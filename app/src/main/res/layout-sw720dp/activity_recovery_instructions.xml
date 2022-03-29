@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Background.WhitePattern.Padding"
+    tools:context=".ui.user.password.recovery.RecoveryInstructionsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="420dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_message"
+        android:layout_marginBottom="@dimen/margin_40dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_label_recovery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_recovery"
+        style="@style/BaseText.Heading.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_huge_38"
+        android:layout_marginBottom="@dimen/margin_24dp"
+        android:text="@string/check_your_email"
+        app:layout_constraintBottom_toTopOf="@+id/tv_label_recovery_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_recovery_info"
+        style="@style/BaseText.Caption.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_standard_16"
+        android:text="@string/recovery_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_open_email_app"
+        style="@style/RoundedButton.Aqua"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="@dimen/margin_32dp"
+        android:text="@string/open_email_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_recovery_info" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_skip_later"
+        style="@style/BaseText.Caption.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:text="@string/skip_i_ll_confirm_later"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_open_email_app" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_dont_receive"
+        style="@style/BaseText.Caption.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10dp"
+        android:text="@string/did_not_receive_the_email"
+        app:layout_constraintBottom_toTopOf="@+id/tv_check_spam_folder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_check_spam_folder"
+        style="@style/BaseText.Caption.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/check_your_spam_folder_or_contact_us"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

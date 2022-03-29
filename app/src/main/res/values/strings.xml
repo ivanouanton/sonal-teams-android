@@ -1,0 +1,133 @@
+<resources>
+
+    <!--Common-->
+    <string name="socketTimeoutException">Connection Timeout.</string>
+    <string name="networkError">Please check your internet connection.</string>
+    <string name="unknownError">There was an error. Please try later.</string>
+    <string name="or_separator">|</string>
+
+    <!--Login-->
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_username_or_password">Forgot username or password</string>
+    <string name="register">Register</string>
+    <string name="your_best_self_reimagined">Your Best-Self\nReimagined</string>
+    <string name="need_help_support">Need help? Support</string>
+    <string name="powered_by">Powered By</string>
+
+    <!--Register-->
+    <string name="registration">Registration</string>
+    <string name="registration_info">To register you will need to visit one of our clinics. To find out more follow the link below or book a consultation.</string>
+    <string name="book_consultation">Book Consultation</string>
+    <string name="find_out_more">Find out more</string>
+
+    <!--Account Not Active-->
+    <string name="uh_oh">Uh Oh!</string>
+    <string name="your_account_is_not_active">Your Account Is Not Active.</string>
+    <string name="account_not_active_info">Please click the link below for more information or book a consultation to register with us.</string>
+
+    <!--Reset Password-->
+    <string name="reset_password">Reset Password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="about_us">About Us</string>
+    <string name="forgot_username_q">Forgot Username?</string>
+    <string name="send_reset_link">Send Reset Link</string>
+
+    <!--Recovery Instructions-->
+    <string name="check_your_email">Check Your Email</string>
+    <string name="recovery_info">We have sent password recovery instructions to your registered email.</string>
+    <string name="open_email_app">Open Email App</string>
+    <string name="skip_i_ll_confirm_later">Skip, I\'ll confirm later</string>
+    <string name="did_not_receive_the_email">Did not receive the email?</string>
+    <string name="check_your_spam_folder_or_contact_us">Check your spam folder, or contact us.</string>
+
+    <!--Change Password-->
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="password_error">Your password must be at least 8 characters.</string>
+
+    <!--Reset Password Info-->
+    <string name="your_password_has_been_reset">Your Password\nHas Been Reset</string>
+    <string name="reset_password_info">To login with your new\npassword click here.</string>
+
+    <!--Forgot Username-->
+    <string name="forgot_username">Forgot Username</string>
+    <string name="forgot_password_q">Forgot password?</string>
+    <string name="send_link">Send Link</string>
+    <string name="registered_email_address">Registered email address</string>
+
+    <!--Sent Username-->
+    <string name="sent">Sent</string>
+    <string name="sent_username_info">We have sent your username to your registered email address.</string>
+    <string name="to_login_click_here">To login click here</string>
+
+    <!--Menu-->
+    <string name="home">Home</string>
+    <string name="device">Device</string>
+    <string name="history">History</string>
+    <string name="more">More</string>
+    <string name="schedule">Schedule</string>
+
+    <!--Dashboard-->
+    <string name="faq">FAQ</string>
+    <string name="support">Support</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="log_out">Log Out</string>
+
+    <!--Home F-->
+    <string name="welcome">Welcome</string>
+    <string name="start_session">Start a session</string>
+    <string name="pair_device">Pair your device</string>
+
+    <!--Device F-->
+    <string name="locate_device_info">Press the\ncenter button on base station\n for 2 seconds\nto begin pairing process</string>
+    <string name="session_start_info">Press the\ncenter button on base station\n for 2 seconds\nto begin your session</string>
+    <string name="session_start_device_info">Press Start on your device to begin your session</string>
+
+    <!--Account-->
+    <string name="account">Account</string>
+    <string name="organization">Organization</string>
+    <string name="chief_complaint">Chief Complaint</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="dob">DOB</string>
+    <string name="email">Email</string>
+    <string name="save_changes">Save Changes</string>
+
+    <!--Set Password-->
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email_address">Email Address</string>
+    <string name="re_enter_password">Re-enter Password</string>
+    <string name="submit_new_password">Submit New Password</string>
+    <string name="set_new_password">Set New Password</string>
+    <string name="confirmation_code">Confirmation Code</string>
+    <string name="submit">Submit</string>
+
+    <!--Session-->
+    <string name="ensure_your_device_powered_up">Ensure Your\nDevice is\nPowered Up</string>
+    <string name="activate_your_device">Activate\nYour Device</string>
+    <string name="pause_session_info">To pause your session\npress the center button on\nbase station for 2 seconds.</string>
+    <string name="cancel_session_info">To cancel your session\npress the center button on\nbase station for 5 seconds</string>
+    <string name="session_length">Session Length</string>
+    <string name="device_initializing">Device Initializing</string>
+    <string name="please_wait">Please Wait...</string>
+    <string name="stop_session_on_headset">Stop session on headset</string>
+
+    <!--Session Complete-->
+    <string name="session_complete">Session Complete</string>
+    <string name="go_home">Go Home</string>
+    <string name="see_you_tomorrow">See you tomorrow</string>
+
+    <!--My Device-->
+    <string name="connected">Connected</string>
+    <string name="your_device">Your Device</string>
+
+    <!--Device-->
+    <string name="available_devices">Available Devices</string>
+    <string name="locating_device">Locating Device</string>
+
+</resources>

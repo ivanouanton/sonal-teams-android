@@ -1,0 +1,80 @@
+package com.waveneuro.injection.component;
+
+import android.content.Context;
+
+import com.asif.abase.injection.qualifier.ApplicationContext;
+import com.asif.abase.injection.scope.PerActivity;
+import com.waveneuro.data.DataManager;
+import com.waveneuro.data.analytics.AnalyticsManager;
+import com.waveneuro.data.preference.PreferenceManager;
+import com.waveneuro.injection.module.ActivityModule;
+import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.account.AccountActivity;
+import com.waveneuro.ui.dashboard.more.WebActivity;
+import com.waveneuro.ui.device.MyDeviceActivity;
+import com.waveneuro.ui.introduction.splash.SplashActivity;
+import com.waveneuro.ui.session.complete.SessionCompleteActivity;
+import com.waveneuro.ui.session.session.SessionActivity;
+import com.waveneuro.ui.user.email.forgot.ForgotUsernameActivity;
+import com.waveneuro.ui.user.email.sent.SentUsernameActivity;
+import com.waveneuro.ui.user.login.LoginActivity;
+import com.waveneuro.ui.user.password.change.ChangePasswordActivity;
+import com.waveneuro.ui.user.password.changed.ResetPasswordInfoActivity;
+import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordActivity;
+import com.waveneuro.ui.user.password.password.first.SetPasswordActivity;
+import com.waveneuro.ui.user.password.recovery.RecoveryInstructionsActivity;
+import com.waveneuro.ui.user.password.reset.ResetPasswordActivity;
+import com.waveneuro.ui.user.profile.notactive.AccountNotActiveActivity;
+import com.waveneuro.ui.user.registration.RegistrationActivity;
+
+import dagger.Subcomponent;
+
+@PerActivity
+@Subcomponent(modules = ActivityModule.class)
+public interface ActivityComponent {
+
+    @ApplicationContext
+    Context context();
+
+    DataManager dataManager();
+
+    PreferenceManager preferenceManager();
+
+    AnalyticsManager analyticsManager();
+
+    void inject(SplashActivity splashActivity);
+
+    void inject(LoginActivity loginActivity);
+
+    void inject(RegistrationActivity registrationActivity);
+
+    void inject(AccountNotActiveActivity accountNotActiveActivity);
+
+    void inject(ForgotUsernameActivity forgotUsernameActivity);
+
+    void inject(SentUsernameActivity sentUsernameActivity);
+
+    void inject(ChangePasswordActivity changePasswordActivity);
+
+    void inject(ResetPasswordInfoActivity resetPasswordInfoActivity);
+
+    void inject(RecoveryInstructionsActivity recoveryInstructionsActivity);
+
+    void inject(ResetPasswordActivity resetPasswordActivity);
+
+    void inject(HomeActivity homeActivity);
+
+    void inject(SessionActivity sessionActivity);
+
+    void inject(SessionCompleteActivity sessionCompleteActivity);
+
+    void inject(WebActivity webActivity);
+
+    void inject(AccountActivity accountActivity);
+
+    void inject(SetNewPasswordActivity setNewPasswordActivity);
+
+    void inject(SetPasswordActivity setPasswordActivity);
+
+    void inject(MyDeviceActivity deviceActivity);
+}

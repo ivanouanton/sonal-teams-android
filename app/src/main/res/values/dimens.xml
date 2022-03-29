@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_very_small">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_standard">14sp</dimen>
+    <dimen name="text_size_standard_16">16sp</dimen>
+    <dimen name="text_size_standard_max">19sp</dimen>
+    <!--    <dimen name="text_size_huge">20sp</dimen>-->
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_large_32">32sp</dimen>
+    <dimen name="text_size_huge_34">34sp</dimen>
+    <dimen name="text_size_huge_38">38sp</dimen>
+    <dimen name="text_size_huge_40">40sp</dimen>
+    <dimen name="text_size_very_huge">48sp</dimen>
+    <dimen name="text_size_gigantic">60sp</dimen>
+    <dimen name="text_size_very_gigantic">68sp</dimen>
+
+    <dimen name="padding_4dp">4dp</dimen>
+    <dimen name="padding_6dp">6dp</dimen>
+    <dimen name="padding_8dp">8dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
+    <dimen name="padding_12dp">12dp</dimen>
+    <dimen name="padding_14dp">14dp</dimen>
+    <dimen name="padding_16dp">16dp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
+    <dimen name="padding_24dp">24dp</dimen>
+    <dimen name="padding_30dp">30dp</dimen>
+    <dimen name="padding_36dp">36dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_42dp">42dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_120dp">120dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_36dp">36dp</dimen>
+    <dimen name="margin_64dp">64dp</dimen>
+    <dimen name="margin_48dp">48dp</dimen>
+    <dimen name="margin_32dp">32dp</dimen>
+    <dimen name="margin_56dp">56dp</dimen>
+    <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_40dp">40dp</dimen>
+    <dimen name="margin_84dp">84dp</dimen>
+    <dimen name="margin_100dp">100dp</dimen>
+    <dimen name="padding_large_36">36dp</dimen>
+
+    <dimen name="width_margin">0dp</dimen>
+
+    <!--    <dimen name="padding_small">32dp</dimen>-->
+<!--    <dimen name="padding_small">36dp</dimen>-->
+<!--    <dimen name="padding_small">40dp</dimen>-->
+<!--    <dimen name="padding_small">42dp</dimen>-->
+<!--    <dimen name="padding_small">48dp</dimen>-->
+<!--    <dimen name="padding_small">56dp</dimen>-->
+<!--    <dimen name="padding_small">60dp</dimen>-->
+<!--    <dimen name="padding_small">64dp</dimen>-->
+<!--    <dimen name="padding_small">84dp</dimen>-->
+<!--    <dimen name="padding_small">100dp</dimen>-->
+<!--    <dimen name="padding_small">120dp</dimen>-->
+<!--    <dimen name="padding_small">260dp</dimen>-->
+<!--    <dimen name="padding_small">320dp</dimen>-->
+
+
+</resources>

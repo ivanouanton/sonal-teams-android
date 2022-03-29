@@ -1,0 +1,194 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <!--    <style name="Theme.WaveNeuroAndroid" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <style name="Theme.WaveNeuroAndroid" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/teal_200</item>
+        <item name="colorPrimaryVariant">@color/teal_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q"> false </item>
+
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/slide_top</item>
+        <item name="android:windowExitTransition">@transition/slide_top</item>
+
+
+    </style>
+
+    <style name="Background.WhitePattern" parent="">
+        <item name="background">@drawable/bg_pattern_white</item>
+        <item name="android:background">@drawable/bg_pattern_white</item>
+    </style>
+    <style name="Background.WhitePattern.Padding">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+    </style>
+
+    <!--START BUTTON STYLE-->
+    <style name="RoundedButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/inter_semi_bold</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="shapeAppearance">@style/RoundShapeAppearance</item>
+    </style>
+
+    <style name="RoundedButton.Aqua">
+        <!--        <item name="android:textColor">@color/white</item>-->
+        <item name="materialThemeOverlay">@style/AquaButtonThemeOverlay</item>
+    </style>
+
+    <style name="AquaButtonThemeOverlay">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/aqua</item>
+    </style>
+
+    <style name="RoundShapeAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+        <item name="cornerRadius">24dp</item>
+    </style>
+    <!--END BUTTON STYLE-->
+
+    <!--START TEXTVIEW STYLE-->
+    <style name="BaseText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BaseText.Heading" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/romana_semi</item>
+    </style>
+
+    <style name="BaseText.Heading2" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/romana_semi</item>
+        <item name="android:textSize">38sp</item>
+    </style>
+
+    <style name="BaseText.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="BaseText.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="BaseText.Heading.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseText.Heading2.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseText.Subtitle.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseText.Caption.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseText.Heading.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Heading2.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Subtitle.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Subtitle.Aqua">
+        <item name="android:textColor">@color/aqua</item>
+    </style>
+
+    <style name="BaseText.Subtitle.Green">
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="BaseText.Caption.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Caption.Gray">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="BaseText.Caption.DarkGray">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
+    <style name="BaseText.Caption.Green">
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="BaseText.Caption.Red">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <!--END TEXTVIEW STYLE-->
+
+    <!--START EDITTEXT STYLE-->
+    <style name="BaseEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BaseEditText.Outline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearanceOverlay">@style/RoundShapeAppearance.Small</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:colorBackground">@android:color/black</item>
+    </style>
+
+    <style name="BaseEditText.Outline.White">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <style name="BaseEditText.Outline.Black">
+        <item name="boxStrokeColor">@android:color/black</item>
+    </style>
+
+    <style name="RoundShapeAppearance.Small">
+        <item name="cornerSize">12dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <!--END EDITTEXT STYLE-->
+
+    <!--START CHECKBOX STYLE-->
+    <style name="CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/inter_semi_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="buttonTint">@color/white</item>
+    </style>
+    <!--END CHECKBOX STYLE-->
+
+    <!--START IMAGEVIEW STYLE-->
+    <style name="ImageView.Round" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+    <!--END IMAGEVIEW STYLE-->
+    <color name="red">#FF1100</color>
+</resources>
