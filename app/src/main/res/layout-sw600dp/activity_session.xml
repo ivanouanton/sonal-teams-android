@@ -280,4 +280,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--START SPIN KIT-->
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit_main"
+        style="@style/SpinKitView.Small.Wave"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginVertical="10dp"
+        android:visibility="gone"
+        app:SpinKit_Color="@color/aqua"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--END SPIN KIT-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

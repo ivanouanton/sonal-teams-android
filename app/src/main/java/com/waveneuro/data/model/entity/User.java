@@ -112,4 +112,8 @@ public class User extends BaseModel {
     public void setCustomGoal(String customGoal) {
         this.customGoal = customGoal;
     }
+
+    public boolean isNameAvailable(){
+        return name != null && name.length() > 0;
+    }
 }

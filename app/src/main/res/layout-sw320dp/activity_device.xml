@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Background.WhitePattern.Padding"
+    tools:context=".ui.device.MyDeviceActivity">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:src="@drawable/ic_back_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_connect_status"
+        style="@style/BaseText.Caption.Green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_16dp"
+        android:text="@string/connected"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_circle_connected"
+        app:layout_constraintEnd_toStartOf="@+id/iv_circle_connected"
+        app:layout_constraintTop_toTopOf="@+id/iv_circle_connected" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_circle_connected"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/margin_36dp"
+        android:layout_marginEnd="@dimen/margin_12dp"
+        android:src="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_device"
+        app:layout_constraintEnd_toStartOf="@+id/iv_device"
+        app:layout_constraintTop_toTopOf="@+id/iv_device"
+        app:shapeAppearanceOverlay="@style/ImageView.Round" />
+
+    <ImageView
+        android:id="@+id/iv_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_bluetooth_black"
+        android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_back"
+        app:tint="@color/black"
+        tools:ignore="UseAppTint" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_your_device"
+        style="@style/BaseText.Heading.Black"
+        android:layout_width="wrap_content"
+        android:textSize="48sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_64dp"
+        android:text="@string/your_device"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_back" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_device_name"
+        style="@style/BaseText.Subtitle.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Sonal-XXXXXXX"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_size_standard_max"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_your_device" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_48dp"
+        android:src="@drawable/img_device_sonal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

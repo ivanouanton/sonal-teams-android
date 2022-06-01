@@ -47,10 +47,10 @@ public class SetNewPasswordActivity extends BaseFormActivity {
         setContentView(R.layout.activity_set_new_password);
         ButterKnife.bind(this);
 
-        if(getIntent().hasExtra(SetNewPasswordCommand.USERNAME)
+        if (getIntent().hasExtra(SetNewPasswordCommand.USERNAME)
                 && getIntent().hasExtra(SetNewPasswordCommand.OLD_PASSWORD)) {
-            userName= getIntent().getStringExtra(SetNewPasswordCommand.USERNAME) ;
-            oldPassword= getIntent().getStringExtra(SetNewPasswordCommand.OLD_PASSWORD);
+            userName = getIntent().getStringExtra(SetNewPasswordCommand.USERNAME);
+            oldPassword = getIntent().getStringExtra(SetNewPasswordCommand.OLD_PASSWORD);
         }
         setView();
         setObserver();
@@ -90,7 +90,7 @@ public class SetNewPasswordActivity extends BaseFormActivity {
     };
 
     public void onSuccess() {
-
+        launchHomeScreen();
     }
 
     private void launchHomeScreen() {

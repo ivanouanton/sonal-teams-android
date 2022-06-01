@@ -115,7 +115,12 @@ public class LoginViewModel extends ViewModel {
 //                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
                     }
                     sentLoginEvent(username);
-                    getPersonalInfo(loginResponse.isFirstEntrance());
+                    if (loginResponse.isFirstEntrance()) {
+                        mDataLive.postValue(new LoginViewState.Loading(false));
+                        mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
+                    } else {
+                        getPersonalInfo(loginResponse.isFirstEntrance());
+                    }
                 }
             }
 

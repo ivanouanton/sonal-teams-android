@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Background.WhitePattern"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/padding_large_36"
+    android:paddingVertical="@dimen/padding_24dp"
+    tools:context=".ui.dashboard.device.DeviceFragment">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_12dp"
+        android:src="@drawable/ic_back_black"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_profile_image"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:adjustViewBounds="true"
+        android:background="@color/aqua"
+        android:scaleType="centerInside"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ImageView.Round"
+        tools:src="@drawable/ic_user_test" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_profile_image_initials"
+        style="@style/BaseText.Heading2.Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_large"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_profile_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_profile_image"
+        app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
+        tools:text="WN" />
+
+    <ImageView
+        android:id="@+id/iv_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_24dp"
+        android:src="@drawable/ic_bluetooth_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--HEAD-->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_welcome"
+        style="@style/BaseText.Heading2.Black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_42dp"
+        android:minLines="3"
+        android:text="@string/ensure_your_device_powered_up"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_back"
+        tools:visibility="visible" />
+
+    <!--LOCATE DEVICE-->
+    <LinearLayout
+        android:id="@+id/ll_locate_device"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_welcome"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_welcome"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_welcome"
+        tools:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sonal_device_power"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_locate_device_info"
+                style="@style/BaseText.Subtitle.Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_16dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:gravity="center"
+                android:text="@string/locate_device_info"
+                android:textSize="@dimen/text_size_standard_max"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_device" />
+
+            <ImageView
+                android:id="@+id/btn_locate_device"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="@dimen/margin_16dp"
+                android:layout_marginBottom="@dimen/margin_8dp"
+                android:background="@drawable/bg_circle_aqua"
+                android:padding="@dimen/padding_16dp"
+                android:src="@drawable/ic_arrow_right_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <!--DEVICE LIST-->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_device_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:visibility="gone"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bluetooth_active_small" />
+
+                <TextView
+                    style="@style/BaseText.Subtitle.Black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/available_devices"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_standard_max"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:id="@+id/img_loading"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_loading"
+                    android:tint="@color/black"
+                    android:visibility="invisible"
+                    app:tint="@color/black"
+                    tools:ignore="UseAppTint" />
+
+            </LinearLayout>
+
+            <com.asif.abase.view.RecyclerViewWithEmpty
+                android:id="@+id/rv_device_available"
+                android:layout_width="match_parent"
+                android:layout_height="320dp" />
+
+        </LinearLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!--LOCATING DEVICE-->
+    <LinearLayout
+        android:id="@+id/ll_container_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="56dp"
+            android:src="@drawable/img_device_sonal" />
+
+        <LinearLayout
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button_rounded_border_aqua"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/padding_20dp"
+            android:paddingVertical="@dimen/padding_8dp">
+
+            <TextView
+                android:id="@+id/tv_locating_device"
+                style="@style/BaseText.Subtitle.Aqua"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/locating_device"
+                android:textSize="20sp" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.Large.MultiplePulseRing"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                app:SpinKit_Color="@color/aqua" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_circle_connected"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:src="@color/green"
+                app:shapeAppearanceOverlay="@style/ImageView.Round" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_session"
+        style="@style/RoundedButton.Aqua"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/start_session"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,4 +6,5 @@ sealed class HomeViewEvent {
     class DeviceConnected : HomeViewEvent()
     class DeviceDisconnected : HomeViewEvent()
     class StartSessionClicked : HomeViewEvent()
+    class SonalWebsiteClicked : HomeViewEvent()
 }

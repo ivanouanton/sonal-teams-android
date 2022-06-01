@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.home.HomeFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="720"
+        android:visibility="gone"
+        android:layout_height="wrap_content"/>
+
+    <!--START PROFILE-->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_profile_image"
         android:layout_width="72dp"
@@ -33,15 +42,19 @@
         app:layout_constraintStart_toStartOf="@+id/iv_profile_image"
         app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
         tools:text="WN" />
+    <!--END PROFILE-->
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="360dp"
+        android:layout_width="380dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_profile_image">
 
+
+        <!--START USERNAME-->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_label_welcome"
             style="@style/BaseText.Heading2.Black"
@@ -52,7 +65,7 @@
             android:layout_marginBottom="@dimen/margin_4dp"
             android:text="@string/welcome"
             android:visibility="gone"
-            tools:visibility="visible"
+            tools:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_username" />
 
@@ -60,7 +73,7 @@
             android:id="@+id/tv_username"
             style="@style/BaseText.Heading.Black"
             android:layout_width="match_parent"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_10dp"
             android:layout_marginBottom="@dimen/margin_16dp"
@@ -70,8 +83,10 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/cv_device" />
+        <!--END USERNAME-->
 
 
+        <!--START DEVICE-->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_device"
             android:layout_width="match_parent"
@@ -81,6 +96,7 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="15dp"
             app:cardElevation="0dp"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -113,7 +129,72 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+        <!--END DEVICE-->
 
+
+        <!--START NOT ACTIVE-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:id="@+id/cl_protocol_not_active"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginHorizontal="@dimen/margin_10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_warning"
+                app:layout_constraintBottom_toTopOf="@+id/tv_label_account_active_status"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_label_account_active_status"
+                style="@style/BaseText.Heading2.Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="160dp"
+                android:gravity="start"
+                android:text="@string/protocol_not_active"
+                android:textSize="@dimen/text_size_huge_40"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_label_notify_email"
+                style="@style/BaseText.Heading2.Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/notify_by_email"
+                android:textSize="@dimen/text_size_huge_40"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_account_active_status"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_label_account_active_info"
+                style="@style/BaseText.Subtitle.GrayDimDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="start"
+                android:text="@string/visit_sonal_website"
+                android:textSize="@dimen/text_size_standard_16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_notify_email" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--END NOT ACTIVE-->
+
+
+        <!--START NEXT PROTOCOL-->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_next_session"
             android:layout_width="match_parent"
@@ -163,7 +244,10 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+        <!--END NEXT PROTOCOL-->
 
+
+        <!--START BUBBLE ERROR-->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_bubble_error"
             android:layout_width="match_parent"
@@ -204,7 +288,10 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+        <!--END BUBBLE ERROR-->
 
+
+        <!--START SPIN KIT-->
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/spin_kit"
             style="@style/SpinKitView.Small.Wave"
@@ -217,6 +304,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <!--END SPIN KIT-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

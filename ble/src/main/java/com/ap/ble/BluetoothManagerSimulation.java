@@ -24,23 +24,23 @@ public class BluetoothManagerSimulation extends BluetoothManager{
         Handler handlerEnd = new Handler();
         handlerEnd.postDelayed(() -> {
             callback.invoke("04");
-        }, 130_000);
+        }, 60_000);
 
-//
-//        Handler handlerPause = new Handler();
-//        handlerPause.postDelayed(() -> {
-//            callback.invoke("03");
-//        }, 15_000);
-//
-//        Handler handlerResume = new Handler();
-//        handlerResume.postDelayed(() -> {
-//            callback.invoke("02");
-//        }, 25_000);
-//
-//        Handler handlerError = new Handler();
-//        handlerError.postDelayed(() -> {
-////                callback.invoke("05");
-//        }, 45_000);
+
+        Handler handlerPause = new Handler();
+        handlerPause.postDelayed(() -> {
+            callback.invoke("03");
+        }, 15_000);
+
+        Handler handlerResume = new Handler();
+        handlerResume.postDelayed(() -> {
+            callback.invoke("02");
+        }, 25_000);
+
+        Handler handlerError = new Handler();
+        handlerError.postDelayed(() -> {
+//                callback.invoke("05");
+        }, 45_000);
     }
 
 }

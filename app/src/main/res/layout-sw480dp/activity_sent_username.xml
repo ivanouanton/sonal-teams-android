@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Background.WhitePattern.Padding"
+    tools:context=".ui.user.email.sent.SentUsernameActivity">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_check_complete"
+        android:layout_marginBottom="@dimen/margin_40dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_label_sent_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_sent_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_huge_38"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/margin_40dp"
+        android:text="@string/sent"
+        style="@style/BaseText.Heading2.Black"
+        app:layout_constraintBottom_toTopOf="@+id/tv_label_sent_username_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/BaseText.Caption.Black"
+        android:id="@+id/tv_label_sent_username_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_standard_16"
+        android:gravity="center"
+        android:text="@string/sent_username_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_open_email_app"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="@string/open_email_app"
+        android:layout_marginTop="@dimen/margin_36dp"
+        style="@style/RoundedButton.Aqua"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_sent_username_info" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="36dp"
+        android:textSize="@dimen/text_size_standard_16"
+        style="@style/BaseText.Caption.Black"
+        android:text="@string/to_login_click_here"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_open_email_app" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

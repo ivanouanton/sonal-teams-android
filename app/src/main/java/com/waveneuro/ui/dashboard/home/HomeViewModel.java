@@ -11,11 +11,15 @@ import com.asif.abase.domain.base.UseCaseCallback;
 import com.asif.abase.exception.SomethingWrongException;
 import com.waveneuro.data.DataManager;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
+import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.domain.base.SingleLiveEvent;
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase;
+import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
 import com.waveneuro.utils.ErrorUtil;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class HomeViewModel extends ViewModel {
 
@@ -31,10 +35,13 @@ public class HomeViewModel extends ViewModel {
     private final SingleLiveEvent<HomeViewEffect> mDataViewEffect = new SingleLiveEvent<>();
 
     private final GetLatestProtocolUseCase getLatestProtocolUseCase;
+    private final GetPersonalInfoUseCase getPersonalInfoUseCase;
 
     @Inject
-    public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase) {
+    public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
+                         GetPersonalInfoUseCase getPersonalInfoUseCase) {
         this.getLatestProtocolUseCase = getLatestProtocolUseCase;
+        this.getPersonalInfoUseCase = getPersonalInfoUseCase;
     }
 
     public void processEvent(HomeViewEvent viewEvent) {
@@ -63,7 +70,35 @@ public class HomeViewModel extends ViewModel {
     }
 
     private void getUserDetails() {
-        this.mDataUserLive.postValue(new HomeUserViewState.Success(dataManager.getUser()));
+        if (dataManager.getUser() != null
+                && dataManager.getUser().isNameAvailable()) {
+            this.mDataUserLive.postValue(new HomeUserViewState.Success(dataManager.getUser()));
+        } else {
+            getPersonalInfo();
+        }
+    }
+
+    private void getPersonalInfo() {
+        this.getPersonalInfoUseCase.execute(new UseCaseCallback() {
+            @Override
+            public void onSuccess(Object response) {
+                Timber.e("PROFILE_SUCCESS");
+                if (response instanceof UserInfoResponse) {
+                    dataManager.saveUser((UserInfoResponse) response);
+                    mDataUserLive.postValue(new HomeUserViewState.Success(dataManager.getUser()));
+                }
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Timber.e("PROFILE_FAILURE");
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 
     private void getProtocol() {
@@ -86,9 +121,13 @@ public class HomeViewModel extends ViewModel {
 
             @Override
             public void onError(Throwable throwable) {
-                APIError error = errorUtil.parseError(new SomethingWrongException());
+                APIError error = errorUtil.parseError(throwable);
                 mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                mDataProtocolLive.postValue(new HomeProtocolViewState.Failure(error));
+                if ("404".equals(error.getCode())) {
+                    mDataProtocolLive.postValue(new HomeProtocolViewState.ProtocolNotFound());
+                } else {
+                    mDataProtocolLive.postValue(new HomeProtocolViewState.Failure(error));
+                }
             }
 
             @Override

@@ -52,8 +52,10 @@ public class SetNewPasswordViewModel extends ViewModel {
                     APIError error = errorUtil.parseError(new SomethingWrongException(), setNewPasswordResponse.getError());
                     mDataLive.postValue(new SetNewPasswordViewState.Failure(error));
                 } else {
+                    dataManager.rememberPassword("");
+                    dataManager.saveAccessToken(setNewPasswordResponse.getAccessToken());
+                    dataManager.saveRefreshToken(setNewPasswordResponse.getRefreshToken());
                     mDataLive.postValue(new SetNewPasswordViewState.Success());
-
                 }
             }
 

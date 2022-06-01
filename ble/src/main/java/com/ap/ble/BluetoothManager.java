@@ -1,5 +1,6 @@
 package com.ap.ble;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -43,6 +44,7 @@ public class BluetoothManager {
 
     private static class BluetoothManagerHolder {
         private static final BluetoothManager S_BLE_MANAGER_1 = new BluetoothManager();
+//        private static final BluetoothManager S_BLE_MANAGER_1 = new BluetoothManagerSimulation();
     }
 
     public void init(Application context) {
@@ -118,17 +120,21 @@ public class BluetoothManager {
 
             @Override
             public void onConnectFail(BleDevice bleDevice, BleException exception) {
+//                Toast.makeText(context, "CONNECT FAILED " , Toast.LENGTH_SHORT).show();
                 BluetoothManager.bleDevice = null;
             }
 
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 new Handler().postDelayed(() -> {
+//                    Toast.makeText(context, "CONNECTED 1 " , Toast.LENGTH_SHORT).show();
                     deviceCallback.onConnected(bleDevice);
                     findServices();
+//                    Toast.makeText(context, "CONNECTED 2 " , Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+//                            Toast.makeText(context, "CONNECTED 3 " , Toast.LENGTH_SHORT).show();
                             String[] response = new String[2];
                             response[0] = "Device Connected";
                             response[1] = deviceCharacteristicValue;
@@ -141,6 +147,7 @@ public class BluetoothManager {
             @Override
             public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 try {
+//                    Toast.makeText(context, "DISCONNECTED" , Toast.LENGTH_SHORT).show();
                     deviceCallback.onDisconnected();
                     Log.e("SESSION DISCONNECT BLE", "1");
                     if (deviceConnectionCallbackList != null) {
@@ -248,16 +255,19 @@ public class BluetoothManager {
 
                         @Override
                         public void onNotifySuccess() {
+//                            Toast.makeText(context, "6TH :: NOTIFY_SUCCESS", Toast.LENGTH_SHORT).show();
                             callback.invoke("NOTIFY_SUCCESS");
                         }
 
                         @Override
                         public void onNotifyFailure(final BleException exception) {
+//                            Toast.makeText(context, "6TH :: NOTIFY_FAILURE", Toast.LENGTH_SHORT).show();
                             callback.invoke("" + exception.getDescription());
                         }
 
                         @Override
                         public void onCharacteristicChanged(byte[] data) {
+//                            Toast.makeText(context, "6TH :: NOTIFY_CHANGE :: " + new String(data), Toast.LENGTH_SHORT).show();
                             treatmentStatus = HexUtil.formatHexString(characterstic6.getValue(), true);
                             if (treatmentStatus != null) {
                                 callback.invoke(treatmentStatus);
@@ -419,6 +429,7 @@ public class BluetoothManager {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void writeData(String hexString, Callback callback) {
         BluetoothGattCharacteristic characterstic5 = null;
         BluetoothGattCharacteristic characterstic9 = null;
@@ -441,7 +452,14 @@ public class BluetoothManager {
                         if (charactersticE != null) {
                             BluetoothGattCharacteristic finalCharacteristicE = charactersticE;
                             BluetoothGattCharacteristic finalCharacteristic5 = characterstic5;
-                            new Handler().post(() -> {
+//                            Toast.makeText(context, " Writable 1 :: "
+//                                    + BleManager.getInstance().getBluetoothGatt(bleDevice).writeCharacteristic(finalCharacteristicE),
+//                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, " Writable 2 :: "
+//                                    + BleManager.getInstance().getBluetoothGatt(bleDevice).writeCharacteristic(finalCharacteristic5),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            new Handler().postDelayed(() -> {
                                 if (!TextUtils.isEmpty(hexString)) {
                                     BleManager.getInstance().write(
                                             bleDevice,
@@ -452,6 +470,7 @@ public class BluetoothManager {
 
                                                 @Override
                                                 public void onWriteSuccess(final int current, final int total, final byte[] justWrite) {
+//                                                    Toast.makeText(context, "Write Success 1 :: " + new String(justWrite), Toast.LENGTH_SHORT).show();
                                                         BluetoothGattCharacteristic finalCharacteristic = finalCharacteristic5;
                                                         new Handler().post(() -> BleManager.getInstance().write(
                                                                 bleDevice,
@@ -462,11 +481,13 @@ public class BluetoothManager {
 
                                                                     @Override
                                                                     public void onWriteSuccess(final int current, final int total, final byte[] justWrite) {
+//                                                                        Toast.makeText(context, "Write Success 2 :: " + new String(justWrite), Toast.LENGTH_SHORT).show();
                                                                         callback.invoke("true");
                                                                     }
 
                                                                     @Override
                                                                     public void onWriteFailure(final BleException exception) {
+//                                                                        Toast.makeText(context, "Write f 2 :: " + exception.getDescription(), Toast.LENGTH_SHORT).show();
                                                                         callback.invoke("false");
                                                                     }
                                                                 }));
@@ -474,12 +495,13 @@ public class BluetoothManager {
 
                                                 @Override
                                                 public void onWriteFailure(final BleException exception) {
+//                                                    Toast.makeText(context, "Write f 1 :: " + exception.getDescription(), Toast.LENGTH_SHORT).show();
                                                     callback.invoke("false");
                                                 }
                                             });
                                 }
 
-                            });
+                            }, 2_000);
 
                         }
                     }

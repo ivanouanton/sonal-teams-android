@@ -113,6 +113,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="BaseText.Subtitle.GrayDimDark">
+        <item name="android:textColor">@color/gray_dim_dark</item>
+    </style>
+
     <style name="BaseText.Subtitle.Aqua">
         <item name="android:textColor">@color/aqua</item>
     </style>

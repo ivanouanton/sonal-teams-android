@@ -18,7 +18,8 @@ import javax.inject.Inject;
 public class WebCommand extends NavigationCommand {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({PAGE_FAQ, PAGE_POLICY, PAGE_CONTACT, PAGE_SUPPORT, PAGE_TERMS_CONDITIONS})
+    @IntDef({PAGE_FAQ, PAGE_POLICY, PAGE_CONTACT, PAGE_SUPPORT, PAGE_TERMS_CONDITIONS,
+            PAGE_SONAL})
     public @interface WEB_PAGE_SCREEN {
     }
 
@@ -27,6 +28,7 @@ public class WebCommand extends NavigationCommand {
     public static final int PAGE_CONTACT = 2;
     public static final int PAGE_SUPPORT = 3;
     public static final int PAGE_TERMS_CONDITIONS = 4;
+    public static final int PAGE_SONAL = 5;
 
     public static final String PAGE_TITLE = "page_title";
     public static final String PAGE_URL = "page_url";
@@ -60,6 +62,10 @@ public class WebCommand extends NavigationCommand {
             case PAGE_TERMS_CONDITIONS:
                 intent.putExtra(PAGE_TITLE, mContext.getString(R.string.terms_of_use));
                 intent.putExtra(PAGE_URL, Config.TERMS_OF_USE_URL);
+                break;
+            case PAGE_SONAL:
+                intent.putExtra(PAGE_TITLE, mContext.getString(R.string.app_name));
+                intent.putExtra(PAGE_URL, Config.SONAL_URL);
                 break;
         }
         this.mContext.startActivity(intent);

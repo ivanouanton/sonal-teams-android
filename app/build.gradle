@@ -12,7 +12,7 @@ android {
         applicationId "com.waveneuro"
         minSdk 21
         targetSdk 31
-        versionCode 15
+        versionCode 17
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     flavorDimensions "flavors"
@@ -24,7 +24,7 @@ android {
             versionNameSuffix "-dev"
         }
         prod {
-            versionName "1.2.1"
+            versionName "1.2.3"
             dimension "flavors"
         }
     }

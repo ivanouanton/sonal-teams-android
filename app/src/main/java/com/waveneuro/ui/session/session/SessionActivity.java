@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -15,7 +14,9 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 
+import com.ap.ble.BleManager;
 import com.ap.ble.BluetoothManager;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -71,6 +72,9 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     @BindView(R.id.tv_locate_device_info)
     MaterialTextView tvLocateDeviceInfo;
+
+    @BindView(R.id.spin_kit_main)
+    SpinKitView spinKitViewMain;
 
 
     @Inject
@@ -150,7 +154,8 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             @Override
             public void invoke(String args) {
                 Timber.e("SESSION_EVENT :: BLE_6_VALUE :: %s", args);
-
+//                Toast.makeText(SessionActivity.this, "SESSION_EVENT :: BLE_6_VALUE :: "+ args,
+//                        Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject properties = new JSONObject();
                     try {
@@ -398,10 +403,18 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 //            bluetoothManager = getBluetoothManager();
         //DONE check in RN for freq and length data
 //        bluetoothManager.sendFrequencyData("10.5", "1800");
-//        displayWait();
+        displayWait();
+//        spinKitViewMain.setVisibility(View.VISIBLE);
         BluetoothManager.getInstance().sendFrequencyData(protocolFrequency, treatmentLength, new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
+//                spinKitViewMain.setVisibility(View.GONE);
+                removeWait();
+                if ("true".equals(args)) {
+
+                } else {
+
+                }
 //                sessionViewModel.processEvent(new SessionViewEvent.StartSession());
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override

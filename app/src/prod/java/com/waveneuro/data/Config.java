@@ -11,6 +11,7 @@ public class Config {
     };
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/" + PATHS[0] + "/";
 
+    public static final String SONAL_URL = PROTOCOL_S + "www.waveneuro.com";
     public static final String FAQ_URL = PROTOCOL_S + "www.waveneuro.com";
     public static final String SUPPORT_URL = PROTOCOL_S + "waveneurohelp.zendesk.com/hc/en-us/requests/new";
     public static final String TERMS_OF_USE_URL = PROTOCOL_S + "www.waveneuro.com/pages/privacy";

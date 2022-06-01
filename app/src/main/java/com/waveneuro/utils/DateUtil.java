@@ -14,7 +14,7 @@ public class DateUtil {
 
     public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
     public static final String PATTERN_ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    public static final String PATTERN_ISO_DATE = "MM/dd/yyyy";
+    public static final String PATTERN_ISO_DATE = "MMMM dd, yyyy";
 
     public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
@@ -120,7 +120,7 @@ public class DateUtil {
 
             SimpleDateFormat format = formats.get(pattern);
             if (format == null) {
-                format = new SimpleDateFormat(pattern, Locale.US);
+                format = new SimpleDateFormat(pattern);
                 format.setTimeZone(TimeZone.getTimeZone("GMT"));
                 formats.put(pattern, format);
             }

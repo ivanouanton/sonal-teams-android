@@ -2,11 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Background.WhitePattern.Padding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Background.WhitePattern.Padding"
     tools:context=".ui.dashboard.home.HomeFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="normal"
+        android:visibility="gone"
+        android:layout_height="wrap_content"/>
+
+
+    <!--START PROFILE-->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_profile_image"
         android:layout_width="56dp"
@@ -33,38 +43,43 @@
         app:layout_constraintStart_toStartOf="@+id/iv_profile_image"
         app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
         tools:text="WN" />
+    <!--END PROFILE-->
 
+
+    <!--START USERNAME-->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_label_welcome"
         style="@style/BaseText.Heading2.Black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_10dp"
-        android:layout_marginBottom="@dimen/margin_4dp"
         android:layout_marginTop="@dimen/margin_32dp"
+        android:layout_marginBottom="@dimen/margin_4dp"
         android:text="@string/welcome"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_image" />
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_image"
+        tools:visibility="gone" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_username"
         style="@style/BaseText.Heading.Black"
         android:layout_width="match_parent"
-        android:text=""
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_10dp"
         android:layout_marginBottom="@dimen/margin_16dp"
         android:autoSizeTextType="uniform"
-        tools:text="Mina Abdelmalek"
-        tools:visibility="visible"
         android:maxLines="1"
+        android:text=""
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_label_welcome" />
+        app:layout_constraintTop_toBottomOf="@id/tv_label_welcome"
+        tools:text="Mina Abdelmalek"
+        tools:visibility="gone" />
+    <!--END USERNAME-->
 
 
+    <!--START DEVICE-->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_device"
         android:layout_width="match_parent"
@@ -76,7 +91,8 @@
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,9 +102,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="@dimen/margin_32dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_32dp"
+                android:layout_weight="1"
                 android:src="@drawable/img_device_sonal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -105,7 +121,72 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+    <!--END DEVICE-->
 
+
+    <!--START NOT ACTIVE-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/cl_protocol_not_active"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginHorizontal="@dimen/margin_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_warning"
+            app:layout_constraintBottom_toTopOf="@+id/tv_label_account_active_status"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_label_account_active_status"
+            style="@style/BaseText.Heading2.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:gravity="start"
+            android:text="@string/protocol_not_active"
+            android:textSize="@dimen/text_size_huge_40"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_label_notify_email"
+            style="@style/BaseText.Heading2.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/notify_by_email"
+            android:textSize="@dimen/text_size_huge_40"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_account_active_status"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_label_account_active_info"
+            style="@style/BaseText.Subtitle.GrayDimDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="start"
+            android:text="@string/visit_sonal_website"
+            android:textSize="@dimen/text_size_standard_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_notify_email" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--END NOT ACTIVE-->
+
+
+    <!--START NEXT PROTOCOL-->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_next_session"
         android:layout_width="match_parent"
@@ -139,9 +220,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingHorizontal="@dimen/padding_12dp"
-                tools:text="Next Session"
                 android:textSize="@dimen/text_size_standard"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Next Session" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_next_session_date"
@@ -149,13 +230,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="Oct 29 @ 3:30pm"
-                android:textSize="@dimen/text_size_standard" />
+                android:textSize="@dimen/text_size_standard"
+                tools:text="Oct 29 @ 3:30pm" />
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+    <!--END NEXT PROTOCOL-->
 
+
+    <!--START BUBBLE ERROR-->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_bubble_error"
         android:layout_width="match_parent"
@@ -189,14 +273,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/padding_12dp"
-                tools:text="Re-connect to internet"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Re-connect to internet" />
 
         </LinearLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
+    <!--END BUBBLE ERROR-->
 
+
+    <!--START SPIN KIT-->
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
         style="@style/SpinKitView.Small.Wave"
@@ -209,5 +296,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <!--END SPIN KIT-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

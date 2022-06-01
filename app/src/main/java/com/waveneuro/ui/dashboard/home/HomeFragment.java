@@ -4,14 +4,20 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
@@ -41,6 +48,7 @@ import com.waveneuro.ui.base.BaseFragment;
 import com.waveneuro.ui.dashboard.DashBoardViewModel;
 import com.waveneuro.ui.dashboard.DashboardViewState;
 import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.lang.annotation.Retention;
@@ -107,8 +115,16 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.cv_next_session)
     MaterialCardView cvNextSession;
 
+    @BindView(R.id.cl_protocol_not_active)
+    ConstraintLayout clProtocolNotActive;
+
+    @BindView(R.id.tv_label_account_active_info)
+    MaterialTextView tvLabelAccountActiveInfo;
+
     @Inject
     SessionCommand sessionCommand;
+    @Inject
+    WebCommand webCommand;
 
     @Inject
     HomeViewModel homeViewModel;
@@ -161,6 +177,30 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setView() {
+        sonalWebsiteSpanText();
+    }
+
+    private void sonalWebsiteSpanText() {
+
+        SpannableString spannableString = new SpannableString(getString(R.string.visit_sonal_website));
+
+        spannableString.setSpan(new UnderlineSpan(), 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                redirectToSonalWebsite();
+            }
+        }, 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray_dim_dark)), 13, 34, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tvLabelAccountActiveInfo.setText(spannableString);
+        tvLabelAccountActiveInfo.setClickable(true);
+        tvLabelAccountActiveInfo.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void redirectToSonalWebsite() {
+        webCommand.navigate(WebCommand.PAGE_SONAL);
     }
 
     private void setObserver() {
@@ -204,6 +244,15 @@ public class HomeFragment extends BaseFragment {
             setProtocolData();
         } else if (viewState instanceof HomeProtocolViewState.Failure) {
             spinKitView.setVisibility(View.GONE);
+        } else if (viewState instanceof HomeProtocolViewState.ProtocolNotFound) {
+            tvLabelWelcome.setVisibility(View.GONE);
+            tvUsername.setVisibility(View.GONE);
+            cvDevice.setVisibility(View.GONE);
+            spinKitView.setVisibility(View.GONE);
+            clProtocolNotActive.setVisibility(View.VISIBLE);
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).enableDeviceTab(false);
+            }
         } else if (viewState instanceof HomeProtocolViewState.Loading) {
             //TODO Create Dialog
             HomeProtocolViewState.Loading loading = (HomeProtocolViewState.Loading) viewState;
@@ -270,7 +319,7 @@ public class HomeFragment extends BaseFragment {
     };
 
     private void launchSessionScreen(String treatmentLength, String protocolFrequency) {
-        if(TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
+        if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT).show();
             return;
         }

@@ -243,6 +243,10 @@ public class HomeActivity extends BaseActivity {
         bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_device);
     }
 
+    public void enableDeviceTab(boolean enable) {
+        bottomNavigationView.getMenu().getItem(0).setEnabled(enable);
+    }
+
     private void resetTabs() {
         frHome.setVisibility(View.GONE);
         frDevice.setVisibility(View.GONE);

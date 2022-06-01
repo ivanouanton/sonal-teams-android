@@ -11,16 +11,13 @@ import androidx.lifecycle.Observer;
 
 import com.asif.abase.data.model.BaseModel;
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
-import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.utils.DateUtil;
 
@@ -112,7 +109,7 @@ public class AccountActivity extends BaseFormActivity {
     Observer<AccountViewEffect> accountViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof AccountViewEffect.BackRedirect) {
             goBack();
-        } else  if (viewEffect instanceof AccountViewEffect.UpdateSuccess) {
+        } else if (viewEffect instanceof AccountViewEffect.UpdateSuccess) {
             Toast.makeText(AccountActivity.this, "Profile updated successfully.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -132,7 +129,7 @@ public class AccountActivity extends BaseFormActivity {
             tipEmail.setText(userInfoResponse.getEmail());
             tvOrganization.setText(userInfoResponse.getLocation());
             tvChiefComplaint.setText(userInfoResponse.getCustomGoal());
-            
+
             if (TextUtils.isEmpty(userInfoResponse.getImageThumbnailUrl())) {
                 if (TextUtils.isEmpty(userInfoResponse.getName())) {
                     tvProfileImageInitials.setText("");
@@ -163,15 +160,17 @@ public class AccountActivity extends BaseFormActivity {
     }
 
     public void openDataPicker(View view) {
+        Date dob = DateUtil.parseDate(tipDob.getText().toString().trim(), DateUtil.PATTERN_ISO_DATE);
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setSelection(dob != null ? dob.getTime() : MaterialDatePicker.todayInUtcMilliseconds())
                 .setTitleText("Select Birth date").build();
 
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
 //                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 //                calendar.setTimeInMillis((Long) selection);
-            String dateString = DateFormat.format("MM/dd/yyyy", new Date((Long) selection)).toString();
+//            String dateString = DateFormat.format("MM/dd/yyyy", new Date((Long) selection)).toString();
+            String dateString = DateFormat.format(DateUtil.PATTERN_ISO_DATE, new Date((Long) selection)).toString();
             ((TextInputEditText) view).setText(dateString);
         });
     }
@@ -192,13 +191,14 @@ public class AccountActivity extends BaseFormActivity {
 
     @Override
     public void submit() {
+        String dateString = DateUtil.parseDate(tipDob.getText().toString().trim(), DateUtil.PATTERN_ISO_DATE, "MM/dd/yyyy");
         this.accountViewModel.processEvent(
                 new AccountViewEvent.UpdatedUser(
                         tipFirstName.getText().toString().trim(),
                         tipLastName.getText().toString().trim(),
                         tipUsername.getText().toString().trim(),
                         tipEmail.getText().toString().trim(),
-                        tipDob.getText().toString().trim()
+                        dateString
                 ));
     }
 }

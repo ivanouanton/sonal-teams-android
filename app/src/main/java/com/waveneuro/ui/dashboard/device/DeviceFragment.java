@@ -383,6 +383,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
             @Override
             public void onConnected(BleDevice bleDevice) {
+                if(requireActivity() instanceof BaseActivity) {
+                    ((BaseActivity) getActivity()).removeWait();
+                }
                 deviceViewModel.processEvent(new DeviceViewEvent.Connected());
                 dashBoardViewModel.processEvent(
                         new DashboardViewEvent.Connected(
@@ -396,6 +399,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
             @Override
             public void onDisconnected() {
+                if(requireActivity() instanceof BaseActivity) {
+                    ((BaseActivity) getActivity()).removeWait();
+                }
                 deviceViewModel.processEvent(new DeviceViewEvent.Disconnected());
                 dashBoardViewModel.processEvent(new DashboardViewEvent.Disconnected());
             }
@@ -471,6 +477,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @Override
     public void onClickDevice(com.waveneuro.data.model.entity.BleDevice data) {
+        if(requireActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).displayWait();
+        }
         this.deviceViewModel.processEvent(new DeviceViewEvent.DeviceClicked(data));
     }
 

@@ -47,6 +47,34 @@
 
     <dimen name="width_margin">0dp</dimen>
 
+    <!--DEVICE SCREEN-->
+    <dimen name="height_start_session">64dp</dimen>
+    <dimen name="size_next_arrow">60dp</dimen>
+    <dimen name="size_profile">56dp</dimen>
+    <dimen name="margin_profile">24dp</dimen>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!--    <dimen name="padding_small">32dp</dimen>-->
 <!--    <dimen name="padding_small">36dp</dimen>-->
 <!--    <dimen name="padding_small">40dp</dimen>-->

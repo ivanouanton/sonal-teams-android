@@ -81,6 +81,9 @@
     <string name="welcome">Welcome</string>
     <string name="start_session">Start a session</string>
     <string name="pair_device">Pair your device</string>
+    <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
+    <string name="protocol_not_active">Your Protocol\nis processing</string>
+    <string name="notify_by_email">We will notify you via email once it ready</string>
 
     <!--Device F-->
     <string name="locate_device_info">Press the\ncenter button on base station\n for 2 seconds\nto begin pairing process</string>
@@ -129,5 +132,6 @@
     <!--Device-->
     <string name="available_devices">Available Devices</string>
     <string name="locating_device">Locating Device</string>
+
 
 </resources>
