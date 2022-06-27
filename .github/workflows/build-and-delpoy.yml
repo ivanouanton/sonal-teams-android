@@ -29,12 +29,6 @@ jobs:
           fileName: "ks.keystore"
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - name: Update version code
-        uses: chkfung/android-version-actions@v1.1
-        with:
-          gradlePath: android/app/build.gradle
-          versionCode: 18
-
       - name: Build and deploy
         run: bundle exec fastlane android deploy
         env:
