@@ -6,26 +6,26 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.waveneuro"
         minSdk 21
-        targetSdk 31
+        targetSdk 32
         versionCode 17
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "flavors"
+    flavorDimensions "env"
     productFlavors {
         dev {
 //            applicationId "com.waveneuro.dev"
             versionName "1.2.2"
-            dimension "flavors"
+            dimension "env"
             versionNameSuffix "-dev"
         }
         prod {
             versionName "1.2.3"
-            dimension "flavors"
+            dimension "env"
         }
     }
     buildTypes {
