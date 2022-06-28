@@ -40,3 +40,4 @@ jobs:
           name: assets
           path: |
             ${{ github.workspace }}/app/build/outputs/bundle/release
+
