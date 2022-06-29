@@ -21,6 +21,7 @@ import com.asif.messagebar.R
  */
 class FbProgress : View {
 
+
     private val barLength = 16
     private val barMaxLength = 270
     private val pauseGrowingTime: Long = 200
