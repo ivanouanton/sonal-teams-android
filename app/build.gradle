@@ -19,12 +19,14 @@ android {
     flavorDimensions "env"
     productFlavors {
         dev {
+            manifestPlaceholders = [sentryEnvironment:"dev"]
 //            applicationId "com.waveneuro.dev"
             versionName "1.2.2"
             dimension "env"
             versionNameSuffix "-dev"
         }
         prod {
+            manifestPlaceholders = [sentryEnvironment:"prod"]
             versionName "1.2.3"
             dimension "env"
         }
@@ -128,5 +130,7 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 
     implementation "com.mixpanel.android:mixpanel-android:6.1.0"
+
+    implementation 'io.sentry:sentry-android:6.1.4'
 
 }

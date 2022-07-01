@@ -118,6 +118,14 @@
             android:name="com.mixpanel.android.MPConfig.EnableDebugLogging"
             android:value="true" />
 
+        <meta-data android:name="io.sentry.dsn" android:value="https://7e568372a08f41f9a218f2309cea5772@o1090649.ingest.sentry.io/6543313" />
+        <!-- Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+           We recommend adjusting this value in production. -->
+        <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
+        <!-- Enable user interaction tracing to capture transactions for various UI events (such as clicks or scrolls). -->
+        <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
+        <meta-data android:name="io.sentry.environment" android:value="${sentryEnvironment}" />
+
     </application>
 
 </manifest>
