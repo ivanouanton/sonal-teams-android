@@ -34,7 +34,8 @@ jobs:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
-      
+          cat application.keystore
+          
 #       - name: Build and deploy
 #         run: bundle exec fastlane android deploy
 #         env:
