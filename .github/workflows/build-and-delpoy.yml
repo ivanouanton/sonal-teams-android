@@ -23,10 +23,10 @@ jobs:
           encodedString: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
 
       - name: Clone certificactes repository
-          uses: actions/checkout@v2
-          with:
-            repository: waveneuroscience/certificates
-            path: ./keystore
+        uses: actions/checkout@v2
+        with:
+          repository: waveneuroscience/certificates
+          path: ./keystore
 
       - name: Decrypt keystore
         run: |
