@@ -27,26 +27,21 @@ jobs:
         with:
           repository: waveneuroscience/certificates
           token: ${{ secrets.PAT }}
-          path: ./keystore
 
       - name: Decrypt keystore
-        run: |
-          gpg --version
-          cd keystore/keystore
-          pwd
-          ls
-          gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.KEYSTORE_ENCRYPTION_KEY }} --output application.keystore application.keystore.gpg
-          ls
-
-      - name: Build and deploy
-        run: bundle exec fastlane android deploy
         env:
-          ANDROID_JSON_KEY_FILE: ${{ steps.secrets_json_file.outputs.filePath }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore application.keystore.gpg
+      
+#       - name: Build and deploy
+#         run: bundle exec fastlane android deploy
+#         env:
+#           ANDROID_JSON_KEY_FILE: ${{ steps.secrets_json_file.outputs.filePath }}
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: assets
-          path: |
-            ${{ github.workspace }}/app/build/outputs/bundle/release
-
+#       - name: Upload build artifacts
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: assets
+#           path: |
+#             ${{ github.workspace }}/app/build/outputs/bundle/release
