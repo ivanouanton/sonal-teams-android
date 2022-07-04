@@ -9,30 +9,31 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.2
-          bundler-cache: true
+#       - name: Set up ruby
+#         uses: ruby/setup-ruby@v1
+#         with:
+#           ruby-version: 2.7.2
+#           bundler-cache: true
 
-      - name: Decode SA json
-        uses: timheuer/base64-to-file@v1
-        id: secrets_json_file
-        with:
-          fileName: "secrets.json"
-          encodedString: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+#       - name: Decode SA json
+#         uses: timheuer/base64-to-file@v1
+#         id: secrets_json_file
+#         with:
+#           fileName: "secrets.json"
+#           encodedString: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
 
       - name: Clone certificactes repository
         uses: actions/checkout@v2
         with:
           repository: waveneuroscience/certificates
           token: ${{ secrets.PAT }}
+          path: ./keystore
 
       - name: Decrypt keystore
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore application.keystore.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
       
 #       - name: Build and deploy
 #         run: bundle exec fastlane android deploy
