@@ -31,7 +31,7 @@ jobs:
 
       - name: Decrypt keystore
         run: |
-          gpg --quiet --batch --yes --decode --passphrase=${{ secrets.KEYSTORE_ENCRYPTION_KEY }} --output application.keystore application.keystore.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.KEYSTORE_ENCRYPTION_KEY }} --output application.keystore application.keystore.gpg
           ls
 
       - name: Build and deploy
