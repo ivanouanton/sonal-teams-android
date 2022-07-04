@@ -32,6 +32,8 @@ jobs:
       - name: Decrypt keystore
         run: |
           cd keystore
+          pwd
+          ls
           gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.KEYSTORE_ENCRYPTION_KEY }} --output application.keystore application.keystore.gpg
           ls
 
