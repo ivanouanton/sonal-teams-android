@@ -1,6 +1,9 @@
 package com.waveneuro.data.preference;
 
 public class PreferenceKeys {
+
+    private PreferenceKeys() {}
+
     public static final String ACCESS_TOKEN = "access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
     public static final String CUSTOM_GOAL = "custom_goal";

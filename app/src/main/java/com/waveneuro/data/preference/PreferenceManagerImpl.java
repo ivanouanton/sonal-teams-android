@@ -7,10 +7,10 @@ import com.waveneuro.data.model.response.user.UserInfoResponse;
 
 public class PreferenceManagerImpl implements PreferenceManager {
 
-    private static SharedPreferences defaultPreferences = null;
+    private SharedPreferences defaultPreferences;
     protected static final String DEFAULT_PREF_FILE_NAME = "waven_prefs";
 
-    private static SharedPreferences encPreferences = null;
+    private SharedPreferences encPreferences;
     protected static final String ENC_PREF_FILE_NAME = "waveneuro_prefs";
 
 

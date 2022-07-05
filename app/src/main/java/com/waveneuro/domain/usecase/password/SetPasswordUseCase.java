@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class SetPasswordUseCase extends ObservableUseCase {
+public class SetPasswordUseCase extends ObservableUseCase<SetPasswordResponse> {
 
     private final DataManager dataManager;
 
@@ -26,7 +26,7 @@ public class SetPasswordUseCase extends ObservableUseCase {
         return dataManager.setPassword(request);
     }
 
-    public void execute(SetPasswordRequest request, UseCaseCallback useCaseCallback) {
+    public void execute(SetPasswordRequest request, UseCaseCallback<SetPasswordResponse> useCaseCallback) {
         this.request=request;
         super.execute(useCaseCallback);
     }

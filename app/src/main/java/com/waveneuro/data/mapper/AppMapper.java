@@ -6,6 +6,8 @@ import com.waveneuro.data.model.response.user.UserInfoResponse;
 
 public class AppMapper {
 
+    private AppMapper(){}
+
     public static User toAppUser(UserInfoResponse response) {
         User user = new User();
         user.setEmail(response.getEmail());
@@ -14,6 +16,7 @@ public class AppMapper {
         user.setGivenName(response.getGivenName());
         user.setFamilyName(response.getFamilyName());
         user.setGender(response.getGender());
+        user.setBirthdate(response.getBirthdate());
         user.setImageThumbnailUrl(response.getImageThumbnailUrl());
         user.setCustomGoal(response.getCustomGoal());
         user.setLocation(response.getLocation());

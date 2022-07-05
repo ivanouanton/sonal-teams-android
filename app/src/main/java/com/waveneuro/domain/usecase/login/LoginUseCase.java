@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class LoginUseCase extends ObservableUseCase {
+public class LoginUseCase extends ObservableUseCase<LoginResponse> {
 
     private final DataManager dataManager;
 
@@ -26,7 +26,7 @@ public class LoginUseCase extends ObservableUseCase {
         return dataManager.login(request);
     }
 
-    public void execute(LoginRequest request, UseCaseCallback useCaseCallback) {
+    public void execute(LoginRequest request, UseCaseCallback<LoginResponse> useCaseCallback) {
         this.request=request;
         super.execute(useCaseCallback);
     }
