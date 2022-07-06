@@ -27,7 +27,7 @@ platform :android do
 
   desc 'Build the Android application'
   lane :build do
-    keystore_path = "#{fastfileLocation}/../keystore/keystore/application.keystore"
+    keystore_path = "#{fastfileLocation}/../application.keystore"
     clean
     gradle(
       task: 'bundle',
