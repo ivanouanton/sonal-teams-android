@@ -1,38 +1,54 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
+  fastfileLocation = File.expand_path(File.dirname(__FILE__))
   
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  lane :increment_version_code do |options|
+    build_number = Integer(options[:build_number])
+    puts(build_number: build_number)
+
+    path = '../app/build.gradle'
+    re = /versionCode\s+(\d+)/
+
+    s = File.read(path)
+    s[re, 1] = String(build_number)
+
+    f = File.new(path, 'w')
+    f.write(s)
+    f.close
+  end
+  
+  desc 'Clean project'
+  lane :clean do
+    gradle(
+      task: 'clean',
+    )
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
+  desc 'Build the Android application'
+  lane :build do
+    keystore_path = "#{fastfileLocation}/../application.keystore"
+    clean
+    gradle(
+      task: 'bundle',
+      flavor: ENV['FLAVOR'],
+      build_type: 'release',
+      properties: {
+        'android.injected.signing.store.file' => keystore_path,
+        'android.injected.signing.store.password' => ENV['KEYSTORE_PASSWORD'],
+        'android.injected.signing.key.alias' => ENV['KEYSTORE_ALIAS'],
+        'android.injected.signing.key.password' => ENV['KEYSTORE_ALIAS_PASSWORD']
+      }
+    )
+    
     upload_to_play_store(track: 'internal')
+    
+#     supply(
+#       track: 'internal',
+#       skip_upload_metadata: true,
+#       skip_upload_images: true,
+#       skip_upload_screenshots: true,
+#     )
   end
+
 end

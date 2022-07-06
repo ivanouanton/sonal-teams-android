@@ -5,22 +5,16 @@ on:
 
 jobs:
   deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.2
-          bundler-cache: true
-
-      - name: Decode SA json
-        uses: timheuer/base64-to-file@v1
-        id: secrets_json_file
-        with:
-          fileName: "secrets.json"
-          encodedString: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+      - name: Set Google credentials
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+        run: |
+          echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 --decode > google_account.json
 
       - name: Clone certificactes repository
         uses: actions/checkout@v2
@@ -30,23 +24,22 @@ jobs:
           path: ./keystore
 
       - name: Decrypt keystore
-        run: |
-          gpg --version
-          cd keystore/keystore
-          pwd
-          ls
-          gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.KEYSTORE_ENCRYPTION_KEY }} --output application.keystore application.keystore.gpg
-          ls
-
-      - name: Build and deploy
-        run: bundle exec fastlane android deploy
         env:
-          ANDROID_JSON_KEY_FILE: ${{ steps.secrets_json_file.outputs.filePath }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: assets
-          path: |
-            ${{ github.workspace }}/app/build/outputs/bundle/release
-
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
+      
+      - name: Install deps
+        run: |
+          sudo apt-get update && sudo apt-get install libcurl3-dev
+          sudo gem install bundler
+          bundle install    
+      
+      - name: Build
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+          FLAVOR: 'prod'
+        run: |
+          fastlane android build

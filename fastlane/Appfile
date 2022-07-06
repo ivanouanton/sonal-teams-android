@@ -1,2 +1,2 @@
-json_key_file("./secret.json")
+json_key_file("./google_account.json")
 package_name("com.waveneuro")
