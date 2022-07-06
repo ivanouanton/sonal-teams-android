@@ -3,6 +3,10 @@ name: Build and Deploy
 on:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Build and Deploy
@@ -34,12 +38,17 @@ jobs:
           sudo apt-get update && sudo apt-get install libcurl3-dev
           sudo gem install bundler
           bundle install    
+
+      - name: Setup git identity
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "Github Actions [BOT]"
       
-      - name: Build
+      - name: Build and Deploy
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'prod'
         run: |
-          fastlane android build
+          bundle exec fastlane android beta --env prod

@@ -1,21 +1,35 @@
 default_platform(:android)
 
+def set_version_code(version_code)
+  path = '../app/build.gradle'
+  re = /versionCode\s+(\d+)/
+
+  s = File.read(path)
+  s[re, 1] = String(version_code)
+
+  f = File.new(path, 'w')
+  f.write(s)
+  f.close
+end
+
 platform :android do
   fastfileLocation = File.expand_path(File.dirname(__FILE__))
-  
-  lane :increment_version_code do |options|
-    build_number = Integer(options[:build_number])
-    puts(build_number: build_number)
 
-    path = '../app/build.gradle'
-    re = /versionCode\s+(\d+)/
+  desc 'Increment build number'
+  lane :increment_build do
+    previous_build_number = google_play_track_version_codes(
+      track: "internal",
+    )[0]
 
-    s = File.read(path)
-    s[re, 1] = String(build_number)
+    current_build_number = previous_build_number + 1
 
-    f = File.new(path, 'w')
-    f.write(s)
-    f.close
+    set_version_code(current_build_number);
+
+    git_commit(path: "./app/build.gradle", message: "Set new version code to #{current_build_number}")
+
+    push_to_git_remote(
+      remote: "origin"
+    )
   end
   
   desc 'Clean project'
@@ -28,7 +42,6 @@ platform :android do
   desc 'Build the Android application'
   lane :build do
     keystore_path = "#{fastfileLocation}/../application.keystore"
-    clean
     gradle(
       task: 'bundle',
       flavor: ENV['FLAVOR'],
@@ -40,15 +53,14 @@ platform :android do
         'android.injected.signing.key.password' => ENV['KEYSTORE_ALIAS_PASSWORD']
       }
     )
-    
+  end
+
+  desc 'Deploy the application'
+  lane :beta do
+    clean
+    increment_build
+    build
     upload_to_play_store(track: 'internal')
-    
-#     supply(
-#       track: 'internal',
-#       skip_upload_metadata: true,
-#       skip_upload_images: true,
-#       skip_upload_screenshots: true,
-#     )
   end
 
 end
