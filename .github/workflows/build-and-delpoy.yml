@@ -29,11 +29,11 @@ jobs:
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
       
-      - name: Install deps
-        run: |
-          sudo apt-get update && sudo apt-get install libcurl3-dev
-          sudo gem install bundler
-          bundle install    
+#       - name: Install deps
+#         run: |
+#           sudo apt-get update && sudo apt-get install libcurl3-dev
+#           sudo gem install bundler
+#           bundle install    
       
       - name: Build
         env:
@@ -42,4 +42,6 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'prod'
         run: |
-          fastlane android build
+          pwd
+          find . | grep keystore
+#           fastlane android build
