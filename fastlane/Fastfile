@@ -24,12 +24,6 @@ platform :android do
     current_build_number = previous_build_number + 1
 
     set_version_code(current_build_number);
-
-    git_commit(path: "./app/build.gradle", message: "Set new version code to #{current_build_number}")
-
-    push_to_git_remote(
-      remote: "origin"
-    )
   end
   
   desc 'Clean project'
