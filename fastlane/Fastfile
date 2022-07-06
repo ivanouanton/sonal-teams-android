@@ -18,6 +18,7 @@ platform :android do
   desc 'Increment build number'
   lane :increment_build do
     previous_build_number = google_play_track_version_codes(
+      package_name: ENV['PACKAGE_NAME'],
       track: "internal",
     )[0]
 
