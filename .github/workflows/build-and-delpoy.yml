@@ -35,7 +35,7 @@ jobs:
           sudo gem install bundler
           bundle install    
       
-      - name: Build
+      - name: Build and Deploy
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
