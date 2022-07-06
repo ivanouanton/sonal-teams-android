@@ -34,6 +34,11 @@ jobs:
           sudo apt-get update && sudo apt-get install libcurl3-dev
           sudo gem install bundler
           bundle install    
+
+      - name: Setup git identity
+        run: |
+          git config --global user.email "fastlane@github.actions"
+          git config --global user.name "Fastlane"
       
       - name: Build and Deploy
         env:
