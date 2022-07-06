@@ -29,14 +29,11 @@ jobs:
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
           
-#       - name: Build and deploy
-#         run: bundle exec fastlane android deploy
-#         env:
-#           ANDROID_JSON_KEY_FILE: ${{ steps.secrets_json_file.outputs.filePath }}
-
-#       - name: Upload build artifacts
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: assets
-#           path: |
-#             ${{ github.workspace }}/app/build/outputs/bundle/release
+      - name: Build
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+          FLAVOR: 'prod'
+        run: |
+          fastlane android build
