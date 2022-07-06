@@ -42,4 +42,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'prod'
         run: |
-          fastlane android beta
+          bundle exec fastlane android increment_build
