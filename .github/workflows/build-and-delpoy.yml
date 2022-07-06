@@ -37,8 +37,8 @@ jobs:
 
       - name: Setup git identity
         run: |
-          git config --global user.email "fastlane@github.actions"
-          git config --global user.name "Fastlane"
+          git config --global user.email "github-action@users.noreply.github.com"
+          git config --global user.name "GitHub Action"
       
       - name: Build and Deploy
         env:
