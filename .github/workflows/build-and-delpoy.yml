@@ -11,10 +11,9 @@ jobs:
 
       - name: Set Google Credentials
         env:
-          GOOGLE_PLAY_SERVICE_ACCOUNT2: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT2 }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
-          echo $GOOGLE_PLAY_SERVICE_ACCOUNT2 > google.json
-          cat google.json
+          echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 --decode > google_account.json
 
       - name: Clone certificactes repository
         uses: actions/checkout@v2
