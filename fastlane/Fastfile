@@ -15,6 +15,13 @@ platform :android do
     f.write(s)
     f.close
   end
+  
+  desc 'Clean project'
+  lane :clean do
+    gradle(
+      task: 'clean',
+    )
+  end
 
   desc 'Build the Android application'
   lane :build do
