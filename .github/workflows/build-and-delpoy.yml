@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set Google Credentials
+      - name: Set Google credentials
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
@@ -28,7 +28,14 @@ jobs:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
-          
+      
+      - name: Install deps
+        run: |
+          sudo apt-get update && sudo apt-get install libcurl3-dev
+          yarn
+          sudo gem install bundler
+          cd android && bundle install    
+      
       - name: Build
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
