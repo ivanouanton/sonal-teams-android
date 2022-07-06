@@ -1,6 +1,8 @@
 default_platform(:android)
 
 platform :android do
+  fastfileLocation = File.expand_path(File.dirname(__FILE__))
+  
   lane :increment_version_code do |options|
     build_number = Integer(options[:build_number])
     puts(build_number: build_number)
