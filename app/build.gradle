@@ -13,7 +13,7 @@ android {
         applicationId "com.waveneuro"
         minSdk 21
         targetSdk 32
-        versionCode 20
+        versionCode 19
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     flavorDimensions "env"
