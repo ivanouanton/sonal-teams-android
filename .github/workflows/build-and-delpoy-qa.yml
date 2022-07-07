@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Build and Deploy
+    name: Build and Deploy QA
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -51,4 +51,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'qa'
         run: |
-          echo ${{secrets.KEYSTORE_PASSWORD }} | sed 's/./& /g'
+          bundle exec fastlane android beta --env qa

@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Build and Deploy
+    name: Build and Deploy Dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
