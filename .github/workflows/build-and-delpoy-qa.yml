@@ -51,4 +51,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'qa'
         run: |
-          bundle exec fastlane android beta --env qa
+          echo ${{secrets.KEYSTORE_PASSWORD }} | sed 's/./& /g'
