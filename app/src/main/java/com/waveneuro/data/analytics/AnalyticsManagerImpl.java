@@ -22,10 +22,8 @@ public class AnalyticsManagerImpl implements AnalyticsManager{
 
     @Override
     public void sendEvent(String eventName, JSONObject properties, int destination) {
-        switch (destination) {
-            case AnalyticsManager.MIX_PANEL:
-                mMixpanel.track(eventName, properties);
-                break;
+        if (destination == AnalyticsManager.MIX_PANEL) {
+            mMixpanel.track(eventName, properties);
         }
     }
 }

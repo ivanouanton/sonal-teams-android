@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class ForgotUsernameUseCase extends ObservableUseCase {
+public class ForgotUsernameUseCase extends ObservableUseCase<ForgotUsernameResponse> {
 
     private final DataManager dataManager;
 
@@ -26,7 +26,7 @@ public class ForgotUsernameUseCase extends ObservableUseCase {
         return dataManager.forgotUsername(request);
     }
 
-    public void execute(ForgotUsernameRequest request, UseCaseCallback useCaseCallback) {
+    public void execute(ForgotUsernameRequest request, UseCaseCallback<ForgotUsernameResponse> useCaseCallback) {
         this.request=request;
         super.execute(useCaseCallback);
     }

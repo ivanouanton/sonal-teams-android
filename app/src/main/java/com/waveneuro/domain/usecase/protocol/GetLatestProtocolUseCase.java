@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class GetLatestProtocolUseCase extends ObservableUseCase {
+public class GetLatestProtocolUseCase extends ObservableUseCase<ProtocolResponse> {
 
     private final DataManager dataManager;
 
@@ -23,7 +23,4 @@ public class GetLatestProtocolUseCase extends ObservableUseCase {
         return dataManager.protocol();
     }
 
-    public void execute(UseCaseCallback useCaseCallback) {
-        super.execute(useCaseCallback);
-    }
 }

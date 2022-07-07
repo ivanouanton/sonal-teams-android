@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class RefreshTokenUseCase extends ObservableUseCase {
+public class RefreshTokenUseCase extends ObservableUseCase<RefreshResponse> {
 
     private final DataManager dataManager;
 
@@ -23,7 +23,4 @@ public class RefreshTokenUseCase extends ObservableUseCase {
         return dataManager.refreshToken();
     }
 
-    public void execute(UseCaseCallback useCaseCallback) {
-        super.execute(useCaseCallback);
-    }
 }

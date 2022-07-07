@@ -1,6 +1,9 @@
 package com.waveneuro.data.analytics;
 
 public class AnalyticsEvent {
+
+    private AnalyticsEvent() {}
+
     public static final String LOGIN = "login";
     public static final String LOGOUT = "logout";
     public static final String SESSION_START = "session_start";

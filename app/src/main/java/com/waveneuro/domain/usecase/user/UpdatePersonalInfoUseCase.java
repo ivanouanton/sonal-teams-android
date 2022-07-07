@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class UpdatePersonalInfoUseCase extends ObservableUseCase {
+public class UpdatePersonalInfoUseCase extends ObservableUseCase<UserInfoResponse> {
 
     private final DataManager dataManager;
 
@@ -25,7 +25,7 @@ public class UpdatePersonalInfoUseCase extends ObservableUseCase {
         return dataManager.updateUser(request);
     }
 
-    public void execute(AccountUpdateRequest request,UseCaseCallback useCaseCallback) {
+    public void execute(AccountUpdateRequest request,UseCaseCallback<UserInfoResponse> useCaseCallback) {
         this.request = request;
         super.execute(useCaseCallback);
     }

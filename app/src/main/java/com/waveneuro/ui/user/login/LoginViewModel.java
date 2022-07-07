@@ -100,26 +100,25 @@ public class LoginViewModel extends ViewModel {
 
     private void login(String username, String password) {
         mDataLive.postValue(new LoginViewState.Loading(true));
-        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback() {
+        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback<LoginResponse>() {
             @Override
-            public void onSuccess(Object response) {
-                LoginResponse loginResponse = (LoginResponse) response;
-                if (loginResponse.getError() != null && TextUtils.isEmpty(loginResponse.getError())) {
+            public void onSuccess(LoginResponse response) {
+                if (response.getError() != null && TextUtils.isEmpty(response.getError())) {
                     mDataLive.postValue(new LoginViewState.Loading(false));
-                    APIError error = errorUtil.parseError(new SomethingWrongException(), loginResponse.getError());
+                    APIError error = errorUtil.parseError(new SomethingWrongException(), response.getError());
                     mDataLive.postValue(new LoginViewState.Failure(error));
                 } else {
-                    if (!loginResponse.isFirstEntrance()) {
-                        dataManager.saveAccessToken(loginResponse.getAccessToken());
-                        dataManager.saveRefreshToken(loginResponse.getRefreshToken());
+                    if (!response.isFirstEntrance()) {
+                        dataManager.saveAccessToken(response.getAccessToken());
+                        dataManager.saveRefreshToken(response.getRefreshToken());
 //                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
                     }
                     sentLoginEvent(username);
-                    if (loginResponse.isFirstEntrance()) {
+                    if (response.isFirstEntrance()) {
                         mDataLive.postValue(new LoginViewState.Loading(false));
                         mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
                     } else {
-                        getPersonalInfo(loginResponse.isFirstEntrance());
+                        getPersonalInfo(response.isFirstEntrance());
                     }
                 }
             }
@@ -149,18 +148,17 @@ public class LoginViewModel extends ViewModel {
     }
 
     private void getPersonalInfo(boolean firstEntrance) {
-        this.getPersonalInfoUseCase.execute(new UseCaseCallback() {
+        this.getPersonalInfoUseCase.execute(new UseCaseCallback<UserInfoResponse>() {
             @Override
-            public void onSuccess(Object response) {
+            public void onSuccess(UserInfoResponse response) {
                 Timber.e("PROFILE_SUCCESS");
                 mDataLive.postValue(new LoginViewState.Loading(false));
-                if (response instanceof UserInfoResponse) {
-                    dataManager.saveUser((UserInfoResponse) response);
-                    if (firstEntrance) {
-                        mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
-                    } else {
-                        mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
-                    }
+
+                dataManager.saveUser((UserInfoResponse) response);
+                if (firstEntrance) {
+                    mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
+                } else {
+                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
                 }
             }
 

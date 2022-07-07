@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class GetPersonalInfoUseCase extends ObservableUseCase {
+public class GetPersonalInfoUseCase extends ObservableUseCase<UserInfoResponse> {
 
     private final DataManager dataManager;
 
@@ -22,8 +22,5 @@ public class GetPersonalInfoUseCase extends ObservableUseCase {
     public Observable<UserInfoResponse> buildUseCaseSingle() {
         return dataManager.getPersonalInfo();
     }
-
-    public void execute(UseCaseCallback useCaseCallback) {
-        super.execute(useCaseCallback);
-    }
+    
 }

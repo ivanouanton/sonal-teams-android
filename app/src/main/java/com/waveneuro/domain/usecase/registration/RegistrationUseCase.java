@@ -10,13 +10,10 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class RegistrationUseCase extends ObservableUseCase {
-
-    private final DataManager dataManager;
+public class RegistrationUseCase extends ObservableUseCase<LoginResponse> {
 
     @Inject
     public RegistrationUseCase(DataManager dataManager) {
-        this.dataManager = dataManager;
     }
 
     @Override
@@ -24,7 +21,7 @@ public class RegistrationUseCase extends ObservableUseCase {
         return null;
     }
 
-    public void execute(LoginRequest request, UseCaseCallback useCaseCallback) {
+    public void execute(LoginRequest request, UseCaseCallback<LoginResponse> useCaseCallback) {
         super.execute(useCaseCallback);
     }
 

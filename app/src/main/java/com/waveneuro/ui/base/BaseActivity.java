@@ -1,11 +1,7 @@
 package com.waveneuro.ui.base;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,11 +88,6 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
     public void onSuccess(BaseModel model) {
         removeWait();
     }
@@ -125,12 +116,7 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
                 .messageColorRes(R.color.white)
                 .backgroundColorRes(R.color.black)
                 .primaryActionText("DISMISS")
-                .primaryActionTapListener(new Flashbar.OnActionTapListener() {
-                    @Override
-                    public void onActionTapped(@NonNull Flashbar bar) {
-                        bar.dismiss();
-                    }
-                })
+                .primaryActionTapListener(Flashbar::dismiss)
                 .showOverlay()
                 .dismissOnTapOutside()
                 .build().show();

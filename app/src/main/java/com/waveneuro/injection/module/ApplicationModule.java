@@ -5,11 +5,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.asif.abase.injection.qualifier.ApplicationContext;
-import com.chuckerteam.chucker.api.ChuckerInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.waveneuro.BuildConfig;
 import com.waveneuro.data.Config;
 import com.waveneuro.data.DataManager;
 import com.waveneuro.data.DataManagerImpl;
@@ -34,11 +32,9 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import timber.log.Timber;
 
 @Module
 public class ApplicationModule {
@@ -114,23 +110,13 @@ public class ApplicationModule {
 
         // Interceptors
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-//        if (BuildConfig.DEBUG) {
-////            // Logging Interceptors
-//            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message));
-//            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//            clientBuilder.addInterceptor(interceptor);
-//            clientBuilder.addInterceptor(new ChuckerInterceptor(context));
-//        }
+
         // URL Interceptors
         clientBuilder.addInterceptor(chain -> {
             Request request = chain.request();
             Request.@NotNull Builder requestBuilder = chain.request().newBuilder();
             if (!chain.request().url().url().getPath().contains("login")) {
                 requestBuilder.addHeader("Authorization", "Bearer " + preferenceManager.getAccessToken());
-//            } else if (chain.request().url().url().getPath().contains("refresh")) {
-//                requestBuilder.addHeader("Authorization", "Bearer " + preferenceManager.getRefreshToken());
-//                return chain.proceed(requestBuilder.build());
-//            } else {
                 Log.e("OKHTTP :: ","ACCESS TOKEN :: " + preferenceManager.getAccessToken());
                 Response response = chain.proceed(requestBuilder.build());
                 Log.e("OKHTTP :: ","RESPONSE :: " + response.code());

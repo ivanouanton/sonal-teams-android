@@ -55,11 +55,6 @@ public abstract class BaseFormActivity extends BaseActivity implements FormView,
         }
     }
 
-    @Override
-    public void onSupportActionModeStarted(@NonNull ActionMode mode) {
-        super.onSupportActionModeStarted(mode);
-    }
-
     public class TextInputLayoutAdapter implements ViewDataAdapter<TextInputLayout, String> {
         @Override
         public String getData(TextInputLayout view) throws ConversionException {
