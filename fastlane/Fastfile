@@ -57,4 +57,12 @@ platform :android do
     upload_to_play_store(track: 'internal')
   end
 
+  desc 'Deploy draft'
+  lane :draft do
+    clean
+    increment_build
+    build
+    upload_to_play_store(track: 'internal', release_status: 'draft')
+  end
+
 end

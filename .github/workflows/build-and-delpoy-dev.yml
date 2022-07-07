@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy Dev
 
 on:
   workflow_dispatch:
@@ -51,4 +51,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
           FLAVOR: 'dev'
         run: |
-          bundle exec fastlane android beta --env dev
+          bundle exec fastlane android draft --env dev
