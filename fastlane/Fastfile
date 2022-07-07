@@ -18,19 +18,12 @@ platform :android do
   desc 'Increment build number'
   lane :increment_build do
     previous_build_number = google_play_track_version_codes(
-      package_name: ENV['PACKAGE_NAME'],
       track: "internal",
     )[0]
 
     current_build_number = previous_build_number + 1
 
     set_version_code(current_build_number);
-
-    git_commit(path: "./app/build.gradle", message: "Set new version code to #{current_build_number}")
-
-    push_to_git_remote(
-      remote: "origin"
-    )
   end
   
   desc 'Clean project'
