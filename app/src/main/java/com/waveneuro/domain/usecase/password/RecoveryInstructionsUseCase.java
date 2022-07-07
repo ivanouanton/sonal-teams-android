@@ -10,15 +10,10 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class RecoveryInstructionsUseCase extends ObservableUseCase {
-
-    private final DataManager dataManager;
-
-    private ForgotPasswordConfirmRequest request;
+public class RecoveryInstructionsUseCase extends ObservableUseCase<BaseModel> {
 
     @Inject
     public RecoveryInstructionsUseCase(DataManager dataManager) {
-        this.dataManager = dataManager;
     }
 
     @Override
@@ -26,8 +21,7 @@ public class RecoveryInstructionsUseCase extends ObservableUseCase {
         return null;
     }
 
-    public void execute(ForgotPasswordConfirmRequest request, UseCaseCallback useCaseCallback) {
-        this.request=request;
+    public void execute(ForgotPasswordConfirmRequest request, UseCaseCallback<BaseModel> useCaseCallback) {
         super.execute(useCaseCallback);
     }
 

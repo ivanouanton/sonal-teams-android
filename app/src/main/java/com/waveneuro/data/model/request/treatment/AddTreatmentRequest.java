@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import com.waveneuro.utils.DateUtil;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddTreatmentRequest extends BaseModel implements Serializable {
@@ -42,14 +41,6 @@ public class AddTreatmentRequest extends BaseModel implements Serializable {
 
     public void setEegId(String eegId) {
         this.eegId = eegId;
-    }
-
-    public String getTreatmentDate() {
-        return treatmentDate;
-    }
-
-    private void setTreatmentDate(String treatmentDate) {
-        this.treatmentDate = treatmentDate;
     }
 
     public void setTreatmentDate() {

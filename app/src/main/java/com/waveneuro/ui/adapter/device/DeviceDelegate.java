@@ -10,11 +10,9 @@ import com.waveneuro.data.model.entity.BleDevice;
 
 public class DeviceDelegate {
 
-    private Context mContext;
-
     public DeviceViewHolder onCreateNoteViewHolder(ViewGroup parent, int viewType) {
-        this.mContext = parent.getContext();
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_device, parent, false);
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_device, parent, false);
         return new DeviceViewHolder(view);
     }
 

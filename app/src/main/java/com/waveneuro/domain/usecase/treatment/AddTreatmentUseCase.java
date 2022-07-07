@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class AddTreatmentUseCase extends ObservableUseCase {
+public class AddTreatmentUseCase extends ObservableUseCase<TreatmentResponse> {
 
     private final DataManager dataManager;
 
@@ -26,7 +26,7 @@ public class AddTreatmentUseCase extends ObservableUseCase {
         return dataManager.addTreatment(request);
     }
 
-    public void execute(AddTreatmentRequest request, UseCaseCallback useCaseCallback) {
+    public void execute(AddTreatmentRequest request, UseCaseCallback<TreatmentResponse> useCaseCallback) {
         this.request = request;
         super.execute(useCaseCallback);
     }

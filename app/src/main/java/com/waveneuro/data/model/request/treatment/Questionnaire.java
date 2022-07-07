@@ -1,4 +1,6 @@
 package com.waveneuro.data.model.request.treatment;
 
-public class Questionnaire {
+import java.io.Serializable;
+
+public class Questionnaire implements Serializable {
 }
