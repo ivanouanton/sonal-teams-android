@@ -13,21 +13,31 @@ android {
         applicationId "com.waveneuro"
         minSdk 21
         targetSdk 32
-        versionCode 17
+        versionCode 18
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     flavorDimensions "env"
     productFlavors {
         dev {
-            manifestPlaceholders = [sentryEnvironment:"dev"]
-//            applicationId "com.waveneuro.dev"
+            manifestPlaceholders = [sentryEnvironment: "dev",
+                                    appName: "Sonal DEV"]
             versionName "1.2.2"
             dimension "env"
             versionNameSuffix "-dev"
+            applicationIdSuffix ".dev"
+        }
+        qa {
+            manifestPlaceholders = [sentryEnvironment:"qa",
+                                    appName: "Sonal QA"]
+            versionName "1.2.4"
+            dimension "env"
+            versionNameSuffix "-qa"
+            applicationIdSuffix ".qa"
         }
         prod {
-            manifestPlaceholders = [sentryEnvironment:"prod"]
-            versionName "1.2.3"
+            manifestPlaceholders = [sentryEnvironment:"prod",
+                                    appName: "@string/app_name"]
+            versionName "1.2.4"
             dimension "env"
         }
     }
@@ -52,6 +62,15 @@ android {
                            'src/main/res/layouts/users/password',
                            'src/main/res/layouts/users/register'
             ]
+        }
+        prod {
+            java.srcDirs = ['src/prod/java/com/waveneuro/data']
+        }
+        qa {
+            java.srcDirs = ['src/qa/java/com/waveneuro/data']
+        }
+        dev {
+            java.srcDirs = ['src/dev/java/com/waveneuro/data']
         }
     }
 
