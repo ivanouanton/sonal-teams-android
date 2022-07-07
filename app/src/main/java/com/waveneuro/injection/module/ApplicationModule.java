@@ -115,6 +115,7 @@ public class ApplicationModule {
         clientBuilder.addInterceptor(chain -> {
             Request request = chain.request();
             Request.@NotNull Builder requestBuilder = chain.request().newBuilder();
+            Log.d("OKHTTP :: ", chain.request().url()+"");
             if (!chain.request().url().url().getPath().contains("login")) {
                 requestBuilder.addHeader("Authorization", "Bearer " + preferenceManager.getAccessToken());
                 Log.e("OKHTTP :: ","ACCESS TOKEN :: " + preferenceManager.getAccessToken());
