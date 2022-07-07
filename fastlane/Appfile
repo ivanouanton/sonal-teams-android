@@ -1,2 +1,2 @@
-json_key_file("./secret.json")
-package_name("com.waveneuro")
+json_key_file("./google_account.json")
+package_name(ENV["PACKAGE_NAME"])
