@@ -79,9 +79,81 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:3138931806:android:be0488946aa97cf9ccb8cf",
+        "android_client_info": {
+          "package_name": "com.waveneuro.develop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3138931806-p8831hoc3986tdgvrt0dlksim9qi9fvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJryTWuVkbv6vvtbMS-F13-U9I30ywoMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3138931806-p8831hoc3986tdgvrt0dlksim9qi9fvu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3138931806-7shfhebhovuchb04h22ictan25ojfvul.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.waveneuro.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:3138931806:android:f067caa325bba3bdccb8cf",
         "android_client_info": {
           "package_name": "com.waveneuro.qa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3138931806-p8831hoc3986tdgvrt0dlksim9qi9fvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJryTWuVkbv6vvtbMS-F13-U9I30ywoMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3138931806-p8831hoc3986tdgvrt0dlksim9qi9fvu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3138931806-7shfhebhovuchb04h22ictan25ojfvul.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.waveneuro.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3138931806:android:57b5dcfab77493daccb8cf",
+        "android_client_info": {
+          "package_name": "com.waveneuro.test"
         }
       },
       "oauth_client": [

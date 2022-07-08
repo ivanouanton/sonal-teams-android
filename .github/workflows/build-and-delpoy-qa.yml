@@ -29,9 +29,9 @@ jobs:
 
       - name: Decrypt keystore
         env:
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE_DEV_QA }}
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application-qa.keystore.gpg
       
       - name: Install deps
         run: |
