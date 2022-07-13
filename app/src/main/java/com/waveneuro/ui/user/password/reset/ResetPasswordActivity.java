@@ -19,6 +19,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.more.WebCommand;
+import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
 import com.waveneuro.ui.user.password.password.first.SetPasswordViewCommand;
 import com.waveneuro.ui.user.password.recovery.RecoveryInstructionsCommand;
@@ -36,8 +37,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
     MaterialTextView tvForgotUsername;
     @BindView(R.id.tv_register)
     MaterialTextView tvRegister;
-    @BindView(R.id.tv_sign_in)
-    MaterialTextView tvLogin;
+
     @BindView(R.id.tv_about_us)
     MaterialTextView tvAboutUs;
 
@@ -49,7 +49,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
     ResetPasswordViewModel resetPasswordViewModel;
 
     @Inject
-    ResetPasswordCommand forgotUsernameCommand;
+    ForgotUsernameCommand forgotUsernameCommand;
     @Inject
     RegistrationCommand registrationCommand;
     @Inject
@@ -78,8 +78,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
     private void setView() {
         forgotUsernameSpanText();
         registerSpanText();
-        loginSpanText();
-//        aboutUsSpanText();
     }
 
     private void forgotUsernameSpanText() {
@@ -99,25 +97,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
         tvForgotUsername.setText(spannableString);
         tvForgotUsername.setClickable(true);
         tvForgotUsername.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    private void loginSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.sign_in));
-
-        spannableString.setSpan(new UnderlineSpan(), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                resetPasswordViewModel.processEvent(new ResetPasswordViewEvent.LoginClicked());
-            }
-        }, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)),
-                0, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvLogin.setText(spannableString);
-        tvLogin.setClickable(true);
-        tvLogin.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 
@@ -197,8 +176,8 @@ public class ResetPasswordActivity extends BaseFormActivity {
     };
 
     private void launchForgotUsernameScreen() {
-//        forgotUsernameCommand.navigate();
-        webCommand.navigate(WebCommand.PAGE_SUPPORT);
+        forgotUsernameCommand.navigate();
+        //webCommand.navigate(WebCommand.PAGE_SUPPORT);
     }
 
     private void launchRegisterScreen() {

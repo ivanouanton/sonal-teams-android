@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.Window;
-import android.widget.CheckBox;
 
 import androidx.lifecycle.Observer;
 
@@ -54,6 +52,8 @@ public class LoginActivity extends BaseFormActivity {
     MaterialTextView tvSupport;
     @BindView(R.id.chk_remember_me)
     MaterialCheckBox chkRememberMe;
+    @BindView(R.id.tv_recover_here)
+    MaterialTextView tvRecover;
 
     @Inject
     DashboardCommand dashboardCommand;
@@ -91,68 +91,20 @@ public class LoginActivity extends BaseFormActivity {
     }
 
     private void setView() {
-        loginSpanText();
-        registerSpanText();
-        supportSpanText();
+        recoverHereSpan();
     }
 
-    private void loginSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.forgot_username_or_password));
+    private void recoverHereSpan() {
+        SpannableString spannableString = new SpannableString(getString(R.string.recover_here));
 
-        spannableString.setSpan(new UnderlineSpan(), 7, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new UnderlineSpan(), 19, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new UnderlineSpan(), 0, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                loginViewModel.processEvent(new LoginViewEvent.ForgotUsernameClicked());
-            }
-        }, 7, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                loginViewModel.processEvent(new LoginViewEvent.ForgotPasswordClicked());
-            }
-        }, 19, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, 12, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tvRecover.setText(spannableString);
 
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 7, 15, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 19, 27, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvForgotPassword.setText(spannableString);
-        tvForgotPassword.setClickable(true);
-        tvForgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
+        tvRecover.setOnClickListener(view -> loginViewModel.processEvent(new LoginViewEvent.ForgotPasswordClicked()));
     }
 
-    private void registerSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.register));
-
-        spannableString.setSpan(new UnderlineSpan(), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                loginViewModel.processEvent(new LoginViewEvent.RegisterClicked());
-            }
-        }, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvRegister.setText(spannableString);
-    }
-
-    private void supportSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.need_help_support));
-
-        spannableString.setSpan(new UnderlineSpan(), 11, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                loginViewModel.processEvent(new LoginViewEvent.SupportClicked());
-            }
-        }, 11, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 11, 18, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvSupport.setText(spannableString);
-    }
 
     private void setObserver() {
         this.loginViewModel.getData().observe(this, loginViewStateObserver);

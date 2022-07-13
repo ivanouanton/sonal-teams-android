@@ -15,4 +15,6 @@
     <color name="gray_dim">#52000000</color>
     <color name="yellow_dim">#FFD378</color>
     <color name="gray_dim_dark">#777777</color>
+
+    <color name="login_screen_overlay">#A6000000</color>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login_gray"
+    android:background="@drawable/bg_login_overlaid"
     android:paddingHorizontal="@dimen/padding_24dp"
     android:paddingVertical="0dp"
     tools:context=".ui.user.login.LoginActivity">
@@ -94,7 +94,7 @@
             app:endIconTint="@color/black"
             app:hintAnimationEnabled="false"
             app:hintEnabled="false"
-            app:layout_constraintBottom_toTopOf="@+id/chk_remember_me"
+            app:layout_constraintBottom_toTopOf="@+id/tv_forgot_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -110,6 +110,24 @@
                 android:text="" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_forgot_password"
+            style="@style/BaseText.Caption.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_username_or_password"
+            app:layout_constraintBottom_toTopOf="@+id/chk_remember_me"
+            app:layout_constraintStart_toStartOf="@+id/et_password" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_recover_here"
+            style="@style/BaseText.Caption.White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recover_here"
+            app:layout_constraintBottom_toTopOf="@+id/chk_remember_me"
+            app:layout_constraintEnd_toEndOf="@+id/et_password" />
 
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -137,16 +155,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_4dp"
-            app:layout_constraintBottom_toTopOf="@id/tv_support"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_forgot_password"
+                android:id="@+id/tv_register"
                 style="@style/BaseText.Caption.White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_username_or_password" />
+                android:text="@string/register" />
 
             <TextView
                 style="@style/BaseText.Caption.White"
@@ -156,24 +174,15 @@
                 android:text="@string/or_separator" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_register"
+                android:id="@+id/tv_support"
                 style="@style/BaseText.Caption.White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register" />
+                android:layout_marginBottom="@dimen/margin_24dp"
+                android:text="@string/need_help_support" />
 
         </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_support"
-            style="@style/BaseText.Caption.White"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_24dp"
-            android:text="@string/need_help_support"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
