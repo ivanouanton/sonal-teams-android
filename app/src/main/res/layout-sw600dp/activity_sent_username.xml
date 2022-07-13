@@ -61,18 +61,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_label_sent_username_info" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="36dp"
-        android:textSize="@dimen/text_size_standard_16"
-        style="@style/BaseText.Caption.Black"
-        android:text="@string/to_login_click_here"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_open_email_app" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_open_login"
+            style="@style/RoundedButton.Aqua"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_open_email_app" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
