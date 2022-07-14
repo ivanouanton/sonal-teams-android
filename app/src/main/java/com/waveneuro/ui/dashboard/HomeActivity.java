@@ -244,7 +244,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void enableDeviceTab(boolean enable) {
-        bottomNavigationView.getMenu().getItem(0).setEnabled(enable);
+        bottomNavigationView.getMenu().getItem(1).setEnabled(enable);
     }
 
     private void resetTabs() {
