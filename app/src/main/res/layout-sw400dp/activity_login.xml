@@ -132,7 +132,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
-        style="@style/RoundedButton.Aqua"
+        style="@style/RoundedButton.Aqua.BlackText"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="@dimen/margin_12dp"
