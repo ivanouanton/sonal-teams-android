@@ -33,9 +33,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_label_forgot_username"
-        style="@style/BaseText.Heading2.Black"
+        style="@style/BaseText.Heading.Black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_large_32"
         android:layout_marginBottom="@dimen/margin_16dp"
         android:text="@string/forgot_username"
         app:layout_constraintBottom_toTopOf="@+id/et_email"

@@ -93,6 +93,7 @@
 
     <!--Account-->
     <string name="account">Account</string>
+    <string name="profile_information">Profile Information</string>
     <string name="organization">Organization</string>
     <string name="chief_complaint">Chief Complaint</string>
     <string name="first_name">First Name</string>
@@ -100,6 +101,13 @@
     <string name="dob">DOB</string>
     <string name="email">Email</string>
     <string name="save_changes">Save Changes</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="enter_first_name">Enter First Name</string>
+    <string name="enter_last_name">Enter Last Name</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
 
     <!--Set Password-->
     <string name="sign_up">Sign Up</string>

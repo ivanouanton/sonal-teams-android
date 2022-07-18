@@ -122,7 +122,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_recover_here"
-            style="@style/BaseText.Caption.White"
+            style="@style/BaseText.Caption.Yellow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recover_here"
