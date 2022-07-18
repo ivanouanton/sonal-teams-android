@@ -17,6 +17,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_history"
         android:orderInCategory="2"
+        android:visible="false"
         android:title="@string/history" />
     <item
         android:id="@+id/bottom_navigation_more"

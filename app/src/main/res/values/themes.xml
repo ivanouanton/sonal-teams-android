@@ -26,8 +26,8 @@
     </style>
 
     <style name="Background.WhitePattern" parent="">
-        <item name="background">@drawable/bg_pattern_white</item>
-        <item name="android:background">@drawable/bg_pattern_white</item>
+        <item name="background">@color/gray_15</item>
+        <item name="android:background">@color/gray_15</item>
     </style>
     <style name="Background.WhitePattern.Padding">
         <item name="android:paddingStart">24dp</item>
@@ -108,6 +108,10 @@
 
     <style name="BaseText.Caption.White">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BaseText.Caption.Yellow">
+        <item name="android:textColor">@color/yellow_dim</item>
     </style>
 
     <style name="BaseText.Heading.Black">
@@ -192,7 +196,7 @@
     <style name="CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="fontFamily">@font/inter_semi_bold</item>
+        <item name="fontFamily">@font/inter_regular</item>
         <item name="android:textColor">@color/white</item>
         <item name="buttonTint">@color/white</item>
     </style>

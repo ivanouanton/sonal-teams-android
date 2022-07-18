@@ -78,6 +78,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
     private void setView() {
         forgotUsernameSpanText();
         registerSpanText();
+        aboutUsSpanText();
     }
 
     private void forgotUsernameSpanText() {

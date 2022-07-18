@@ -22,8 +22,10 @@ import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.account.AccountCommand;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
+import com.waveneuro.ui.dashboard.help.HelpCommand;
 import com.waveneuro.ui.dashboard.history.HistoryFragment;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
+import com.waveneuro.ui.dashboard.home.MoreFragment;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.device.MyDeviceCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
@@ -45,6 +47,8 @@ public class HomeActivity extends BaseActivity {
     FrameLayout frDevice;
     @BindView(R.id.fr_history)
     FrameLayout frHistory;
+    @BindView(R.id.fr_more)
+    FrameLayout frMore;
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
@@ -73,6 +77,7 @@ public class HomeActivity extends BaseActivity {
     HomeFragment homeFragment;
     DeviceFragment deviceFragment;
     HistoryFragment historyFragment;
+    MoreFragment moreFragment;
 
     BluetoothManager bluetoothManager;
 
@@ -84,10 +89,11 @@ public class HomeActivity extends BaseActivity {
     MyDeviceCommand myDeviceCommand;
     @Inject
     WebCommand webCommand;
-
+    @Inject
+    HelpCommand helpCommand;
 
     @Inject
-    DashBoardViewModel dashBoardViewModel;
+    public DashBoardViewModel dashBoardViewModel;
 
     DashBoardViewModel dashBoardViewModelConnection;
 
@@ -119,8 +125,9 @@ public class HomeActivity extends BaseActivity {
                     addFragment(TAB_HISTORY);
                     return true;
                 case R.id.bottom_navigation_more:
-                    drawerLayout.openDrawer(GravityCompat.END);
-                    return false;
+                    setContainerVisible(TAB_MORE);
+                    addFragment(TAB_MORE);
+                    return true;
                 default:
                     return false;
             }
@@ -154,9 +161,12 @@ public class HomeActivity extends BaseActivity {
             deviceFragment = DeviceFragment.newInstance();
         if (historyFragment == null)
             historyFragment = HistoryFragment.newInstance();
+        if (moreFragment == null)
+            moreFragment = MoreFragment.newInstance();
         addFragment(frHome, homeFragment);
         addFragment(frDevice, deviceFragment);
         addFragment(frHistory, historyFragment);
+        addFragment(frMore, moreFragment);
     }
 
     private void setObserver() {
@@ -174,6 +184,8 @@ public class HomeActivity extends BaseActivity {
             launchLoginScreen();
         } else if (viewEffect instanceof DashboardViewEffect.Account) {
             launchAccountScreen();
+        } else if (viewEffect instanceof DashboardViewEffect.Help) {
+            launchHelpScreen();
         } else if (viewEffect instanceof DashboardViewEffect.Device) {
             DashboardViewEffect.Device effect = (DashboardViewEffect.Device) viewEffect;
             launchMyDeviceScreen(effect.getDeviceName());
@@ -195,6 +207,10 @@ public class HomeActivity extends BaseActivity {
         this.accountCommand.navigate();
     }
 
+    private void launchHelpScreen() {
+        this.helpCommand.navigate();
+    }
+
     private void launchMyDeviceScreen(String deviceName) {
         this.myDeviceCommand.navigate(deviceName);
     }
@@ -203,6 +219,7 @@ public class HomeActivity extends BaseActivity {
         frHome.setVisibility(TAB_HOME == tab ? View.VISIBLE : View.GONE);
         frDevice.setVisibility(TAB_DEVICE == tab ? View.VISIBLE : View.GONE);
         frHistory.setVisibility(TAB_HISTORY == tab ? View.VISIBLE : View.GONE);
+        frMore.setVisibility(TAB_MORE == tab ? View.VISIBLE : View.GONE);
     }
 
     private void addFragment(@BottomTab int tab) {
@@ -223,6 +240,12 @@ public class HomeActivity extends BaseActivity {
                 if (historyFragment == null) {
                     historyFragment = HistoryFragment.newInstance();
                     addFragment(frHistory, historyFragment);
+                }
+                break;
+            case TAB_MORE:
+                if (moreFragment == null) {
+                    moreFragment = MoreFragment.newInstance();
+                    addFragment(frMore, moreFragment);
                 }
                 break;
         }

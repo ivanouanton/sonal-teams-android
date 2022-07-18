@@ -10,6 +10,7 @@ import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.injection.module.ActivityModule;
 import com.waveneuro.ui.dashboard.HomeActivity;
 import com.waveneuro.ui.dashboard.account.AccountActivity;
+import com.waveneuro.ui.dashboard.help.HelpActivity;
 import com.waveneuro.ui.dashboard.more.WebActivity;
 import com.waveneuro.ui.device.MyDeviceActivity;
 import com.waveneuro.ui.introduction.splash.SplashActivity;
@@ -77,4 +78,6 @@ public interface ActivityComponent {
     void inject(SetPasswordActivity setPasswordActivity);
 
     void inject(MyDeviceActivity deviceActivity);
+
+    void inject(HelpActivity helpActivity);
 }

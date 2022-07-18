@@ -99,7 +99,7 @@ public class LoginActivity extends BaseFormActivity {
 
         spannableString.setSpan(new UnderlineSpan(), 0, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, 12, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 12, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         tvRecover.setText(spannableString);
 
         tvRecover.setOnClickListener(view -> loginViewModel.processEvent(new LoginViewEvent.ForgotPasswordClicked()));
