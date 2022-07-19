@@ -23,6 +23,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
         android:text="@string/profile_information"
+        android:fontFamily="@font/inter_semi_bold"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_back"
