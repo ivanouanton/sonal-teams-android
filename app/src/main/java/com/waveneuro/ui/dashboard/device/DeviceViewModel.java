@@ -90,6 +90,10 @@ public class DeviceViewModel extends ViewModel {
         });
     }
 
+    public void setDeviceId(String sonalId) {
+        dataManager.saveSonalId(sonalId);
+    }
+
     public MutableLiveData<DeviceViewState> getData() {
         return mDataLive;
     }

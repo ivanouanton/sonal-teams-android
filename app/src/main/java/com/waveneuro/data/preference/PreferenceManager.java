@@ -20,9 +20,17 @@ public interface PreferenceManager {
 
     void saveProtocolFrequency(String protocolFrequency);
 
+    void saveProtocolId(String protocolId);
+
+    void saveSonalId(String sonalId);
+
     String getTreatmentLength();
 
     String getProtocolFrequency();
+
+    String getProtocolId();
+
+    String getSonalId();
 
     String getName();
 

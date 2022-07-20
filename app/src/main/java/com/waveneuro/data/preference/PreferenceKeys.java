@@ -17,7 +17,9 @@ public class PreferenceKeys {
     public static final String FAMILY_NAME = "family_name";
     public static final String TREATMENT_LENGTH = "treatment_length";
     public static final String PROTOCOL_FREQUENCY = "protocol_frequency";
+    public static final String PROTOCOL_ID = "protocol_id";
     public static final String EEG_ID = "eeg_id";
+    public static final String SONAL_ID = "sonal_id";
 
     public static final String REMEMBER_USERNAME = "remember_username";
     public static final String REMEMBER_PASSWORD = "remember_password";
