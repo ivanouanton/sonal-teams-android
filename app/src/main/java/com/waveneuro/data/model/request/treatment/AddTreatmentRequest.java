@@ -13,18 +13,24 @@ public class AddTreatmentRequest extends BaseModel implements Serializable {
     boolean completed;
 
     @SerializedName("eeg_id")
-    String eegId;
+    Long eegId;
 
     @SerializedName("questionnaire")
     Questionnaire questionnaire;
 
     @SerializedName("treatment_date")
-    String treatmentDate;
+    Long treatmentDate;
+
+    @SerializedName("sonal_id")
+    Long sonalId;
+
+    @SerializedName("protocol_id")
+    Long protocolId;
 
     public AddTreatmentRequest() {
         completed = true;
         questionnaire = new Questionnaire();
-        treatmentDate = DateUtil.getCurrentDate();
+        treatmentDate = System.currentTimeMillis();
     }
 
     public boolean getCompleted() {
@@ -35,17 +41,33 @@ public class AddTreatmentRequest extends BaseModel implements Serializable {
         this.completed = completed;
     }
 
-    public String getEegId() {
+    public Long getEegId() {
         return eegId;
     }
 
-    public void setEegId(String eegId) {
+    public void setEegId(Long eegId) {
         this.eegId = eegId;
     }
 
     public void setTreatmentDate() {
         Calendar calendar = Calendar.getInstance();
-        this.treatmentDate = DateUtil.formatDate(calendar.getTime(), DateUtil.PATTERN_ISO8601);
+        this.treatmentDate = System.currentTimeMillis();
+    }
+
+    public Long getSonalId() {
+        return sonalId;
+    }
+
+    public void setSonalId(Long sonalId) {
+        this.sonalId = sonalId;
+    }
+
+    public Long getProtocolId() {
+        return protocolId;
+    }
+
+    public void setProtocolId(Long protocolId) {
+        this.protocolId = protocolId;
     }
 
     public Questionnaire getQuestionnaire() {

@@ -43,7 +43,9 @@ public class SessionViewModel extends ViewModel {
         if (viewEvent instanceof SessionViewEvent.Start) {
             sentSessionEvent(AnalyticsEvent.SESSION_STARTED,
                     dataManager.getUser().getUsername(),
-                    dataManager.getEegId());
+                    dataManager.getEegId(),
+                    dataManager.getProtocolId(),
+                    dataManager.getSonalId());
             if(this.mDataLive.getValue() instanceof SessionViewState.SessionPaused) {
                 this.mDataLive.postValue(new SessionViewState.ResumeSession());
             } else {
@@ -63,7 +65,9 @@ public class SessionViewModel extends ViewModel {
         } else if (viewEvent instanceof SessionViewEvent.EndSession) {
             sentSessionEvent(AnalyticsEvent.SESSION_COMPLETED,
                     dataManager.getUser().getUsername(),
-                    dataManager.getEegId());
+                    dataManager.getEegId(),
+                    dataManager.getProtocolId(),
+                    dataManager.getSonalId());
             this.mDataLive.postValue(new SessionViewState.SessionEnded());
             //DONE API call
             addTreatmentData();
@@ -72,11 +76,18 @@ public class SessionViewModel extends ViewModel {
         } else if (viewEvent instanceof SessionViewEvent.DevicePaused) {
             sentSessionEvent(AnalyticsEvent.SESSION_PAUSED,
                     dataManager.getUser().getUsername(),
-                    dataManager.getEegId());
+                    dataManager.getEegId(),
+                    dataManager.getProtocolId(),
+                    dataManager.getSonalId());
             this.mDataLive.postValue(new SessionViewState.SessionPaused());
         } else if (viewEvent instanceof SessionViewEvent.ResumeSession) {
             this.mDataLive.postValue(new SessionViewState.ResumeSession());
         } else if (viewEvent instanceof SessionViewEvent.DeviceError) {
+            sentSessionEvent(AnalyticsEvent.SESSION_TERMINATED_EARLY,
+                    dataManager.getUser().getUsername(),
+                    dataManager.getEegId(),
+                    dataManager.getProtocolId(),
+                    dataManager.getSonalId());
             SessionViewEvent.DeviceError event = (SessionViewEvent.DeviceError) viewEvent;
             //DONE call API with true
             this.mDataLive.postValue(
@@ -90,8 +101,10 @@ public class SessionViewModel extends ViewModel {
 
     private void sendErrorTreatmentData() {
         AddTreatmentRequest request = new AddTreatmentRequest();
-        request.setEegId(dataManager.getEegId());
         request.setCompleted(false);
+        request.setEegId(Long.parseLong(dataManager.getEegId()));
+        request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
+        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -112,7 +125,9 @@ public class SessionViewModel extends ViewModel {
 
     private void addTreatmentData() {
         AddTreatmentRequest request = new AddTreatmentRequest();
-        request.setEegId(dataManager.getEegId());
+        request.setEegId(Long.parseLong(dataManager.getEegId()));
+        request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
+        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -131,11 +146,13 @@ public class SessionViewModel extends ViewModel {
         });
     }
 
-    private void sentSessionEvent(String eventName, String username, String eggId) {
+    private void sentSessionEvent(String eventName, String username, String eggId, String protocolId, String sonalId) {
         JSONObject properties = new JSONObject();
         try {
             properties.put("username", username);
+            properties.put("protocol_id", protocolId);
             properties.put("treatment_eeg_id", eggId);
+            properties.put("sonal_id", sonalId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

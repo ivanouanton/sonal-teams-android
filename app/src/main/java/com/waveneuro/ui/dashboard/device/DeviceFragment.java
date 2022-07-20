@@ -387,6 +387,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
                     ((BaseActivity) getActivity()).removeWait();
                 }
                 deviceViewModel.processEvent(new DeviceViewEvent.Connected());
+                deviceViewModel.setDeviceId(bleDevice.getName());
                 dashBoardViewModel.processEvent(
                         new DashboardViewEvent.Connected(
                                 new com.waveneuro.data.model.entity.BleDevice(bleDevice)));

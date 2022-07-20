@@ -57,6 +57,10 @@ public interface DataManager {
 
     void saveProtocolFrequency(String protocolFrequency);
 
+    void saveProtocolId(String protocolId);
+
+    void saveSonalId(String sonalId);
+
     String getTreatmentLength();
 
     String getProtocolFrequency();
@@ -84,4 +88,8 @@ public interface DataManager {
     void removeRememberPassword();
 
     Observable<UserInfoResponse> updateUser(AccountUpdateRequest request);
+
+    String getProtocolId();
+
+    String getSonalId();
 }

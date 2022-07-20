@@ -124,6 +124,16 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
+    public void saveProtocolId(String protocolId) {
+        preferenceManager.saveProtocolId(protocolId);
+    }
+
+    @Override
+    public void saveSonalId(String sonalId) {
+        preferenceManager.saveSonalId(sonalId);
+    }
+
+    @Override
     public String getTreatmentLength() {
         return preferenceManager.getTreatmentLength();
     }
@@ -131,6 +141,16 @@ public class DataManagerImpl implements DataManager {
     @Override
     public String getProtocolFrequency() {
         return preferenceManager.getProtocolFrequency();
+    }
+
+    @Override
+    public String getProtocolId() {
+        return preferenceManager.getProtocolId();
+    }
+
+    @Override
+    public String getSonalId() {
+        return preferenceManager.getSonalId();
     }
 
     @Override

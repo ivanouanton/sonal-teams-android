@@ -78,6 +78,16 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
+    public void saveProtocolId(String protocolId) {
+        getDefaultEditor().putString(PreferenceKeys.PROTOCOL_ID, protocolId).commit();
+    }
+
+    @Override
+    public void saveSonalId(String sonalId) {
+        getDefaultEditor().putString(PreferenceKeys.SONAL_ID, sonalId).commit();
+    }
+
+    @Override
     public String getTreatmentLength() {
         return defaultPreferences.getString(PreferenceKeys.TREATMENT_LENGTH, "");
     }
@@ -85,6 +95,16 @@ public class PreferenceManagerImpl implements PreferenceManager {
     @Override
     public String getProtocolFrequency() {
         return defaultPreferences.getString(PreferenceKeys.PROTOCOL_FREQUENCY, "");
+    }
+
+    @Override
+    public String getProtocolId() {
+        return defaultPreferences.getString(PreferenceKeys.PROTOCOL_ID, "");
+    }
+
+    @Override
+    public String getSonalId() {
+        return defaultPreferences.getString(PreferenceKeys.SONAL_ID, "");
     }
 
     @Override

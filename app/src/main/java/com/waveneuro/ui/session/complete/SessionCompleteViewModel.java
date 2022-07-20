@@ -31,7 +31,7 @@ public class SessionCompleteViewModel extends ViewModel {
 
     void processEvent(SessionCompleteViewEvent viewEvent) {
         if (viewEvent instanceof SessionCompleteViewEvent.Start) {
-//            completeSession();
+            completeSession();
         } else if (viewEvent instanceof SessionCompleteViewEvent.BackClicked) {
             this.mDataViewEffect.postValue(new SessionCompleteViewEffect.Back());
         } else if (viewEvent instanceof SessionCompleteViewEvent.HomeClicked) {
@@ -41,21 +41,20 @@ public class SessionCompleteViewModel extends ViewModel {
 
     private void completeSession() {
         AddTreatmentRequest request = new AddTreatmentRequest();
-        request.setEegId(dataManager.getEegId());
+        request.setEegId(Long.parseLong(dataManager.getEegId()));
+        request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
+        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
         addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
-
             }
 
             @Override
             public void onError(Throwable throwable) {
-
             }
 
             @Override
             public void onFinish() {
-
             }
         });
     }
