@@ -82,14 +82,20 @@
     <string name="welcome">Welcome</string>
     <string name="start_session">Start a session</string>
     <string name="pair_device">Pair your device</string>
+    <string name="pair_device_title">Pair device</string>
     <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
     <string name="protocol_not_active">Your Protocol\nis processing</string>
     <string name="notify_by_email">We will notify you via email once it ready</string>
 
     <!--Device F-->
-    <string name="locate_device_info">Press the\ncenter button on base station\n for 2 seconds\nto begin pairing process</string>
+    <string name="btn_next">Next</string>
+    <string name="locate_device_info">Firmly press the center button to begin the pairing process.</string>
     <string name="session_start_info">Press the\ncenter button on base station\n for 2 seconds\nto begin your session</string>
     <string name="session_start_device_info">Press Start on your device to begin your session</string>
+    <string name="pairing_successful">Pairing Successful!</string>
+    <string name="pairing_successful_description">Your device is successfully connected, proceed to your session.</string>
+    <string name="proceed_to_session">Proceed to Session</string>
+
 
     <!--Account-->
     <string name="account">Account</string>
@@ -120,7 +126,10 @@
     <string name="submit">Submit</string>
 
     <!--Session-->
-    <string name="ensure_your_device_powered_up">Ensure Your\nDevice is\nPowered Up</string>
+    <string name="ensure_your_device_powered_up">Turn On Device</string>
+    <string name="first_time_using">First time using the device?</string>
+    <string name="scanning">Scanning...</string>
+    <string name="bluetooth_symbol">You should see the Bluetooth symbol flashing.</string>
     <string name="activate_your_device">Activate\nYour Device</string>
     <string name="pause_session_info">To pause your session\npress the center button on\nbase station for 2 seconds.</string>
     <string name="cancel_session_info">To cancel your session\npress the center button on\nbase station for 5 seconds</string>
