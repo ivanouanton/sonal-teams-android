@@ -4,7 +4,7 @@ public class Config {
     private static final String PROTOCOL = "http://";
     public static final String PROTOCOL_S = "https://";
     public static final String[] HOSTS = new String[]{
-            "api.waveneuro.repmvbx.xyz"
+            "api-ecs.waveneuro.repmvbx.xyz"
     };
     public static final String[] PATHS = new String[]{
             "clients"

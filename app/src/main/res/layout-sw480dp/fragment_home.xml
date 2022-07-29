@@ -111,10 +111,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start_session"
-                style="@style/RoundedButton.Aqua"
+                style="@style/RoundedButton.Aqua.BlackText"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginHorizontal="@dimen/margin_32dp"
+                android:layout_marginHorizontal="@dimen/margin_16dp"
                 android:layout_marginBottom="@dimen/margin_10dp"
                 android:text="@string/pair_device" />
 
@@ -198,7 +197,8 @@
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"

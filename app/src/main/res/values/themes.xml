@@ -52,6 +52,12 @@
 
     <style name="RoundedButton.Aqua.BlackText">
         <item name="materialThemeOverlay">@style/AquaButtonThemeOverlayBlack</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:maxWidth">300dp</item>
+        <item name="maxWidth">300dp</item>
+        <item name="layout_constraintWidth_max">300dp</item>
     </style>
 
     <style name="AquaButtonThemeOverlay">
@@ -83,7 +89,7 @@
 
     <style name="BaseText.Heading2" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/romana_semi</item>
-        <item name="android:textSize">38sp</item>
+        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="BaseText.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
