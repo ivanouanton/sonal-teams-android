@@ -10,278 +10,187 @@
     android:paddingVertical="@dimen/padding_30dp"
     tools:context=".ui.session.session.SessionActivity">
 
-    <ImageView
-        android:id="@+id/iv_back"
+    <TextView
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_24dp"
-        android:src="@drawable/ic_back_black"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/inter_semi_bold"
+        android:text="@string/start_session"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_connect_status"
-        style="@style/BaseText.Caption.Green"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_session_device"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_16dp"
-        android:text="Connected"
-        android:textAllCaps="true"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_circle_connected"
-        app:layout_constraintEnd_toStartOf="@+id/iv_circle_connected"
-        app:layout_constraintTop_toTopOf="@+id/iv_circle_connected" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_circle_connected"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/margin_36dp"
-        android:layout_marginEnd="@dimen/margin_12dp"
-        android:src="@color/green"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_device"
-        app:layout_constraintEnd_toStartOf="@+id/iv_device"
-        app:layout_constraintTop_toTopOf="@+id/iv_device"
-        app:shapeAppearanceOverlay="@style/ImageView.Round" />
-
-    <ImageView
-        android:id="@+id/iv_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_bluetooth_black"
-        android:tint="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_back"
-        app:tint="@color/black"
-        tools:ignore="UseAppTint" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_label_session_length"
-        style="@style/BaseText.Heading2.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_84dp"
-        android:text="@string/session_length"
-        android:textSize="@dimen/text_size_huge_38"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_back" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_session_length"
-        style="@style/BaseText.Heading.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_very_gigantic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_label_session_length"
-        tools:text="30 min" />
-
-    <!--START DEVICE INITIALIZING-->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_device_initializing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_8dp"
-        android:layout_marginBottom="@dimen/margin_100dp"
-        android:background="@color/white"
-        android:elevation="8dp"
-        android:visibility="gone"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_rounded_corner_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_session_length"
-        tools:visibility="gone">
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_device"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_device_sonal" />
+
+        <TextView
+            android:id="@+id/tv_device"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="20dp"
+            android:text="@string/device"
+            android:textColor="@color/black"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/iv_device"
+            app:layout_constraintTop_toTopOf="@+id/iv_device" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_device_sonal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_8dp"
-                android:layout_marginBottom="@dimen/margin_16dp"
-                android:orientation="horizontal">
-
-                <com.github.ybq.android.spinkit.SpinKitView
-                    android:id="@+id/spin_kit"
-                    style="@style/SpinKitView.Large.MultiplePulseRing"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/margin_16dp"
-                    app:SpinKit_Color="@color/aqua" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/BaseText.Subtitle.Black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_16dp"
-                        android:text="@string/device_initializing" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/BaseText.Subtitle.Black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_16dp"
-                        android:text="@string/please_wait" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-    <!--END DEVICE INITIALIZING-->
-
-    <!--START SESSION BEGIN INFO-->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_locate_device"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_8dp"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:layout_marginBottom="@dimen/margin_84dp"
-        android:visibility="gone"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_session_length"
-        tools:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_sonal_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_device_sonal_connector_with_wave"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_locate_device_info"
-                style="@style/BaseText.Subtitle.Black"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
-                android:gravity="center"
-                android:text="@string/locate_device_info" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-    <!--END SESSION BEGIN INFO-->
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:text="ID: SONAL-15431"
+            app:layout_constraintStart_toEndOf="@+id/iv_device"
+            app:layout_constraintTop_toBottomOf="@+id/tv_device" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--START SESSION TIMER-->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_session_timer"
-        style="@style/BaseText.Heading.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
-        android:gravity="center"
-        android:textSize="@dimen/text_size_very_gigantic"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="30:00"
-        tools:visibility="gone" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_stop_session_info"
-        style="@style/BaseText.Caption.Gray"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_container_session_info"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_session_on_headset"
-        android:textAllCaps="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/ll_container_session_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_pause" />
+            android:id="@+id/iv_pause"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_pause_session"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_pause_session_info"
             style="@style/BaseText.Subtitle.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
             android:gravity="center"
             android:text="@string/pause_session_info"
-            android:textSize="@dimen/text_size_standard" />
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_pause"
+            app:layout_constraintStart_toEndOf="@+id/iv_pause"
+            app:layout_constraintTop_toTopOf="@+id/iv_pause" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ic_stop" />
+            android:id="@+id/iv_stop"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_stop_session"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pause_session_info" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_stop_session_info"
             style="@style/BaseText.Subtitle.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="3dp"
             android:gravity="center"
             android:text="@string/cancel_session_info"
-            android:textSize="@dimen/text_size_standard" />
+            android:textSize="@dimen/text_size_standard"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_stop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_stop"
+            app:layout_constraintTop_toTopOf="@+id/iv_stop" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--END SESSION TIMER-->
 
-    <!--START SPIN KIT-->
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit_main"
-        style="@style/SpinKitView.Small.Wave"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginVertical="10dp"
-        android:visibility="gone"
-        app:SpinKit_Color="@color/aqua"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_progress"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <!--END SPIN KIT-->
+        app:layout_constraintTop_toBottomOf="@+id/cl_session_device">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/pb_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            app:indicatorColor="@color/aqua"
+            app:indicatorSize="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/aqua20"
+            app:trackThickness="4dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_session_timer"
+            style="@style/BaseText.Heading.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_very_gigantic"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="30:00"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_paused"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/paused"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/pb_progress"
+            app:layout_constraintStart_toStartOf="@+id/pb_progress"
+            app:layout_constraintTop_toBottomOf="@+id/tv_session_timer" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_session"
+        style="@style/RoundedButton.Aqua.BlackText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:text="@string/start_session"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,10 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,8 +39,6 @@ import com.ap.ble.BluetoothManager;
 import com.ap.ble.callback.BleScanCallback;
 import com.ap.ble.data.BleDevice;
 import com.asif.abase.view.RecyclerViewWithEmpty;
-import com.bumptech.glide.Glide;
-import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
@@ -277,7 +273,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 //            launchHomeScreen();
         } else if (viewState instanceof DeviceViewState.Searched) {
             ivBack.setVisibility(View.VISIBLE);
-            cvLocateDevice.setVisibility(View.GONE);
+            cvLocateDevice.setVisibility(View.VISIBLE);
             cvDeviceAvailable.setVisibility(View.VISIBLE);
             llContainerDevice.setVisibility(View.GONE);
         }
@@ -298,27 +294,40 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     }
 
     private void launchFirstTimeDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setTitle(R.string.first_time_using);
-        alertDialogBuilder.setMessage("Make sure your device has a full battery before starting your session\n\nPower on the device by flipping the switch on the bottom of the base station from RED to GREEN");
-                alertDialogBuilder.setPositiveButton("OK",
-                        (arg0, arg1) -> {});
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
+        ViewGroup viewGroup = getView().findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_popup, viewGroup, false);
+        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+        tvTitle.setText(R.string.first_time_using);
+        tvTitle.setTextSize(24);
+        tvContent.setText(R.string.make_sure_device_ready);
+        btnPrimary.setText(R.string.ok);
+        builder.setView(dialogView);
+        final AlertDialog ad = builder.create();
+        btnPrimary.setOnClickListener(v -> ad.dismiss());
+        ad.show();
+
     }
 
     private void launchPairingSuccessfulDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setTitle(R.string.pairing_successful);
-        alertDialogBuilder.setMessage(R.string.pairing_successful_description);
-        alertDialogBuilder.setPositiveButton(R.string.proceed_to_session,
-                (arg0, arg1) -> {
-                    this.deviceViewModel.processEvent(new DeviceViewEvent.StartSessionClicked());
-                });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
+        ViewGroup viewGroup = getView().findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_popup, viewGroup, false);
+        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+        tvTitle.setText(R.string.pairing_successful);
+        tvContent.setText(R.string.pairing_successful_description);
+        btnPrimary.setText(R.string.proceed_to_session);
+        builder.setView(dialogView);
+        final AlertDialog ad = builder.create();
+        btnPrimary.setOnClickListener(v -> this.deviceViewModel.processEvent(new DeviceViewEvent.StartSessionClicked()));
+        ad.show();
+
     }
 
     private void launchHomeScreen(boolean launchWithDelay) {
@@ -333,12 +342,12 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         launchHomeScreen(false);
     }
 
-    private void launchSessionScreen(String treatmentLength, String protocolFrequency) {
+    private void launchSessionScreen(String treatmentLength, String protocolFrequency, String sonalId) {
         if(TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT).show();
             return;
         }
-        sessionCommand.navigate(treatmentLength, protocolFrequency);
+        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId);
     }
 
     private void connectToDevice(com.waveneuro.data.model.entity.BleDevice bleDevice) {
@@ -410,7 +419,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     Observer<DeviceViewEffect> notesViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof DeviceViewEffect.SessionRedirect) {
             DeviceViewEffect.SessionRedirect sessionRedirect = (DeviceViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
         }
     };
 

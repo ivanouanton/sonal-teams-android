@@ -314,16 +314,16 @@ public class HomeFragment extends BaseFragment {
             }
         } else if (viewEffect instanceof HomeViewEffect.SessionRedirect) {
             HomeViewEffect.SessionRedirect sessionRedirect = (HomeViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
         }
     };
 
-    private void launchSessionScreen(String treatmentLength, String protocolFrequency) {
+    private void launchSessionScreen(String treatmentLength, String protocolFrequency, String sonalId) {
         if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT).show();
             return;
         }
-        sessionCommand.navigate(treatmentLength, protocolFrequency);
+        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId);
     }
 
     @OnClick(R.id.btn_start_session)

@@ -5,6 +5,7 @@
     <string name="networkError">Please check your internet connection.</string>
     <string name="unknownError">There was an error. Please try later.</string>
     <string name="or_separator">|</string>
+    <string name="ok">OK</string>
 
     <!--Login-->
     <string name="login">Login</string>
@@ -80,7 +81,6 @@
 
     <!--Home F-->
     <string name="welcome">Welcome</string>
-    <string name="start_session">Start a session</string>
     <string name="pair_device">Pair your device</string>
     <string name="pair_device_title">Pair device</string>
     <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
@@ -95,6 +95,7 @@
     <string name="pairing_successful">Pairing Successful!</string>
     <string name="pairing_successful_description">Your device is successfully connected, proceed to your session.</string>
     <string name="proceed_to_session">Proceed to Session</string>
+    <string name="make_sure_device_ready">Make sure your device has a full battery before starting your session\n\nPower on the device by flipping the switch on the bottom of the base station from RED to GREEN</string>
 
 
     <!--Account-->
@@ -126,17 +127,23 @@
     <string name="submit">Submit</string>
 
     <!--Session-->
+    <string name="start_session">Start Session</string>
     <string name="ensure_your_device_powered_up">Turn On Device</string>
     <string name="first_time_using">First time using the device?</string>
     <string name="scanning">Scanning...</string>
     <string name="bluetooth_symbol">You should see the Bluetooth symbol flashing.</string>
     <string name="activate_your_device">Activate\nYour Device</string>
     <string name="pause_session_info">To pause your session\npress the center button on\nbase station for 2 seconds.</string>
+    <string name="resume_session_info">To resume your session\npress the center button on\nbase station for 2 seconds.</string>
     <string name="cancel_session_info">To cancel your session\npress the center button on\nbase station for 5 seconds</string>
     <string name="session_length">Session Length</string>
     <string name="device_initializing">Device Initializing</string>
     <string name="please_wait">Please Wait...</string>
     <string name="stop_session_on_headset">Stop session on headset</string>
+    <string name="press_center_button">Press the center button on base station for 2 seconds to begin your session</string>
+    <string name="session_done">Your session is done for today, check back in tomorrow.</string>
+    <string name="paused">paused</string>
+
 
     <!--Session Complete-->
     <string name="session_complete">Session Complete</string>
