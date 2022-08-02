@@ -176,8 +176,8 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                         //DONE Display for error
                         //DONE Alert message
                         //TODO Refactor alert message sending code
-                        sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Oops!",
-                                "There was an error during treatment!"));
+                        sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Uh Oh!",
+                                "Error detected on device"));
                         break;
                     case "01":
                         //TODO Same as iOS
@@ -347,19 +347,28 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     private void showEndSessionDialog(String title, String message) {
         if (!isFinishing()) {
-            new AlertDialog.Builder(this)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setPositiveButton("Go To Home",
-                            (dialog, which) -> {
-                                if (!sessionTimer.isFinished())
-                                    sessionTimer.pause();
-                                dashboardCommand.navigate();
-                            })
-
-                    .setCancelable(false)
-                    .show();
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+            ViewGroup viewGroup = findViewById(android.R.id.content);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
+            TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+            TextView tvContent = dialogView.findViewById(R.id.tv_content);
+            Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+            ImageView ivPrimary = dialogView.findViewById(R.id.iv_primary);
+            ivPrimary.setVisibility(View.GONE);
+            tvTitle.setText(title);
+            tvContent.setText(message);
+            btnPrimary.setText("Exit Session");
+            btnPrimary.setOnClickListener(v -> {
+                if (!sessionTimer.isFinished())
+                    sessionTimer.pause();
+                dashboardCommand.navigate();
+            });
+            builder.setView(dialogView);
+            readyDialog = builder.create();
+            readyDialog.show();
         }
+
+
     }
 
 

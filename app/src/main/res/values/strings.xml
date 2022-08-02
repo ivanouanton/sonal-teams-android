@@ -84,8 +84,7 @@
     <string name="pair_device">Pair your device</string>
     <string name="pair_device_title">Pair device</string>
     <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
-    <string name="protocol_not_active">Your Protocol\nis processing</string>
-    <string name="notify_by_email">We will notify you via email once it ready</string>
+    <string name="protocol_not_active">Your Protocol is processing. We will notify you via email once it ready</string>
 
     <!--Device F-->
     <string name="btn_next">Next</string>
