@@ -15,6 +15,7 @@ public class SessionCommand extends NavigationCommand {
     public static final String BLE_DEVICE = "ble_device";
     public static final String TREATMENT_LENGTH = "treatment_length";
     public static final String PROTOCOL_FREQUENCY = "protocol_frequency";
+    public static final String SONAL_ID = "sonal_id";
 
     private final Context mContext;
 
@@ -39,8 +40,9 @@ public class SessionCommand extends NavigationCommand {
 
     }
 
-    public void navigate(String treatmentLength, String protocolFrequency) {
+    public void navigate(String treatmentLength, String protocolFrequency, String sonalId) {
         Intent intent = new Intent(this.mContext, SessionActivity.class);
+        intent.putExtra(SONAL_ID, sonalId);
         intent.putExtra(TREATMENT_LENGTH, treatmentLength);
         intent.putExtra(PROTOCOL_FREQUENCY, protocolFrequency);
         this.mContext.startActivity(intent);

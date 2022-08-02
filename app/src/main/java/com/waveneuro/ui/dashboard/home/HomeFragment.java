@@ -21,7 +21,9 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IntDef;
@@ -115,12 +117,6 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.cv_next_session)
     MaterialCardView cvNextSession;
 
-    @BindView(R.id.cl_protocol_not_active)
-    ConstraintLayout clProtocolNotActive;
-
-    @BindView(R.id.tv_label_account_active_info)
-    MaterialTextView tvLabelAccountActiveInfo;
-
     @Inject
     SessionCommand sessionCommand;
     @Inject
@@ -177,27 +173,9 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setView() {
-        sonalWebsiteSpanText();
+
     }
 
-    private void sonalWebsiteSpanText() {
-
-        SpannableString spannableString = new SpannableString(getString(R.string.visit_sonal_website));
-
-        spannableString.setSpan(new UnderlineSpan(), 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                redirectToSonalWebsite();
-            }
-        }, 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray_dim_dark)), 13, 34, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvLabelAccountActiveInfo.setText(spannableString);
-        tvLabelAccountActiveInfo.setClickable(true);
-        tvLabelAccountActiveInfo.setMovementMethod(LinkMovementMethod.getInstance());
-    }
 
     private void redirectToSonalWebsite() {
         webCommand.navigate(WebCommand.PAGE_SONAL);
@@ -245,11 +223,11 @@ public class HomeFragment extends BaseFragment {
         } else if (viewState instanceof HomeProtocolViewState.Failure) {
             spinKitView.setVisibility(View.GONE);
         } else if (viewState instanceof HomeProtocolViewState.ProtocolNotFound) {
-            tvLabelWelcome.setVisibility(View.GONE);
-            tvUsername.setVisibility(View.GONE);
-            cvDevice.setVisibility(View.GONE);
+
             spinKitView.setVisibility(View.GONE);
-            clProtocolNotActive.setVisibility(View.VISIBLE);
+            btnStartSession.setVisibility(View.GONE);
+            showMissingProtocolError();
+
             if (getActivity() instanceof HomeActivity) {
                 ((HomeActivity) getActivity()).enableDeviceTab(false);
             }
@@ -263,6 +241,42 @@ public class HomeFragment extends BaseFragment {
             }
         }
     };
+
+    void showMissingProtocolError(){
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
+        ViewGroup viewGroup = getView().findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_popup, viewGroup, false);
+        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+        ImageView ivPrimary = dialogView.findViewById(R.id.iv_primary);
+        ivPrimary.setVisibility(View.GONE);
+        tvTitle.setText(R.string.protocol_not_active);
+        tvContent.setText(R.string.visit_sonal_website);
+        btnPrimary.setVisibility(View.INVISIBLE);
+
+        SpannableString spannableString = new SpannableString(getString(R.string.visit_sonal_website));
+
+        spannableString.setSpan(new UnderlineSpan(), 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                redirectToSonalWebsite();
+            }
+        }, 13, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.gray_dim_dark)), 13, 34, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tvContent.setText(spannableString);
+        tvContent.setClickable(true);
+        tvContent.setMovementMethod(LinkMovementMethod.getInstance());
+        builder.setView(dialogView);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
     private void setUserDetail(User user) {
         // DONE Which name need to display
@@ -314,16 +328,16 @@ public class HomeFragment extends BaseFragment {
             }
         } else if (viewEffect instanceof HomeViewEffect.SessionRedirect) {
             HomeViewEffect.SessionRedirect sessionRedirect = (HomeViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
         }
     };
 
-    private void launchSessionScreen(String treatmentLength, String protocolFrequency) {
+    private void launchSessionScreen(String treatmentLength, String protocolFrequency, String sonalId) {
         if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT).show();
             return;
         }
-        sessionCommand.navigate(treatmentLength, protocolFrequency);
+        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId);
     }
 
     @OnClick(R.id.btn_start_session)

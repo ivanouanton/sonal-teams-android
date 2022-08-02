@@ -21,4 +21,9 @@
         // Set the theme of the Activity that directly follows your splash screen.
         <item name="postSplashScreenTheme">@style/Theme.WaveNeuroAndroid</item>  # Required.
     </style>
+
+
+    <style name="PopUp" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_rounded_corner_layout</item>
+    </style>
 </resources>
