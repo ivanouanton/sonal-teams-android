@@ -15,4 +15,5 @@ sealed class SessionViewState {
     class SessionPaused : SessionViewState()
     class ErrorSession(val title: String, val message: String) : SessionViewState()
     class DeviceDisconnected : SessionViewState()
+    class ErrorSending : SessionViewState()
 }

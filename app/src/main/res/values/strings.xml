@@ -142,6 +142,8 @@
     <string name="press_center_button">Press the center button on base station for 2 seconds to begin your session</string>
     <string name="session_done">Your session is done for today, check back in tomorrow.</string>
     <string name="paused">paused</string>
+    <string name="retry">Retry</string>
+    <string name="error_sending_report">Error sending report</string>
 
 
     <!--Session Complete-->

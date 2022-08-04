@@ -301,6 +301,21 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         } else if (viewState instanceof SessionViewState.ErrorSession) {
             SessionViewState.ErrorSession state = (SessionViewState.ErrorSession) viewState;
             showEndSessionDialog(state.getTitle(), state.getMessage());
+        } else if (viewState instanceof SessionViewState.ErrorSending) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+            ViewGroup viewGroup = findViewById(android.R.id.content);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
+            TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+            TextView tvContent = dialogView.findViewById(R.id.tv_content);
+            Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+            ImageView ivPrimary = dialogView.findViewById(R.id.iv_primary);
+            tvTitle.setText(R.string.error_sending_report);
+            btnPrimary.setText(R.string.retry);
+            btnPrimary.setOnClickListener(v -> sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Session Ended", "")));
+            tvContent.setVisibility(View.GONE);
+            builder.setView(dialogView);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
         }
     };
 

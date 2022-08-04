@@ -113,7 +113,7 @@ public class SessionViewModel extends ViewModel {
 
             @Override
             public void onError(Throwable throwable) {
-
+                mDataLive.postValue(new SessionViewState.ErrorSending());
             }
 
             @Override
