@@ -23,7 +23,7 @@ import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.account.AccountCommand;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.help.HelpCommand;
-import com.waveneuro.ui.dashboard.history.HistoryFragment;
+import com.waveneuro.ui.dashboard.history.HistoryCommand;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
 import com.waveneuro.ui.dashboard.home.MoreFragment;
 import com.waveneuro.ui.dashboard.more.WebCommand;
@@ -75,8 +75,6 @@ public class HomeActivity extends BaseActivity {
     public static final int TAB_MORE = 3;
 
     HomeFragment homeFragment;
-    DeviceFragment deviceFragment;
-    HistoryFragment historyFragment;
     MoreFragment moreFragment;
 
     BluetoothManager bluetoothManager;
@@ -91,6 +89,8 @@ public class HomeActivity extends BaseActivity {
     WebCommand webCommand;
     @Inject
     HelpCommand helpCommand;
+    @Inject
+    HistoryCommand deviceHistoryCommand;
 
     @Inject
     public DashBoardViewModel dashBoardViewModel;
@@ -115,14 +115,6 @@ public class HomeActivity extends BaseActivity {
                 case R.id.bottom_navigation_home:
                     setContainerVisible(TAB_HOME);
                     addFragment(TAB_HOME);
-                    return true;
-                case R.id.bottom_navigation_device:
-                    setContainerVisible(TAB_DEVICE);
-                    addFragment(TAB_DEVICE);
-                    return true;
-                case R.id.bottom_navigation_history:
-                    setContainerVisible(TAB_HISTORY);
-                    addFragment(TAB_HISTORY);
                     return true;
                 case R.id.bottom_navigation_more:
                     setContainerVisible(TAB_MORE);
@@ -157,15 +149,9 @@ public class HomeActivity extends BaseActivity {
         fragmentManager = getSupportFragmentManager();
         if (homeFragment == null)
             homeFragment = HomeFragment.newInstance();
-        if (deviceFragment == null)
-            deviceFragment = DeviceFragment.newInstance();
-        if (historyFragment == null)
-            historyFragment = HistoryFragment.newInstance();
         if (moreFragment == null)
             moreFragment = MoreFragment.newInstance();
         addFragment(frHome, homeFragment);
-        addFragment(frDevice, deviceFragment);
-        addFragment(frHistory, historyFragment);
         addFragment(frMore, moreFragment);
     }
 
@@ -186,7 +172,9 @@ public class HomeActivity extends BaseActivity {
             launchAccountScreen();
         } else if (viewEffect instanceof DashboardViewEffect.Help) {
             launchHelpScreen();
-        } else if (viewEffect instanceof DashboardViewEffect.Device) {
+        } else if (viewEffect instanceof DashboardViewEffect.DeviceHistory) {
+            launchDeviceHistoryScreen();
+        }else if (viewEffect instanceof DashboardViewEffect.Device) {
             DashboardViewEffect.Device effect = (DashboardViewEffect.Device) viewEffect;
             launchMyDeviceScreen(effect.getDeviceName());
         }
@@ -211,6 +199,10 @@ public class HomeActivity extends BaseActivity {
         this.helpCommand.navigate();
     }
 
+    private void launchDeviceHistoryScreen() {
+        this.deviceHistoryCommand.navigate();
+    }
+
     private void launchMyDeviceScreen(String deviceName) {
         this.myDeviceCommand.navigate(deviceName);
     }
@@ -228,18 +220,6 @@ public class HomeActivity extends BaseActivity {
                 if (homeFragment == null) {
                     homeFragment = HomeFragment.newInstance();
                     addFragment(frHome, homeFragment);
-                }
-                break;
-            case TAB_DEVICE:
-                if (deviceFragment == null) {
-                    deviceFragment = DeviceFragment.newInstance();
-                    addFragment(frDevice, deviceFragment);
-                }
-                break;
-            case TAB_HISTORY:
-                if (historyFragment == null) {
-                    historyFragment = HistoryFragment.newInstance();
-                    addFragment(frHistory, historyFragment);
                 }
                 break;
             case TAB_MORE:
@@ -260,14 +240,6 @@ public class HomeActivity extends BaseActivity {
 
     public void switchToHome() {
         bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_home);
-    }
-
-    public void switchToDevice() {
-        bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_device);
-    }
-
-    public void enableDeviceTab(boolean enable) {
-        bottomNavigationView.getMenu().getItem(1).setEnabled(enable);
     }
 
     private void resetTabs() {

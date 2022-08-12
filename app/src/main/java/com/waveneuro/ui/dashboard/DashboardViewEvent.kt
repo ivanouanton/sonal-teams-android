@@ -9,4 +9,5 @@ sealed class DashboardViewEvent {
     class DeviceClicked : DashboardViewEvent()
     class LogoutClicked : DashboardViewEvent()
     class HelpClicked : DashboardViewEvent()
+    class DeviceHistoryClicked : DashboardViewEvent()
 }

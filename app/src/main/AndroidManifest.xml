@@ -26,7 +26,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WaveNeuroAndroid">
-        <activity android:name=".ui.dashboard.help.HelpActivity"></activity>
+        <activity
+            android:name=".ui.dashboard.history.HistoryActivity"
+            android:exported="false" />
+        <activity android:name=".ui.dashboard.help.HelpActivity" />
         <activity
             android:name=".ui.device.MyDeviceActivity"
             android:exported="false"

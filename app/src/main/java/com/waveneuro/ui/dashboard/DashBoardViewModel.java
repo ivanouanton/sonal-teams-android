@@ -38,6 +38,8 @@ public class DashBoardViewModel extends ViewModel {
             this.mDataViewEffect.postValue(new DashboardViewEffect.Account());
         } else if (viewEvent instanceof DashboardViewEvent.HelpClicked) {
             this.mDataViewEffect.postValue(new DashboardViewEffect.Help());
+        } else if (viewEvent instanceof DashboardViewEvent.DeviceHistoryClicked) {
+            this.mDataViewEffect.postValue(new DashboardViewEffect.DeviceHistory());
         } else if (viewEvent instanceof DashboardViewEvent.DeviceClicked) {
             if(this.getData().getValue() instanceof DashboardViewState.Connect) {
                 DashboardViewState.Connect connect = (DashboardViewState.Connect) this.getData().getValue();

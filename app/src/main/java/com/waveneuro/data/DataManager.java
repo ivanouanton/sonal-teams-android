@@ -2,8 +2,10 @@ package com.waveneuro.data;
 
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
+import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
+import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
@@ -21,6 +23,8 @@ import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 
@@ -67,6 +71,8 @@ public interface DataManager {
 
     User getUser();
 
+    Observable<SonalDeviceResponse> postSonalDevice(SonalDeviceRequest newDevice);
+
     String getEegId();
 
     void saveEegId(String eegId);
@@ -92,4 +98,8 @@ public interface DataManager {
     String getProtocolId();
 
     String getSonalId();
+
+    Observable<List<SonalDeviceResponse>> getSonalDevices();
+
+
 }
