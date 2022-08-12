@@ -29,6 +29,11 @@ public class MoreFragment extends BaseFragment {
         ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.AccountClicked());
     }
 
+    @OnClick(R.id.ll_device_history)
+    public void onClickDeviceHistory() {
+        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.DeviceHistoryClicked());
+    }
+
     @OnClick(R.id.llHelp)
     public void onClickHelp() {
         ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.HelpClicked());

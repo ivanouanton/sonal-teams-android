@@ -7,7 +7,7 @@ public class Config {
             "api.braincare.wavesynchrony.com"
     };
     public static final String PATHS[] = new String[]{
-            "clients"
+            "users"
     };
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/" + PATHS[0] + "/";
 

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
+import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.ResetPasswordRequest;
@@ -12,6 +13,7 @@ import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
+import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.LoginResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
@@ -26,6 +28,8 @@ import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.data.remote.TreatmentService;
 import com.waveneuro.data.remote.UserService;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import timber.log.Timber;
@@ -151,6 +155,16 @@ public class DataManagerImpl implements DataManager {
     @Override
     public String getSonalId() {
         return preferenceManager.getSonalId();
+    }
+
+    @Override
+    public Observable<List<SonalDeviceResponse>> getSonalDevices() {
+        return userService.getSonalDevices();
+    }
+
+    @Override
+    public Observable<SonalDeviceResponse> postSonalDevice(SonalDeviceRequest newDevice) {
+        return userService.addSonalDevice(newDevice);
     }
 
     @Override
