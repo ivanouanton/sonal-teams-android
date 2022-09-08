@@ -29,7 +29,7 @@ jobs:
 
       - name: Decrypt keystore
         env:
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+          PASSPHRASE: ${{ secrets.$PASSPHRASE_B2B }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
       
@@ -46,9 +46,9 @@ jobs:
       
       - name: Build and Deploy
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
-          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_B2B_ALIAS }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B }}
           FLAVOR: 'prod'
         run: |
           bundle exec fastlane android beta --env prod
