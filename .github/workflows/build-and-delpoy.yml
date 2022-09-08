@@ -29,7 +29,7 @@ jobs:
 
       - name: Decrypt keystore
         env:
-          PASSPHRASE: ${{ secrets.$PASSPHRASE_B2B }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE_B2B }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application.keystore.gpg
       
