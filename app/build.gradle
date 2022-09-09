@@ -24,17 +24,21 @@ android {
                                     appName: "Sonal DEV"]
             dimension "env"
             applicationIdSuffix ".develop"
+            resValue "string", "sentryId", "https://7e568372a08f41f9a218f2309cea5772@o1090649.ingest.sentry.io/6543313"
         }
         qa {
             manifestPlaceholders = [sentryEnvironment:"qa",
                                     appName: "Sonal QA"]
             dimension "env"
             applicationIdSuffix ".test"
+            resValue "string", "sentryId", "https://7e568372a08f41f9a218f2309cea5772@o1090649.ingest.sentry.io/6543313"
         }
         prod {
             manifestPlaceholders = [sentryEnvironment:"prod",
                                     appName: "@string/app_name"]
             dimension "env"
+            resValue "string", "sentryId", ""
+
         }
     }
     buildTypes {

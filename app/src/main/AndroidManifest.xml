@@ -119,7 +119,7 @@
             android:value="true" />
         <meta-data
             android:name="io.sentry.dsn"
-            android:value="https://7e568372a08f41f9a218f2309cea5772@o1090649.ingest.sentry.io/6543313" />
+            android:value="@string/sentryId" />
         <!--
  Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
            We recommend adjusting this value in production.

@@ -127,7 +127,6 @@ public class ApplicationModule {
                     HttpUrl newUrl = new HttpUrl.Builder()
                             .scheme(chain.request().url().scheme())
                             .host(chain.request().url().host())
-                            .addPathSegment(Config.PATHS[0])
                             .addPathSegment("refresh")
                             .build();
                     refreshRequestBuilder.url(newUrl);
