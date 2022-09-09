@@ -11,7 +11,7 @@
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="remember_me">Remember me</string>
+    <string name="remember_me">Remember email</string>
     <string name="forgot_username_or_password">Forgot username or password?</string>
     <string name="recover_here">Recover here</string>
     <string name="register">Sign Up</string>
