@@ -31,7 +31,7 @@ jobs:
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE_B2B }}
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application-dev.keystore.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase=$PASSPHRASE --output application.keystore keystore/keystore/application-dev.keystore.gpg
       
       - name: Install deps
         run: |
