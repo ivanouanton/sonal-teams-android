@@ -81,8 +81,7 @@ android {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "waveneuroscience:sonal-mobile-app-android"
-        property "sonar.projectName", "waveneuroscience:sonal-mobile-app-android"
+        property "sonar.projectKey", "waveneuroscience:sonal-b2b-app-android"
         property "sonar.organization", "remedypointsolutions"
         property "sonar.host.url", "https://sonarcloud.io"
 
