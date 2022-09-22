@@ -6,10 +6,8 @@ public class Config {
     public static final String[] HOSTS = new String[]{
             "api-ecs.waveneuro.repmvbx.xyz"
     };
-    public static final String[] PATHS = new String[]{
-            "users"
-    };
-    public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/" + PATHS[0] + "/";
+
+    public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/";
 
     public static final String SONAL_URL = PROTOCOL_S + "www.waveneuro.com";
     public static final String FAQ_URL = PROTOCOL_S + "www.waveneuro.com";

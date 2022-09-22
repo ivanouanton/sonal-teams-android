@@ -43,21 +43,16 @@ public class AccountViewModel extends ViewModel {
             getPersonalInfo();
         } else if (viewEvent instanceof AccountViewEvent.UpdatedUser) {
             AccountViewEvent.UpdatedUser updatedUser = (AccountViewEvent.UpdatedUser) viewEvent;
-            updateUser(updatedUser.getFirstName(), updatedUser.getLastName(),
-                    updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getDob());
+            updateUser(updatedUser.getFirstName(), updatedUser.getLastName());
         } else if (viewEvent instanceof AccountViewEvent.BackClicked) {
             this.mDataViewEffect.postValue(new AccountViewEffect.BackRedirect());
         }
     }
 
-    private void updateUser(String givenName, String familyName, String username,
-                            String email, String birthDate) {
+    private void updateUser(String firstName, String lastName) {
         AccountUpdateRequest accountUpdateRequest = new AccountUpdateRequest();
-        accountUpdateRequest.setGivenName(givenName);
-        accountUpdateRequest.setFamilyName(familyName);
-        accountUpdateRequest.setUsername(username);
-        accountUpdateRequest.setEmail(email);
-        accountUpdateRequest.setBirthDate(birthDate);
+        accountUpdateRequest.setFirstName(firstName);
+        accountUpdateRequest.setLastName(lastName);
         mDataLive.postValue(new AccountViewState.Loading(true));
         this.updatePersonalInfoUseCase.execute(accountUpdateRequest, new UseCaseCallback() {
             @Override

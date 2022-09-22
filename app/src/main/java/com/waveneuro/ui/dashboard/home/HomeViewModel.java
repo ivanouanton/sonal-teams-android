@@ -10,9 +10,11 @@ import com.asif.abase.data.model.APIError;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.asif.abase.exception.SomethingWrongException;
 import com.waveneuro.data.DataManager;
+import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.domain.base.SingleLiveEvent;
+import com.waveneuro.domain.usecase.patient.GetPatientsUseCase;
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase;
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
 import com.waveneuro.utils.ErrorUtil;
@@ -33,15 +35,19 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<HomeUserViewState> mDataUserLive = new MutableLiveData<>();
     private final MutableLiveData<HomeProtocolViewState> mDataProtocolLive = new MutableLiveData<>();
     private final SingleLiveEvent<HomeViewEffect> mDataViewEffect = new SingleLiveEvent<>();
+    private final MutableLiveData<HomeClientsViewState> mDataPatientsLive = new MutableLiveData<>();
 
     private final GetLatestProtocolUseCase getLatestProtocolUseCase;
     private final GetPersonalInfoUseCase getPersonalInfoUseCase;
+    private final GetPatientsUseCase getPatientsUseCase;
 
     @Inject
     public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
-                         GetPersonalInfoUseCase getPersonalInfoUseCase) {
+                         GetPersonalInfoUseCase getPersonalInfoUseCase,
+                         GetPatientsUseCase getPatientsUseCase) {
         this.getLatestProtocolUseCase = getLatestProtocolUseCase;
         this.getPersonalInfoUseCase = getPersonalInfoUseCase;
+        this.getPatientsUseCase = getPatientsUseCase;
     }
 
     public void processEvent(HomeViewEvent viewEvent) {
@@ -52,6 +58,7 @@ public class HomeViewModel extends ViewModel {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
             getUserDetails();
             getProtocol();
+            getClients();
         } else if (viewEvent instanceof HomeViewEvent.DeviceDisconnected) {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
         } else if (viewEvent instanceof HomeViewEvent.DeviceConnected) {
@@ -137,12 +144,41 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
+    private void getClients() {
+        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
+        this.getPatientsUseCase.execute(new UseCaseCallback() {
+            @Override
+            public void onSuccess(Object response) {
+                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+                PatientResponse patientResponse = (PatientResponse) response;
+                mDataPatientsLive.postValue(new HomeClientsViewState.Success(patientResponse));
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                APIError error = errorUtil.parseError(throwable);
+                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+    }
+
     public MutableLiveData<HomeDeviceViewState> getDeviceData() {
         return mDataDeviceLive;
     }
 
     public MutableLiveData<HomeUserViewState> getUserData() {
         return mDataUserLive;
+    }
+
+    public MutableLiveData<HomeClientsViewState> getClientsData() {
+        return mDataPatientsLive;
     }
 
     public LiveData<HomeProtocolViewState> getProtocolData() {

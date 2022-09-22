@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 
@@ -24,6 +25,7 @@ import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
+import com.waveneuro.ui.user.mfa.MfaCommand;
 import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordCommand;
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand;
 import com.waveneuro.ui.user.registration.RegistrationCommand;
@@ -65,6 +67,8 @@ public class LoginActivity extends BaseFormActivity {
     RegistrationCommand registrationCommand;
     @Inject
     SetNewPasswordCommand setNewPasswordCommand;
+    @Inject
+    MfaCommand mfaCommand;
     @Inject
     WebCommand webCommand;
 
@@ -129,36 +133,32 @@ public class LoginActivity extends BaseFormActivity {
     };
 
     Observer<LoginViewEffect> loginViewEffectObserver = viewEffect -> {
-        if (viewEffect instanceof LoginViewEffect.Home) {
-            launchHomeScreen();
-        } else if (viewEffect instanceof LoginViewEffect.ForgotUsername) {
+        if (viewEffect instanceof LoginViewEffect.ForgotUsername) {
             launchForgotUsernameScreen();
         } else if (viewEffect instanceof LoginViewEffect.ForgotPassword) {
             launchForgotPasswordScreen();
         } else if (viewEffect instanceof LoginViewEffect.RememberMe) {
             LoginViewEffect.RememberMe rememberMe = (LoginViewEffect.RememberMe) viewEffect;
-            setRememberData(rememberMe.getUsername(), rememberMe.getPassword());
+            setRememberData(rememberMe.getUsername());
         } else if (viewEffect instanceof LoginViewEffect.Register) {
             launchRegistrationScreen();
         } else if (viewEffect instanceof LoginViewEffect.Support) {
         } else if (viewEffect instanceof LoginViewEffect.SetNewPassword) {
             launchSetNewPasswordScreen();
+        } else if (viewEffect instanceof LoginViewEffect.EnterMfaCode) {
+            LoginViewEffect.EnterMfaCode enterMfaCode = (LoginViewEffect.EnterMfaCode) viewEffect;
+            mfaCommand.navigate(etUsername.getEditText().getText().toString().trim(), enterMfaCode.getSession());
         }
     };
 
-    private void setRememberData(String username, String password) {
+    private void setRememberData(String username) {
         etUsername.getEditText().setText(""+username);
-        etPassword.getEditText().setText(""+password);
         chkRememberMe.setChecked(true);
     }
 
     private void launchSetNewPasswordScreen() {
         setNewPasswordCommand.navigate(etUsername.getEditText().getText().toString(),
                 etPassword.getEditText().getText().toString());
-    }
-
-    private void launchHomeScreen() {
-        dashboardCommand.navigate();
     }
 
     private void launchForgotUsernameScreen() {
@@ -204,8 +204,7 @@ public class LoginActivity extends BaseFormActivity {
     public void submit() {
         if(chkRememberMe.isChecked())
             this.loginViewModel.processEvent(new LoginViewEvent.RememberUser(
-                    etUsername.getEditText().getText().toString().trim(),
-                    etPassword.getEditText().getText().toString().trim()));
+                    etUsername.getEditText().getText().toString().trim()));
         else
             this.loginViewModel.processEvent(new LoginViewEvent.ClearRememberUser());
         this.loginViewModel.processEvent(new LoginViewEvent.LoginClicked(
@@ -213,9 +212,4 @@ public class LoginActivity extends BaseFormActivity {
                 etPassword.getEditText().getText().toString().trim()));
     }
 
-    @Override
-    public void onSuccess(BaseModel model) {
-        super.onSuccess(model);
-        launchHomeScreen();
-    }
 }

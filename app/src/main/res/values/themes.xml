@@ -174,7 +174,7 @@
 
     <style name="BaseEditText.Outline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="shapeAppearanceOverlay">@style/RoundShapeAppearance.Small</item>
-        <item name="boxStrokeColor">@color/white</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
         <item name="boxStrokeWidth">1dp</item>
         <item name="boxBackgroundColor">@color/white</item>
         <item name="android:colorBackground">@android:color/black</item>
