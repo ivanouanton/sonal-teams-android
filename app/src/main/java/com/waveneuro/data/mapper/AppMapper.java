@@ -11,9 +11,9 @@ public class AppMapper {
     public static User toAppUser(UserInfoResponse response) {
         User user = new User();
         user.setEmail(response.getEmail());
-        user.setName(response.getName());
+        user.setName(response.getFirstName());
         user.setUsername(response.getUsername());
-        user.setGivenName(response.getGivenName());
+        user.setGivenName(response.getLastName());
         user.setFamilyName(response.getFamilyName());
         user.setGender(response.getGender());
         user.setBirthdate(response.getBirthdate());

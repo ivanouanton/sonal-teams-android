@@ -4,50 +4,33 @@ import com.google.gson.annotations.SerializedName;
 
 public class AccountUpdateRequest {
 
-    @SerializedName("family_name")
-    String familyName;
+    @SerializedName("first_name")
+    String firstName;
 
-    @SerializedName("given_name")
-    String givenName;
-
-    @SerializedName("username")
-    String username;
-
-    @SerializedName("email")
-    String email;
-
-    @SerializedName("birthdate")
-    String birthDate;
+    @SerializedName("last_name")
+    String lastName;
 
     public AccountUpdateRequest() {
     }
 
-    public AccountUpdateRequest(String familyName, String givenName,
-                                String username, String email, String birthDate) {
-        this.familyName = familyName;
-        this.givenName = givenName;
-        this.username = username;
-        this.email = email;
-        this.birthDate = birthDate;
+    public AccountUpdateRequest(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

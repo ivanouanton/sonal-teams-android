@@ -3,9 +3,12 @@ package com.waveneuro.data;
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
 import com.waveneuro.data.model.request.device.SonalDeviceRequest;
+import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
+import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
+import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
@@ -19,6 +22,7 @@ import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmR
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
+import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
@@ -29,7 +33,9 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
 
 public interface DataManager {
-    Observable<LoginResponse> login(LoginRequest request);
+    Observable<LoginResponseMfa> login(LoginRequest request);
+
+    Observable<ConfirmTokenResponse> confirmToken(ConfirmTokenRequest request);
 
     void saveAccessToken(String accessToken);
 
@@ -44,6 +50,8 @@ public interface DataManager {
     Observable<UserInfoResponse> getPersonalInfo();
 
     Observable<ProtocolResponse> protocol();
+
+    Observable<PatientResponse> patients();
 
     Observable<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
 

@@ -20,6 +20,7 @@ import com.waveneuro.ui.session.session.SessionActivity;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameActivity;
 import com.waveneuro.ui.user.email.sent.SentUsernameActivity;
 import com.waveneuro.ui.user.login.LoginActivity;
+import com.waveneuro.ui.user.mfa.MfaActivity;
 import com.waveneuro.ui.user.password.change.ChangePasswordActivity;
 import com.waveneuro.ui.user.password.changed.ResetPasswordInfoActivity;
 import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordActivity;
@@ -83,4 +84,6 @@ public interface ActivityComponent {
     void inject(HelpActivity helpActivity);
 
     void inject(HistoryActivity helpActivity);
+
+    void inject(MfaActivity helpActivity);
 }

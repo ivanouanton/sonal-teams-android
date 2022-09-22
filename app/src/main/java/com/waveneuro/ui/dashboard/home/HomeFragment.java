@@ -24,6 +24,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.waveneuro.R;
@@ -71,6 +73,9 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.tv_clients_list)
     TextView tvClientsList;
 
+    @BindView(R.id.rvClients)
+    RecyclerView rvClients;
+
     @Inject
     SessionCommand sessionCommand;
     @Inject
@@ -80,6 +85,11 @@ public class HomeFragment extends BaseFragment {
     HomeViewModel homeViewModel;
 
     private DashBoardViewModel dashBoardViewModel;
+
+    protected ClientListAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    protected String[] mDataset;
+
 
     private HomeFragment() {
         // Required empty public constructor
@@ -99,6 +109,8 @@ public class HomeFragment extends BaseFragment {
         fragmentComponent.inject(this);
         super.onCreate(savedInstanceState);
         dashBoardViewModel = ViewModelProviders.of(requireActivity()).get(DashBoardViewModel.class);
+
+        initDataset();
     }
 
     View view = null;
@@ -117,13 +129,28 @@ public class HomeFragment extends BaseFragment {
         } else {
             this.homeViewModel.processEvent(new HomeViewEvent.Start());
         }
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        rvClients.setLayoutManager(mLayoutManager);
+
+
+        // END_INCLUDE(initializeRecyclerView)
+
         return view;
+    }
+
+    private void initDataset() {
+        mDataset = new String[10];
+        for (int i = 0; i < 10; i++) {
+            mDataset[i] = "This is element #" + i;
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setObserver();
+        spinKitView.setVisibility(View.INVISIBLE);
     }
 
     private void setView() {
@@ -131,12 +158,9 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    private void redirectToSonalWebsite() {
-        webCommand.navigate(WebCommand.PAGE_SONAL);
-    }
-
     private void setObserver() {
         homeViewModel.getUserData().observe(this.getViewLifecycleOwner(), homeUserViewStateObserver);
+        homeViewModel.getClientsData().observe(this.getViewLifecycleOwner(), homeClientsViewStateObserver);
         homeViewModel.getViewEffect().observe(this.getViewLifecycleOwner(), homeViewEffectObserver);
 
         dashBoardViewModel.getData().observe(requireActivity(), dashboardViewState -> {
@@ -155,6 +179,15 @@ public class HomeFragment extends BaseFragment {
         if (viewState instanceof HomeUserViewState.Success) {
             HomeUserViewState.Success success = (HomeUserViewState.Success) viewState;
 
+        }
+    };
+
+    Observer<HomeClientsViewState> homeClientsViewStateObserver = viewState -> {
+        if (viewState instanceof HomeClientsViewState.Success) {
+            HomeClientsViewState.Success success = (HomeClientsViewState.Success) viewState;
+            mAdapter = new ClientListAdapter(success.getItem().getPatients());
+            // Set CustomAdapter as the adapter for RecyclerView.
+            rvClients.setAdapter(mAdapter);
         }
     };
 

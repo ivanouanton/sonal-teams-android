@@ -2,7 +2,6 @@ package com.waveneuro.ui.dashboard.account;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,14 +16,10 @@ import androidx.lifecycle.Observer;
 
 import com.asif.abase.data.model.BaseModel;
 import com.bumptech.glide.Glide;
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textview.MaterialTextView;
 import com.waveneuro.R;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.ui.base.BaseFormActivity;
-import com.waveneuro.utils.DateUtil;
-
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -52,17 +47,11 @@ public class AccountActivity extends BaseFormActivity {
     @BindView(R.id.llLastName)
     RelativeLayout llLastName;
 
-    @BindView(R.id.tvUsernameValue)
-    TextView tvUsername;
+    @BindView(R.id.tvUserRoleValue)
+    TextView tvUserRole;
 
-    @BindView(R.id.llUsername)
+    @BindView(R.id.llUserRole)
     RelativeLayout llUsername;
-
-    @BindView(R.id.tvBirthdayValue)
-    TextView tvBirthday;
-
-    @BindView(R.id.llBirthday)
-    RelativeLayout llBirthday;
 
     @BindView(R.id.tvEmailValue)
     TextView tvEmail;
@@ -72,9 +61,6 @@ public class AccountActivity extends BaseFormActivity {
 
     @BindView(R.id.tvOrganizationValue)
     TextView tvOrganization;
-
-    @BindView(R.id.tvChiefValue)
-    TextView tvChiefComplaint;
 
     @Inject
     AccountViewModel accountViewModel;
@@ -155,35 +141,30 @@ public class AccountActivity extends BaseFormActivity {
         super.onSuccess(model);
         if (model instanceof UserInfoResponse) {
             UserInfoResponse userInfoResponse = (UserInfoResponse) model;
-            tvFirstName.setText(userInfoResponse.getGivenName());
-            tvLastName.setText(userInfoResponse.getFamilyName());
-            tvUsername.setText(userInfoResponse.getUsername());
-            tvBirthday.setText(DateUtil.parseDate(userInfoResponse.getBirthdate(),
-                    DateUtil.PATTERN_RFC1123,
-                    DateUtil.PATTERN_ISO_DATE));
+            tvFirstName.setText(userInfoResponse.getFirstName());
+            tvLastName.setText(userInfoResponse.getLastName());
+            if (userInfoResponse.getRole().equals("STORE_ADMIN")) {
+                tvUserRole.setText("Store Admin");
+            } else if (userInfoResponse.getRole().equals("WN_ADMIN")) {
+                tvUserRole.setText("WN Admin");
+            } else if (userInfoResponse.getRole().equals("STORE_USER")) {
+                tvUserRole.setText("Store User");
+            } else if (userInfoResponse.getRole().equals("EEG_LAB_USER")) {
+                tvUserRole.setText("EEG Lab User");
+            } else if (userInfoResponse.getRole().equals("WN_SALES")) {
+                tvUserRole.setText("WN Sales");
+            } else if (userInfoResponse.getRole().equals("EXECUTIVE")) {
+                tvUserRole.setText("Executive");
+            } else if (userInfoResponse.getRole().equals("CLIENT")) {
+                tvUserRole.setText("Client");
+            } else {
+                tvUserRole.setText("Unknown");
+            }
             tvEmail.setText(userInfoResponse.getEmail());
-            tvOrganization.setText(userInfoResponse.getLocation());
-            tvChiefComplaint.setText(userInfoResponse.getCustomGoal());
+            tvOrganization.setText(userInfoResponse.getOrganizationName());
 
             if (TextUtils.isEmpty(userInfoResponse.getImageThumbnailUrl())) {
-                if (TextUtils.isEmpty(userInfoResponse.getName())) {
-                    tvProfileImageInitials.setText("");
-                    return;
-                }
-                String[] strArray = userInfoResponse.getName().split(" ");
-                StringBuilder builder = new StringBuilder();
-                if (strArray.length > 0) {
-                    builder.append(strArray[0], 0, 1);
-                }
-                if (strArray.length > 1) {
-                    builder.append(strArray[1], 0, 1);
-                }
-//                if (strArray.length > 2) {
-//                    builder.append(strArray[2], 0, 1);
-//                }
-                tvProfileImageInitials.setText(builder.toString().toUpperCase());
-                ivProfileImage.setVisibility(View.VISIBLE);
-                tvProfileImageInitials.setVisibility(View.VISIBLE);
+
             } else {
                 ivProfileImage.setVisibility(View.VISIBLE);
                 // TODO Visible when Image is loaded
@@ -194,19 +175,6 @@ public class AccountActivity extends BaseFormActivity {
         }
     }
 
-    public void openDataPicker() {
-        Date dob = DateUtil.parseDate(tvBirthday.getText().toString().trim(), DateUtil.PATTERN_ISO_DATE);
-        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
-                .setSelection(dob != null ? dob.getTime() : MaterialDatePicker.todayInUtcMilliseconds())
-                .setTitleText("Select Birth date").build();
-
-        datePicker.show(getSupportFragmentManager(), datePicker.toString());
-        datePicker.addOnPositiveButtonClickListener(selection -> {
-            String dateString = DateFormat.format(DateUtil.PATTERN_ISO_DATE, new Date((Long) selection)).toString();
-            tvBirthday.setText(dateString);
-            submit();
-        });
-    }
 
     private void goBack() {
         onBackPressed();
@@ -227,31 +195,17 @@ public class AccountActivity extends BaseFormActivity {
         buildDialog(R.string.enter_last_name, tvLastName).show();
     }
 
-    @OnClick(R.id.llBirthday)
-    public void onBirthdayClicked() {
-        openDataPicker();
-    }
-
     @OnClick(R.id.llEmail)
     public void onEmailClicked() {
         buildDialog(R.string.enter_email, tvEmail).show();
     }
 
-    @OnClick(R.id.llUsername)
-    public void onUsernameClicked() {
-        buildDialog(R.string.enter_username, tvUsername).show();
-    }
-
     @Override
     public void submit() {
-        String dateString = DateUtil.parseDate(tvBirthday.getText().toString().trim(), DateUtil.PATTERN_ISO_DATE, "MM/dd/yyyy");
         this.accountViewModel.processEvent(
                 new AccountViewEvent.UpdatedUser(
                         tvFirstName.getText().toString().trim(),
-                        tvLastName.getText().toString().trim(),
-                        tvUsername.getText().toString().trim(),
-                        tvEmail.getText().toString().trim(),
-                        dateString
+                        tvLastName.getText().toString().trim()
                 ));
     }
 }

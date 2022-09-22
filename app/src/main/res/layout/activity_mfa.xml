@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login_overlaid"
+    android:paddingHorizontal="@dimen/padding_24dp"
+    android:paddingVertical="0dp"
+    tools:context=".ui.user.login.LoginActivity">
+
+    <ImageView
+        android:id="@+id/iv_logo_sonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_56dp"
+        android:src="@drawable/img_sonal_moto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_label_powered_by"
+        style="@style/BaseText.Caption.White"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:layout_marginTop="@dimen/margin_30dp"
+        android:text="@string/powered_by"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo_sonal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logo_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_powered_by"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_six_digits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:text="@string/enter_six_digit_mfa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/tv_six_digits"
+        tools:layout_editor_absoluteX="24dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code1"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code1"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code2"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code2"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code3"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code3"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code4"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code4"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code5"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code5"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_code6"
+            style="@style/BaseEditText.Outline"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:boxBackgroundColor="@color/translucent_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tip_code6"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

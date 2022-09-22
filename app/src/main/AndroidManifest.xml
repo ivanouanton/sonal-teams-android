@@ -102,6 +102,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.user.mfa.MfaActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.introduction.splash.SplashActivity"
             android:exported="true"
             android:launchMode="singleInstance"

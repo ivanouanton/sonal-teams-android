@@ -1,6 +1,7 @@
 package com.waveneuro.data.model.response.user;
 
 import com.asif.abase.data.model.BaseModel;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UserInfoResponse extends BaseModel {
@@ -32,11 +33,11 @@ public class UserInfoResponse extends BaseModel {
 	@SerializedName("created_at")
 	private String createdAt;
 
-	@SerializedName("given_name")
-	private String givenName;
+	@SerializedName("first_name")
+	private String firstName;
 
-	@SerializedName("name")
-	private String name;
+	@SerializedName("last_name")
+	private String lastName;
 
 	@SerializedName("location")
 	private String location;
@@ -52,6 +53,21 @@ public class UserInfoResponse extends BaseModel {
 
 	@SerializedName("username")
 	private String username;
+
+	@SerializedName("role")
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@SerializedName("organization")
+	@Expose
+	private Organization organization;
 
 	public String getMessage() {
 		return message;
@@ -125,20 +141,32 @@ public class UserInfoResponse extends BaseModel {
 		return createdAt;
 	}
 
-	public void setGivenName(String givenName){
-		this.givenName = givenName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public String getGivenName(){
-		return givenName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public void setName(String name){
-		this.name = name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public String getName(){
-		return name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public String getOrganizationName() {
+		return organization.getName();
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public void setLocation(String location){
@@ -182,23 +210,42 @@ public class UserInfoResponse extends BaseModel {
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"UserInfoResponse{" + 
-			"custom:goal = '" + customGoal + '\'' + 
-			",sub = '" + sub + '\'' + 
-			",birthdate = '" + birthdate + '\'' + 
-			",custom:tos_signed = '" + customTosSigned + '\'' + 
-			",gender = '" + gender + '\'' + 
-			",image_thumbnail_url = '" + imageThumbnailUrl + '\'' + 
-			",created_at = '" + createdAt + '\'' + 
-			",given_name = '" + givenName + '\'' + 
-			",name = '" + name + '\'' + 
-			",location = '" + location + '\'' + 
-			",modified_at = '" + modifiedAt + '\'' + 
-			",family_name = '" + familyName + '\'' + 
-			",email = '" + email + '\'' + 
-			",username = '" + username + '\'' + 
-			"}";
+	public String toString() {
+		return "UserInfoResponse{" +
+				"message='" + message + '\'' +
+				", error='" + error + '\'' +
+				", customGoal='" + customGoal + '\'' +
+				", sub=" + sub +
+				", birthdate='" + birthdate + '\'' +
+				", customTosSigned=" + customTosSigned +
+				", gender='" + gender + '\'' +
+				", imageThumbnailUrl='" + imageThumbnailUrl + '\'' +
+				", createdAt='" + createdAt + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", location='" + location + '\'' +
+				", modifiedAt='" + modifiedAt + '\'' +
+				", familyName='" + familyName + '\'' +
+				", email='" + email + '\'' +
+				", username='" + username + '\'' +
+				'}';
+	}
+
+	class Organization {
+
+		@SerializedName("name")
+		private String name;
+
+		public String getName() {
+			return name;
 		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public Organization(String name) {
+			this.name = name;
+		}
+	}
 }

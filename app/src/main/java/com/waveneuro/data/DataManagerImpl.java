@@ -6,6 +6,7 @@ import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
 import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
+import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
@@ -15,12 +16,15 @@ import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
+import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponse;
+import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
+import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
@@ -46,8 +50,13 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<LoginResponse> login(LoginRequest request) {
+    public Observable<LoginResponseMfa> login(LoginRequest request) {
         return this.userService.login(request);
+    }
+
+    @Override
+    public Observable<ConfirmTokenResponse> confirmToken(ConfirmTokenRequest request) {
+        return this.userService.confirmSoftwareToken(request);
     }
 
     @Override
@@ -88,6 +97,11 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<ProtocolResponse> protocol() {
         return this.treatmentService.protocol();
+    }
+
+    @Override
+    public Observable<PatientResponse> patients() {
+        return this.userService.getClientList();
     }
 
     @Override
