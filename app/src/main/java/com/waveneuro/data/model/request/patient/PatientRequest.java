@@ -1,10 +1,10 @@
-package com.waveneuro.data.model.response.patient;
+package com.waveneuro.data.model.request.patient;
 
 import com.asif.abase.data.model.BaseModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PatientResponse extends BaseModel {
+public class PatientRequest extends BaseModel {
 
 
     @SerializedName("first_name")
@@ -19,25 +19,11 @@ public class PatientResponse extends BaseModel {
     @SerializedName("tos_signed")
     private boolean tosSigned;
 
-    @SerializedName("sex")
-    private boolean isMale;
-
     @SerializedName("email")
     private String email;
 
     @SerializedName("username")
     private String username;
-
-    @SerializedName("id")
-    private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -55,13 +41,6 @@ public class PatientResponse extends BaseModel {
         this.username = username;
     }
 
-    public boolean isMale() {
-        return isMale;
-    }
-
-    public void setMale(boolean male) {
-        isMale = male;
-    }
 
     public boolean isTosSigned() {
         return tosSigned;

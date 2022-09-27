@@ -8,13 +8,27 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.waveneuro.R;
-import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
 
 import java.util.List;
 
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.ViewHolder> {
 
-    private List<PatientResponse.Patient> patients;
+
+    public interface OnItemClickListener {
+        void onItemClick(PatientListResponse.Patient patient);
+    }
+
+
+    private List<PatientListResponse.Patient> patients;
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public OnItemClickListener listener;
+
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName;
@@ -29,7 +43,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
 
     }
 
-    public ClientListAdapter(List<PatientResponse.Patient> pt) {
+    public ClientListAdapter(List<PatientListResponse.Patient> pt) {
         patients = pt;
     }
 
@@ -46,9 +60,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
 
         viewHolder.tvName.setText(patients.get(position).getFirstName() + " " + patients.get(position).getLastName());
         viewHolder.tvOrganization.setText(patients.get(position).getOrganizationName());
+        viewHolder.itemView.setOnClickListener(view -> listener.onItemClick(patients.get(position)));
+
     }
 
-    @Override
     public int getItemCount() {
         return patients.size();
     }

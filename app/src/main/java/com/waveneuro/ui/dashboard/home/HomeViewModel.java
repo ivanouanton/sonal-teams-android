@@ -10,10 +10,12 @@ import com.asif.abase.data.model.APIError;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.asif.abase.exception.SomethingWrongException;
 import com.waveneuro.data.DataManager;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.domain.base.SingleLiveEvent;
+import com.waveneuro.domain.usecase.patient.GetPatientUseCase;
 import com.waveneuro.domain.usecase.patient.GetPatientsUseCase;
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase;
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
@@ -40,14 +42,17 @@ public class HomeViewModel extends ViewModel {
     private final GetLatestProtocolUseCase getLatestProtocolUseCase;
     private final GetPersonalInfoUseCase getPersonalInfoUseCase;
     private final GetPatientsUseCase getPatientsUseCase;
+    private final GetPatientUseCase getPatientUseCase;
 
     @Inject
     public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
                          GetPersonalInfoUseCase getPersonalInfoUseCase,
-                         GetPatientsUseCase getPatientsUseCase) {
+                         GetPatientsUseCase getPatientsUseCase,
+                         GetPatientUseCase getPatientUseCase) {
         this.getLatestProtocolUseCase = getLatestProtocolUseCase;
         this.getPersonalInfoUseCase = getPersonalInfoUseCase;
         this.getPatientsUseCase = getPatientsUseCase;
+        this.getPatientUseCase = getPatientUseCase;
     }
 
     public void processEvent(HomeViewEvent viewEvent) {
@@ -150,8 +155,33 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onSuccess(Object response) {
                 mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                PatientResponse patientResponse = (PatientResponse) response;
+                PatientListResponse patientResponse = (PatientListResponse) response;
                 mDataPatientsLive.postValue(new HomeClientsViewState.Success(patientResponse));
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                APIError error = errorUtil.parseError(throwable);
+                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+    }
+
+    void getClientWithId(int id) {
+        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
+        this.getPatientUseCase.execute(id, new UseCaseCallback() {
+            @Override
+            public void onSuccess(Object response) {
+                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+                PatientResponse patientResponse = (PatientResponse) response;
+                mDataPatientsLive.postValue(new HomeClientsViewState.PatientSuccess(patientResponse));
 
             }
 

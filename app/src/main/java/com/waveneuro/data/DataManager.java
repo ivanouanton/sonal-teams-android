@@ -6,6 +6,7 @@ import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
+import com.waveneuro.data.model.request.patient.PatientRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
@@ -17,11 +18,11 @@ import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
-import com.waveneuro.data.model.response.login.LoginResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
@@ -51,7 +52,11 @@ public interface DataManager {
 
     Observable<ProtocolResponse> protocol();
 
-    Observable<PatientResponse> patients();
+    Observable<PatientListResponse> patients();
+
+    Observable<PatientResponse> patientWithId(int id);
+
+    Observable<PatientResponse> updatePatientWithId(int id, PatientRequest request);
 
     Observable<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
 
