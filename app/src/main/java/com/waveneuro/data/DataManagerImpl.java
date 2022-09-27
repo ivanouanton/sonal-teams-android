@@ -13,17 +13,18 @@ import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRe
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
+import com.waveneuro.data.model.request.patient.PatientRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
@@ -100,8 +101,18 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<PatientResponse> patients() {
+    public Observable<PatientListResponse> patients() {
         return this.userService.getClientList();
+    }
+
+    @Override
+    public Observable<PatientResponse> patientWithId(int id) {
+        return this.userService.getClient(id);
+    }
+
+    @Override
+    public Observable<PatientResponse> updatePatientWithId(int id, PatientRequest request) {
+        return this.userService.updateClient(id, request);
     }
 
     @Override

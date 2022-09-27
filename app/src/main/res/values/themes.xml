@@ -60,6 +60,10 @@
         <item name="layout_constraintWidth_max">300dp</item>
     </style>
 
+    <style name="RoundedButton.Aqua.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="AquaButtonThemeOverlay">
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimary">@color/aqua</item>

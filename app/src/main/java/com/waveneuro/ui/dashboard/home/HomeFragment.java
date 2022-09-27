@@ -28,14 +28,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.waveneuro.R;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
+import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.base.BaseFragment;
 import com.waveneuro.ui.dashboard.DashBoardViewModel;
 import com.waveneuro.ui.dashboard.DashboardViewState;
+import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
 import com.waveneuro.ui.dashboard.more.WebCommand;
+import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
 import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.lang.annotation.Retention;
@@ -49,10 +54,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements ClientListAdapter.OnItemClickListener, EditClientViewModel.OnClientUpdated {
 
     private static final int REQUEST_CODE_OPEN_GPS = 1;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
+
+    @Override
+    public void onClientUpdated() {
+        this.homeViewModel.processEvent(new HomeViewEvent.Start());
+    }
 
 
     @Retention(RetentionPolicy.SOURCE)
@@ -100,6 +110,13 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
+    public void onItemClick(PatientListResponse.Patient patient) {
+
+        homeViewModel.getClientWithId(patient.getId());
+    }
+
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         fragmentComponent = DaggerFragmentComponent.builder()
                 .activityComponent(((BaseActivity) getActivity()).activityComponent())
@@ -110,7 +127,6 @@ public class HomeFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         dashBoardViewModel = ViewModelProviders.of(requireActivity()).get(DashBoardViewModel.class);
 
-        initDataset();
     }
 
     View view = null;
@@ -137,13 +153,6 @@ public class HomeFragment extends BaseFragment {
         // END_INCLUDE(initializeRecyclerView)
 
         return view;
-    }
-
-    private void initDataset() {
-        mDataset = new String[10];
-        for (int i = 0; i < 10; i++) {
-            mDataset[i] = "This is element #" + i;
-        }
     }
 
     @Override
@@ -186,8 +195,26 @@ public class HomeFragment extends BaseFragment {
         if (viewState instanceof HomeClientsViewState.Success) {
             HomeClientsViewState.Success success = (HomeClientsViewState.Success) viewState;
             mAdapter = new ClientListAdapter(success.getItem().getPatients());
+            mAdapter.listener = this;
             // Set CustomAdapter as the adapter for RecyclerView.
             rvClients.setAdapter(mAdapter);
+        } else if (viewState instanceof HomeClientsViewState.PatientSuccess) {
+            HomeClientsViewState.PatientSuccess success = (HomeClientsViewState.PatientSuccess) viewState;
+
+            PatientResponse patient = success.getItem();
+            ViewClientBottomSheet viewClientBottomSheet =
+                    ViewClientBottomSheet.newInstance(this, patient.getId(),
+                            patient.getFirstName(),
+                            patient.getLastName(),
+                            patient.getBirthday(),
+                            patient.isMale(),
+                            patient.getEmail(),
+                            patient.getUsername(),
+                            patient.getOrganizationName(),
+                            patient.isTosSigned()
+                    );
+            viewClientBottomSheet.show(getChildFragmentManager(), "");
+
         }
     };
 
@@ -293,4 +320,5 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
+
 }

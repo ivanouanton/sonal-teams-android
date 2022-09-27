@@ -8,14 +8,15 @@ import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRe
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
+import com.waveneuro.data.model.request.patient.PatientRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
+import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
@@ -27,6 +28,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public interface UserService {
 
@@ -64,6 +66,12 @@ public interface UserService {
     Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
 
     @GET("patients")
-    Observable<PatientResponse> getClientList();
+    Observable<PatientListResponse> getClientList();
+
+    @GET("patients/{id}")
+    Observable<PatientResponse> getClient(@Path("id") int id);
+
+    @PUT("patients/{id}")
+    Observable<PatientResponse> updateClient(@Path("id") int id, @Body PatientRequest request);
 
 }
