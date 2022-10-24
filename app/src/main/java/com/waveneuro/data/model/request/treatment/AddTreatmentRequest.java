@@ -9,37 +9,23 @@ import java.util.Calendar;
 
 public class AddTreatmentRequest extends BaseModel implements Serializable {
 
-    @SerializedName("completed")
-    boolean completed;
-
     @SerializedName("eeg_id")
     Long eegId;
 
-    @SerializedName("questionnaire")
-    Questionnaire questionnaire;
+    @SerializedName("finished_at")
+    Long finishedAt;
 
-    @SerializedName("treatment_date")
-    Long treatmentDate;
+    @SerializedName("is_completed")
+    boolean completed;
 
-    @SerializedName("sonal_id")
-    Long sonalId;
+    @SerializedName("patient_id")
+    Long patientId;
 
     @SerializedName("protocol_id")
     Long protocolId;
 
-    public AddTreatmentRequest() {
-        completed = true;
-        questionnaire = new Questionnaire();
-        treatmentDate = System.currentTimeMillis();
-    }
-
-    public boolean getCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
+    @SerializedName("sonal_id")
+    String sonalId;
 
     public Long getEegId() {
         return eegId;
@@ -49,17 +35,28 @@ public class AddTreatmentRequest extends BaseModel implements Serializable {
         this.eegId = eegId;
     }
 
-    public void setTreatmentDate() {
-        Calendar calendar = Calendar.getInstance();
-        this.treatmentDate = System.currentTimeMillis();
+    public Long getFinishedAt() {
+        return finishedAt;
     }
 
-    public Long getSonalId() {
-        return sonalId;
+    public void setFinishedAt(Long finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
-    public void setSonalId(Long sonalId) {
-        this.sonalId = sonalId;
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 
     public Long getProtocolId() {
@@ -70,21 +67,23 @@ public class AddTreatmentRequest extends BaseModel implements Serializable {
         this.protocolId = protocolId;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
+    public String getSonalId() {
+        return sonalId;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
+    public void setSonalId(String sonalId) {
+        this.sonalId = sonalId;
     }
 
-    @Override
-    public String toString() {
-        return "AddTreatmentRequest{" +
-                "completed=" + completed +
-                ", eegId='" + eegId + '\'' +
-                ", questionnaire=" + questionnaire +
-                ", treatmentDate='" + treatmentDate + '\'' +
-                '}';
+    public AddTreatmentRequest() {
+    }
+
+    public AddTreatmentRequest(Long eegId, Long finishedAt, boolean completed, Long patientId, Long protocolId, String sonalId) {
+        this.eegId = eegId;
+        this.finishedAt = finishedAt;
+        this.completed = completed;
+        this.patientId = patientId;
+        this.protocolId = protocolId;
+        this.sonalId = sonalId;
     }
 }

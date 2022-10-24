@@ -238,6 +238,13 @@ public class HomeActivity extends BaseActivity {
         fragmentTransaction.commit();
     }
 
+    public void addFragment(int viewId, Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(viewId, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     public void switchToHome() {
         bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_home);
     }
@@ -300,7 +307,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.finish();
+       //this.finish();
     }
 
     @Override

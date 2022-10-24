@@ -75,7 +75,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +95,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +115,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +135,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,7 +155,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -170,7 +175,8 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:inputType="number"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:maxLength= "1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

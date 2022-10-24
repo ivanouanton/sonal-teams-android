@@ -120,7 +120,7 @@ public class DateUtil {
 
             SimpleDateFormat format = formats.get(pattern);
             if (format == null) {
-                format = new SimpleDateFormat(pattern);
+                format = new SimpleDateFormat(pattern, Locale.US);
                 format.setTimeZone(TimeZone.getTimeZone("GMT"));
                 formats.put(pattern, format);
             }
