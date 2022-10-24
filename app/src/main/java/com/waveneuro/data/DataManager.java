@@ -25,9 +25,11 @@ import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
+import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
+import com.waveneuro.ui.session.history.SessionListAdapter;
 
 import java.util.List;
 
@@ -113,6 +115,8 @@ public interface DataManager {
     String getSonalId();
 
     Observable<List<SonalDeviceResponse>> getSonalDevices();
+
+    Observable<SessionResponse> getSessions(int id);
 
 
 }

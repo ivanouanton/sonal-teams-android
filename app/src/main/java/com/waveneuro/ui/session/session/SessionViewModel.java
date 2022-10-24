@@ -104,7 +104,7 @@ public class SessionViewModel extends ViewModel {
         request.setCompleted(false);
         request.setEegId(Long.parseLong(dataManager.getEegId()));
         request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
-        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
+        request.setSonalId(dataManager.getSonalId());
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -127,7 +127,7 @@ public class SessionViewModel extends ViewModel {
         AddTreatmentRequest request = new AddTreatmentRequest();
         request.setEegId(Long.parseLong(dataManager.getEegId()));
         request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
-        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
+        request.setSonalId(dataManager.getSonalId());
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {

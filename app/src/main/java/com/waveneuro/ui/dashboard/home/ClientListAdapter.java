@@ -3,6 +3,7 @@ package com.waveneuro.ui.dashboard.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
 
     public interface OnItemClickListener {
         void onItemClick(PatientListResponse.Patient patient);
+        void onStartSessionClick(PatientListResponse.Patient patient);
     }
 
 
@@ -33,12 +35,14 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName;
         private final TextView tvOrganization;
+        private final ImageView ivStartSession;
 
         public ViewHolder(View view) {
             super(view);
 
             tvName = view.findViewById(R.id.tvName);
             tvOrganization = view.findViewById(R.id.tvOrganization);
+            ivStartSession = view.findViewById(R.id.ivStartSession);
         }
 
     }
@@ -60,6 +64,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
 
         viewHolder.tvName.setText(patients.get(position).getFirstName() + " " + patients.get(position).getLastName());
         viewHolder.tvOrganization.setText(patients.get(position).getOrganizationName());
+        viewHolder.ivStartSession.setOnClickListener(view -> listener.onStartSessionClick(patients.get(position)));
         viewHolder.itemView.setOnClickListener(view -> listener.onItemClick(patients.get(position)));
 
     }

@@ -16,6 +16,7 @@ import com.waveneuro.ui.dashboard.more.WebActivity;
 import com.waveneuro.ui.device.MyDeviceActivity;
 import com.waveneuro.ui.introduction.splash.SplashActivity;
 import com.waveneuro.ui.session.complete.SessionCompleteActivity;
+import com.waveneuro.ui.session.history.SessionHistoryActivity;
 import com.waveneuro.ui.session.session.SessionActivity;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameActivity;
 import com.waveneuro.ui.user.email.sent.SentUsernameActivity;
@@ -86,4 +87,6 @@ public interface ActivityComponent {
     void inject(HistoryActivity helpActivity);
 
     void inject(MfaActivity helpActivity);
+
+    void inject(SessionHistoryActivity sessionHistoryActivity);
 }
