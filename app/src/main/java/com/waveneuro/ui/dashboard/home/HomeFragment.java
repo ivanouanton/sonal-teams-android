@@ -38,6 +38,8 @@ import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.base.BaseFragment;
 import com.waveneuro.ui.dashboard.DashBoardViewModel;
 import com.waveneuro.ui.dashboard.DashboardViewState;
+import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
@@ -113,6 +115,11 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     public void onItemClick(PatientListResponse.Patient patient) {
 
         homeViewModel.getClientWithId(patient.getId());
+    }
+
+    @Override
+    public void onStartSessionClick(PatientListResponse.Patient patient) {
+        ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
     }
 
 

@@ -10,20 +10,40 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 import com.waveneuro.R;
+import com.waveneuro.injection.component.DaggerFragmentComponent;
+import com.waveneuro.injection.component.FragmentComponent;
+import com.waveneuro.injection.module.FragmentModule;
+import com.waveneuro.ui.base.BaseActivity;
+import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
 import com.waveneuro.ui.dashboard.home.HomeViewModel;
+import com.waveneuro.ui.device.MyDeviceCommand;
+import com.waveneuro.ui.session.history.Session;
+import com.waveneuro.ui.session.history.SessionHistoryCommand;
+import com.waveneuro.ui.session.session.SessionCommand;
 import com.waveneuro.utils.DateUtil;
 
 import javax.inject.Inject;
 
 public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
+    protected FragmentComponent fragmentComponent;
 
+
+    @Inject
+    SessionHistoryCommand sessionHistoryCommand;
+
+    @Inject
+    SessionCommand sessionCommand;
 
     private int id;
     private String firstName;
@@ -43,6 +63,8 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     TextView tvUsername;
     TextView tvOrganization;
     TextView tvTos;
+    TextView tvViewHistory;
+    MaterialButton btnStartSession;
 
     EditClientViewModel.OnClientUpdated listener;
 
@@ -77,10 +99,22 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvUsername = view.findViewById(R.id.tv_username_value);
         tvOrganization = view.findViewById(R.id.tv_organization_value);
         tvTos = view.findViewById(R.id.tv_tos_status_value);
-
+        tvViewHistory = view.findViewById(R.id.tv_view_history);
+        btnStartSession = view.findViewById(R.id.btn_start_session);
 
         return view;
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        fragmentComponent = DaggerFragmentComponent.builder()
+                .activityComponent(((BaseActivity) getActivity()).activityComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
+
+        fragmentComponent.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -94,6 +128,11 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvOrganization.setText(organization);
         tvTos.setText(tos?"Signed":"Not Signed");
         tvEdit.setOnClickListener(v -> editClient());
+        tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(String.valueOf(id), firstName + " " + lastName));
+        btnStartSession.setOnClickListener(v -> {
+            dismiss();
+            ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
+        });
     }
 
     private void editClient(){

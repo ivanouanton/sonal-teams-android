@@ -15,6 +15,6 @@ public interface TreatmentService {
     @GET("latest_nest_protocol")
     Observable<ProtocolResponse> protocol();
 
-    @POST("treatments")
+    @POST("sonal/sessions/user_closure")
     Observable<TreatmentResponse> addTreatment(@Body AddTreatmentRequest request);
 }

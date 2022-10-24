@@ -18,6 +18,7 @@ import com.waveneuro.data.model.response.password.password.SetNewPasswordRespons
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
 
@@ -73,5 +74,8 @@ public interface UserService {
 
     @PUT("patients/{id}")
     Observable<PatientResponse> updateClient(@Path("id") int id, @Body PatientRequest request);
+
+    @GET("sonal/sessions/{id}")
+    Observable<SessionResponse> getSessions(@Path("id") int id);
 
 }

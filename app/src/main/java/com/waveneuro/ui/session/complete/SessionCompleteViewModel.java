@@ -43,7 +43,8 @@ public class SessionCompleteViewModel extends ViewModel {
         AddTreatmentRequest request = new AddTreatmentRequest();
         request.setEegId(Long.parseLong(dataManager.getEegId()));
         request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
-        request.setSonalId(Long.parseLong(dataManager.getSonalId().replaceAll("\\D+","")));
+        request.setSonalId(dataManager.getSonalId());
+        request.setFinishedAt(System.currentTimeMillis());
         addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
