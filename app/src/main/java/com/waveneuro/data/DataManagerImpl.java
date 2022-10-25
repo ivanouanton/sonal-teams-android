@@ -27,6 +27,7 @@ import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
+import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
@@ -185,6 +186,11 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<List<SonalDeviceResponse>> getSonalDevices() {
         return userService.getSonalDevices();
+    }
+
+    @Override
+    public Observable<SessionResponse> getSessions(int id) {
+        return userService.getSessions(id);
     }
 
     @Override

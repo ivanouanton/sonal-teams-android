@@ -8,6 +8,8 @@ import com.waveneuro.injection.module.FragmentModule;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
+import com.waveneuro.ui.dashboard.home.MoreFragment;
+import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
 
 import dagger.Component;
 
@@ -23,4 +25,8 @@ public interface FragmentComponent {
     void inject(DeviceFragment deviceFragment);
 
     void inject(EditClientBottomSheet editClientBottomSheet);
+
+    void inject(ViewClientBottomSheet viewClientBottomSheet);
+
+    void inject(MoreFragment moreFragment);
 }
