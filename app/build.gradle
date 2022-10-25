@@ -88,6 +88,8 @@ sonarqube {
         property "sonar.projectName", "waveneuroscience:sonal-b2b-app-android"
         property "sonar.organization", "remedypointsolutions"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.qualitygate.wait", "true"
+        property "sonar.qualitygate.timeout", "180"
 
     }
 }
