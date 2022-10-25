@@ -21,7 +21,8 @@ android {
     productFlavors {
         dev {
             manifestPlaceholders = [sentryEnvironment: "dev",
-                                    appName: "Sonal DEV"]
+                                    appName: "Sonal DEV",
+                                    relaseName: "1.0.0"]
             dimension "env"
             applicationIdSuffix ".develop"
             resValue "string", "sentryId", ""
