@@ -1,20 +1,15 @@
-name: SonarCloud
+name: CodeQuality Gate
 
 on:
   push:
     branches:
       - main
-      - dev
   pull_request:
     types: [opened, synchronize, reopened]
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   analyze:
-    name: Analyze
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

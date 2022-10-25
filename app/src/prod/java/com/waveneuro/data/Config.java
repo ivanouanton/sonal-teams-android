@@ -4,7 +4,7 @@ public class Config {
     private static final String PROTOCOL = "http://";
     public static final String PROTOCOL_S = "https://";
     public static final String HOSTS[] = new String[]{
-            "api.braincare.wavesynchrony.com"
+            "api-ecs.braincare.wavesynchrony.com"
     };
 
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/";

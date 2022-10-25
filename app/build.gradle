@@ -21,16 +21,16 @@ android {
     productFlavors {
         dev {
             manifestPlaceholders = [sentryEnvironment: "dev",
-                                    appName: "Sonal DEV",
-                                    relaseName: "1.0.0"]
+                                    appName: "Sonal DEV B2B",
+                                    releaseName: "1.0.0"]
             dimension "env"
             applicationIdSuffix ".develop"
             resValue "string", "sentryId", ""
         }
         qa {
             manifestPlaceholders = [sentryEnvironment:"test",
-                                    appName: "Sonal QA",
-                                    relaseName: "1.0.0"]
+                                    appName: "Sonal QA B2B",
+                                    releaseName: "1.0.0"]
             dimension "env"
             applicationIdSuffix ".test"
             resValue "string", "sentryId", "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808"
@@ -38,7 +38,7 @@ android {
         prod {
             manifestPlaceholders = [sentryEnvironment:"production",
                                     appName: "@string/app_name",
-                                    relaseName: "1.0.0"]
+                                    releaseName: "1.0.0"]
             dimension "env"
             resValue "string", "sentryId", "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808"
 
