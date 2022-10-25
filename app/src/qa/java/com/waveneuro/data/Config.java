@@ -4,7 +4,7 @@ public class Config {
     private static final String PROTOCOL = "http://";
     public static final String PROTOCOL_S = "https://";
     public static final String HOSTS[] = new String[]{
-            "api.wn.repmvbx.xyz"
+            "api-ecs.wn.repmvbx.xyz"
     };
 
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/";
