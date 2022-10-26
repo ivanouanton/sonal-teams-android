@@ -103,7 +103,7 @@ public class DataManagerImpl implements DataManager {
 
     @Override
     public Observable<PatientListResponse> patients() {
-        return this.userService.getClientList();
+        return this.userService.getClientList(1);
     }
 
     @Override
