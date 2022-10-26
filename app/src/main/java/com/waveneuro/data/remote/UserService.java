@@ -30,6 +30,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserService {
 
@@ -67,7 +68,7 @@ public interface UserService {
     Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
 
     @GET("patients")
-    Observable<PatientListResponse> getClientList();
+    Observable<PatientListResponse> getClientList(@Query("page") int page);
 
     @GET("patients/{id}")
     Observable<PatientResponse> getClient(@Path("id") int id);
