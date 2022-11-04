@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
@@ -24,10 +22,6 @@ import com.waveneuro.ui.dashboard.HomeActivity;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
-import com.waveneuro.ui.dashboard.home.HomeFragment;
-import com.waveneuro.ui.dashboard.home.HomeViewModel;
-import com.waveneuro.ui.device.MyDeviceCommand;
-import com.waveneuro.ui.session.history.Session;
 import com.waveneuro.ui.session.history.SessionHistoryCommand;
 import com.waveneuro.ui.session.session.SessionCommand;
 import com.waveneuro.utils.DateUtil;
@@ -37,7 +31,6 @@ import javax.inject.Inject;
 public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
     protected FragmentComponent fragmentComponent;
-
 
     @Inject
     SessionHistoryCommand sessionHistoryCommand;

@@ -3,21 +3,21 @@ package com.waveneuro.data;
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
 import com.waveneuro.data.model.request.device.SonalDeviceRequest;
+import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
+import com.waveneuro.data.model.request.login.LoginRequest;
+import com.waveneuro.data.model.request.password.ResetPasswordRequest;
+import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
+import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
+import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDeviceResponse;
+import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
-import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
-import com.waveneuro.data.model.request.login.LoginRequest;
-import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
-import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
-import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
-import com.waveneuro.data.model.request.password.ResetPasswordRequest;
-import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
@@ -29,7 +29,6 @@ import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
-import com.waveneuro.ui.session.history.SessionListAdapter;
 
 import java.util.List;
 
@@ -54,7 +53,9 @@ public interface DataManager {
 
     Observable<ProtocolResponse> protocol();
 
-    Observable<PatientListResponse> patients();
+    Observable<PatientListResponse> patients(String startsWith, Integer[] ids);
+
+    Observable<List<PatientListResponse.Patient.Organization>> organizations();
 
     Observable<PatientResponse> patientWithId(int id);
 

@@ -1,7 +1,9 @@
 package com.waveneuro.domain.usecase.patient;
 
 import com.asif.abase.domain.base.ObservableUseCase;
+import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
+import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 
 import javax.inject.Inject;
@@ -12,6 +14,9 @@ public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
 
     private final DataManager dataManager;
 
+    private Integer[] ids;
+    private String startsWith;
+
     @Inject
     public GetPatientsUseCase(DataManager dataManager) {
         this.dataManager = dataManager;
@@ -19,7 +24,13 @@ public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
 
     @Override
     public Observable<PatientListResponse> buildUseCaseSingle() {
-        return dataManager.patients();
+        return dataManager.patients(startsWith, ids);
+    }
+
+    public void execute(String starsWith, Integer[] ids, UseCaseCallback<ForgotUsernameResponse> useCaseCallback) {
+        this.ids=ids;
+        this.startsWith = starsWith;
+        super.execute(useCaseCallback);
     }
 
 }

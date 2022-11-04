@@ -68,7 +68,7 @@ public interface UserService {
     Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
 
     @GET("patients")
-    Observable<PatientListResponse> getClientList(@Query("page") int page);
+    Observable<PatientListResponse> getClientList(@Query("page") int page, @Query("organization") Integer[] org, @Query("search") String startsWith);
 
     @GET("patients/{id}")
     Observable<PatientResponse> getClient(@Path("id") int id);
@@ -78,5 +78,8 @@ public interface UserService {
 
     @GET("sonal/sessions/{id}")
     Observable<SessionResponse> getSessions(@Path("id") int id);
+
+    @GET("orgs/me")
+    Observable<List<PatientListResponse.Patient.Organization>> getOrganizations();
 
 }
