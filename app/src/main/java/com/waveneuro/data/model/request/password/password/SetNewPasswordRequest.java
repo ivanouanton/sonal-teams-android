@@ -3,39 +3,42 @@ package com.waveneuro.data.model.request.password.password;
 import com.google.gson.annotations.SerializedName;
 
 public class SetNewPasswordRequest {
-    @SerializedName("username")
-    private String username;
+    @SerializedName("email")
+    private String email;
 
-    @SerializedName("new_password")
-    private String newPassword;
+    @SerializedName("code")
+    private String code;
 
-    @SerializedName("old_password")
-    private String oldPassword;
+    @SerializedName("password")
+    private String password;
 
-    public SetNewPasswordRequest(String username, String newPassword, String oldPassword) {
-        this.username = username;
-        this.newPassword = newPassword;
-        this.oldPassword = oldPassword;
+    public SetNewPasswordRequest(String email, String code, String password) {
+        this.email = email;
+        this.code = code;
+        this.password = password;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
+    public String getCode() {
+        return code;
     }
 
-    @Override
-    public String toString() {
-        return "SetNewPasswordRequest{" +
-                "username='" + username + '\'' +
-                ", newPassword='" + newPassword + '\'' +
-                ", oldPassword='" + oldPassword + '\'' +
-                '}';
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

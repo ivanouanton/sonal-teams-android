@@ -40,7 +40,7 @@ public interface UserService {
     @GET("users/me")
     Observable<UserInfoResponse> getPersonalInfo();
 
-    @POST("forgot_password")
+    @POST("users/forgot_password")
     Observable<ForgotPasswordResponse> forgotPassword(@Body ForgotPasswordRequest request);
 
     @POST("forgot_password_confirm")
@@ -49,7 +49,7 @@ public interface UserService {
     @POST("refresh")
     Observable<RefreshResponse> refreshToken();
 
-    @POST("change_temp_password")
+    @POST("users/confirm_forgot_password")
     Observable<SetNewPasswordResponse> changeTempPassword(@Body SetNewPasswordRequest request);
 
     @POST("forgot_password_confirm")

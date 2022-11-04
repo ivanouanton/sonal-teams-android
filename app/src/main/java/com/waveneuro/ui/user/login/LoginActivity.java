@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 
-import com.asif.abase.data.model.BaseModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
@@ -46,12 +43,6 @@ public class LoginActivity extends BaseFormActivity {
     @Password(message = "Password must at least 8 characters", min = 8)
     @BindView(R.id.et_password)
     TextInputLayout etPassword;
-    @BindView(R.id.tv_forgot_password)
-    MaterialTextView tvForgotPassword;
-    @BindView(R.id.tv_register)
-    MaterialTextView tvRegister;
-    @BindView(R.id.tv_support)
-    MaterialTextView tvSupport;
     @BindView(R.id.chk_remember_me)
     MaterialCheckBox chkRememberMe;
     @BindView(R.id.tv_recover_here)
@@ -99,9 +90,9 @@ public class LoginActivity extends BaseFormActivity {
     }
 
     private void recoverHereSpan() {
-        SpannableString spannableString = new SpannableString(getString(R.string.recover_here));
+        SpannableString spannableString = new SpannableString(getString(R.string.forgot_password));
 
-        spannableString.setSpan(new UnderlineSpan(), 0, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new UnderlineSpan(), 0, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 12, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         tvRecover.setText(spannableString);
@@ -133,9 +124,7 @@ public class LoginActivity extends BaseFormActivity {
     };
 
     Observer<LoginViewEffect> loginViewEffectObserver = viewEffect -> {
-        if (viewEffect instanceof LoginViewEffect.ForgotUsername) {
-            launchForgotUsernameScreen();
-        } else if (viewEffect instanceof LoginViewEffect.ForgotPassword) {
+        if (viewEffect instanceof LoginViewEffect.ForgotPassword) {
             launchForgotPasswordScreen();
         } else if (viewEffect instanceof LoginViewEffect.RememberMe) {
             LoginViewEffect.RememberMe rememberMe = (LoginViewEffect.RememberMe) viewEffect;
@@ -161,11 +150,6 @@ public class LoginActivity extends BaseFormActivity {
                 etPassword.getEditText().getText().toString());
     }
 
-    private void launchForgotUsernameScreen() {
-//        forgotUsernameCommand.navigate();
-        webCommand.navigate(WebCommand.PAGE_SUPPORT);
-    }
-
     private void launchForgotPasswordScreen() {
         resetPasswordCommand.navigate();
     }
@@ -177,27 +161,6 @@ public class LoginActivity extends BaseFormActivity {
     @OnClick(R.id.btn_login)
     public void onClickLogin() {
         this.mValidator.validate();
-    }
-
-    @OnClick(R.id.tv_forgot_password)
-    public void onClickForgotUsername() {
-//        this.loginViewModel.processEvent(new LoginViewEvent.ForgotUsernameClicked());
-    }
-
-    public void onClickForgotPassword() {
-        this.loginViewModel.processEvent(new LoginViewEvent.ForgotPasswordClicked());
-    }
-
-    @OnClick(R.id.tv_register)
-    public void onClickRegister() {
-        this.loginViewModel.processEvent(new LoginViewEvent.RegisterClicked());
-    }
-
-    @OnClick(R.id.tv_support)
-    public void onClickSupport() {
-        //DONE Make event
-//        this.loginViewModel.processEvent(new LoginViewEvent.ForgotPasswordClicked());
-        webCommand.navigate(WebCommand.PAGE_SUPPORT);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.waveneuro.ui.user.mfa;
+package com.waveneuro.ui.user.password.code;
 
 import android.text.TextUtils;
 
@@ -6,34 +6,26 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.asif.abase.data.model.APIError;
-import com.asif.abase.data.model.BaseModel;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.analytics.AnalyticsEvent;
 import com.waveneuro.data.analytics.AnalyticsManager;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
+import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
-import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.domain.base.SingleLiveEvent;
 import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase;
 import com.waveneuro.domain.usecase.login.LoginUseCase;
+import com.waveneuro.domain.usecase.password.ForgotPasswordUseCase;
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
 import com.waveneuro.ui.user.login.LoginViewEffect;
 import com.waveneuro.ui.user.login.LoginViewEvent;
 import com.waveneuro.ui.user.login.LoginViewState;
 import com.waveneuro.utils.ErrorUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
-public class MfaViewModel extends ViewModel {
+public class ForgotPasswordCodeViewModel extends ViewModel {
 
     @Inject
     ErrorUtil errorUtil;
@@ -53,12 +45,15 @@ public class MfaViewModel extends ViewModel {
     private final LoginUseCase loginUseCase;
     private final GetPersonalInfoUseCase getPersonalInfoUseCase;
     private final ConfirmTokenUseCase confirmTokenUseCase;
+    private final ForgotPasswordUseCase forgotPasswordUseCase;
+
 
     @Inject
-    public MfaViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase,  ConfirmTokenUseCase confirmTokenUseCase) {
+    public ForgotPasswordCodeViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase, ForgotPasswordUseCase forgotPasswordUseCase) {
         this.loginUseCase = loginUseCase;
         this.getPersonalInfoUseCase = getPersonalInfoUseCase;
         this.confirmTokenUseCase = confirmTokenUseCase;
+        this.forgotPasswordUseCase = forgotPasswordUseCase;
     }
 
     void processEvent(LoginViewEvent viewEvent) {
@@ -80,6 +75,25 @@ public class MfaViewModel extends ViewModel {
         } else if (viewEvent instanceof LoginViewEvent.SupportClicked) {
             this.mDataViewEffect.postValue(new LoginViewEffect.Support());
         }
+    }
+
+    void resetPassword(String username) {
+        this.forgotPasswordUseCase.execute(new ForgotPasswordRequest(username), new UseCaseCallback() {
+            @Override
+            public void onSuccess(Object response) {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 
     private void removeRememberUserData() {
@@ -129,57 +143,6 @@ public class MfaViewModel extends ViewModel {
         });
     }
 
-    public void confirmToken(String mfaCode, String username, String session) {
-        this.confirmTokenUseCase.execute(new ConfirmTokenRequest(username, mfaCode, session), new UseCaseCallback<ConfirmTokenResponse>() {
-
-            @Override
-            public void onSuccess(ConfirmTokenResponse confirmTokenResponse) {
-                mDataViewEffect.postValue(new LoginViewEffect.Home());
-                preferenceManager.setAccessToken(confirmTokenResponse.getIdToken());
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                mDataViewEffect.postValue(new LoginViewEffect.WrongMfaCode());
-            }
-
-            @Override
-            public void onFinish() {
-                int x = 0;
-            }
-        });
-    }
-
-
-    private void getPersonalInfo(boolean firstEntrance) {
-        this.getPersonalInfoUseCase.execute(new UseCaseCallback<UserInfoResponse>() {
-            @Override
-            public void onSuccess(UserInfoResponse response) {
-                Timber.e("PROFILE_SUCCESS");
-                mDataLive.postValue(new LoginViewState.Loading(false));
-
-                dataManager.saveUser((UserInfoResponse) response);
-                if (firstEntrance) {
-                    mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
-                } else {
-                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
-                }
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Timber.e("PROFILE_FAILURE");
-                mDataLive.postValue(new LoginViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new LoginViewState.Failure(error));
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
-    }
 
     public MutableLiveData<LoginViewState> getData() {
         return mDataLive;
