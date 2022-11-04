@@ -1,5 +1,8 @@
 package com.waveneuro.ui.dashboard;
 
+import static com.waveneuro.ui.session.history.SessionHistoryActivity.START_SESSION;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -307,7 +310,18 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-       //this.finish();
+        this.finish();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data.hasExtra(START_SESSION)) {
+            if (data.getBooleanExtra(START_SESSION, false)) {
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                addFragment(R.id.fr_home, DeviceFragment.newInstance());
+            }
+        }
     }
 
     @Override
