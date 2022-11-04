@@ -19,21 +19,15 @@ import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.home.OnFiltersChangedListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class FiltersBottomSheet extends BottomSheetDialogFragment implements OrgsListAdapter.OnItemClickListener {
 
     @BindView(R.id.rvOrganizations)
     RecyclerView rvOrganizations;
-
-    @OnClick(R.id.btn_apply)
-    public void onClickApply() {
-        Integer[] a = new Integer[selectedIds.size()];
-        listener.onFiltersChanged(selectedIds.toArray(a));
-    }
 
     protected FragmentComponent fragmentComponent;
 
@@ -51,16 +45,20 @@ public class FiltersBottomSheet extends BottomSheetDialogFragment implements Org
     }
 
 
-    public static FiltersBottomSheet newInstance(List<PatientListResponse.Patient.Organization> organizations) {
-        FiltersBottomSheet viewClientBottomSheet = new FiltersBottomSheet(organizations);
+    public static FiltersBottomSheet newInstance(List<PatientListResponse.Patient.Organization> organizations, Integer[] selected) {
+        FiltersBottomSheet viewClientBottomSheet = new FiltersBottomSheet(organizations, selected);
         return viewClientBottomSheet;
     }
 
     public FiltersBottomSheet() {
     }
 
-    public FiltersBottomSheet(List<PatientListResponse.Patient.Organization> orgs) {
+    public FiltersBottomSheet(List<PatientListResponse.Patient.Organization> orgs, Integer[] selected) {
         this.orgs = orgs;
+        selectedIds.clear();
+        if (selected != null && selected.length > 0) {
+            selectedIds.addAll(Arrays.asList(selected));
+        }
     }
 
     @Override
@@ -73,11 +71,22 @@ public class FiltersBottomSheet extends BottomSheetDialogFragment implements Org
 
         rvOrganizations = view.findViewById(R.id.rvOrganizations);
 
-        mAdapter = new OrgsListAdapter(orgs);
+        mAdapter = new OrgsListAdapter(orgs, selectedIds);
         mLayoutManager = new LinearLayoutManager(getActivity());
         rvOrganizations.setLayoutManager(mLayoutManager);
         rvOrganizations.setAdapter(mAdapter);
         mAdapter.setListener(this);
+
+        view.findViewById(R.id.tv_clear).setOnClickListener(v -> {
+            selectedIds.clear();
+            mAdapter.notifyDataSetChanged();
+        });
+
+        view.findViewById(R.id.btn_apply).setOnClickListener(v -> {
+            Integer[] a = new Integer[selectedIds.size()];
+            listener.onFiltersChanged(selectedIds.toArray(a));
+            dismiss();
+        });
 
         return view;
 

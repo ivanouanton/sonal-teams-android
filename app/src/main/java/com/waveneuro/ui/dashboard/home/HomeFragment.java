@@ -71,7 +71,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     @Override
     public void onFiltersChanged(Integer[] ids) {
         filters = ids;
-        this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(etSearch.getText().toString(), filters));
     }
 
 
@@ -202,7 +202,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         spinKitView.setVisibility(View.INVISIBLE);
 
         tilSearch.setEndIconOnClickListener(v -> {
-            filtersBottomSheet.show(getChildFragmentManager(), "");
+            if (filtersBottomSheet != null) {
+                filtersBottomSheet.show(getChildFragmentManager(), "");
+            }
         });
     }
 
@@ -268,7 +270,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         } else if (viewState instanceof HomeClientsViewState.OrganizationSuccess) {
             HomeClientsViewState.OrganizationSuccess success = (HomeClientsViewState.OrganizationSuccess) viewState;
             List<PatientListResponse.Patient.Organization> orgs = success.getItem();
-            filtersBottomSheet = FiltersBottomSheet.newInstance(orgs);
+            filtersBottomSheet = FiltersBottomSheet.newInstance(orgs, filters);
             filtersBottomSheet.setListener(this);
 
         }

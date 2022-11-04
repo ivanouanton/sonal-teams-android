@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.asif.abase.data.model.APIError;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.asif.abase.exception.SomethingWrongException;
-import com.google.android.gms.common.util.ArrayUtils;
 import com.waveneuro.data.DataManager;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
@@ -74,7 +73,7 @@ public class HomeViewModel extends ViewModel {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
             getUserDetails();
             getProtocol();
-            getClients(start.getStartsWith(), ArrayUtils.toWrapperArray(start.getFilters()));
+            getClients(start.getStartsWith(), start.getFilters());
             getOrganizations();
         } else if (viewEvent instanceof HomeViewEvent.DeviceDisconnected) {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());

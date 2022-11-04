@@ -24,6 +24,8 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
 
     private List<PatientListResponse.Patient.Organization> orgs;
 
+    private List<Integer> selected;
+
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -46,8 +48,9 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
 
     }
 
-    public OrgsListAdapter(List<PatientListResponse.Patient.Organization> pt) {
+    public OrgsListAdapter(List<PatientListResponse.Patient.Organization> pt, List<Integer> sel) {
         orgs = pt;
+        selected = sel;
     }
 
     @Override
@@ -62,6 +65,8 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
         viewHolder.tvName.setText(orgs.get(position).getName());
+
+        viewHolder.cbOrganization.setChecked(selected.contains(orgs.get(position).getId()));
         viewHolder.cbOrganization.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 listener.onSelected(orgs.get(position).getId());
