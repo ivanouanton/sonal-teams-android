@@ -6,19 +6,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.asif.abase.data.model.APIError;
-import com.asif.abase.data.model.BaseModel;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
 import com.waveneuro.data.analytics.AnalyticsManager;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
+import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
-import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.domain.base.SingleLiveEvent;
 import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase;
 import com.waveneuro.domain.usecase.login.LoginUseCase;
+import com.waveneuro.domain.usecase.password.ForgotPasswordUseCase;
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
 import com.waveneuro.ui.user.login.LoginViewEffect;
 import com.waveneuro.ui.user.login.LoginViewEvent;
@@ -26,8 +24,6 @@ import com.waveneuro.ui.user.login.LoginViewState;
 import com.waveneuro.utils.ErrorUtil;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public class ForgotPasswordCodeViewModel extends ViewModel {
 
@@ -49,12 +45,15 @@ public class ForgotPasswordCodeViewModel extends ViewModel {
     private final LoginUseCase loginUseCase;
     private final GetPersonalInfoUseCase getPersonalInfoUseCase;
     private final ConfirmTokenUseCase confirmTokenUseCase;
+    private final ForgotPasswordUseCase forgotPasswordUseCase;
+
 
     @Inject
-    public ForgotPasswordCodeViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase) {
+    public ForgotPasswordCodeViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase, ForgotPasswordUseCase forgotPasswordUseCase) {
         this.loginUseCase = loginUseCase;
         this.getPersonalInfoUseCase = getPersonalInfoUseCase;
         this.confirmTokenUseCase = confirmTokenUseCase;
+        this.forgotPasswordUseCase = forgotPasswordUseCase;
     }
 
     void processEvent(LoginViewEvent viewEvent) {
@@ -76,6 +75,25 @@ public class ForgotPasswordCodeViewModel extends ViewModel {
         } else if (viewEvent instanceof LoginViewEvent.SupportClicked) {
             this.mDataViewEffect.postValue(new LoginViewEffect.Support());
         }
+    }
+
+    void resetPassword(String username) {
+        this.forgotPasswordUseCase.execute(new ForgotPasswordRequest(username), new UseCaseCallback() {
+            @Override
+            public void onSuccess(Object response) {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 
     private void removeRememberUserData() {

@@ -27,8 +27,6 @@ import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
 import com.waveneuro.ui.user.login.LoginViewEffect;
-import com.waveneuro.ui.user.mfa.MfaCommand;
-import com.waveneuro.ui.user.mfa.MfaViewModel;
 import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordCommand;
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand;
 import com.waveneuro.ui.user.registration.RegistrationCommand;
@@ -76,7 +74,7 @@ public class ForgotPasswordCodeActivity extends BaseFormActivity {
 
 
     @Inject
-    MfaViewModel mfaViewModel;
+    ForgotPasswordCodeViewModel forgotPasswordCodeViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,7 +111,7 @@ public class ForgotPasswordCodeActivity extends BaseFormActivity {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         //this.loginViewModel.getViewEffect().observe(this, loginViewEffectObserver);
-        this.mfaViewModel.getViewEffect().observe(this, loginViewEffectObserver);
+        this.forgotPasswordCodeViewModel.getViewEffect().observe(this, loginViewEffectObserver);
 
         setView();
     }
@@ -148,7 +146,6 @@ public class ForgotPasswordCodeActivity extends BaseFormActivity {
 
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            int x = 0;
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -208,6 +205,7 @@ public class ForgotPasswordCodeActivity extends BaseFormActivity {
 
     @OnClick(R.id.tv_resend_code)
     public void onClickResendCode() {
+        forgotPasswordCodeViewModel.resetPassword(username);
 
     }
 
