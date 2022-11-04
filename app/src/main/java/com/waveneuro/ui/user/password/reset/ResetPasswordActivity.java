@@ -1,26 +1,31 @@
 package com.waveneuro.ui.user.password.reset;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
+import com.waveneuro.ui.user.password.code.ForgotPasswordCodeCommand;
 import com.waveneuro.ui.user.password.password.first.SetPasswordViewCommand;
 import com.waveneuro.ui.user.password.recovery.RecoveryInstructionsCommand;
 import com.waveneuro.ui.user.registration.RegistrationCommand;
@@ -33,17 +38,12 @@ import butterknife.OnClick;
 
 public class ResetPasswordActivity extends BaseFormActivity {
 
-    @BindView(R.id.tv_forgot_username)
-    MaterialTextView tvForgotUsername;
-    @BindView(R.id.tv_register)
-    MaterialTextView tvRegister;
-
-    @BindView(R.id.tv_about_us)
-    MaterialTextView tvAboutUs;
-
-    @NotEmpty(trim = true, message = "Enter username")
+    @NotEmpty(trim = true, message = "Enter email")
     @BindView(R.id.et_username)
     TextInputLayout etUsername;
+
+    @BindView(R.id.tv_log_in)
+    TextView tvLogIn;
 
     @Inject
     ResetPasswordViewModel resetPasswordViewModel;
@@ -54,6 +54,8 @@ public class ResetPasswordActivity extends BaseFormActivity {
     RegistrationCommand registrationCommand;
     @Inject
     RecoveryInstructionsCommand recoveryInstructionsCommand;
+    @Inject
+    ForgotPasswordCodeCommand forgotPasswordCodeCommand;
 
     @Inject
     LoginCommand loginCommand;
@@ -63,9 +65,13 @@ public class ResetPasswordActivity extends BaseFormActivity {
     @Inject
     WebCommand webCommand;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
         setContentView(R.layout.activity_reset_password);
@@ -76,68 +82,19 @@ public class ResetPasswordActivity extends BaseFormActivity {
     }
 
     private void setView() {
-        forgotUsernameSpanText();
-        registerSpanText();
-        aboutUsSpanText();
+        logInSpanText();
     }
 
-    private void forgotUsernameSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.forgot_username_q));
+    private void logInSpanText() {
+        SpannableString spannableString = new SpannableString(getString(R.string.log_in));
 
-        spannableString.setSpan(new UnderlineSpan(), 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new UnderlineSpan(), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                resetPasswordViewModel.processEvent(new ResetPasswordViewEvent.ForgotUsernameClicked());
-            }
-        }, 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 6, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        tvLogIn.setText(spannableString);
 
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)),
-                0, 16, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvForgotUsername.setText(spannableString);
-        tvForgotUsername.setClickable(true);
-        tvForgotUsername.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-
-    private void registerSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.sign_up));
-
-        spannableString.setSpan(new UnderlineSpan(), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                resetPasswordViewModel.processEvent(new ResetPasswordViewEvent.RegisterClicked());
-            }
-        }, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)),
-                0, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvRegister.setText(spannableString);
-        tvRegister.setClickable(true);
-        tvRegister.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    private void aboutUsSpanText() {
-        SpannableString spannableString = new SpannableString(getString(R.string.about_us));
-
-        spannableString.setSpan(new UnderlineSpan(), 0, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                resetPasswordViewModel.processEvent(new ResetPasswordViewEvent.AboutUsClicked());
-            }
-        }, 0, 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)),
-                0, 8, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        tvAboutUs.setText(spannableString);
-        tvAboutUs.setClickable(true);
-        tvAboutUs.setMovementMethod(LinkMovementMethod.getInstance());
-    }
 
     private void setObserver() {
         this.resetPasswordViewModel.getData().observe(this, resetPasswordViewStateObserver);
@@ -147,9 +104,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
     Observer<ResetPasswordViewState> resetPasswordViewStateObserver = viewState -> {
         if (viewState instanceof ResetPasswordViewState.Success) {
             ResetPasswordViewState.Success success = (ResetPasswordViewState.Success) viewState;
-//            onSuccess();
-//            launchRecoveryInsScreen();
-            launchSetPasswordScreen();
+            launchCheckEmailDialog();
         } else if (viewState instanceof ResetPasswordViewState.Failure) {
             ResetPasswordViewState.Failure error = (ResetPasswordViewState.Failure) viewState;
             onFailure(error.getError());
@@ -165,47 +120,47 @@ public class ResetPasswordActivity extends BaseFormActivity {
     Observer<ResetPasswordViewEffect> resetPasswordViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof ResetPasswordViewEffect.BackRedirect) {
             goBack();
-        } else if (viewEffect instanceof ResetPasswordViewEffect.ForgotUsernameRedirect) {
-            launchForgotUsernameScreen();
-        } else if (viewEffect instanceof ResetPasswordViewEffect.RegisterRedirect) {
-            launchRegisterScreen();
-        } else if (viewEffect instanceof ResetPasswordViewEffect.AboutUsRedirect) {
-            launchAboutUsScreen();
         } else if (viewEffect instanceof ResetPasswordViewEffect.LoginRedirect) {
             launchLoginScreen();
         }
     };
 
-    private void launchForgotUsernameScreen() {
-        forgotUsernameCommand.navigate();
-        //webCommand.navigate(WebCommand.PAGE_SUPPORT);
-    }
-
-    private void launchRegisterScreen() {
-        registrationCommand.navigate();
-    }
-
-    private void launchAboutUsScreen() {
-
-    }
 
     private void launchLoginScreen() {
         loginCommand.navigate();
         finish();
     }
 
-    private void launchRecoveryInsScreen() {
-        recoveryInstructionsCommand.navigate();
+    private void launchCheckEmailDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
+        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+        tvTitle.setText(R.string.check_your_email);
+        tvTitle.setTextSize(24);
+        tvContent.setText(R.string.recovery_info);
+        btnPrimary.setText(R.string.open_email_app);
+        builder.setView(dialogView);
+        final AlertDialog ad = builder.create();
+        btnPrimary.setOnClickListener(v -> {
+            ad.dismiss();
+            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString());
+            try {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_APP_EMAIL);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(intent);
+            } catch (android.content.ActivityNotFoundException e) {
+            }
+        });
+        ad.show();
     }
 
-    private void launchSetPasswordScreen() {
-        setPasswordViewCommand.navigate(etUsername.getEditText().getText().toString());
-    }
-
-    @OnClick(R.id.iv_back)
+    @OnClick(R.id.tv_log_in)
     public void onClickBack() {
-        resetPasswordViewModel.processEvent(
-                new ResetPasswordViewEvent.BackClicked());
+        loginCommand.navigate();
     }
 
     private void goBack() {
