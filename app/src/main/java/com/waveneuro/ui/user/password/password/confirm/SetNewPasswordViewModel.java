@@ -38,12 +38,12 @@ public class SetNewPasswordViewModel extends ViewModel {
         if (viewEvent instanceof SetNewPasswordViewEvent.Start) {
         } else if (viewEvent instanceof SetNewPasswordViewEvent.SetNewPassword) {
             SetNewPasswordViewEvent.SetNewPassword event = (SetNewPasswordViewEvent.SetNewPassword) viewEvent;
-            setNewPassword(event.getUsername(), event.getNewPassword(), event.getOldPassword());
+            setNewPassword(event.getEmail(), event.getCode(), event.getPassword());
         }
     }
 
-    private void setNewPassword(String username, String newPassword, String oldPassword) {
-        SetNewPasswordRequest request = new SetNewPasswordRequest(username, newPassword, oldPassword);
+    private void setNewPassword(String email, String code, String password) {
+        SetNewPasswordRequest request = new SetNewPasswordRequest(email, code, password);
         this.setNewPasswordUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object response) {
@@ -52,9 +52,6 @@ public class SetNewPasswordViewModel extends ViewModel {
                     APIError error = errorUtil.parseError(new SomethingWrongException(), setNewPasswordResponse.getError());
                     mDataLive.postValue(new SetNewPasswordViewState.Failure(error));
                 } else {
-                    dataManager.rememberPassword("");
-                    dataManager.saveAccessToken(setNewPasswordResponse.getAccessToken());
-                    dataManager.saveRefreshToken(setNewPasswordResponse.getRefreshToken());
                     mDataLive.postValue(new SetNewPasswordViewState.Success());
                 }
             }

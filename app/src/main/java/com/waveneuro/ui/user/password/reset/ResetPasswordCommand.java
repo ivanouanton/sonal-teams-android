@@ -20,9 +20,6 @@ public class ResetPasswordCommand extends NavigationCommand {
     @Override
     public void navigate() {
         Intent intent = new Intent(this.mContext, ResetPasswordActivity.class);
-//        Intent intent = new Intent(this.mContext, ResetPasswordInfoActivity.class);
-//        Intent intent = new Intent(this.mContext, ChangePasswordActivity.class);
-//        Intent intent = new Intent(this.mContext, RecoveryInstructionsActivity.class);
         this.mContext.startActivity(intent);
     }
 }

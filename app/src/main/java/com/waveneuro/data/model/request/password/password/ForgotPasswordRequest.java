@@ -4,17 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class ForgotPasswordRequest {
 
-    @SerializedName("username")
-    private String username;
+    @SerializedName("email")
+    private String email;
 
-    public ForgotPasswordRequest(String username) {
-        this.username = username;
+    public ForgotPasswordRequest(String email) {
+        this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "ForgotPasswordRequest{" +
-                "username='" + username + '\'' +
-                '}';
-    }
 }
