@@ -133,8 +133,9 @@
     <!--Session-->
     <string name="start_session">Start Session</string>
     <string name="ensure_your_device_powered_up">Turn On Device</string>
-    <string name="first_time_using">First time using the device?</string>
+    <string name="how_to_power_on_the_device">How to power on the device</string>
     <string name="scanning">Scanning...</string>
+    <string name="skip_onboarding">Skip onboarding</string>
     <string name="bluetooth_symbol">You should see the Bluetooth symbol flashing.</string>
     <string name="activate_your_device">Activate\nYour Device</string>
     <string name="pause_session_info">To pause your session\npress the center button on\nbase station for 2 seconds.</string>
@@ -149,6 +150,24 @@
     <string name="paused">paused</string>
     <string name="retry">Retry</string>
     <string name="error_sending_report">Error sending report</string>
+
+    <!--How to use the device-->
+    <string name="got_it">Got it</string>
+    <string name="list_of_precautions">List of all precautions</string>
+    <string name="how_to_step1">Power on the device by flipping the switch on the bottom of the base station from RED to GREEN</string>
+    <string name="how_to_step2">Firmly press the center button to begin the pairing process.</string>
+    <string name="how_to_step3">You should see the Bluetooth symbol flashing.</string>
+    <string name="how_to_step4">When all the indicators are lit, the device is successfully connected. You can now begin your session. </string>
+    <string name="how_to_step5">Choose a client above to start a session.</string>
+    <string name="how_to_step6">This device uses strong magnets.    Avoid wearing metal items on or near your head. Ensure you are aware of all precautions before proceeding.</string>
+
+
+    <!--Precautions-->
+    <string name="precautions_title">The Sonal should NOT be used by individuals who have:</string>
+    <string name="metal_objects_title">Metal objects such as:</string>
+    <string name="precautions_list">\u2022 cardiac pacemakers \n\u2022 implanted medication pumps \n\u2022 defribrilators \n\u2022 intra cardiac lines \n\u2022 aneurysm clips \n\u2022 shunts \n\u2022 stimulators \n\u2022 cochlear implants \n\u2022 stents \n\u2022 electrodes \n\u2022 metallic objects in or on their head</string>
+    <string name="metal_objects_list">\u2022 shrapnel \n\u2022 bullets or bullet fragments \n\u2022 magnetically activated dental implants</string>
+    <string name="precautions_warning">Failure to follow this restriction could result in serious injury or death.</string>
 
 
     <!--Session Complete-->

@@ -55,6 +55,7 @@ import com.waveneuro.ui.dashboard.DashBoardViewModel;
 import com.waveneuro.ui.dashboard.DashboardViewEvent;
 import com.waveneuro.ui.dashboard.DashboardViewState;
 import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.session.how_to.HowToCommand;
 import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.util.ArrayList;
@@ -112,6 +113,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @Inject
     SessionCommand sessionCommand;
+
+    @Inject
+    HowToCommand howToCommand;
 
     @Inject
     DeviceViewModel deviceViewModel;
@@ -293,23 +297,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         }
     }
 
-    private void launchFirstTimeDialog(){
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
-        ViewGroup viewGroup = getView().findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_popup, viewGroup, false);
-        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
-        TextView tvContent = dialogView.findViewById(R.id.tv_content);
-        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
-        tvTitle.setText(R.string.first_time_using);
-        tvTitle.setTextSize(24);
-        tvContent.setText(R.string.make_sure_device_ready);
-        btnPrimary.setText(R.string.ok);
-        builder.setView(dialogView);
-        final AlertDialog ad = builder.create();
-        btnPrimary.setOnClickListener(v -> ad.dismiss());
-        ad.show();
-
+    private void launchHowToActivity(){
+        howToCommand.navigate();
     }
 
     private void launchPairingSuccessfulDialog(){
@@ -442,7 +431,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @OnClick(R.id.tv_first_time)
     public void onFirstTimeUsing() {
-        launchFirstTimeDialog();
+        launchHowToActivity();
     }
 
     @Override
