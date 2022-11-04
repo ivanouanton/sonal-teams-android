@@ -128,10 +128,21 @@ public class PatientListResponse extends BaseModel {
             this.organization = organization;
         }
 
-        class Organization {
+        public class Organization {
 
             @SerializedName("name")
             private String name;
+
+            @SerializedName("id")
+            private int id;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
 
             public String getName() {
                 return name;
