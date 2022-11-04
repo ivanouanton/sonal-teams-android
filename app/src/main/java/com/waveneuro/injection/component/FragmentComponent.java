@@ -7,6 +7,7 @@ import com.asif.abase.injection.scope.PerFragment;
 import com.waveneuro.injection.module.FragmentModule;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
+import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
 import com.waveneuro.ui.dashboard.home.MoreFragment;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
@@ -29,4 +30,6 @@ public interface FragmentComponent {
     void inject(ViewClientBottomSheet viewClientBottomSheet);
 
     void inject(MoreFragment moreFragment);
+
+    void inject(FiltersBottomSheet filtersBottomSheet);
 }
