@@ -1,5 +1,6 @@
 package com.waveneuro.ui.session.history;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -20,10 +21,10 @@ public class SessionHistoryCommand extends NavigationCommand {
         this.mContext = mContext;
     }
 
-    public void navigate(String value, String name) {
+    public void navigate(Activity activity, String value, String name) {
         Intent intent = new Intent(this.mContext, SessionHistoryActivity.class);
         intent.putExtra(USER_ID, value);
         intent.putExtra(NAME, name);
-        this.mContext.startActivity(intent);
+        activity.startActivityForResult(intent, 0);
     }
 }
