@@ -2,7 +2,6 @@ package com.waveneuro.ui.dashboard.home;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,14 @@ import android.widget.Toast;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.waveneuro.R;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
@@ -41,13 +41,13 @@ import com.waveneuro.ui.dashboard.DashboardViewState;
 import com.waveneuro.ui.dashboard.HomeActivity;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
+import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
 import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,14 +56,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class HomeFragment extends BaseFragment implements ClientListAdapter.OnItemClickListener, EditClientViewModel.OnClientUpdated {
+public class HomeFragment extends BaseFragment implements ClientListAdapter.OnItemClickListener, EditClientViewModel.OnClientUpdated, OnFiltersChangedListener {
 
     private static final int REQUEST_CODE_OPEN_GPS = 1;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
 
+    private Integer[] filters;
+
     @Override
     public void onClientUpdated() {
-        this.homeViewModel.processEvent(new HomeViewEvent.Start());
+        this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
+    }
+
+    @Override
+    public void onFiltersChanged(Integer[] ids) {
+        filters = ids;
+        this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
     }
 
 
@@ -88,6 +96,15 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     @BindView(R.id.rvClients)
     RecyclerView rvClients;
 
+    @BindView(R.id.tv_empty_result)
+    TextView tvEmptyResult;
+
+    @BindView(R.id.til_search)
+    TextInputLayout tilSearch;
+
+    @BindView(R.id.et_search)
+    TextInputEditText etSearch;
+
     @Inject
     SessionCommand sessionCommand;
     @Inject
@@ -101,6 +118,8 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     protected ClientListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected String[] mDataset;
+
+    FiltersBottomSheet filtersBottomSheet;
 
 
     private HomeFragment() {
@@ -150,14 +169,28 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         if (dashBoardViewModel.getData().getValue() instanceof DashboardViewState.Connect) {
             this.homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
         } else {
-            this.homeViewModel.processEvent(new HomeViewEvent.Start());
+            this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
         }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         rvClients.setLayoutManager(mLayoutManager);
 
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        // END_INCLUDE(initializeRecyclerView)
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                homeViewModel.getClients(charSequence.toString(), filters);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         return view;
     }
@@ -167,6 +200,10 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         super.onViewCreated(view, savedInstanceState);
         setObserver();
         spinKitView.setVisibility(View.INVISIBLE);
+
+        tilSearch.setEndIconOnClickListener(v -> {
+            filtersBottomSheet.show(getChildFragmentManager(), "");
+        });
     }
 
     private void setView() {
@@ -203,8 +240,14 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             HomeClientsViewState.Success success = (HomeClientsViewState.Success) viewState;
             mAdapter = new ClientListAdapter(success.getItem().getPatients());
             mAdapter.listener = this;
-            // Set CustomAdapter as the adapter for RecyclerView.
             rvClients.setAdapter(mAdapter);
+            if (success.getItem().getPatients().isEmpty()) {
+                tvEmptyResult.setVisibility(View.VISIBLE);
+                rvClients.setVisibility(View.INVISIBLE);
+            } else {
+                tvEmptyResult.setVisibility(View.INVISIBLE);
+                rvClients.setVisibility(View.VISIBLE);
+            }
         } else if (viewState instanceof HomeClientsViewState.PatientSuccess) {
             HomeClientsViewState.PatientSuccess success = (HomeClientsViewState.PatientSuccess) viewState;
 
@@ -221,6 +264,12 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                             patient.isTosSigned()
                     );
             viewClientBottomSheet.show(getChildFragmentManager(), "");
+
+        } else if (viewState instanceof HomeClientsViewState.OrganizationSuccess) {
+            HomeClientsViewState.OrganizationSuccess success = (HomeClientsViewState.OrganizationSuccess) viewState;
+            List<PatientListResponse.Patient.Organization> orgs = success.getItem();
+            filtersBottomSheet = FiltersBottomSheet.newInstance(orgs);
+            filtersBottomSheet.setListener(this);
 
         }
     };
@@ -239,42 +288,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             return;
         }
         sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId);
-    }
-
-    private void checkPermissions() {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!bluetoothAdapter.isEnabled()) {
-            Toast.makeText(requireActivity(), "Please turn on Bluetooth first", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-        List<String> permissionDeniedList = new ArrayList<>();
-        for (String permission : permissions) {
-            int permissionCheck = ContextCompat.checkSelfPermission(requireActivity(), permission);
-            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                onPermissionGranted(permission);
-            } else {
-                permissionDeniedList.add(permission);
-            }
-        }
-        if (!permissionDeniedList.isEmpty()) {
-            new AlertDialog.Builder(requireActivity())
-                    .setTitle("Location Permission Request")
-                    .setMessage("WaveNeuro requires that Location permission be enabled to scan for Bluetooth Low Energy devices.\nPlease allow Location permission to continue.")
-                    .setNegativeButton(R.string.cancel,
-                            (dialog, which) -> {
-                            })
-                    .setPositiveButton("Allow",
-                            (dialog, which) -> {
-                                String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
-                                ActivityCompat.requestPermissions(requireActivity(), deniedPermissions, REQUEST_CODE_PERMISSION_LOCATION);
-                            })
-
-                    .setCancelable(false)
-                    .show();
-
-        }
     }
 
     private void onPermissionGranted(String permission) {
@@ -327,5 +340,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                 break;
         }
     }
+
 
 }
