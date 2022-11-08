@@ -158,6 +158,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         super.onViewCreated(view, savedInstanceState);
         setObserver();
         this.deviceViewModel.processEvent(new DeviceViewEvent.Start());
+        if (!deviceViewModel.getOnboardingDisplayed()) {
+            howToCommand.navigate();
+        }
     }
 
     private void setView() {

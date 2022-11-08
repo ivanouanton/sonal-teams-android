@@ -23,4 +23,6 @@ public class PreferenceKeys {
 
     public static final String REMEMBER_USERNAME = "remember_username";
     public static final String REMEMBER_PASSWORD = "remember_password";
+
+    public static final String ONBOARDING_DISPLAYED = "onboarding_displayed";
 }

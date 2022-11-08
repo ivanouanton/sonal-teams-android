@@ -11,13 +11,9 @@ import javax.inject.Inject;
 
 public class HowToViewModel extends ViewModel {
 
-    private GetSonalDevicesUseCase getSonalDevicesUseCase;
-    private PostSonalDevicesUseCase postSonalDevicesUseCase;
 
     @Inject
     public HowToViewModel(GetSonalDevicesUseCase getSonalDevicesUseCase, PostSonalDevicesUseCase postSonalDevicesUseCase) {
-        this.getSonalDevicesUseCase = getSonalDevicesUseCase;
-        this.postSonalDevicesUseCase = postSonalDevicesUseCase;
     }
 
     @Inject
@@ -25,7 +21,5 @@ public class HowToViewModel extends ViewModel {
 
     @Inject
     DataManager dataManager;
-
-
 
 }

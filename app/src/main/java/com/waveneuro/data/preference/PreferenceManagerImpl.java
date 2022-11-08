@@ -10,6 +10,9 @@ public class PreferenceManagerImpl implements PreferenceManager {
     private SharedPreferences defaultPreferences;
     protected static final String DEFAULT_PREF_FILE_NAME = "waven_prefs";
 
+    private SharedPreferences nonUserPreferences;
+    protected static final String NON_USER_RELATED_PREF_FILE_NAME = "non_user_prefs";
+
     private SharedPreferences encPreferences;
     protected static final String ENC_PREF_FILE_NAME = "waveneuro_prefs";
 
@@ -17,6 +20,7 @@ public class PreferenceManagerImpl implements PreferenceManager {
     public PreferenceManagerImpl(Context context) {
         defaultPreferences = context.getSharedPreferences(DEFAULT_PREF_FILE_NAME, Context.MODE_PRIVATE);
         encPreferences = context.getSharedPreferences(ENC_PREF_FILE_NAME, Context.MODE_PRIVATE);
+        nonUserPreferences = context.getSharedPreferences(NON_USER_RELATED_PREF_FILE_NAME, Context.MODE_PRIVATE);
     }
 
     private SharedPreferences.Editor getDefaultEditor() {
@@ -25,6 +29,10 @@ public class PreferenceManagerImpl implements PreferenceManager {
 
     private SharedPreferences.Editor getEncEditor() {
         return encPreferences.edit();
+    }
+
+    private SharedPreferences.Editor getNonUserEditor() {
+        return nonUserPreferences.edit();
     }
 
     @Override
@@ -160,5 +168,15 @@ public class PreferenceManagerImpl implements PreferenceManager {
     @Override
     public void removeRememberPassword() {
         getEncEditor().remove(PreferenceKeys.REMEMBER_PASSWORD).commit();
+    }
+
+    @Override
+    public boolean getOnboardingDisplayed() {
+        return nonUserPreferences.getBoolean(PreferenceKeys.ONBOARDING_DISPLAYED, false);
+    }
+
+    @Override
+    public void setOnboardingDisplayed() {
+        getNonUserEditor().putBoolean(PreferenceKeys.ONBOARDING_DISPLAYED, true).commit();
     }
 }

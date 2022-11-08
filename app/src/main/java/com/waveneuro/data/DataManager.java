@@ -119,5 +119,8 @@ public interface DataManager {
 
     Observable<SessionResponse> getSessions(int id);
 
+    boolean getOnboardingDisplayed();
+
+    void setOnboardingDisplayed();
 
 }
