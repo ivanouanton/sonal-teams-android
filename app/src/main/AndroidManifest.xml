@@ -112,6 +112,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.user.password.code.ForgotPasswordCodeActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.session.history.SessionHistoryActivity"
             android:exported="false"
             android:launchMode="singleInstance"

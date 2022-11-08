@@ -9,12 +9,12 @@
 
     <!--Login-->
     <string name="login">Login</string>
+    <string name="log_in">Log In</string>
     <string name="user_role">User Role</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="remember_me">Remember email</string>
     <string name="forgot_username_or_password">Forgot username or password?</string>
-    <string name="recover_here">Recover here</string>
     <string name="register">Sign Up</string>
     <string name="your_best_self_reimagined">Your Best-Self\nReimagined</string>
     <string name="need_help_support">Support</string>
@@ -38,12 +38,20 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="about_us">About Us</string>
     <string name="forgot_username_q">Forgot Username?</string>
-    <string name="send_reset_link">Send Reset Link</string>
+    <string name="send_reset_code">Send Reset Code</string>
+    <string name="enter_registered_email">Enter Registered Email Address</string>
 
     <!--Recovery Instructions-->
     <string name="check_your_email">Check Your Email</string>
     <string name="recovery_info">We have sent password recovery instructions to your registered email.</string>
     <string name="open_email_app">Open Email App</string>
+    <string name="enter_code_forgot_password">Enter the six digit code from your email to reset password.</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="password_must">Password must :</string>
+    <string name="condition1">\u2022 be at least 8 characters</string>
+    <string name="condition2">\u2022 contain both lower and upper case letter</string>
+    <string name="condition3">\u2022 contain at least 1 number</string>
+    <string name="condition4">\u2022 contain at least 1 special symbol</string>
     <string name="skip_i_ll_confirm_later">Skip, I\'ll confirm later</string>
     <string name="did_not_receive_the_email">Did not receive the email?</string>
     <string name="check_your_spam_folder_or_contact_us">Check your spam folder, or contact us.</string>

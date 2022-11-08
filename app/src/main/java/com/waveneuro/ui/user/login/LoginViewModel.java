@@ -62,8 +62,6 @@ public class LoginViewModel extends ViewModel {
         } else if (viewEvent instanceof LoginViewEvent.LoginClicked) {
             LoginViewEvent.LoginClicked loginClicked = (LoginViewEvent.LoginClicked) viewEvent;
             login(loginClicked.getUsername(), loginClicked.getPassword());
-        } else if (viewEvent instanceof LoginViewEvent.ForgotUsernameClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.ForgotUsername());
         } else if (viewEvent instanceof LoginViewEvent.ForgotPasswordClicked) {
             this.mDataViewEffect.postValue(new LoginViewEffect.ForgotPassword());
         } else if (viewEvent instanceof LoginViewEvent.RegisterClicked) {

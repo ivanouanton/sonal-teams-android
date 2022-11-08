@@ -21,6 +21,7 @@ public class LoginCommand extends NavigationCommand {
     @Override
     public void navigate() {
         Intent intent = new Intent(this.mContext, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         this.mContext.startActivity(intent);
         ((Activity) this.mContext).finish();
     }

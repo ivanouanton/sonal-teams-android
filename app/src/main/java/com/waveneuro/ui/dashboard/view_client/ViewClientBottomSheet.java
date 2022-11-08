@@ -121,7 +121,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvOrganization.setText(organization);
         tvTos.setText(tos?"Signed":"Not Signed");
         tvEdit.setOnClickListener(v -> editClient());
-        tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(String.valueOf(id), firstName + " " + lastName));
+        tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(requireActivity(), String.valueOf(id), firstName + " " + lastName));
         btnStartSession.setOnClickListener(v -> {
             dismiss();
             ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());

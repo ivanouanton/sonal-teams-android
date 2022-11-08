@@ -1,5 +1,7 @@
 package com.waveneuro.ui.session.history;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.waveneuro.R;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.ui.base.BaseActivity;
+import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -23,6 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SessionHistoryActivity extends BaseActivity {
+    
+    public static final String START_SESSION = "start_session";
 
     @Inject
     SessionHistoryViewModel sessionHistoryViewModel;
@@ -35,6 +40,18 @@ public class SessionHistoryActivity extends BaseActivity {
     protected RecyclerView.LayoutManager mLayoutManager;
 
     int userId;
+
+    @Inject
+    SessionCommand sessionCommand;
+
+    @OnClick(R.id.btn_start_session)
+    public void onClickStartSession() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(START_SESSION, true);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+
+    }
 
 
     @Override
