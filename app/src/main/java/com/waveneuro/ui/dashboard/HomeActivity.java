@@ -316,7 +316,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data.hasExtra(START_SESSION)) {
+        if (data != null && data.hasExtra(START_SESSION)) {
             if (data.getBooleanExtra(START_SESSION, false)) {
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 addFragment(R.id.fr_home, DeviceFragment.newInstance());
