@@ -199,6 +199,16 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
+    public boolean getOnboardingDisplayed() {
+        return preferenceManager.getOnboardingDisplayed();
+    }
+
+    @Override
+    public void setOnboardingDisplayed() {
+        preferenceManager.setOnboardingDisplayed();
+    }
+
+    @Override
     public Observable<SonalDeviceResponse> postSonalDevice(SonalDeviceRequest newDevice) {
         return userService.addSonalDevice(newDevice);
     }

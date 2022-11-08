@@ -103,4 +103,14 @@ public class DeviceViewModel extends ViewModel {
         return mDataViewEffect;
     }
 
+    boolean getOnboardingDisplayed(){
+        if (dataManager.getOnboardingDisplayed()) {
+            return true;
+        } else {
+            dataManager.setOnboardingDisplayed();
+            return false;
+        }
+
+    }
+
 }

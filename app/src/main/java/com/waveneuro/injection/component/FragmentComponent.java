@@ -11,6 +11,7 @@ import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
 import com.waveneuro.ui.dashboard.home.MoreFragment;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
+import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet;
 
 import dagger.Component;
 
@@ -32,4 +33,8 @@ public interface FragmentComponent {
     void inject(MoreFragment moreFragment);
 
     void inject(FiltersBottomSheet filtersBottomSheet);
+
+    void inject(PrecautionsBottomSheet precautionsBottomSheet);
+
+
 }

@@ -53,4 +53,8 @@ public interface PreferenceManager {
     void removeRememberUser();
 
     void removeRememberPassword();
+
+    boolean getOnboardingDisplayed();
+
+    void setOnboardingDisplayed();
 }
