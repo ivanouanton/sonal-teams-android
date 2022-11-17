@@ -130,7 +130,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
     private void editClient(){
         EditClientBottomSheet editClientBottomSheet = EditClientBottomSheet.newInstance(listener, id,
-                firstName, lastName, dob, isMale, email, username, organization, tos
+                firstName, lastName, dob, isMale, email, username, organization
         );
         editClientBottomSheet.show(getParentFragmentManager(), "");
         dismiss();
