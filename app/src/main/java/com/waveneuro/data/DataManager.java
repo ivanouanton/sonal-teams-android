@@ -51,7 +51,7 @@ public interface DataManager {
 
     Observable<UserInfoResponse> getPersonalInfo();
 
-    Observable<ProtocolResponse> protocol();
+    Observable<ProtocolResponse> protocol(int id);
 
     Observable<PatientListResponse> patients(String startsWith, Integer[] ids);
 
@@ -92,6 +92,10 @@ public interface DataManager {
     String getEegId();
 
     void saveEegId(String eegId);
+
+    Long getPatientId();
+
+    void savePatientId(Long patientId);
 
     Observable<SetNewPasswordResponse> setNewPassword(SetNewPasswordRequest request);
 

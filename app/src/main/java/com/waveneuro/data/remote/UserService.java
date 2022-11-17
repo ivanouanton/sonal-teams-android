@@ -18,6 +18,7 @@ import com.waveneuro.data.model.response.password.password.SetNewPasswordRespons
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
@@ -78,6 +79,9 @@ public interface UserService {
 
     @GET("sonal/sessions/{id}")
     Observable<SessionResponse> getSessions(@Path("id") int id);
+
+    @GET("sonal/protocols/{id}")
+    Observable<ProtocolResponse> getProtocolForUser(@Path("id") int id);
 
     @GET("orgs/me")
     Observable<List<PatientListResponse.Patient.Organization>> getOrganizations();

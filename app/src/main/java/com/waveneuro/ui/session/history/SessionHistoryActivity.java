@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.waveneuro.R;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.ui.base.BaseActivity;
@@ -65,6 +66,11 @@ public class SessionHistoryActivity extends BaseActivity {
             userId = Integer.valueOf(getIntent().getStringExtra(SessionHistoryCommand.USER_ID));
             ((TextView)findViewById(R.id.tvName)).setText(getIntent().getStringExtra(SessionHistoryCommand.NAME));
         }
+
+        if(getIntent().hasExtra(SessionHistoryCommand.TREATMENT_DATA_PRESENT)) {
+            ((MaterialButton)findViewById(R.id.btn_start_session)).setEnabled(getIntent().getBooleanExtra(SessionHistoryCommand.TREATMENT_DATA_PRESENT, false));
+        }
+
         setView();
         setObserver();
 

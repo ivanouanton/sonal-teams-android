@@ -101,10 +101,12 @@ public class SessionViewModel extends ViewModel {
 
     private void sendErrorTreatmentData() {
         AddTreatmentRequest request = new AddTreatmentRequest();
-        request.setCompleted(false);
         request.setEegId(Long.parseLong(dataManager.getEegId()));
         request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
         request.setSonalId(dataManager.getSonalId());
+        request.setCompleted(false);
+        request.setPatientId(dataManager.getPatientId());
+        request.setFinishedAt(System.currentTimeMillis()/1000);
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -113,7 +115,7 @@ public class SessionViewModel extends ViewModel {
 
             @Override
             public void onError(Throwable throwable) {
-                mDataLive.postValue(new SessionViewState.ErrorSending());
+
             }
 
             @Override
@@ -121,6 +123,8 @@ public class SessionViewModel extends ViewModel {
 
             }
         });
+
+
     }
 
     private void addTreatmentData() {
@@ -128,6 +132,9 @@ public class SessionViewModel extends ViewModel {
         request.setEegId(Long.parseLong(dataManager.getEegId()));
         request.setProtocolId(Long.parseLong(dataManager.getProtocolId()));
         request.setSonalId(dataManager.getSonalId());
+        request.setCompleted(true);
+        request.setPatientId(dataManager.getPatientId());
+        request.setFinishedAt(System.currentTimeMillis()/1000);
         this.addTreatmentUseCase.execute(request, new UseCaseCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -144,6 +151,7 @@ public class SessionViewModel extends ViewModel {
 
             }
         });
+
     }
 
     private void sentSessionEvent(String eventName, String username, String eggId, String protocolId, String sonalId) {

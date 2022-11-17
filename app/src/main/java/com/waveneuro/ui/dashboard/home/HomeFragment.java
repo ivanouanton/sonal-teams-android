@@ -138,7 +138,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @Override
     public void onStartSessionClick(PatientListResponse.Patient patient) {
-        ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
+        homeViewModel.startSessionForClientWithId(patient.getId());
     }
 
 
@@ -263,7 +263,8 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                             patient.getEmail(),
                             patient.getUsername(),
                             patient.getOrganizationName(),
-                            patient.isTosSigned()
+                            patient.isTosSigned(),
+                            success.getTreatmentDataPresent()
                     );
             viewClientBottomSheet.show(getChildFragmentManager(), "");
 
@@ -272,6 +273,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             List<PatientListResponse.Patient.Organization> orgs = success.getItem();
             filtersBottomSheet = FiltersBottomSheet.newInstance(orgs, filters);
             filtersBottomSheet.setListener(this);
+
+        } else if (viewState instanceof HomeClientsViewState.PatientSessionSuccess) {
+            ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
 
         }
     };

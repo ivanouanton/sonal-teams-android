@@ -100,7 +100,8 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             sonalId = getIntent().getStringExtra(SessionCommand.SONAL_ID);
         }
         if (getIntent().hasExtra(SessionCommand.TREATMENT_LENGTH)) {
-            treatmentLength = getIntent().getStringExtra(SessionCommand.TREATMENT_LENGTH);
+           // treatmentLength = getIntent().getStringExtra(SessionCommand.TREATMENT_LENGTH);
+            treatmentLength = "60";
             try {
                 treatmentLengthMinutes = Integer.parseInt(treatmentLength) / 60;
             } catch (Exception e) {
@@ -319,11 +320,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         }
     };
 
-    private void launchSessionCompleteScreen() {
-        sessionCompleteCommand.navigate();
-        finish();
-    }
-
     Observer<SessionViewEffect> sessionViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof SessionViewEffect.Back) {
             showCloseSessionDialog();
@@ -383,6 +379,24 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         }
 
 
+    }
+
+    private void launchSessionCompleteScreen() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
+        TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+        TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+        ImageView ivPrimary = dialogView.findViewById(R.id.iv_primary);
+        ivPrimary.setVisibility(View.GONE);
+        tvTitle.setText(R.string.congratulations);
+        tvContent.setText(R.string.session_done);
+        btnPrimary.setText(R.string.go_home);
+        btnPrimary.setOnClickListener(v -> dashboardCommand.navigate());
+        builder.setView(dialogView);
+        readyDialog = builder.create();
+        readyDialog.show();
     }
 
 

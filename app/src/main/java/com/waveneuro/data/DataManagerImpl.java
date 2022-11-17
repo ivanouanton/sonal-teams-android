@@ -97,8 +97,8 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<ProtocolResponse> protocol() {
-        return this.treatmentService.protocol();
+    public Observable<ProtocolResponse> protocol(int id) {
+        return this.userService.getProtocolForUser(id);
     }
 
     @Override
@@ -224,6 +224,16 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
+    public Long getPatientId() {
+        return preferenceManager.getPatientId();
+    }
+
+    @Override
+    public void savePatientId(Long patientId) {
+        preferenceManager.savePatientId(patientId);
+    }
+
+    @Override
     public User getUser() {
         User user = new User();
         user.setName(preferenceManager.getName());
@@ -276,4 +286,6 @@ public class DataManagerImpl implements DataManager {
     public Observable<UserInfoResponse> updateUser(AccountUpdateRequest request) {
         return this.userService.updateUser(request);
     }
+
+
 }
