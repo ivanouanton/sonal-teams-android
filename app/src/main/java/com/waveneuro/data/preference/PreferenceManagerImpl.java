@@ -141,6 +141,16 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
+    public Long getPatientId() {
+        return defaultPreferences.getLong(PreferenceKeys.PATIENT_ID, 0L);
+    }
+
+    @Override
+    public void savePatientId(Long patientId) {
+        getDefaultEditor().putLong(PreferenceKeys.PATIENT_ID, patientId).commit();
+    }
+
+    @Override
     public void rememberUsername(String username) {
         getEncEditor().putString(PreferenceKeys.REMEMBER_USERNAME, username).commit();
     }

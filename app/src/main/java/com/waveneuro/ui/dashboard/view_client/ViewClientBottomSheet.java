@@ -49,6 +49,8 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     private String organization;
     private int tosStatus;
 
+    private boolean treatmentDataPresent;
+
     TextView tvEdit;
     TextView tvName;
     TextView tvDob;
@@ -75,7 +77,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
     EditClientViewModel.OnClientUpdated listener;
 
-    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, int tosStatus) {
+    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, int tosStatus, boolean treatmentDataPresent) {
         ViewClientBottomSheet viewClientBottomSheet = new ViewClientBottomSheet();
         viewClientBottomSheet.id = id;
         viewClientBottomSheet.firstName = name;
@@ -87,6 +89,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         viewClientBottomSheet.organization = organization;
         viewClientBottomSheet.tosStatus = tosStatus;
         viewClientBottomSheet.listener = listener;
+        viewClientBottomSheet.treatmentDataPresent = treatmentDataPresent;
         return viewClientBottomSheet;
     }
 
@@ -160,11 +163,12 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         }
 
         tvEdit.setOnClickListener(v -> editClient());
-        tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(requireActivity(), String.valueOf(id), firstName + " " + lastName));
+        tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(requireActivity(), String.valueOf(id), firstName + " " + lastName, treatmentDataPresent));
         btnStartSession.setOnClickListener(v -> {
             dismiss();
             ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
         });
+        btnStartSession.setEnabled(treatmentDataPresent);
     }
 
     private void editClient(){

@@ -42,6 +42,10 @@ public interface PreferenceManager {
 
     void saveEegId(String eegId);
 
+    Long getPatientId();
+
+    void savePatientId(Long eegId);
+
     void rememberUsername(String username);
 
     void rememberPassword(String password);

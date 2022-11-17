@@ -158,6 +158,8 @@
     <string name="paused">paused</string>
     <string name="retry">Retry</string>
     <string name="error_sending_report">Error sending report</string>
+    <string name="congratulations">Congratulations!</string>
+
 
     <!--How to use the device-->
     <string name="got_it">Got it</string>

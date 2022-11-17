@@ -1,14 +1,11 @@
 package com.waveneuro.ui.dashboard.home;
 
-import android.text.TextUtils;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.asif.abase.data.model.APIError;
 import com.asif.abase.domain.base.UseCaseCallback;
-import com.asif.abase.exception.SomethingWrongException;
 import com.waveneuro.data.DataManager;
 import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
@@ -72,7 +69,6 @@ public class HomeViewModel extends ViewModel {
             }
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
             getUserDetails();
-            getProtocol();
             getClients(start.getStartsWith(), start.getFilters());
             getOrganizations();
         } else if (viewEvent instanceof HomeViewEvent.DeviceDisconnected) {
@@ -124,41 +120,6 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
-    private void getProtocol() {
-        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
-        this.getLatestProtocolUseCase.execute(new UseCaseCallback() {
-            @Override
-            public void onSuccess(Object response) {
-                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                ProtocolResponse protocolResponse = (ProtocolResponse) response;
-                if (protocolResponse.getError() != null && TextUtils.isEmpty(protocolResponse.getError())) {
-                    APIError error = errorUtil.parseError(new SomethingWrongException(), protocolResponse.getError());
-                    mDataProtocolLive.postValue(new HomeProtocolViewState.Failure(error));
-                } else {
-                    dataManager.saveTreatmentLength(protocolResponse.getTreatmentLength());
-                    dataManager.saveProtocolFrequency(protocolResponse.getProtocolFrequency());
-                    dataManager.saveEegId(protocolResponse.getEegId());
-                    mDataProtocolLive.postValue(new HomeProtocolViewState.Success(protocolResponse));
-                }
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                APIError error = errorUtil.parseError(throwable);
-                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                if ("404".equals(error.getCode())) {
-                    mDataProtocolLive.postValue(new HomeProtocolViewState.ProtocolNotFound());
-                } else {
-                    mDataProtocolLive.postValue(new HomeProtocolViewState.Failure(error));
-                }
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
-    }
 
     public void getClients(String startsWith, Integer[] filters) {
         mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
@@ -212,9 +173,32 @@ public class HomeViewModel extends ViewModel {
         this.getPatientUseCase.execute(id, new UseCaseCallback() {
             @Override
             public void onSuccess(Object response) {
-                mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
                 PatientResponse patientResponse = (PatientResponse) response;
-                mDataPatientsLive.postValue(new HomeClientsViewState.PatientSuccess(patientResponse));
+                getLatestProtocolUseCase.execute(id, new UseCaseCallback<ProtocolResponse>() {
+                    @Override
+                    public void onSuccess(ProtocolResponse protocolResponse) {
+                        dataManager.saveProtocolFrequency(protocolResponse.getProtocolFrequency());
+                        dataManager.saveTreatmentLength(protocolResponse.getTreatmentLength());
+                        dataManager.saveProtocolId(protocolResponse.getId());
+                        dataManager.saveEegId(protocolResponse.getEegId());
+                        dataManager.savePatientId((long) id);
+                        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+                        mDataPatientsLive.postValue(new HomeClientsViewState.PatientSuccess(patientResponse, true));
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+                        mDataPatientsLive.postValue(new HomeClientsViewState.PatientSuccess(patientResponse, false));
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        int x = 0;
+
+                    }
+                });
+
 
             }
 
@@ -230,6 +214,34 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
+    }
+
+    void startSessionForClientWithId(int id) {
+        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
+
+                getLatestProtocolUseCase.execute(id, new UseCaseCallback<ProtocolResponse>() {
+                    @Override
+                    public void onSuccess(ProtocolResponse protocolResponse) {
+                        dataManager.saveProtocolFrequency(protocolResponse.getProtocolFrequency());
+                        dataManager.saveTreatmentLength(protocolResponse.getTreatmentLength());
+                        dataManager.saveProtocolId(protocolResponse.getId());
+                        dataManager.saveEegId(protocolResponse.getEegId());
+                        dataManager.savePatientId((long) id);
+                        mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
+                        mDataPatientsLive.postValue(new HomeClientsViewState.PatientSessionSuccess(id));
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                });
+
     }
 
     public MutableLiveData<HomeDeviceViewState> getDeviceData() {

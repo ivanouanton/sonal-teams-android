@@ -12,6 +12,8 @@ import io.reactivex.rxjava3.core.Observable;
 public class GetLatestProtocolUseCase extends ObservableUseCase<ProtocolResponse> {
 
     private final DataManager dataManager;
+    private int id;
+
 
     @Inject
     public GetLatestProtocolUseCase(DataManager dataManager) {
@@ -20,7 +22,12 @@ public class GetLatestProtocolUseCase extends ObservableUseCase<ProtocolResponse
 
     @Override
     public Observable<ProtocolResponse> buildUseCaseSingle() {
-        return dataManager.protocol();
+        return dataManager.protocol(id);
+    }
+
+    public void execute(int id, UseCaseCallback<ProtocolResponse> useCaseCallback) {
+        this.id=id;
+        super.execute(useCaseCallback);
     }
 
 }
