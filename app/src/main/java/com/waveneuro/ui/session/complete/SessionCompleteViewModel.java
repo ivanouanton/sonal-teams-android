@@ -31,7 +31,7 @@ public class SessionCompleteViewModel extends ViewModel {
 
     void processEvent(SessionCompleteViewEvent viewEvent) {
         if (viewEvent instanceof SessionCompleteViewEvent.Start) {
-            completeSession();
+            //completeSession();
         } else if (viewEvent instanceof SessionCompleteViewEvent.BackClicked) {
             this.mDataViewEffect.postValue(new SessionCompleteViewEffect.Back());
         } else if (viewEvent instanceof SessionCompleteViewEvent.HomeClicked) {
@@ -58,6 +58,7 @@ public class SessionCompleteViewModel extends ViewModel {
             public void onFinish() {
             }
         });
+
     }
 
     public MutableLiveData<SessionCompleteViewState> getData() {
