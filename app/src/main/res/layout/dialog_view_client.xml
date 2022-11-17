@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -142,13 +143,67 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_organization" />
 
     <TextView
-        android:id="@+id/tv_tos_status_value"
+        android:id="@+id/tv_tos_status_signed_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
+        android:text="Signed"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_tos_status" />
+
+    <ImageView
+        android:id="@+id/tv_tos_status_signed_icon"
+        android:layout_width="20dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="4dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_signed_label"
+        app:layout_constraintStart_toEndOf="@+id/tv_tos_status_signed_label"
+        app:srcCompat="@drawable/tos_signed" />
+
+    <TextView
+        android:id="@+id/tv_tos_status_not_signed_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:text="Not signed"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status" />
+
+    <ImageView
+        android:id="@+id/tv_tos_status_not_signed_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_not_signed_label"
+        app:layout_constraintStart_toEndOf="@+id/tv_tos_status_not_signed_label"
+        app:srcCompat="@drawable/tos_not_signed" />
+
+    <TextView
+        android:id="@+id/tv_tos_status_waiting_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:text="Waiting for signature"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status" />
+
+    <ImageView
+        android:id="@+id/tv_tos_status_waiting_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginStart="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_waiting_label"
+        app:layout_constraintStart_toEndOf="@+id/tv_tos_status_waiting_label"
+        app:srcCompat="@drawable/tos_waiting" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_session"
@@ -175,4 +230,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_start_session" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
