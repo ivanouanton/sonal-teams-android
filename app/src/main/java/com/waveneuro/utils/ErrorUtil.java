@@ -38,9 +38,8 @@ public class ErrorUtil {
 
             if (e instanceof HttpException) {
                 ResponseBody errorBody = ((HttpException) e).response().errorBody();
-                apiError = gson.fromJson(errorBody.string(), APIError.class);
-                if(apiError == null)
-                    apiError = new APIError();
+                APIError httpError = gson.fromJson(errorBody.string(), APIError.class);
+                apiError.setMessage(httpError.getMessage());
                 apiError.setCode(String.valueOf(((HttpException) e).code()));
             } else if (e instanceof SocketTimeoutException) {
                 apiError.setMessage(context.getString(R.string.socketTimeoutException));
@@ -53,6 +52,7 @@ public class ErrorUtil {
             Timber.e("Unknown exception: {%s}", ex.getMessage());
             apiError.setMessage(context.getString(R.string.unknownError));
         }
+
         return apiError;
     }
 
