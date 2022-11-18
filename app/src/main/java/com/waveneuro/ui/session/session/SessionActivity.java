@@ -186,20 +186,18 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                                 "You manually stopped the device."));
                         break;
                     default:
-
-                        break;
                 }
                 ble6Value = args;
             }
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
-
+                return;
             }
 
             @Override
             public void invoke(String[] args) {
-
+                return;
             }
         });
 
@@ -215,15 +213,16 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
         @Override
         public void onCharacterises(String value) {
-
+            return;
         }
 
         @Override
         public void onDisconnected() {
             // TODO Manage using state
             Timber.e("SESSION DISCONNECTED CALLBACK");
-            if (!sessionTimer.isFinished())
+            if (!sessionTimer.isFinished()) {
                 sessionTimer.pause();
+            }
             sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Session Ended",
                     "You manually stopped the device."));
         }
@@ -261,10 +260,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             onFailure(error.getError());
         } else if (viewState instanceof SessionViewState.Loading) {
             SessionViewState.Loading loading = ((SessionViewState.Loading) viewState);
-            if (loading.getLoading())
+            if (loading.getLoading()) {
                 displayWait("Loading...", null);
-            else
+            }
+            else {
                 removeWait();
+            }
         } else if (viewState instanceof SessionViewState.LocateDevice) {
             tvSonalId.setText("ID: "+sonalId);
             tvSessionTimer.setVisibility(View.VISIBLE);
@@ -293,7 +294,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             ivPause.setImageResource(R.drawable.ic_resume_session);
             pauseSpanText(true);
             tvPaused.setVisibility(View.VISIBLE);
-
             pauseSession();
         } else if (viewState instanceof SessionViewState.ErrorSession) {
             SessionViewState.ErrorSession state = (SessionViewState.ErrorSession) viewState;
@@ -367,8 +367,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             readyDialog = builder.create();
             readyDialog.show();
         }
-
-
     }
 
     private void launchSessionCompleteScreen() {
@@ -399,10 +397,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
+                return;
             }
 
             @Override
             public void invoke(String[] args) {
+                return;
             }
         });
         Timber.e("SESSION_VARS T :: %s :: %s", treatmentLength, BluetoothManager.getInstance().getTreatmentLength(treatmentLength));
@@ -412,31 +412,34 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     private CountDownTimer sessionTimer = new CountDownTimer(0, 10, 1, this);
 
     private void startSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
         sessionTimer = new CountDownTimer(treatmentLengthMinutes, 0, 1, this);
         sessionTimer.start(false);
 
     }
 
     private void pauseSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
     }
 
     private void resumeSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
         Timber.e("SESSION :: %s", sessionTimer.getMinutesTillCountDown());
         sessionTimer = new CountDownTimer(sessionTimer.getMinutesTillCountDown(),
                 sessionTimer.getSecondsTillCountDown(), 1, this);
         sessionTimer.start(false);
-//            sessionTimer.start(true);
     }
 
     private void endSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
     }
 
     @Override
