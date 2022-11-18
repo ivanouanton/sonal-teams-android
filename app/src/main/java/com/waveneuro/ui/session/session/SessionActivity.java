@@ -210,7 +210,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     BluetoothManager.DeviceConnectionCallback deviceConnectionCallback = new BluetoothManager.DeviceConnectionCallback() {
         @Override
         public void onConnected(com.ap.ble.data.BleDevice bleDevice) {
-
+            return;
         }
 
         @Override
@@ -394,7 +394,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         BluetoothManager.getInstance().sendFrequencyData(protocolFrequency, treatmentLength, new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
-
+                return;
             }
 
             @Override
