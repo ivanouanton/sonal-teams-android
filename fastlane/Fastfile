@@ -62,7 +62,7 @@ platform :android do
     clean
     increment_build
     build
-    upload_to_play_store(track: 'internal', release_status: 'draft')
+    upload_to_play_store(track: 'internal')
   end
 
 end
