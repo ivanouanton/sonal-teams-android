@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.waveneuro.R;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
         viewHolder.tvName.setText(sessions.get(position).name);
-        viewHolder.tvRd.setText(sessions.get(position).rd);
+        viewHolder.tvRd.setText(sessions.get(position).rd==null?"n/a":sessions.get(position).rd);
         viewHolder.tvSd.setText(sessions.get(position).sd);
         viewHolder.tvStatus.setText(sessions.get(position).status);
 
