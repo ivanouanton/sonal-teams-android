@@ -192,12 +192,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
-                return;
+                // follow the interface
             }
 
             @Override
             public void invoke(String[] args) {
-                return;
+                // follow the interface
             }
         });
 
@@ -208,12 +208,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     BluetoothManager.DeviceConnectionCallback deviceConnectionCallback = new BluetoothManager.DeviceConnectionCallback() {
         @Override
         public void onConnected(com.ap.ble.data.BleDevice bleDevice) {
-            return;
+            // follow the interface
         }
 
         @Override
         public void onCharacterises(String value) {
-            return;
+            // follow the interface
         }
 
         @Override
@@ -392,17 +392,17 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         BluetoothManager.getInstance().sendFrequencyData(protocolFrequency, treatmentLength, new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
-                return;
+                // follow the interface
             }
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
-                return;
+                // follow the interface
             }
 
             @Override
             public void invoke(String[] args) {
-                return;
+                // follow the interface
             }
         });
         Timber.e("SESSION_VARS T :: %s :: %s", treatmentLength, BluetoothManager.getInstance().getTreatmentLength(treatmentLength));
