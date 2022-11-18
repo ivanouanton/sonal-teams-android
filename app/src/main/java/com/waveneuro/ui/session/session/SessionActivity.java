@@ -410,11 +410,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             @Override
             public void invoke(String args) {
                 //removeWait();
-                if ("true".equals(args)) {
-
-                } else {
-
-                }
 //                sessionViewModel.processEvent(new SessionViewEvent.StartSession());
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
