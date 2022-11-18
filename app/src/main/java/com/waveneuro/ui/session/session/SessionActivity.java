@@ -128,14 +128,10 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     private void setBleListeners() {
 
-//        if (bluetoothManager == null)
-//            bluetoothManager = getBluetoothManager();
         BluetoothManager.getInstance().getSixthCharacteristic(new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
                 Timber.e("SESSION_EVENT :: BLE_6_VALUE :: %s", args);
-//                Toast.makeText(SessionActivity.this, "SESSION_EVENT :: BLE_6_VALUE :: "+ args,
-//                        Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject properties = new JSONObject();
                     try {
@@ -214,7 +210,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     BluetoothManager.DeviceConnectionCallback deviceConnectionCallback = new BluetoothManager.DeviceConnectionCallback() {
         @Override
         public void onConnected(com.ap.ble.data.BleDevice bleDevice) {
-            //tvSonalId.setText("ID: " + bleDevice.getName());
+
         }
 
         @Override
@@ -324,13 +320,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         if (viewEffect instanceof SessionViewEffect.Back) {
             showCloseSessionDialog();
         } else if (viewEffect instanceof SessionViewEffect.InitializeBle) {
-            //DONE wait for 2 sec
-            //DONE set length in device in 05 -> 02 & 0E -> length and freq
             setDeviceInitChars();
-//            new Handler().postDelayed(() -> {
-////                    sessionViewModel.processEvent(new SessionViewEvent.LocatingDevice());
-//            }, 2000);
-
         }
     };
 
@@ -401,27 +391,9 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
 
     private void setDeviceInitChars() {
-//        if (bluetoothManager == null)
-//            bluetoothManager = getBluetoothManager();
-        //DONE check in RN for freq and length data
-//        bluetoothManager.sendFrequencyData("10.5", "1800");
-        //displayWait();
         BluetoothManager.getInstance().sendFrequencyData(protocolFrequency, treatmentLength, new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
-                //removeWait();
-//                sessionViewModel.processEvent(new SessionViewEvent.StartSession());
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        removeWait();
-//                        if ("true".equals(args)) {
-//                            Toast.makeText(SessionActivity.this, "Device initialized", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(SessionActivity.this, "Error in device initialization", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }, 20_000);
 
             }
 
@@ -494,9 +466,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if (bluetoothManager != null) {
         BluetoothManager.getInstance().unregisterDeviceConnectionCallback(deviceConnectionCallback);
-//        }
     }
 
     @OnClick(R.id.btn_start_session)
