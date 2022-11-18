@@ -56,7 +56,10 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     TextView tvDob;
     TextView tvSex;
     TextView tvEmail;
+
     TextView tvUsername;
+    TextView tvUsernameLabel;
+
     TextView tvOrganization;
 
     TextView tvTosSignedLabel;
@@ -67,10 +70,6 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
     TextView tvTosWaitingLabel;
     ImageView tvTosWaitingIcon;
-
-
-
-
 
     TextView tvViewHistory;
     MaterialButton btnStartSession;
@@ -107,6 +106,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvSex = view.findViewById(R.id.tv_sab_value);
         tvEmail = view.findViewById(R.id.tv_email_value);
         tvUsername = view.findViewById(R.id.tv_username_value);
+        tvUsernameLabel = view.findViewById(R.id.tv_username);
         tvOrganization = view.findViewById(R.id.tv_organization_value);
 
         tvTosSignedLabel = view.findViewById(R.id.tv_tos_status_signed_label);
@@ -143,7 +143,14 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvDob.setText(DateUtil.parseDate(dob, PATTERN_RFC1123, "MM/dd/YYYY"));
         tvSex.setText(isMale?"Male":"Female");
         tvEmail.setText(email);
-        tvUsername.setText(username);
+
+        if(username != null) {
+            tvUsername.setText(username);
+        } else {
+            tvUsername.setVisibility(View.GONE);
+            tvUsernameLabel.setVisibility(View.GONE);
+        }
+
         tvOrganization.setText(organization);
 
         switch (tosStatus) {
