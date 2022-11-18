@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +47,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     private String email;
     private String username;
     private String organization;
-    private boolean tos;
+    private int tosStatus;
 
     private boolean treatmentDataPresent;
 
@@ -57,13 +58,26 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     TextView tvEmail;
     TextView tvUsername;
     TextView tvOrganization;
-    TextView tvTos;
+
+    TextView tvTosSignedLabel;
+    ImageView tvTosSignedIcon;
+
+    TextView tvTosNotSignedLabel;
+    ImageView tvTosNotSignedIcon;
+
+    TextView tvTosWaitingLabel;
+    ImageView tvTosWaitingIcon;
+
+
+
+
+
     TextView tvViewHistory;
     MaterialButton btnStartSession;
 
     EditClientViewModel.OnClientUpdated listener;
 
-    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, boolean tos, boolean treatmentDataPresent) {
+    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, int tosStatus, boolean treatmentDataPresent) {
         ViewClientBottomSheet viewClientBottomSheet = new ViewClientBottomSheet();
         viewClientBottomSheet.id = id;
         viewClientBottomSheet.firstName = name;
@@ -73,7 +87,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         viewClientBottomSheet.email = email;
         viewClientBottomSheet.username = username;
         viewClientBottomSheet.organization = organization;
-        viewClientBottomSheet.tos = tos;
+        viewClientBottomSheet.tosStatus = tosStatus;
         viewClientBottomSheet.listener = listener;
         viewClientBottomSheet.treatmentDataPresent = treatmentDataPresent;
         return viewClientBottomSheet;
@@ -94,7 +108,16 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvEmail = view.findViewById(R.id.tv_email_value);
         tvUsername = view.findViewById(R.id.tv_username_value);
         tvOrganization = view.findViewById(R.id.tv_organization_value);
-        tvTos = view.findViewById(R.id.tv_tos_status_value);
+
+        tvTosSignedLabel = view.findViewById(R.id.tv_tos_status_signed_label);
+        tvTosSignedIcon = view.findViewById(R.id.tv_tos_status_signed_icon);
+
+        tvTosNotSignedLabel = view.findViewById(R.id.tv_tos_status_not_signed_label);
+        tvTosNotSignedIcon = view.findViewById(R.id.tv_tos_status_not_signed_icon);
+
+        tvTosWaitingLabel = view.findViewById(R.id.tv_tos_status_waiting_label);
+        tvTosWaitingIcon = view.findViewById(R.id.tv_tos_status_waiting_icon);
+
         tvViewHistory = view.findViewById(R.id.tv_view_history);
         btnStartSession = view.findViewById(R.id.btn_start_session);
 
@@ -122,7 +145,23 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvEmail.setText(email);
         tvUsername.setText(username);
         tvOrganization.setText(organization);
-        tvTos.setText(tos?"Signed":"Not Signed");
+
+        switch (tosStatus) {
+            case 0:
+            case 3:
+                tvTosSignedLabel.setVisibility(View.VISIBLE);
+                tvTosSignedIcon.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                tvTosWaitingLabel.setVisibility(View.VISIBLE);
+                tvTosWaitingIcon.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+            default:
+                tvTosNotSignedLabel.setVisibility(View.VISIBLE);
+                tvTosNotSignedIcon.setVisibility(View.VISIBLE);
+        }
+
         tvEdit.setOnClickListener(v -> editClient());
         tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(requireActivity(), String.valueOf(id), firstName + " " + lastName, treatmentDataPresent));
         btnStartSession.setOnClickListener(v -> {
@@ -134,7 +173,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
 
     private void editClient(){
         EditClientBottomSheet editClientBottomSheet = EditClientBottomSheet.newInstance(listener, id,
-                firstName, lastName, dob, isMale, email, username, organization, tos
+                firstName, lastName, dob, isMale, email
         );
         editClientBottomSheet.show(getParentFragmentManager(), "");
         dismiss();

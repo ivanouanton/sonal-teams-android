@@ -19,6 +19,9 @@ public class PatientResponse extends BaseModel {
     @SerializedName("tos_signed")
     private boolean tosSigned;
 
+    @SerializedName("tos_status")
+    private int tosStatus;
+
     @SerializedName("sex")
     private boolean isMale;
 
@@ -69,6 +72,10 @@ public class PatientResponse extends BaseModel {
 
     public void setTosSigned(boolean tosSigned) {
         this.tosSigned = tosSigned;
+    }
+
+    public int getTosStatus() {
+        return tosStatus;
     }
 
     public String getFirstName() {

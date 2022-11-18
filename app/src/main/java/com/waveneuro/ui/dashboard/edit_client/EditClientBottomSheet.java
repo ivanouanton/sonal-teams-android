@@ -47,9 +47,6 @@ public class EditClientBottomSheet extends BottomSheetDialogFragment {
     private String dob;
     private boolean isMale;
     private String email;
-    private String username;
-    private String organization;
-    private boolean tos;
 
     TextInputEditText etFirstName;
     TextInputEditText etLastName;
@@ -65,7 +62,7 @@ public class EditClientBottomSheet extends BottomSheetDialogFragment {
     EditClientViewModel.OnClientUpdated listener;
 
 
-    public static EditClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, boolean tos) {
+    public static EditClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email) {
         EditClientBottomSheet editClientBottomSheet = new EditClientBottomSheet();
         editClientBottomSheet.id = id;
         editClientBottomSheet.firstName = name;
@@ -73,9 +70,6 @@ public class EditClientBottomSheet extends BottomSheetDialogFragment {
         editClientBottomSheet.dob = dob;
         editClientBottomSheet.isMale = sex;
         editClientBottomSheet.email = email;
-        editClientBottomSheet.username = username;
-        editClientBottomSheet.organization = organization;
-        editClientBottomSheet.tos = tos;
         editClientBottomSheet.listener = listener;
         return editClientBottomSheet;
     }

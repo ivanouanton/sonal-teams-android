@@ -76,15 +76,7 @@ public class HomeViewModel extends ViewModel {
         } else if (viewEvent instanceof HomeViewEvent.DeviceConnected) {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.StartSession());
         } else if (viewEvent instanceof HomeViewEvent.StartSessionClicked) {
-            if (this.mDataDeviceLive.getValue() instanceof HomeDeviceViewState.PairDevice) {
-                this.mDataViewEffect.postValue(new HomeViewEffect.DeviceRedirect());
-            } else {
-                this.mDataViewEffect.postValue(new HomeViewEffect.DeviceRedirect());
-//                this.mDataViewEffect.postValue(
-//                        new HomeViewEffect.SessionRedirect(
-//                                dataManager.getTreatmentLength(),
-//                                dataManager.getProtocolFrequency()));
-            }
+            this.mDataViewEffect.postValue(new HomeViewEffect.DeviceRedirect());
         }
     }
 

@@ -263,7 +263,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                             patient.getEmail(),
                             patient.getUsername(),
                             patient.getOrganizationName(),
-                            patient.isTosSigned(),
+                            patient.getTosStatus(),
                             success.getTreatmentDataPresent()
                     );
             viewClientBottomSheet.show(getChildFragmentManager(), "");

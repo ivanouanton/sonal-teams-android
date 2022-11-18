@@ -128,14 +128,10 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     private void setBleListeners() {
 
-//        if (bluetoothManager == null)
-//            bluetoothManager = getBluetoothManager();
         BluetoothManager.getInstance().getSixthCharacteristic(new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
                 Timber.e("SESSION_EVENT :: BLE_6_VALUE :: %s", args);
-//                Toast.makeText(SessionActivity.this, "SESSION_EVENT :: BLE_6_VALUE :: "+ args,
-//                        Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject properties = new JSONObject();
                     try {
@@ -190,20 +186,18 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                                 "You manually stopped the device."));
                         break;
                     default:
-
-                        break;
                 }
                 ble6Value = args;
             }
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
-
+                // follow the interface
             }
 
             @Override
             public void invoke(String[] args) {
-
+                // follow the interface
             }
         });
 
@@ -214,20 +208,21 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     BluetoothManager.DeviceConnectionCallback deviceConnectionCallback = new BluetoothManager.DeviceConnectionCallback() {
         @Override
         public void onConnected(com.ap.ble.data.BleDevice bleDevice) {
-            //tvSonalId.setText("ID: " + bleDevice.getName());
+            // follow the interface
         }
 
         @Override
         public void onCharacterises(String value) {
-
+            // follow the interface
         }
 
         @Override
         public void onDisconnected() {
             // TODO Manage using state
             Timber.e("SESSION DISCONNECTED CALLBACK");
-            if (!sessionTimer.isFinished())
+            if (!sessionTimer.isFinished()) {
                 sessionTimer.pause();
+            }
             sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Session Ended",
                     "You manually stopped the device."));
         }
@@ -265,10 +260,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             onFailure(error.getError());
         } else if (viewState instanceof SessionViewState.Loading) {
             SessionViewState.Loading loading = ((SessionViewState.Loading) viewState);
-            if (loading.getLoading())
+            if (loading.getLoading()) {
                 displayWait("Loading...", null);
-            else
+            }
+            else {
                 removeWait();
+            }
         } else if (viewState instanceof SessionViewState.LocateDevice) {
             tvSonalId.setText("ID: "+sonalId);
             tvSessionTimer.setVisibility(View.VISIBLE);
@@ -297,7 +294,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             ivPause.setImageResource(R.drawable.ic_resume_session);
             pauseSpanText(true);
             tvPaused.setVisibility(View.VISIBLE);
-
             pauseSession();
         } else if (viewState instanceof SessionViewState.ErrorSession) {
             SessionViewState.ErrorSession state = (SessionViewState.ErrorSession) viewState;
@@ -324,13 +320,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         if (viewEffect instanceof SessionViewEffect.Back) {
             showCloseSessionDialog();
         } else if (viewEffect instanceof SessionViewEffect.InitializeBle) {
-            //DONE wait for 2 sec
-            //DONE set length in device in 05 -> 02 & 0E -> length and freq
             setDeviceInitChars();
-//            new Handler().postDelayed(() -> {
-////                    sessionViewModel.processEvent(new SessionViewEvent.LocatingDevice());
-//            }, 2000);
-
         }
     };
 
@@ -377,8 +367,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             readyDialog = builder.create();
             readyDialog.show();
         }
-
-
     }
 
     private void launchSessionCompleteScreen() {
@@ -401,41 +389,20 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
 
     private void setDeviceInitChars() {
-//        if (bluetoothManager == null)
-//            bluetoothManager = getBluetoothManager();
-        //DONE check in RN for freq and length data
-//        bluetoothManager.sendFrequencyData("10.5", "1800");
-        //displayWait();
         BluetoothManager.getInstance().sendFrequencyData(protocolFrequency, treatmentLength, new BluetoothManager.Callback() {
             @Override
             public void invoke(String args) {
-                //removeWait();
-                if ("true".equals(args)) {
-
-                } else {
-
-                }
-//                sessionViewModel.processEvent(new SessionViewEvent.StartSession());
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        removeWait();
-//                        if ("true".equals(args)) {
-//                            Toast.makeText(SessionActivity.this, "Device initialized", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(SessionActivity.this, "Error in device initialization", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }, 20_000);
-
+                // follow the interface
             }
 
             @Override
             public void invoke(List<com.ap.ble.data.BleDevice> args) {
+                // follow the interface
             }
 
             @Override
             public void invoke(String[] args) {
+                // follow the interface
             }
         });
         Timber.e("SESSION_VARS T :: %s :: %s", treatmentLength, BluetoothManager.getInstance().getTreatmentLength(treatmentLength));
@@ -445,31 +412,34 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     private CountDownTimer sessionTimer = new CountDownTimer(0, 10, 1, this);
 
     private void startSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
         sessionTimer = new CountDownTimer(treatmentLengthMinutes, 0, 1, this);
         sessionTimer.start(false);
 
     }
 
     private void pauseSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
     }
 
     private void resumeSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
         Timber.e("SESSION :: %s", sessionTimer.getMinutesTillCountDown());
         sessionTimer = new CountDownTimer(sessionTimer.getMinutesTillCountDown(),
                 sessionTimer.getSecondsTillCountDown(), 1, this);
         sessionTimer.start(false);
-//            sessionTimer.start(true);
     }
 
     private void endSession() {
-        if (!sessionTimer.isFinished())
+        if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
+        }
     }
 
     @Override
@@ -499,9 +469,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if (bluetoothManager != null) {
         BluetoothManager.getInstance().unregisterDeviceConnectionCallback(deviceConnectionCallback);
-//        }
     }
 
     @OnClick(R.id.btn_start_session)
