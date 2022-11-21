@@ -254,18 +254,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             HomeClientsViewState.PatientSuccess success = (HomeClientsViewState.PatientSuccess) viewState;
 
             PatientResponse patient = success.getItem();
-            ViewClientBottomSheet viewClientBottomSheet =
-                    ViewClientBottomSheet.newInstance(this, patient.getId(),
-                            patient.getFirstName(),
-                            patient.getLastName(),
-                            patient.getBirthday(),
-                            patient.isMale(),
-                            patient.getEmail(),
-                            patient.getUsername(),
-                            patient.getOrganizationName(),
-                            patient.getTosStatus(),
-                            success.getTreatmentDataPresent()
-                    );
+            ViewClientBottomSheet viewClientBottomSheet = ViewClientBottomSheet.newInstance(this, patient, success.getTreatmentDataPresent());
             viewClientBottomSheet.show(getChildFragmentManager(), "");
 
         } else if (viewState instanceof HomeClientsViewState.OrganizationSuccess) {
@@ -275,7 +264,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             filtersBottomSheet.setListener(this);
 
         } else if (viewState instanceof HomeClientsViewState.PatientSessionSuccess) {
-            ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
+            ((HomeActivity) requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
 
         }
     };

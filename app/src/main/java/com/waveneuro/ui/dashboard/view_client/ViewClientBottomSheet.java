@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.waveneuro.R;
+import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.component.FragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
@@ -56,7 +57,10 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     TextView tvDob;
     TextView tvSex;
     TextView tvEmail;
+
     TextView tvUsername;
+    TextView tvUsernameLabel;
+
     TextView tvOrganization;
 
     TextView tvTosSignedLabel;
@@ -68,27 +72,23 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     TextView tvTosWaitingLabel;
     ImageView tvTosWaitingIcon;
 
-
-
-
-
     TextView tvViewHistory;
     MaterialButton btnStartSession;
 
     EditClientViewModel.OnClientUpdated listener;
 
-    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, int id, String name, String lastName, String dob, boolean sex, String email, String username, String organization, int tosStatus, boolean treatmentDataPresent) {
+    public static ViewClientBottomSheet newInstance(EditClientViewModel.OnClientUpdated listener, PatientResponse patient, boolean treatmentDataPresent) {
         ViewClientBottomSheet viewClientBottomSheet = new ViewClientBottomSheet();
-        viewClientBottomSheet.id = id;
-        viewClientBottomSheet.firstName = name;
-        viewClientBottomSheet.lastName = lastName;
-        viewClientBottomSheet.dob = dob;
-        viewClientBottomSheet.isMale = sex;
-        viewClientBottomSheet.email = email;
-        viewClientBottomSheet.username = username;
-        viewClientBottomSheet.organization = organization;
-        viewClientBottomSheet.tosStatus = tosStatus;
         viewClientBottomSheet.listener = listener;
+        viewClientBottomSheet.id = patient.getId();
+        viewClientBottomSheet.firstName = patient.getFirstName();
+        viewClientBottomSheet.lastName = patient.getLastName();
+        viewClientBottomSheet.dob = patient.getBirthday();
+        viewClientBottomSheet.isMale = patient.isMale();
+        viewClientBottomSheet.email = patient.getEmail();
+        viewClientBottomSheet.username = patient.getUsername();
+        viewClientBottomSheet.organization = patient.getOrganizationName();
+        viewClientBottomSheet.tosStatus = patient.getTosStatus();
         viewClientBottomSheet.treatmentDataPresent = treatmentDataPresent;
         return viewClientBottomSheet;
     }
@@ -107,6 +107,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvSex = view.findViewById(R.id.tv_sab_value);
         tvEmail = view.findViewById(R.id.tv_email_value);
         tvUsername = view.findViewById(R.id.tv_username_value);
+        tvUsernameLabel = view.findViewById(R.id.tv_username);
         tvOrganization = view.findViewById(R.id.tv_organization_value);
 
         tvTosSignedLabel = view.findViewById(R.id.tv_tos_status_signed_label);
@@ -143,7 +144,14 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvDob.setText(DateUtil.parseDate(dob, PATTERN_RFC1123, "MM/dd/YYYY"));
         tvSex.setText(isMale?"Male":"Female");
         tvEmail.setText(email);
-        tvUsername.setText(username);
+
+        if(username != null) {
+            tvUsername.setText(username);
+        } else {
+            tvUsername.setVisibility(View.GONE);
+            tvUsernameLabel.setVisibility(View.GONE);
+        }
+
         tvOrganization.setText(organization);
 
         switch (tosStatus) {
