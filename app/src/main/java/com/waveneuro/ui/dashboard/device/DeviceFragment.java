@@ -39,6 +39,7 @@ import com.ap.ble.BluetoothManager;
 import com.ap.ble.callback.BleScanCallback;
 import com.ap.ble.data.BleDevice;
 import com.asif.abase.view.RecyclerViewWithEmpty;
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
@@ -52,6 +53,7 @@ import com.waveneuro.ui.adapter.device.OnDeviceItemClickListener;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.base.BaseListFragment;
 import com.waveneuro.ui.dashboard.DashBoardViewModel;
+import com.waveneuro.ui.dashboard.DashboardCommand;
 import com.waveneuro.ui.dashboard.DashboardViewEvent;
 import com.waveneuro.ui.dashboard.DashboardViewState;
 import com.waveneuro.ui.dashboard.HomeActivity;
@@ -90,6 +92,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     MaterialButton btnLocateDevice;
     @BindView(R.id.iv_device)
     ImageView ivDevice;
+    @BindView(R.id.iv_device_scanning)
+    ImageView ivDeviceScanning;
     @BindView(R.id.tv_first_time)
     TextView tvFirstTime;
     @BindView(R.id.tv_scanning_device_info)
@@ -113,6 +117,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @Inject
     SessionCommand sessionCommand;
+    @Inject
+    DashboardCommand dashboardCommand;
 
     @Inject
     HowToCommand howToCommand;
@@ -221,7 +227,6 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         } else if (viewState instanceof DeviceViewState.InitLocateDevice) {
             DeviceViewState.InitLocateDevice initLocateDevice = (DeviceViewState.InitLocateDevice) viewState;
             setUserDetail(initLocateDevice.getUser());
-            ivBack.setVisibility(View.INVISIBLE);
             tvLabelWelcome.setText(getString(R.string.ensure_your_device_powered_up));
             tvLabelWelcome.setVisibility(View.VISIBLE);
             ivDevice.setImageDrawable(ContextCompat.getDrawable(requireContext(),
@@ -231,8 +236,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvLocateDevice.setVisibility(View.VISIBLE);
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.GONE);
+            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice);
         } else if (viewState instanceof DeviceViewState.LocateDevice) {
-            ivBack.setVisibility(View.INVISIBLE);
             tvLabelWelcome.setText(getString(R.string.ensure_your_device_powered_up));
             tvLabelWelcome.setVisibility(View.VISIBLE);
             ivDevice.setImageDrawable(ContextCompat.getDrawable(requireContext(),
@@ -242,7 +247,6 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.GONE);
         } else if (viewState instanceof DeviceViewState.LocateDeviceNext) {
-            ivBack.setVisibility(View.INVISIBLE);
             tvLabelWelcome.setText(getString(R.string.activate_your_device));
             tvLabelWelcome.setVisibility(View.VISIBLE);
             ivDevice.setImageDrawable(ContextCompat.getDrawable(requireContext(),
@@ -253,33 +257,23 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.GONE);
         } else if (viewState instanceof DeviceViewState.Searching) {
-            ivBack.setVisibility(View.VISIBLE);
             tvLabelWelcome.setVisibility(View.GONE);
             cvLocateDevice.setVisibility(View.GONE);
             cvDeviceAvailable.setVisibility(View.GONE);
             tvScanningDeviceInfo.setVisibility(View.VISIBLE);
             tvLabelScanning.setVisibility(View.VISIBLE);
             llContainerDevice.setVisibility(View.VISIBLE);
+            Glide.with(requireContext()).load(R.drawable.searching).into(ivDeviceScanning);
             locateDevice();
         } else if (viewState instanceof DeviceViewState.Connecting) {
             DeviceViewState.Connecting connecting = (DeviceViewState.Connecting) viewState;
             connectToDevice(connecting.getBleDevice());
         } else if (viewState instanceof DeviceViewState.Connected) {
-            ivBack.setVisibility(View.INVISIBLE);
             launchPairingSuccessfulDialog();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                tvLocatingDevice.setTextAppearance(R.style.BaseText_Subtitle_Green);
-//            } else {
-//                tvLocatingDevice.setTextAppearance(getContext(), R.style.BaseText_Subtitle_Green);
-//            }
-//            tvLocatingDevice.setText("Device Connected");
             cvLocateDevice.setVisibility(View.GONE);
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.VISIBLE);
-
-//            launchHomeScreen();
         } else if (viewState instanceof DeviceViewState.Searched) {
-            ivBack.setVisibility(View.VISIBLE);
             cvLocateDevice.setVisibility(View.VISIBLE);
             cvDeviceAvailable.setVisibility(View.VISIBLE);
             llContainerDevice.setVisibility(View.GONE);
@@ -427,9 +421,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @OnClick(R.id.iv_back)
     public void onClickBack() {
-        // TODO Do with processEvent
-        launchHomeScreen();
-        this.deviceViewModel.processEvent(new DeviceViewEvent.Start());
+        dashboardCommand.navigate();
     }
 
     @OnClick(R.id.tv_first_time)
