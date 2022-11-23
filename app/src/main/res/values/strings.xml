@@ -142,7 +142,7 @@
     <string name="start_session">Start Session</string>
     <string name="ensure_your_device_powered_up">Turn On Device</string>
     <string name="how_to_power_on_the_device">How to power on the device</string>
-    <string name="scanning">Scanning...</string>
+    <string name="scanning">Searching...</string>
     <string name="skip_onboarding">Skip onboarding</string>
     <string name="bluetooth_symbol">You should see the Bluetooth symbol flashing.</string>
     <string name="activate_your_device">Activate\nYour Device</string>
