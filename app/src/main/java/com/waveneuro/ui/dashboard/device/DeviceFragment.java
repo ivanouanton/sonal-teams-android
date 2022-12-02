@@ -229,8 +229,6 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             setUserDetail(initLocateDevice.getUser());
             tvLabelWelcome.setText(getString(R.string.ensure_your_device_powered_up));
             tvLabelWelcome.setVisibility(View.VISIBLE);
-            ivDevice.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                    R.drawable.ic_sonal_device_power));
             ivDevice.setVisibility(View.VISIBLE);
             tvLocateDeviceInfo.setVisibility(View.VISIBLE);
             cvLocateDevice.setVisibility(View.VISIBLE);
@@ -240,8 +238,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         } else if (viewState instanceof DeviceViewState.LocateDevice) {
             tvLabelWelcome.setText(getString(R.string.ensure_your_device_powered_up));
             tvLabelWelcome.setVisibility(View.VISIBLE);
-            ivDevice.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                    R.drawable.ic_sonal_device_power));
+            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice);
             ivDevice.setVisibility(View.VISIBLE);
             cvLocateDevice.setVisibility(View.VISIBLE);
             cvDeviceAvailable.setVisibility(View.GONE);
