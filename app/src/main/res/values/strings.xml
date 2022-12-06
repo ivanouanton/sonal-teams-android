@@ -192,6 +192,8 @@
     <!--Device-->
     <string name="available_devices">Available Devices</string>
     <string name="locating_device">Locating Device</string>
+    <string name="sonal">Sonal</string>
+    <string name="waveneuro">WaveNeuro</string>
 
 
 </resources>
