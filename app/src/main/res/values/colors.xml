@@ -13,6 +13,7 @@
     <color name="gray">#C2C7C8</color>
     <color name="gray_dark">#999999</color>
     <color name="gray_light">#EAECEC</color>
+    <color name="gray_light_bg_transparent">#F0F9F9F9</color>
     <color name="green">#A6D0A8</color>
     <color name="gray_dim">#52000000</color>
     <color name="yellow_dim">#FFDE6E</color>

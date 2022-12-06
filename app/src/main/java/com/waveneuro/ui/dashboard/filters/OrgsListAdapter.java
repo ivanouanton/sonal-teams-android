@@ -36,8 +36,8 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tvName);
-            ivTick = view.findViewById(R.id.ivTick);
+            tvName = view.findViewById(R.id.tv_name);
+            ivTick = view.findViewById(R.id.iv_tick);
         }
     }
 
