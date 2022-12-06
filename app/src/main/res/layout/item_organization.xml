@@ -3,30 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:id="@+id/clContainer"
-    android:background="@drawable/bg_client">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clContainer">
 
     <TextView
+        style="@style/SmallTextRegular.Black"
         android:id="@+id/tvName"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox"
+        android:layout_marginEnd="16dp"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/vDivider"
+        app:layout_constraintEnd_toStartOf="@+id/ivTick"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hello world" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <ImageView
+        android:id="@+id/ivTick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_gravity="center|end"
+        android:layout_marginEnd="@dimen/margin_16dp"
+        android:src="@drawable/ic_tick"
+        app:layout_constraintBottom_toBottomOf="@+id/tvName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tvName" />
+
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
