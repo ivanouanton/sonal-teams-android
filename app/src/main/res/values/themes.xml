@@ -104,6 +104,10 @@
         <item name="fontFamily">@font/inter_regular</item>
     </style>
 
+    <style name="BaseText.Caption.Bold" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/inter_bold</item>
+    </style>
+
     <style name="BaseText.Heading.White">
         <item name="android:textColor">@color/white</item>
     </style>
@@ -176,7 +180,19 @@
         <item name="android:textSize">@dimen/text_size_standard</item>
     </style>
 
-    <style name="BodyTextBold.Black" parent="BaseText.Subtitle.Black">
+    <style name="SmallTextBold" parent="BaseText.Caption.Bold">
+        <item name="android:textSize">@dimen/text_size_standard</item>
+    </style>
+
+    <style name="SmallTextBold.Aqua" parent="SmallTextBold">
+        <item name="android:textColor">@color/aqua</item>
+    </style>
+
+    <style name="SmallTextBold.Black" parent="SmallTextBold">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BodyTextBold.Black" parent="SmallTextBold">
         <item name="fontFamily">@font/inter_semi_bold</item>
     </style>
 

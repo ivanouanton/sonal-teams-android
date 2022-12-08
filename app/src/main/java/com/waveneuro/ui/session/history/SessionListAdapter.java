@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,11 +28,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             super(view);
 
             tvName = view.findViewById(R.id.tv_name);
-            tvRd = view.findViewById(R.id.tvRd);
-            tvSd = view.findViewById(R.id.tvSd);
+            tvRd = view.findViewById(R.id.tv_rd);
+            tvSd = view.findViewById(R.id.tv_sd);
             tvStatus = view.findViewById(R.id.tvStatus);
         }
-
     }
 
     public SessionListAdapter(List<Session> s) {
@@ -52,8 +52,8 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         viewHolder.tvName.setText(sessions.get(position).name);
         viewHolder.tvRd.setText(sessions.get(position).rd==null?"n/a":sessions.get(position).rd);
         viewHolder.tvSd.setText(sessions.get(position).sd);
-        viewHolder.tvStatus.setText(sessions.get(position).status);
-
+        viewHolder.tvStatus.setText(sessions.get(position).isCompleted?"Completed":"Terminated");
+        viewHolder.tvStatus.setTextColor(ContextCompat.getColor(viewHolder.itemView.getContext(), sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark));
     }
 
     public int getItemCount() {
