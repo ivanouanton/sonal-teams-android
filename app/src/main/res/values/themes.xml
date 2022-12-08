@@ -192,8 +192,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="BodyTextBold.Black" parent="SmallTextBold">
-        <item name="fontFamily">@font/inter_semi_bold</item>
+    <style name="BodyTextBold" parent="BaseText.Caption.Bold">
+        <item name="android:textSize">@dimen/text_size_standard_16</item>
+    </style>
+
+    <style name="BodyTextBold.Black" parent="BodyTextBold">
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <!--END TEXTVIEW STYLE-->

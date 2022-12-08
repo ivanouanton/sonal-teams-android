@@ -12,13 +12,12 @@
 
 <!--START SPIN KIT-->
     <TextView
-        style="@style/BodyTextBold.Black"
+        style="@style/SmallTextBold.Black"
         android:id="@+id/tv_clients_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:text="@string/clients_list"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -14,9 +14,7 @@ import java.util.List;
 
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ViewHolder> {
 
-
     private List<Session> sessions;
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName;
@@ -30,7 +28,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             tvName = view.findViewById(R.id.tv_name);
             tvRd = view.findViewById(R.id.tv_rd);
             tvSd = view.findViewById(R.id.tv_sd);
-            tvStatus = view.findViewById(R.id.tvStatus);
+            tvStatus = view.findViewById(R.id.tv_status);
         }
     }
 
@@ -53,12 +51,11 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         viewHolder.tvRd.setText(sessions.get(position).rd==null?"n/a":sessions.get(position).rd);
         viewHolder.tvSd.setText(sessions.get(position).sd);
         viewHolder.tvStatus.setText(sessions.get(position).isCompleted?"Completed":"Terminated");
-        viewHolder.tvStatus.setTextColor(ContextCompat.getColor(viewHolder.itemView.getContext(), sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark));
+        int color = ContextCompat.getColor(viewHolder.itemView.getContext(), sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark);
+        viewHolder.tvStatus.setTextColor(color);
     }
 
     public int getItemCount() {
         return sessions.size();
     }
-
-
 }

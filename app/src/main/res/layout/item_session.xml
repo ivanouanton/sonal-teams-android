@@ -19,7 +19,7 @@
 
     <TextView
         style="@style/SmallTextBold.Aqua"
-        android:id="@+id/tvStatus"
+        android:id="@+id/tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -29,10 +29,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_rd_ttl"
         style="@style/BaseText.Caption.Black"
+        android:id="@+id/tv_rd_ttl"
         android:layout_width="0dp"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="EEG R/D: "
@@ -40,8 +40,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
+        style="@style/BaseText.Caption.DarkGray"
         android:id="@+id/tv_rd"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/tv_rd_ttl"
         app:layout_constraintStart_toEndOf="@+id/tv_rd_ttl"
@@ -49,20 +50,20 @@
         tools:text="12/11/2022" />
 
     <TextView
-        android:id="@+id/tv_sd_ttl"
         style="@style/BaseText.Caption.Black"
+        android:id="@+id/tv_sd_ttl"
         android:layout_width="0dp"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:text="S/D: "
         app:layout_constraintBottom_toBottomOf="@+id/tv_sd"
         app:layout_constraintEnd_toStartOf="@+id/tv_sd"
         app:layout_constraintTop_toTopOf="@+id/tv_sd" />
 
     <TextView
-        android:id="@+id/tv_sd"
         style="@style/BaseText.Caption.DarkGray"
+        android:id="@+id/tv_sd"
         android:layout_width="0dp"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_rd"
         app:layout_constraintEnd_toEndOf="parent"
