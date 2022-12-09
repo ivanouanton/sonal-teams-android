@@ -353,6 +353,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
             }
 
+
             @Override
             public void onDisconnected() {
                 if(requireActivity() instanceof BaseActivity) {

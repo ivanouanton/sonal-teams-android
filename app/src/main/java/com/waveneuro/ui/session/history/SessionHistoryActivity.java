@@ -64,7 +64,7 @@ public class SessionHistoryActivity extends BaseActivity {
 
         if(getIntent().hasExtra(SessionHistoryCommand.USER_ID)) {
             userId = Integer.valueOf(getIntent().getStringExtra(SessionHistoryCommand.USER_ID));
-            ((TextView)findViewById(R.id.tvName)).setText(getIntent().getStringExtra(SessionHistoryCommand.NAME));
+            ((TextView)findViewById(R.id.tv_name)).setText(getIntent().getStringExtra(SessionHistoryCommand.NAME));
         }
 
         if(getIntent().hasExtra(SessionHistoryCommand.TREATMENT_DATA_PRESENT)) {

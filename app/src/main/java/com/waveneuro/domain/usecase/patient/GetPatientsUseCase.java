@@ -14,6 +14,7 @@ public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
 
     private final DataManager dataManager;
 
+    private Integer page;
     private Integer[] ids;
     private String startsWith;
 
@@ -24,13 +25,13 @@ public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
 
     @Override
     public Observable<PatientListResponse> buildUseCaseSingle() {
-        return dataManager.patients(startsWith, ids);
+        return dataManager.patients(page, startsWith, ids);
     }
 
-    public void execute(String starsWith, Integer[] ids, UseCaseCallback<ForgotUsernameResponse> useCaseCallback) {
+    public void execute(Integer page, String starsWith, Integer[] ids, UseCaseCallback<ForgotUsernameResponse> useCaseCallback) {
+        this.page = page;
         this.ids=ids;
         this.startsWith = starsWith;
         super.execute(useCaseCallback);
     }
-
 }
