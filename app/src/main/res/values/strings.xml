@@ -192,6 +192,8 @@
     <!--Device-->
     <string name="available_devices">Available Devices</string>
     <string name="locating_device">Locating Device</string>
+    <string name="search">Search</string>
+    <string name="no_client_with_this_name_is_found">No client with this name is found</string>
 
 
 </resources>

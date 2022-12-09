@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     style="@style/Background.WhitePattern.Padding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
-    tools:context=".ui.dashboard.home.HomeFragment"
-    android:background="@drawable/bg_client">
+    android:background="@color/white"
+    tools:context=".ui.dashboard.home.HomeFragment">
 
 
-<!--START SPIN KIT-->
+    <!--START SPIN KIT-->
     <TextView
-        style="@style/SmallTextBold.Black"
         android:id="@+id/tv_clients_list"
+        style="@style/BodyTextBold.Black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -59,25 +59,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:startIconDrawable="@drawable/ic_search"
         app:endIconDrawable="@drawable/ic_filter"
         app:endIconMode="password_toggle"
         app:hintAnimationEnabled="false"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_clients_list">
+        app:layout_constraintTop_toBottomOf="@+id/tv_clients_list"
+        app:startIconDrawable="@drawable/ic_search">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search"
+            android:backgroundTint="@color/gray_light"
+            android:hint="@string/search"
             android:maxLines="1"
             android:minHeight="40dp"
             android:singleLine="true"
-            android:backgroundTint="@color/gray_light"
-            />
+            tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,8 +85,9 @@
         android:id="@+id/tv_empty_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No client with this name is found"
+        android:text="@string/no_client_with_this_name_is_found"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvClients"
         app:layout_constraintTop_toTopOf="@+id/rvClients" />
 
