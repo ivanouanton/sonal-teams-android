@@ -15,7 +15,7 @@
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="SONAL-123456" />
+        tools:text="Sonal-XXXXXXX" />
 
     <TextView
         style="@style/SmallTextBold.Aqua"
