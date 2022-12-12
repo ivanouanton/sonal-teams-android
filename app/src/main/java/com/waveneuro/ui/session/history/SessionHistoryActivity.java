@@ -110,9 +110,9 @@ public class SessionHistoryActivity extends BaseActivity {
             String dateSd = simpleDateFormat.format(sd.getTime());
             sessions.add(new Session(
                     viewState.getSessions().get(i).getSonalId(),
-                    "EEG R/D: " + dateRd,
-                    "S/D: " + dateSd,
-                    viewState.getSessions().get(i).isCompleted()?"Completed":"Terminated"));
+                    dateRd,
+                    dateSd,
+                    viewState.getSessions().get(i).isCompleted()));
 
         }
         mAdapter = new SessionListAdapter(sessions);

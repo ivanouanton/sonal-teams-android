@@ -25,6 +25,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -91,6 +92,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @BindView(R.id.tv_clients_list)
     TextView tvClientsList;
+
+    @BindView(R.id.sr_clients)
+    SwipeRefreshLayout srClients;
 
     @BindView(R.id.rvClients)
     RecyclerView rvClients;
@@ -167,11 +171,20 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         if (dashBoardViewModel.getData().getValue() instanceof DashboardViewState.Connect) {
             this.homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
         } else {
-            this.homeViewModel.processEvent(new HomeViewEvent.Start(0, "", null));
+            this.homeViewModel.processEvent(new HomeViewEvent.Start(page, "", null));
         }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         rvClients.setLayoutManager(mLayoutManager);
+
+        srClients.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 0;
+                homeViewModel.getClients(page, etSearch.getText().toString(), filters);
+                srClients.setRefreshing(false);
+            }
+        });
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override

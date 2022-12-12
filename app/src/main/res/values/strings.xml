@@ -160,6 +160,13 @@
     <string name="error_sending_report">Error sending report</string>
     <string name="congratulations">Congratulations!</string>
 
+    <!--Sessions history-->
+    <string name="session_history">Session History</string>
+    <string name="eeg_rd">EEG R/D:</string>
+    <string name="sd">S/D:</string>
+    <string name="completed">Completed</string>
+    <string name="terminated">Terminated</string>
+
 
     <!--How to use the device-->
     <string name="got_it">Got it</string>
