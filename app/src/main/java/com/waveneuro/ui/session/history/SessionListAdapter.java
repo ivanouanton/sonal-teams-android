@@ -26,7 +26,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tvName);
+            tvName = view.findViewById(R.id.tv_name);
             tvRd = view.findViewById(R.id.tvRd);
             tvSd = view.findViewById(R.id.tvSd);
             tvStatus = view.findViewById(R.id.tvStatus);

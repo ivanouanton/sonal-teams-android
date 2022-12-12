@@ -168,6 +168,18 @@
         <item name="android:textColor">@color/red</item>
     </style>
 
+    <style name="SmallTextRegular.Black" parent="BaseText.Caption">
+        <item name="android:textSize">@dimen/text_size_standard</item>
+    </style>
+
+    <style name="SmallTextRegular.Aqua" parent="BaseText.Caption">
+        <item name="android:textSize">@dimen/text_size_standard</item>
+    </style>
+
+    <style name="BodyTextBold.Black" parent="BaseText.Subtitle.Black">
+        <item name="fontFamily">@font/inter_semi_bold</item>
+    </style>
+
     <!--END TEXTVIEW STYLE-->
 
     <!--START EDITTEXT STYLE-->

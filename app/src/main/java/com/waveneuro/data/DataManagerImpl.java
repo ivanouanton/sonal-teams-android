@@ -102,8 +102,8 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<PatientListResponse> patients(String startsWith, Integer[] ids) {
-        return this.userService.getClientList(1, ids, startsWith);
+    public Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids) {
+        return this.userService.getClientList(page, ids, startsWith);
     }
 
     @Override
