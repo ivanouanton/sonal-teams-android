@@ -53,7 +53,7 @@ public interface DataManager {
 
     Observable<ProtocolResponse> protocol(int id);
 
-    Observable<PatientListResponse> patients(String startsWith, Integer[] ids);
+    Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids);
 
     Observable<List<PatientListResponse.Patient.Organization>> organizations();
 

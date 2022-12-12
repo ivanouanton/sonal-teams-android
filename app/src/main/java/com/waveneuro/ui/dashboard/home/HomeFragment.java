@@ -62,24 +62,23 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
 
     private Integer[] filters;
+    private Integer page = 0;
 
     @Override
     public void onClientUpdated() {
-        this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(0,"", null));
     }
 
     @Override
     public void onFiltersChanged(Integer[] ids) {
         filters = ids;
-        this.homeViewModel.processEvent(new HomeViewEvent.Start(etSearch.getText().toString(), filters));
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(page, etSearch.getText().toString(), filters));
     }
-
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({BUBBLE_NO_INTERNET, BUBBLE_DEVICE_NOT_CONNECTED, BUBBLE_LOW_BATTERY,
             BUBBLE_LOW_BATTERY_PLUG, BUBBLE_LOW_BATTERY_KEEP_PLUG})
-    public @interface BubbleError {
-    }
+    public @interface BubbleError { }
 
     public static final int BUBBLE_NO_INTERNET = 0;
     public static final int BUBBLE_DEVICE_NOT_CONNECTED = 1;
@@ -141,7 +140,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         homeViewModel.startSessionForClientWithId(patient.getId());
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -169,7 +167,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         if (dashBoardViewModel.getData().getValue() instanceof DashboardViewState.Connect) {
             this.homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
         } else {
-            this.homeViewModel.processEvent(new HomeViewEvent.Start("", null));
+            this.homeViewModel.processEvent(new HomeViewEvent.Start(0, "", null));
         }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -183,7 +181,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                homeViewModel.getClients(charSequence.toString(), filters);
+                homeViewModel.getClients(page, charSequence.toString(), filters);
             }
 
             @Override
@@ -211,7 +209,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     private void setView() {
 
     }
-
 
     private void setObserver() {
         homeViewModel.getUserData().observe(this.getViewLifecycleOwner(), homeUserViewStateObserver);
@@ -316,7 +313,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             return false;
         return locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
     }
-
 
     @Override
     public final void onRequestPermissionsResult(int requestCode,

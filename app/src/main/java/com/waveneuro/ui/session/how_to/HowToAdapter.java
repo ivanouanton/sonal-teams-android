@@ -24,7 +24,7 @@ public class HowToAdapter extends PagerAdapter {
         HowToModel modelObject = HowToModel.values()[position];
         LayoutInflater inflater = LayoutInflater.from(mContext);
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_how_to, collection, false);
-        ((TextView)layout.findViewById(R.id.tvName)).setText(modelObject.getTitleRes());
+        ((TextView)layout.findViewById(R.id.tv_name)).setText(modelObject.getTitleRes());
         ((ImageView)layout.findViewById(R.id.iv_illustration)).setImageResource(modelObject.getDrawableRes());
         collection.addView(layout);
         return layout;

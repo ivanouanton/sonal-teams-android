@@ -40,7 +40,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Vi
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tvName);
+            tvName = view.findViewById(R.id.tv_name);
             tvOrganization = view.findViewById(R.id.tvOrganization);
             ivStartSession = view.findViewById(R.id.ivStartSession);
         }
