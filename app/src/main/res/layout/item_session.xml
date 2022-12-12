@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
-        tools:text="Completed"
+        tools:text="@string/completed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:text="EEG R/D: "
+        android:text="@string/eeg_rd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -44,6 +44,7 @@
         android:id="@+id/tv_rd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_rd_ttl"
         app:layout_constraintStart_toEndOf="@+id/tv_rd_ttl"
         app:layout_constraintTop_toTopOf="@+id/tv_rd_ttl"
@@ -54,7 +55,8 @@
         android:id="@+id/tv_sd_ttl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="S/D: "
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:text="@string/sd"
         app:layout_constraintBottom_toBottomOf="@+id/tv_sd"
         app:layout_constraintEnd_toStartOf="@+id/tv_sd"
         app:layout_constraintTop_toTopOf="@+id/tv_sd" />

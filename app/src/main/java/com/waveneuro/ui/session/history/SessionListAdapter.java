@@ -1,5 +1,6 @@
 package com.waveneuro.ui.session.history;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,14 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         viewHolder.tvName.setText(sessions.get(position).name);
         viewHolder.tvRd.setText(sessions.get(position).rd==null?"n/a":sessions.get(position).rd);
         viewHolder.tvSd.setText(sessions.get(position).sd);
-        viewHolder.tvStatus.setText(sessions.get(position).isCompleted?"Completed":"Terminated");
-        int color = ContextCompat.getColor(viewHolder.itemView.getContext(), sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark);
+
+        Context context = viewHolder.itemView.getContext();
+
+        String completed = context.getString(R.string.completed);
+        String terminated = context.getString(R.string.terminated);
+        viewHolder.tvStatus.setText(sessions.get(position).isCompleted?completed:terminated);
+
+        int color = ContextCompat.getColor(context, sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark);
         viewHolder.tvStatus.setTextColor(color);
     }
 
