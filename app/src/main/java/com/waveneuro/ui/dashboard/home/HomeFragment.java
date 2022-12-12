@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import com.waveneuro.ui.session.session.SessionCommand;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -63,7 +65,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
 
     private Integer[] filters;
-    private Integer page = 0;
+    private ArrayList<PatientListResponse.Patient> currentList = new ArrayList<>();
 
     @Override
     public void onClientUpdated() {
@@ -73,7 +75,8 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     @Override
     public void onFiltersChanged(Integer[] ids) {
         filters = ids;
-        this.homeViewModel.processEvent(new HomeViewEvent.Start(page, etSearch.getText().toString(), filters));
+        homeViewModel.setNewPage(0);
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters));
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -107,6 +110,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @BindView(R.id.et_search)
     TextInputEditText etSearch;
+
+    @BindView(R.id.pb_progress)
+    ProgressBar pbProgress;
 
     @Inject
     SessionCommand sessionCommand;
@@ -145,6 +151,11 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     }
 
     @Override
+    public void onListEnded() {
+        homeViewModel.setNewPage(homeViewModel.mPage.getValue() + 1);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         fragmentComponent = DaggerFragmentComponent.builder()
                 .activityComponent(((BaseActivity) getActivity()).activityComponent())
@@ -171,7 +182,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         if (dashBoardViewModel.getData().getValue() instanceof DashboardViewState.Connect) {
             this.homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
         } else {
-            this.homeViewModel.processEvent(new HomeViewEvent.Start(page, "", null));
+            this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), "", null));
         }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -180,12 +191,12 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         srClients.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 0;
-                homeViewModel.getClients(page, etSearch.getText().toString(), filters);
+                homeViewModel.setNewPage(0);
+                homeViewModel.getClients(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters);
                 srClients.setRefreshing(false);
             }
         });
-
+        
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -194,7 +205,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                homeViewModel.getClients(page, charSequence.toString(), filters);
+                homeViewModel.getClients(homeViewModel.mPage.getValue(), charSequence.toString(), filters);
             }
 
             @Override
@@ -202,6 +213,10 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
             }
         });
+
+        mAdapter = new ClientListAdapter(this);
+        rvClients.setAdapter(mAdapter);
+        mAdapter.submitList(currentList);
 
         return view;
     }
@@ -227,6 +242,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         homeViewModel.getUserData().observe(this.getViewLifecycleOwner(), homeUserViewStateObserver);
         homeViewModel.getClientsData().observe(this.getViewLifecycleOwner(), homeClientsViewStateObserver);
         homeViewModel.getViewEffect().observe(this.getViewLifecycleOwner(), homeViewEffectObserver);
+        homeViewModel.getProtocolData().observe(this.getViewLifecycleOwner(), homeProtocolDataObserver);
 
         dashBoardViewModel.getData().observe(requireActivity(), dashboardViewState -> {
             Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject");
@@ -238,6 +254,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                 }
             }
         });
+        homeViewModel.mPage.observe(this.getViewLifecycleOwner(), pageObserver);
     }
 
     Observer<HomeUserViewState> homeUserViewStateObserver = viewState -> {
@@ -250,10 +267,10 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     Observer<HomeClientsViewState> homeClientsViewStateObserver = viewState -> {
         if (viewState instanceof HomeClientsViewState.Success) {
             HomeClientsViewState.Success success = (HomeClientsViewState.Success) viewState;
-            mAdapter = new ClientListAdapter(success.getItem().getPatients());
-            mAdapter.listener = this;
-            rvClients.setAdapter(mAdapter);
-            if (success.getItem().getPatients().isEmpty()) {
+            currentList.clear();
+            currentList.addAll(success.getPatientList());
+            mAdapter.notifyDataSetChanged();
+            if (success.getPatientList().isEmpty()) {
                 tvEmptyResult.setVisibility(View.VISIBLE);
                 rvClients.setVisibility(View.INVISIBLE);
             } else {
@@ -284,6 +301,25 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         } else if (viewEffect instanceof HomeViewEffect.SessionRedirect) {
             HomeViewEffect.SessionRedirect sessionRedirect = (HomeViewEffect.SessionRedirect) viewEffect;
             launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
+        }
+    };
+
+    Observer<HomeProtocolViewState> homeProtocolDataObserver = protocol -> {
+        if (protocol instanceof HomeProtocolViewState.Loading) {
+            if(((HomeProtocolViewState.Loading) protocol).getLoading()) {
+                pbProgress.setVisibility(View.VISIBLE);
+            } else {
+                pbProgress.setVisibility(View.INVISIBLE);
+            }
+        }
+    };
+
+    Observer<Integer> pageObserver = new Observer<Integer>() {
+        @Override
+        public void onChanged(@Nullable final Integer newPage) {
+            if (newPage != 0) {
+                homeViewModel.processEvent(new HomeViewEvent.Start(newPage,etSearch.getText().toString(), filters));
+            }
         }
     };
 
@@ -344,6 +380,5 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                 break;
         }
     }
-
 
 }
