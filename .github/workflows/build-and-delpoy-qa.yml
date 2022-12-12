@@ -51,4 +51,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B_QA }}
           FLAVOR: 'qa'
         run: |
-          bundle exec fastlane android draft --env qa
+          bundle exec fastlane android beta --env qa
