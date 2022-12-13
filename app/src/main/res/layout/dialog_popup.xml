@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="24dp"
-    android:paddingHorizontal="16dp"
+    android:paddingVertical="48dp"
+    android:paddingHorizontal="24dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -37,11 +37,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <Button
-            android:id="@+id/btn_primary"
             style="@style/RoundedButton.Aqua.BlackText"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:id="@+id/btn_primary"
             android:layout_marginTop="24dp"
+            android:stateListAnimator="@null"
             android:text="OK" />
     </LinearLayout>
 </LinearLayout>
