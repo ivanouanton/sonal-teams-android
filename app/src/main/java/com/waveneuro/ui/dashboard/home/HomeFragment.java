@@ -52,6 +52,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -165,7 +167,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         fragmentComponent.inject(this);
         super.onCreate(savedInstanceState);
         dashBoardViewModel = ViewModelProviders.of(requireActivity()).get(DashBoardViewModel.class);
-
     }
 
     View view = null;
@@ -196,23 +197,29 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                 srClients.setRefreshing(false);
             }
         });
-        
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
+        etSearch.addTextChangedListener(
+                new TextWatcher() {
+                    private Timer timer = new Timer();
+                    private final long DELAY = 1000; // Milliseconds
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                homeViewModel.getClients(homeViewModel.mPage.getValue(), charSequence.toString(), filters);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+                    @Override public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
+                    @Override public void afterTextChanged(final Editable s) { }
+                    @Override public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                        timer.cancel();
+                        timer = new Timer();
+                        timer.schedule(
+                                new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        homeViewModel.setNewPage(0);
+                                        homeViewModel.getClients(homeViewModel.mPage.getValue(), charSequence.toString(), filters);
+                                    }
+                                },
+                                DELAY
+                        );
+                    }
+                });
 
         mAdapter = new ClientListAdapter(this);
         rvClients.setAdapter(mAdapter);
