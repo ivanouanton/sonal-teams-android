@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
@@ -161,9 +162,10 @@ public class ResetPasswordActivity extends BaseFormActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
         TextView tvTitle = dialogView.findViewById(R.id.tv_title);
         TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        ImageButton btnClose = dialogView.findViewById(R.id.ibtn_close);
+        btnClose.setVisibility(View.VISIBLE);
         Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
         tvTitle.setText(R.string.check_your_email);
-        tvTitle.setTextSize(24);
         tvContent.setText(R.string.recovery_info);
         btnPrimary.setText(R.string.open_email_app);
         builder.setView(dialogView);
@@ -178,6 +180,9 @@ public class ResetPasswordActivity extends BaseFormActivity {
                 this.startActivity(intent);
             } catch (android.content.ActivityNotFoundException e) {
             }
+        });
+        btnClose.setOnClickListener(v -> {
+            ad.dismiss();
         });
         ad.show();
     }
