@@ -87,9 +87,8 @@
         android:layout_height="wrap_content"
         android:text="@string/no_client_with_this_name_is_found"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/rvClients"
-        app:layout_constraintTop_toTopOf="@+id/rvClients" />
+        app:layout_constraintStart_toStartOf="@+id/sr_clients"
+        app:layout_constraintTop_toTopOf="@+id/sr_clients" />
 
     <ProgressBar
         android:id="@+id/pb_progress"
