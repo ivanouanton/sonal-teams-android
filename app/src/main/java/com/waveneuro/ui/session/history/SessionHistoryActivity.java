@@ -3,6 +3,7 @@ package com.waveneuro.ui.session.history;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
@@ -14,6 +15,7 @@ import com.waveneuro.R;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.session.session.SessionCommand;
+import com.waveneuro.ui.session.session.SessionViewState;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -37,7 +39,6 @@ public class SessionHistoryActivity extends BaseActivity {
     RecyclerView rvSessions;
 
     protected SessionListAdapter mAdapter;
-
     protected RecyclerView.LayoutManager mLayoutManager;
 
     int userId;
@@ -51,12 +52,11 @@ public class SessionHistoryActivity extends BaseActivity {
         resultIntent.putExtra(START_SESSION, true);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         activityComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_history);
@@ -75,19 +75,15 @@ public class SessionHistoryActivity extends BaseActivity {
         setObserver();
 
         sessionHistoryViewModel.getSessionHistory(userId);
-
-
     }
 
     private void setView() {
-
         mLayoutManager = new LinearLayoutManager(this);
         rvSessions.setLayoutManager(mLayoutManager);
     }
 
     private void setObserver() {
         this.sessionHistoryViewModel.getData().observe(this, viewStateObserver);
-
     }
 
     @OnClick(R.id.iv_back)
@@ -97,27 +93,38 @@ public class SessionHistoryActivity extends BaseActivity {
 
     Observer<SessionResponse> viewStateObserver = viewState -> {
 
-
-
-
         List<Session> sessions = new ArrayList<>();
         for (int i = 0; i < viewState.getSessions().size(); i++) {
             String pattern = "dd/MM/yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            Timestamp rd = new Timestamp(Math.round(viewState.getSessions().get(i).eegRecordedAt)*1000);
-            Timestamp sd = new Timestamp(Math.round(viewState.getSessions().get(i).finishedAt)*1000);
-            String dateRd = simpleDateFormat.format(rd.getTime());
-            String dateSd = simpleDateFormat.format(sd.getTime());
+
+            SessionResponse.Session session = viewState.getSessions().get(i);
+
+            String dateRd;
+            if (session.eegRecordedAt == null) {
+                dateRd = "";
+            } else {
+                Timestamp timestamp = new Timestamp(Math.round(session.eegRecordedAt)*1000);
+                dateRd = simpleDateFormat.format(timestamp.getTime());
+            }
+
+            String dateSd;
+            if (session.finishedAt == null) {
+                dateSd = "";
+            } else {
+                Timestamp timestamp = new Timestamp(Math.round(session.finishedAt)*1000);
+                dateSd = simpleDateFormat.format(timestamp.getTime());
+            }
+
             sessions.add(new Session(
-                    viewState.getSessions().get(i).getSonalId(),
+                    session.getSonalId(),
                     dateRd,
                     dateSd,
-                    viewState.getSessions().get(i).isCompleted()));
-
+                    session.isCompleted()));
         }
         mAdapter = new SessionListAdapter(sessions);
         rvSessions.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-
     };
+
 }
