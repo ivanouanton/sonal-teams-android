@@ -121,7 +121,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
         });
     }
 
-
     private void setObserver() {
         this.resetPasswordViewModel.getData().observe(this, resetPasswordViewStateObserver);
         this.resetPasswordViewModel.getViewEffect().observe(this, resetPasswordViewEffectObserver);
@@ -151,7 +150,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
         }
     };
 
-
     private void launchLoginScreen() {
         loginCommand.navigate();
         finish();
@@ -172,7 +170,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
         final AlertDialog ad = builder.create();
         btnPrimary.setOnClickListener(v -> {
             ad.dismiss();
-            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString());
+            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString().trim());
             try {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_APP_EMAIL);
@@ -193,16 +191,16 @@ public class ResetPasswordActivity extends BaseFormActivity {
         onBackPressed();
     }
 
-
     @Override
     public void submit() {
         this.resetPasswordViewModel.processEvent(
                 new ResetPasswordViewEvent.ForgotPasswordClicked(
-                        etUsername.getEditText().getText().toString()));
+                        etUsername.getEditText().getText().toString().trim()));
     }
 
     @OnClick(R.id.btn_send_reset_link)
     public void onClickSendResetLink() {
         this.mValidator.validate();
     }
+
 }
