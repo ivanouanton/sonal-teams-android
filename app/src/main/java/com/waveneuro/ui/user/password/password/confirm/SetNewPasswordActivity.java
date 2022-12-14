@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
@@ -142,33 +143,42 @@ public class SetNewPasswordActivity extends BaseFormActivity {
         this.setNewPasswordViewModel.getViewEffect().observe(this, setNewPasswordViewEffectObserver);
     }
 
+    private final Flashbar.OnActionTapListener flashBarTapListener = new Flashbar.OnActionTapListener() {
+
+        @Override
+        public void onActionTapped(@NonNull Flashbar bar) {
+            loginCommand.navigate();
+        }
+    };
+
     Observer<SetNewPasswordViewState> setNewPasswordViewStateObserver = viewState -> {
         if (viewState instanceof SetNewPasswordViewState.Success) {
             SetNewPasswordViewState.Success success = (SetNewPasswordViewState.Success) viewState;
-            new Flashbar.Builder(this)
+            Flashbar flashplayer = new Flashbar.Builder(this)
                     .gravity(Flashbar.Gravity.BOTTOM)
-                    .message("Password has been changed")
-                    .messageColorRes(R.color.white)
-                    .backgroundColorRes(R.color.black)
+                    .message(R.string.password_has_been_changed)
+                    .messageColorRes(R.color.black)
+                    .backgroundColorRes(R.color.gray)
+                    .primaryActionText(R.string.ok)
+                    .primaryActionTextColor(R.color.aqua)
+                    .primaryActionTapListener(flashBarTapListener)
                     .showOverlay()
-                    .dismissOnTapOutside()
-                    .build().show();
+                    .build();
+            flashplayer.show();
         } else if (viewState instanceof SetNewPasswordViewState.Failure) {
             SetNewPasswordViewState.Failure error = (SetNewPasswordViewState.Failure) viewState;
             onFailure(error.getError());
         } else if (viewState instanceof SetNewPasswordViewState.Loading) {
             SetNewPasswordViewState.Loading loading = ((SetNewPasswordViewState.Loading) viewState);
             if (loading.getLoading())
-                displayWait("Loading...", null);
+                displayWait(R.string.loading, null);
             else
                 removeWait();
         }
     };
 
     Observer<SetNewPasswordViewEffect> setNewPasswordViewEffectObserver = viewEffect -> {
-        if (viewEffect instanceof SetNewPasswordViewEffect.Home) {
-
-        }
+        if (viewEffect instanceof SetNewPasswordViewEffect.Home) { }
     };
 
     @OnClick(R.id.btn_reset_password)
