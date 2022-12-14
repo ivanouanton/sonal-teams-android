@@ -183,6 +183,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
         });
         btnClose.setOnClickListener(v -> {
             ad.dismiss();
+            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString().trim());
         });
         ad.show();
     }
