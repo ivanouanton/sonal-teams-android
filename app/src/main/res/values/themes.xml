@@ -35,6 +35,12 @@
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">24dp</item>
     </style>
+    <style name="Background.WhitePattern.Padding.Home">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
 
     <!--START BUTTON STYLE-->
     <style name="RoundedButton" parent="Widget.MaterialComponents.Button">

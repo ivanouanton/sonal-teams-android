@@ -171,7 +171,7 @@ public class SetNewPasswordActivity extends BaseFormActivity {
         } else if (viewState instanceof SetNewPasswordViewState.Loading) {
             SetNewPasswordViewState.Loading loading = ((SetNewPasswordViewState.Loading) viewState);
             if (loading.getLoading())
-                displayWait(R.string.loading, null);
+                displayWait("Loading...", null);
             else
                 removeWait();
         }
