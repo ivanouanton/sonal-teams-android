@@ -324,7 +324,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     Observer<Integer> pageObserver = new Observer<Integer>() {
         @Override
         public void onChanged(@Nullable final Integer newPage) {
-            if (newPage != 0) {
+            if (newPage != null && newPage != 0) {
                 homeViewModel.processEvent(new HomeViewEvent.Start(newPage,etSearch.getText().toString(), filters));
             }
         }
