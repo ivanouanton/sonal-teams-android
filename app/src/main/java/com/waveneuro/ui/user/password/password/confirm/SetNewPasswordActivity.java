@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.messagebar.messagebar.Flashbar;
@@ -143,28 +144,21 @@ public class SetNewPasswordActivity extends BaseFormActivity {
         this.setNewPasswordViewModel.getViewEffect().observe(this, setNewPasswordViewEffectObserver);
     }
 
-    private final Flashbar.OnActionTapListener flashBarTapListener = new Flashbar.OnActionTapListener() {
-
-        @Override
-        public void onActionTapped(@NonNull Flashbar bar) {
-            loginCommand.navigate();
-        }
-    };
-
     Observer<SetNewPasswordViewState> setNewPasswordViewStateObserver = viewState -> {
         if (viewState instanceof SetNewPasswordViewState.Success) {
             SetNewPasswordViewState.Success success = (SetNewPasswordViewState.Success) viewState;
-            Flashbar flashplayer = new Flashbar.Builder(this)
-                    .gravity(Flashbar.Gravity.BOTTOM)
-                    .message(R.string.password_has_been_changed)
-                    .messageColorRes(R.color.black)
-                    .backgroundColorRes(R.color.gray)
-                    .primaryActionText(R.string.ok)
-                    .primaryActionTextColor(R.color.aqua)
-                    .primaryActionTapListener(flashBarTapListener)
-                    .showOverlay()
-                    .build();
-            flashplayer.show();
+
+            View view = findViewById(R.id.root);
+            final Snackbar snackBar = Snackbar.make(view, R.string.password_has_been_changed, Snackbar.LENGTH_LONG);
+            snackBar.setDuration(100000000);
+            snackBar.setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    snackBar.dismiss();
+                    loginCommand.navigate();
+                }
+            });
+            snackBar.show();
         } else if (viewState instanceof SetNewPasswordViewState.Failure) {
             SetNewPasswordViewState.Failure error = (SetNewPasswordViewState.Failure) viewState;
             onFailure(error.getError());

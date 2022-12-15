@@ -26,8 +26,7 @@
     <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
         <item name="actionTextColorAlpha">1</item>
-        <item name="android:alpha">0.5</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="backgroundOverlayColorAlpha">0.87</item>
     </style>
 
     <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
@@ -39,7 +38,7 @@
     </style>
 
     <style name="ThemeOverlay.App.Snackbar" parent="">
-        <item name="colorOnSurface">@color/white_transparent_87</item>
+        <item name="colorOnSurface">@color/white</item>
     </style>
 
     <style name="PopUp" parent="Theme.AppCompat.Light.Dialog.Alert">
