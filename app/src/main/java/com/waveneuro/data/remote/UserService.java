@@ -21,7 +21,9 @@ import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
+import com.waveneuro.data.model.response.user.UserDevicesResponse;
 import com.waveneuro.data.model.response.user.UserInfoResponse;
+import com.waveneuro.data.model.response.user.UserDevicesResponse;
 
 import java.util.List;
 
@@ -86,4 +88,6 @@ public interface UserService {
     @GET("orgs/me")
     Observable<List<PatientListResponse.Patient.Organization>> getOrganizations();
 
+    @GET("sonal/user_devices")
+    Observable<UserDevicesResponse> getUserDevices();
 }
