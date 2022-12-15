@@ -11,6 +11,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
@@ -133,7 +135,22 @@ public class ResetPasswordActivity extends BaseFormActivity {
             launchCheckEmailDialog();
         } else if (viewState instanceof ResetPasswordViewState.Failure) {
             ResetPasswordViewState.Failure error = (ResetPasswordViewState.Failure) viewState;
-            onFailure(error.getError());
+
+            if (Integer.valueOf(error.getError().getCode()) == 400) {
+                View view = findViewById(R.id.rpa_root);
+                final Snackbar snackBar = Snackbar.make(view, R.string.email_does_not_match, Snackbar.LENGTH_LONG);
+                snackBar.setDuration(100000000);
+                snackBar.setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackBar.dismiss();
+                    }
+                });
+                snackBar.show();
+            } else {
+                onFailure(error.getError());
+            }
+
         } else if (viewState instanceof ResetPasswordViewState.Loading) {
             ResetPasswordViewState.Loading loading = ((ResetPasswordViewState.Loading) viewState);
             if (loading.getLoading())
