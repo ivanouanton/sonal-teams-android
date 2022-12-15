@@ -1,4 +1,4 @@
-package com.waveneuro.data.model.response.user;
+package com.waveneuro.data.model.response.device;
 
 import android.annotation.SuppressLint;
 
@@ -7,16 +7,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UserDevicesResponse extends BaseModel {
+public class SonalDevicesResponse extends BaseModel {
     @SerializedName("devices")
     @Expose
     private List<Device> devices;
 
-    public List<Device> getDevices() {
-        return devices;
+    public ArrayList<SonalDevicesResponse.Device> getDevices() {
+        return new ArrayList<Device>(devices);
     }
 
     public class Device {
@@ -33,7 +34,7 @@ public class UserDevicesResponse extends BaseModel {
         @SuppressLint("SimpleDateFormat")
         public String getLastConnection() {
             Date date = new java.util.Date(last_session_at*1000L);
-            return new SimpleDateFormat("MMM d, yyyy").format(date);
+            return "Last connection: " + new SimpleDateFormat("MMM d, yyyy").format(date);
         }
     }
 }

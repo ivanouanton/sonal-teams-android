@@ -2,7 +2,6 @@ package com.waveneuro.data;
 
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
-import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
@@ -13,7 +12,7 @@ import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
-import com.waveneuro.data.model.response.device.SonalDeviceResponse;
+import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
@@ -87,8 +86,6 @@ public interface DataManager {
 
     User getUser();
 
-    Observable<SonalDeviceResponse> postSonalDevice(SonalDeviceRequest newDevice);
-
     String getEegId();
 
     void saveEegId(String eegId);
@@ -119,7 +116,7 @@ public interface DataManager {
 
     String getSonalId();
 
-    Observable<List<SonalDeviceResponse>> getSonalDevices();
+    Observable<SonalDevicesResponse> getSonalDevices();
 
     Observable<SessionResponse> getSessions(int id);
 
