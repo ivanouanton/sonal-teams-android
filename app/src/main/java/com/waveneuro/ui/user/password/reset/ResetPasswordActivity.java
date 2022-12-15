@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
@@ -44,6 +47,9 @@ public class ResetPasswordActivity extends BaseFormActivity {
 
     @BindView(R.id.tv_log_in)
     TextView tvLogIn;
+
+    @BindView(R.id.btn_send_reset_link)
+    MaterialButton btnSendLink;
 
     @Inject
     ResetPasswordViewModel resetPasswordViewModel;
@@ -83,6 +89,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
 
     private void setView() {
         logInSpanText();
+        setupInputWatcher();
     }
 
     private void logInSpanText() {
@@ -92,7 +99,26 @@ public class ResetPasswordActivity extends BaseFormActivity {
 
         spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 6, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         tvLogIn.setText(spannableString);
+    }
 
+    private void setupInputWatcher() {
+        etUsername.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                btnSendLink.setEnabled(count != 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
 

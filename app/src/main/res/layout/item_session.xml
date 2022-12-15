@@ -4,48 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:background="@drawable/bg_client">
+    android:layout_marginTop="8dp">
 
     <TextView
-        android:id="@+id/tvName"
+        style="@style/SmallTextBold.Black"
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Sonal-XXXXXXX" />
 
     <TextView
-        android:id="@+id/tvStatus"
+        style="@style/SmallTextBold.Aqua"
+        android:id="@+id/tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
-        android:textStyle="bold"
-        android:textColor="@color/aqua"
+        tools:text="@string/completed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvSd"
+        style="@style/BaseText.Caption.Black"
+        android:id="@+id/tv_rd_ttl"
         android:layout_width="0dp"
-        android:layout_height="18dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
-
-    <TextView
-        android:id="@+id/tvRd"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="@string/eeg_rd"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <TextView
+        style="@style/BaseText.Caption.DarkGray"
+        android:id="@+id/tv_rd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_rd_ttl"
+        app:layout_constraintStart_toEndOf="@+id/tv_rd_ttl"
+        app:layout_constraintTop_toTopOf="@+id/tv_rd_ttl"
+        tools:text="12/11/2022" />
+
+    <TextView
+        style="@style/BaseText.Caption.Black"
+        android:id="@+id/tv_sd_ttl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:text="@string/sd"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_sd"
+        app:layout_constraintEnd_toStartOf="@+id/tv_sd"
+        app:layout_constraintTop_toTopOf="@+id/tv_sd" />
+
+    <TextView
+        style="@style/BaseText.Caption.DarkGray"
+        android:id="@+id/tv_sd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_rd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_rd"
+        tools:text="12/11/2022" />
+
+    <View
+        android:id="@+id/v_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_rd_ttl" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

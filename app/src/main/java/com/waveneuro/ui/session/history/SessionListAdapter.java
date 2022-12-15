@@ -1,9 +1,11 @@
 package com.waveneuro.ui.session.history;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,9 +15,7 @@ import java.util.List;
 
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ViewHolder> {
 
-
     private List<Session> sessions;
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName;
@@ -26,12 +26,11 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tvName);
-            tvRd = view.findViewById(R.id.tvRd);
-            tvSd = view.findViewById(R.id.tvSd);
-            tvStatus = view.findViewById(R.id.tvStatus);
+            tvName = view.findViewById(R.id.tv_name);
+            tvRd = view.findViewById(R.id.tv_rd);
+            tvSd = view.findViewById(R.id.tv_sd);
+            tvStatus = view.findViewById(R.id.tv_status);
         }
-
     }
 
     public SessionListAdapter(List<Session> s) {
@@ -52,13 +51,18 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
         viewHolder.tvName.setText(sessions.get(position).name);
         viewHolder.tvRd.setText(sessions.get(position).rd==null?"n/a":sessions.get(position).rd);
         viewHolder.tvSd.setText(sessions.get(position).sd);
-        viewHolder.tvStatus.setText(sessions.get(position).status);
 
+        Context context = viewHolder.itemView.getContext();
+
+        String completed = context.getString(R.string.completed);
+        String terminated = context.getString(R.string.terminated);
+        viewHolder.tvStatus.setText(sessions.get(position).isCompleted?completed:terminated);
+
+        int color = ContextCompat.getColor(context, sessions.get(position).isCompleted?R.color.aqua: R.color.gray_dim_dark);
+        viewHolder.tvStatus.setTextColor(color);
     }
 
     public int getItemCount() {
         return sessions.size();
     }
-
-
 }

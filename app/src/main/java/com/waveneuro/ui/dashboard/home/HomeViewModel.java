@@ -46,6 +46,10 @@ public class HomeViewModel extends ViewModel {
     private final GetOrganizationsUseCase getOrganizationsUseCase;
     private final GetPatientUseCase getPatientUseCase;
 
+    private ArrayList<PatientListResponse.Patient> mPatientList = new ArrayList<>();
+
+    public MutableLiveData<Integer> mPage = new MutableLiveData<>(0);
+
     @Inject
     public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
                          GetPersonalInfoUseCase getPersonalInfoUseCase,
@@ -69,7 +73,7 @@ public class HomeViewModel extends ViewModel {
             }
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
             getUserDetails();
-            getClients(start.getStartsWith(), start.getFilters());
+            getClients(start.getPage(), start.getStartsWith(), start.getFilters());
             getOrganizations();
         } else if (viewEvent instanceof HomeViewEvent.DeviceDisconnected) {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
@@ -112,24 +116,21 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
-
-    public void getClients(String startsWith, Integer[] filters) {
+    public void getClients(Integer page, String startsWith, Integer[] filters) {
         mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
 
-        this.getPatientsUseCase.execute(startsWith, filters, new UseCaseCallback() {
+        this.getPatientsUseCase.execute(page, startsWith, filters, new UseCaseCallback() {
             @Override
             public void onSuccess(Object response) {
                 mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                PatientListResponse patientResponse = (PatientListResponse) response;
-                mDataPatientsLive.postValue(new HomeClientsViewState.Success(patientResponse));
-
+                mPatientList.addAll(((PatientListResponse) response).getPatients());
+                mDataPatientsLive.postValue(new HomeClientsViewState.Success(mPatientList));
             }
 
             @Override
             public void onError(Throwable throwable) {
                 APIError error = errorUtil.parseError(throwable);
                 mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-
             }
 
             @Override
@@ -137,7 +138,6 @@ public class HomeViewModel extends ViewModel {
 
             }
         });
-
     }
 
     void getOrganizations(){
@@ -190,8 +190,6 @@ public class HomeViewModel extends ViewModel {
 
                     }
                 });
-
-
             }
 
             @Override
@@ -233,7 +231,6 @@ public class HomeViewModel extends ViewModel {
 
                     }
                 });
-
     }
 
     public MutableLiveData<HomeDeviceViewState> getDeviceData() {
@@ -254,5 +251,12 @@ public class HomeViewModel extends ViewModel {
 
     public SingleLiveEvent<HomeViewEffect> getViewEffect() {
         return mDataViewEffect;
+    }
+
+    public void setNewPage(Integer newPage) {
+        mPage.postValue(newPage);
+        if (newPage == 0) {
+            mPatientList.clear();
+        }
     }
 }

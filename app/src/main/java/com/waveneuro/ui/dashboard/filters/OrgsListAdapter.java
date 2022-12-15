@@ -3,7 +3,7 @@ package com.waveneuro.ui.dashboard.filters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,15 +15,12 @@ import java.util.List;
 
 public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHolder> {
 
-
     public interface OnItemClickListener {
         void onSelected(int id);
         void onDeselected(int id);
     }
 
-
     private List<PatientListResponse.Patient.Organization> orgs;
-
     private List<Integer> selected;
 
     public void setListener(OnItemClickListener listener) {
@@ -32,20 +29,16 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
 
     public OnItemClickListener listener;
 
-
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName;
-        private final CheckBox cbOrganization;
+        private final ImageView ivTick;
 
         public ViewHolder(View view) {
             super(view);
 
-            tvName = view.findViewById(R.id.tvName);
-            cbOrganization = view.findViewById(R.id.checkBox);
-
+            tvName = view.findViewById(R.id.tv_name);
+            ivTick = view.findViewById(R.id.iv_tick);
         }
-
     }
 
     public OrgsListAdapter(List<PatientListResponse.Patient.Organization> pt, List<Integer> sel) {
@@ -66,15 +59,25 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
 
         viewHolder.tvName.setText(orgs.get(position).getName());
 
-        viewHolder.cbOrganization.setChecked(selected.contains(orgs.get(position).getId()));
-        viewHolder.cbOrganization.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                listener.onSelected(orgs.get(position).getId());
-            } else {
-                listener.onDeselected(orgs.get(position).getId());
+        if (selected.contains(orgs.get(position).getId())) {
+            viewHolder.ivTick.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivTick.setVisibility(View.INVISIBLE);
+        }
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selected.contains(orgs.get(position).getId())) {
+                    listener.onDeselected(orgs.get(position).getId());
+                    viewHolder.ivTick.setVisibility(View.INVISIBLE);
+                } else {
+                    listener.onSelected(orgs.get(position).getId());
+                    viewHolder.ivTick.setVisibility(View.VISIBLE);
+
+                }
             }
         });
-
     }
 
     public int getItemCount() {
