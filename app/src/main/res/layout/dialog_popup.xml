@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingVertical="24dp"
-    android:paddingHorizontal="16dp"
+    android:paddingHorizontal="24dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,12 +13,22 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <ImageButton
+            android:id="@+id/ibtn_close"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:src="@drawable/ic_close"
+             android:visibility="gone" />
+
         <TextView
             android:id="@+id/tv_title"
             style="@style/BaseText.Heading2.Black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
+            android:layout_marginTop="24dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <ImageView
@@ -37,11 +47,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <Button
-            android:id="@+id/btn_primary"
             style="@style/RoundedButton.Aqua.BlackText"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
+            android:id="@+id/btn_primary"
+            android:layout_marginTop="48dp"
+            android:stateListAnimator="@null"
             android:text="OK" />
     </LinearLayout>
 </LinearLayout>

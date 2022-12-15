@@ -11,16 +11,19 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
@@ -121,7 +124,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
         });
     }
 
-
     private void setObserver() {
         this.resetPasswordViewModel.getData().observe(this, resetPasswordViewStateObserver);
         this.resetPasswordViewModel.getViewEffect().observe(this, resetPasswordViewEffectObserver);
@@ -133,7 +135,22 @@ public class ResetPasswordActivity extends BaseFormActivity {
             launchCheckEmailDialog();
         } else if (viewState instanceof ResetPasswordViewState.Failure) {
             ResetPasswordViewState.Failure error = (ResetPasswordViewState.Failure) viewState;
-            onFailure(error.getError());
+
+            if (Integer.valueOf(error.getError().getCode()) == 400) {
+                View view = findViewById(R.id.rpa_root);
+                final Snackbar snackBar = Snackbar.make(view, R.string.email_does_not_match, Snackbar.LENGTH_LONG);
+                snackBar.setDuration(100000000);
+                snackBar.setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackBar.dismiss();
+                    }
+                });
+                snackBar.show();
+            } else {
+                onFailure(error.getError());
+            }
+
         } else if (viewState instanceof ResetPasswordViewState.Loading) {
             ResetPasswordViewState.Loading loading = ((ResetPasswordViewState.Loading) viewState);
             if (loading.getLoading())
@@ -151,7 +168,6 @@ public class ResetPasswordActivity extends BaseFormActivity {
         }
     };
 
-
     private void launchLoginScreen() {
         loginCommand.navigate();
         finish();
@@ -163,16 +179,17 @@ public class ResetPasswordActivity extends BaseFormActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
         TextView tvTitle = dialogView.findViewById(R.id.tv_title);
         TextView tvContent = dialogView.findViewById(R.id.tv_content);
+        ImageButton btnClose = dialogView.findViewById(R.id.ibtn_close);
+        btnClose.setVisibility(View.VISIBLE);
         Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
         tvTitle.setText(R.string.check_your_email);
-        tvTitle.setTextSize(24);
         tvContent.setText(R.string.recovery_info);
         btnPrimary.setText(R.string.open_email_app);
         builder.setView(dialogView);
         final AlertDialog ad = builder.create();
         btnPrimary.setOnClickListener(v -> {
             ad.dismiss();
-            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString());
+            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString().trim());
             try {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_APP_EMAIL);
@@ -180,6 +197,10 @@ public class ResetPasswordActivity extends BaseFormActivity {
                 this.startActivity(intent);
             } catch (android.content.ActivityNotFoundException e) {
             }
+        });
+        btnClose.setOnClickListener(v -> {
+            ad.dismiss();
+            forgotPasswordCodeCommand.navigate(etUsername.getEditText().getText().toString().trim());
         });
         ad.show();
     }
@@ -193,16 +214,16 @@ public class ResetPasswordActivity extends BaseFormActivity {
         onBackPressed();
     }
 
-
     @Override
     public void submit() {
         this.resetPasswordViewModel.processEvent(
                 new ResetPasswordViewEvent.ForgotPasswordClicked(
-                        etUsername.getEditText().getText().toString()));
+                        etUsername.getEditText().getText().toString().trim()));
     }
 
     @OnClick(R.id.btn_send_reset_link)
     public void onClickSendResetLink() {
         this.mValidator.validate();
     }
+
 }
