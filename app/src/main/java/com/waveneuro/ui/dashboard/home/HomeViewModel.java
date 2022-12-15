@@ -46,6 +46,10 @@ public class HomeViewModel extends ViewModel {
     private final GetOrganizationsUseCase getOrganizationsUseCase;
     private final GetPatientUseCase getPatientUseCase;
 
+    private ArrayList<PatientListResponse.Patient> mPatientList = new ArrayList<>();
+
+    public MutableLiveData<Integer> mPage = new MutableLiveData<>(0);
+
     @Inject
     public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
                          GetPersonalInfoUseCase getPersonalInfoUseCase,
@@ -112,7 +116,6 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
-
     public void getClients(Integer page, String startsWith, Integer[] filters) {
         mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(true));
 
@@ -120,8 +123,8 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onSuccess(Object response) {
                 mDataProtocolLive.postValue(new HomeProtocolViewState.Loading(false));
-                PatientListResponse patientResponse = (PatientListResponse) response;
-                mDataPatientsLive.postValue(new HomeClientsViewState.Success(patientResponse));
+                mPatientList.addAll(((PatientListResponse) response).getPatients());
+                mDataPatientsLive.postValue(new HomeClientsViewState.Success(mPatientList));
             }
 
             @Override
@@ -248,5 +251,12 @@ public class HomeViewModel extends ViewModel {
 
     public SingleLiveEvent<HomeViewEffect> getViewEffect() {
         return mDataViewEffect;
+    }
+
+    public void setNewPage(Integer newPage) {
+        mPage.postValue(newPage);
+        if (newPage == 0) {
+            mPatientList.clear();
+        }
     }
 }
