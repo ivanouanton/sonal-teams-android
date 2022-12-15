@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.messagebar.messagebar.Flashbar;
@@ -145,14 +147,18 @@ public class SetNewPasswordActivity extends BaseFormActivity {
     Observer<SetNewPasswordViewState> setNewPasswordViewStateObserver = viewState -> {
         if (viewState instanceof SetNewPasswordViewState.Success) {
             SetNewPasswordViewState.Success success = (SetNewPasswordViewState.Success) viewState;
-            new Flashbar.Builder(this)
-                    .gravity(Flashbar.Gravity.BOTTOM)
-                    .message("Password has been changed")
-                    .messageColorRes(R.color.white)
-                    .backgroundColorRes(R.color.black)
-                    .showOverlay()
-                    .dismissOnTapOutside()
-                    .build().show();
+
+            View view = findViewById(R.id.root);
+            final Snackbar snackBar = Snackbar.make(view, R.string.password_has_been_changed, Snackbar.LENGTH_LONG);
+            snackBar.setDuration(100000000);
+            snackBar.setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    snackBar.dismiss();
+                    loginCommand.navigate();
+                }
+            });
+            snackBar.show();
         } else if (viewState instanceof SetNewPasswordViewState.Failure) {
             SetNewPasswordViewState.Failure error = (SetNewPasswordViewState.Failure) viewState;
             onFailure(error.getError());
@@ -166,9 +172,7 @@ public class SetNewPasswordActivity extends BaseFormActivity {
     };
 
     Observer<SetNewPasswordViewEffect> setNewPasswordViewEffectObserver = viewEffect -> {
-        if (viewEffect instanceof SetNewPasswordViewEffect.Home) {
-
-        }
+        if (viewEffect instanceof SetNewPasswordViewEffect.Home) { }
     };
 
     @OnClick(R.id.btn_reset_password)

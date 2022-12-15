@@ -121,11 +121,10 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintStart_toStartOf="@+id/et_password" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/btn_login"
         style="@style/RoundedButton.Aqua.BlackText"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
         android:layout_marginBottom="32dp"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"

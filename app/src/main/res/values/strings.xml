@@ -55,6 +55,9 @@
     <string name="skip_i_ll_confirm_later">Skip, I\'ll confirm later</string>
     <string name="did_not_receive_the_email">Did not receive the email?</string>
     <string name="check_your_spam_folder_or_contact_us">Check your spam folder, or contact us.</string>
+    <string name="password_has_been_changed">Password has been changed</string>
+    <string name="loading">Loading...</string>
+    <string name="email_does_not_match">The email you entered doesn\'t match your account</string>
 
     <!--Change Password-->
     <string name="enter_new_password">Enter New Password</string>

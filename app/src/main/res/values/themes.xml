@@ -22,6 +22,10 @@
         <item name="android:windowEnterTransition">@transition/slide_top</item>
         <item name="android:windowExitTransition">@transition/slide_top</item>
 
+        <!-- Snackbar -->
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
+        <item name="snackbarTextViewStyle">@style/Widget.App.SnackbarText</item>
 
     </style>
 
@@ -34,6 +38,12 @@
         <item name="android:paddingEnd">24dp</item>
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">24dp</item>
+    </style>
+    <style name="Background.WhitePattern.Padding.Home">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">0dp</item>
     </style>
 
     <!--START BUTTON STYLE-->
@@ -52,12 +62,10 @@
 
     <style name="RoundedButton.Aqua.BlackText">
         <item name="materialThemeOverlay">@style/AquaButtonThemeOverlayBlack</item>
-        <item name="android:layout_height">50dp</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:layout_height">54dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:maxWidth">300dp</item>
-        <item name="maxWidth">300dp</item>
-        <item name="layout_constraintWidth_max">300dp</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="RoundedButton.Aqua.Black">
@@ -93,7 +101,7 @@
 
     <style name="BaseText.Heading2" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/romana_semi</item>
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">32sp</item>
     </style>
 
     <style name="BaseText.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
