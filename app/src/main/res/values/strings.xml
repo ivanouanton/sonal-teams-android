@@ -210,4 +210,8 @@
     <string name="label_last_connection">\"Last connection: \"</string>
 
 
+    <string name="don_t_show_again">Don\'t show again</string>
+    <string name="warning_title">Warning!</string>
+    <string name="warning_message">By continuing, you confirm that you aware of all precautions.</string>
+    <string name="continue_button">Continue</string>
 </resources>

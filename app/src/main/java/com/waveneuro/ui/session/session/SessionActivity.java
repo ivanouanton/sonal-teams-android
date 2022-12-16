@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.ap.ble.BluetoothManager;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
 import com.waveneuro.R;
+import com.waveneuro.data.DataManager;
 import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
@@ -77,6 +79,9 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     @Inject
     SessionViewModel sessionViewModel;
 
+    @Inject
+    DataManager dataManager;
+
     String treatmentLength = null;
     String protocolFrequency = null;
     String sonalId = null;
@@ -94,14 +99,11 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         setView();
         setObserver();
 
-        this.sessionViewModel.processEvent(new SessionViewEvent.Start());
-
         if (getIntent().hasExtra(SessionCommand.SONAL_ID)) {
             sonalId = getIntent().getStringExtra(SessionCommand.SONAL_ID);
         }
         if (getIntent().hasExtra(SessionCommand.TREATMENT_LENGTH)) {
-           // treatmentLength = getIntent().getStringExtra(SessionCommand.TREATMENT_LENGTH);
-            treatmentLength = "60";
+            treatmentLength = getIntent().getStringExtra(SessionCommand.TREATMENT_LENGTH);
             try {
                 treatmentLengthMinutes = Integer.parseInt(treatmentLength) / 60;
             } catch (Exception e) {
@@ -148,40 +150,26 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                     return;
                 }
                 switch (args) {
-                    case "02":
-                        //DONE listen for characteristics 06 for value 02 for start
-                        //DONE testing set manually, use BluetoothSimulator
-                        if (ble6Value.equals("03")) {
+                    case BluetoothManager.START_SESSION:
+                        if (ble6Value.equals(BluetoothManager.PAUSE_SESSION)) {
                             sessionViewModel.processEvent(new SessionViewEvent.ResumeSession());
                         } else {
                             sessionViewModel.processEvent(new SessionViewEvent.StartSession());
                         }
                         break;
-                    case "03":
-                        //DONE listen for characteristics 06 for value 03 for paused
-                        //DONE pause timer
+                    case BluetoothManager.PAUSE_SESSION:
                         sessionViewModel.processEvent(new SessionViewEvent.DevicePaused());
                         break;
-                    case "04":
-                        //DONE listen for characteristics 06 for value 04 for end
-                        //DONE end timer
+                    case BluetoothManager.END_SESSION:
                         sessionViewModel.processEvent(new SessionViewEvent.EndSession());
                         break;
-                    case "05":
-                        //DONE listen for characteristics 06 for value 05 error
-                        //DONE Display for error
-                        //DONE Alert message
-                        //TODO Refactor alert message sending code
+                    case BluetoothManager.ERROR:
                         sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Uh Oh!",
                                 "Error detected on device"));
                         break;
                     case "01":
-                        //TODO Same as iOS
                         break;
-                    case "00":
-                        //TODO Same as iOS
-                        //DONE Alert message
-                        //TODO Refactor alert message sending code
+                    case BluetoothManager.INACTIVE:
                         sessionViewModel.processEvent(new SessionViewEvent.DeviceError("Session Ended",
                                 "You manually stopped the device."));
                         break;
@@ -218,7 +206,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
         @Override
         public void onDisconnected() {
-            // TODO Manage using state
             Timber.e("SESSION DISCONNECTED CALLBACK");
             if (!sessionTimer.isFinished()) {
                 sessionTimer.pause();
@@ -278,7 +265,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             tvSessionTimer.setVisibility(View.VISIBLE);
             tvStopSessionInfo.setVisibility(View.VISIBLE);
             clContainerSessionInfo.setVisibility(View.VISIBLE);
-            startSession();
+            startCountdown();
         } else if (viewState instanceof SessionViewState.ResumeSession) {
             pauseSpanText(false);
             tvPaused.setVisibility(View.GONE);
@@ -286,15 +273,15 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             tvSessionTimer.setVisibility(View.VISIBLE);
             tvStopSessionInfo.setVisibility(View.VISIBLE);
             clContainerSessionInfo.setVisibility(View.VISIBLE);
-            resumeSession();
+            resumeCountdown();
         } else if (viewState instanceof SessionViewState.SessionEnded) {
-            endSession();
+            stopCountdown();
             launchSessionCompleteScreen();
         } else if (viewState instanceof SessionViewState.SessionPaused) {
             ivPause.setImageResource(R.drawable.ic_resume_session);
             pauseSpanText(true);
             tvPaused.setVisibility(View.VISIBLE);
-            pauseSession();
+            pauseCountdown();
         } else if (viewState instanceof SessionViewState.ErrorSession) {
             SessionViewState.ErrorSession state = (SessionViewState.ErrorSession) viewState;
             showEndSessionDialog(state.getTitle(), state.getMessage());
@@ -411,22 +398,21 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     private CountDownTimer sessionTimer = new CountDownTimer(0, 10, 1, this);
 
-    private void startSession() {
+    private void startCountdown() {
         if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
         }
         sessionTimer = new CountDownTimer(treatmentLengthMinutes, 0, 1, this);
         sessionTimer.start(false);
-
     }
 
-    private void pauseSession() {
+    private void pauseCountdown() {
         if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
         }
     }
 
-    private void resumeSession() {
+    private void resumeCountdown() {
         if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
         }
@@ -436,7 +422,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         sessionTimer.start(false);
     }
 
-    private void endSession() {
+    private void stopCountdown() {
         if (!sessionTimer.isFinished()) {
             sessionTimer.pause();
         }
@@ -474,9 +460,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
 
     @OnClick(R.id.btn_start_session)
     public void onClickStartSession() {
-
         btnStartSession.setVisibility(View.INVISIBLE);
+        startSession();
+        this.sessionViewModel.processEvent(new SessionViewEvent.Start());
+    }
 
+    private void showStartSessionPopup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
@@ -490,7 +479,36 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         btnPrimary.setVisibility(View.GONE);
         builder.setView(dialogView);
         readyDialog = builder.create();
+        readyDialog.setCanceledOnTouchOutside(false);
         readyDialog.show();
+    }
 
+    private void startSession() {
+        if (dataManager.getPrecautionsDisplayed()) {
+            showStartSessionPopup();
+        } else {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+            ViewGroup viewGroup = findViewById(android.R.id.content);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup_with_checkbox, viewGroup, false);
+            TextView tvTitle = dialogView.findViewById(R.id.tv_title);
+            tvTitle.setText(R.string.warning_title);
+            TextView tvContent = dialogView.findViewById(R.id.tv_content);
+            tvContent.setText(R.string.warning_message);
+            Button btnPrimary = dialogView.findViewById(R.id.btn_primary);
+            btnPrimary.setText(R.string.continue_button);
+            CheckBox cbDontShowAgain = dialogView.findViewById(R.id.dont_show_again);
+            builder.setView(dialogView);
+            AlertDialog precautionsWarningDialog = builder.create();
+            precautionsWarningDialog.setCanceledOnTouchOutside(false);
+            precautionsWarningDialog.show();
+
+            btnPrimary.setOnClickListener(v -> {
+                if (cbDontShowAgain.isChecked()) {
+                    dataManager.setPrecautionsDisplayed();
+                }
+                precautionsWarningDialog.hide();
+                showStartSessionPopup();
+            });
+        }
     }
 }

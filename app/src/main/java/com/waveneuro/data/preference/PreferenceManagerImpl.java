@@ -189,4 +189,14 @@ public class PreferenceManagerImpl implements PreferenceManager {
     public void setOnboardingDisplayed() {
         getNonUserEditor().putBoolean(PreferenceKeys.ONBOARDING_DISPLAYED, true).commit();
     }
+
+    @Override
+    public boolean getPrecautionsDisplayed() {
+        return nonUserPreferences.getBoolean(PreferenceKeys.PRECAUTIONS_DISPLAYED, false);
+    }
+
+    @Override
+    public void setPrecautionsDisplayed() {
+        getNonUserEditor().putBoolean(PreferenceKeys.PRECAUTIONS_DISPLAYED, true).commit();
+    }
 }
