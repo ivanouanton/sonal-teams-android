@@ -214,4 +214,5 @@
     <string name="warning_title">Warning!</string>
     <string name="warning_message">By continuing, you confirm that you aware of all precautions.</string>
     <string name="continue_button">Continue</string>
+    <string name="illustration">Illustration</string>
 </resources>

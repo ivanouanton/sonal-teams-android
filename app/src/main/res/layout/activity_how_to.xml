@@ -10,24 +10,25 @@
         android:id="@+id/tv_skip_onboarding"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:text="@string/skip_onboarding"
         android:textColor="@color/aqua"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="0dp"
         android:layout_height="450dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/btn_got_it"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_page_indicator" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_page_indicator"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_got_it"
