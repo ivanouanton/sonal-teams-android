@@ -1,6 +1,7 @@
 package com.waveneuro.ui.session.session;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,8 +27,8 @@ import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
 import com.waveneuro.ui.session.complete.SessionCompleteCommand;
+import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet;
 import com.waveneuro.utils.CountDownTimer;
-import com.waveneuro.utils.MonospaceSpan;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,14 +62,17 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     @BindView(R.id.pb_progress)
     CircularProgressIndicator pbProgress;
 
-    @BindView(R.id.tv_sonal_id)
-    TextView tvSonalId;
+    @BindView(R.id.ll_control_info)
+    LinearLayout llConrolInfo;
 
     @BindView(R.id.iv_pause)
     ImageView ivPause;
 
     @BindView(R.id.tv_paused)
     TextView tvPaused;
+
+    @BindView(R.id.cl_precautions)
+    ConstraintLayout clPrecautions;
 
     AlertDialog readyDialog;
 
@@ -93,7 +98,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
-        setContentView(R.layout.activity_session);
+        setContentView(R.layout.fragment_session);
         ButterKnife.bind(this);
 
         setView();
@@ -121,8 +126,12 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
         setBleListeners();
     }
 
-    private void setView() {
 
+    private void setView() {
+        clPrecautions.setOnClickListener(v -> {
+            PrecautionsBottomSheet precautionsBottomSheet = PrecautionsBottomSheet.newInstance();
+            precautionsBottomSheet.show(this.getSupportFragmentManager(), "");
+        });
     }
 
     @Inject
@@ -254,17 +263,16 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                 removeWait();
             }
         } else if (viewState instanceof SessionViewState.LocateDevice) {
-            tvSonalId.setText("ID: "+sonalId);
             tvSessionTimer.setVisibility(View.VISIBLE);
             tvSessionTimer.setText("30:00");
             tvStopSessionInfo.setVisibility(View.VISIBLE);
-            clContainerSessionInfo.setVisibility(View.GONE);
+            llConrolInfo.setVisibility(View.GONE);
         } else if (viewState instanceof SessionViewState.SessionStarted) {
             if (readyDialog != null) readyDialog.dismiss();
             btnStartSession.setVisibility(View.GONE);
             tvSessionTimer.setVisibility(View.VISIBLE);
             tvStopSessionInfo.setVisibility(View.VISIBLE);
-            clContainerSessionInfo.setVisibility(View.VISIBLE);
+            llConrolInfo.setVisibility(View.VISIBLE);
             startCountdown();
         } else if (viewState instanceof SessionViewState.ResumeSession) {
             pauseSpanText(false);
@@ -272,7 +280,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             ivPause.setImageResource(R.drawable.ic_pause_session);
             tvSessionTimer.setVisibility(View.VISIBLE);
             tvStopSessionInfo.setVisibility(View.VISIBLE);
-            clContainerSessionInfo.setVisibility(View.VISIBLE);
+            llConrolInfo.setVisibility(View.VISIBLE);
             resumeCountdown();
         } else if (viewState instanceof SessionViewState.SessionEnded) {
             stopCountdown();
@@ -431,15 +439,17 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     @Override
     public void onCountDownActive(String time) {
         tvSessionTimer.post(() -> {
-            SpannableString textMono = new SpannableString(time);
             int m = Integer.parseInt(time.split(":")[0]);
             int s = Integer.parseInt(time.split(":")[1]);
-            int t = m*60+s;
+            int t = m * 60 + s;
 
-            pbProgress.setProgress((((1800-t)*100))/1800+1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                pbProgress.setProgress(((1800 - t) * 100) / 1800 + 1, true);
+            } else {
+                pbProgress.setProgress(((1800 - t) * 100) / 1800 + 1);
+            }
 
-            textMono.setSpan(new MonospaceSpan(), 0, textMono.length(), 0);
-            tvSessionTimer.setText(textMono);
+            tvSessionTimer.setText(time);
         });
     }
 
