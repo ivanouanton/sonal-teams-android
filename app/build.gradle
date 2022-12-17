@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.waveneuro.b2b"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 2
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -21,26 +21,23 @@ android {
     productFlavors {
         dev {
             manifestPlaceholders = [sentryEnvironment: "dev",
-                                    appName: "Sonal DEV B2B",
-                                    releaseName: "1.0.0"]
+                                    sentryId         : ""
+            ]
             dimension "env"
             applicationIdSuffix ".develop"
-            resValue "string", "sentryId", ""
         }
-        qa {
-            manifestPlaceholders = [sentryEnvironment:"test",
-                                    appName: "Sonal QA B2B",
-                                    releaseName: "1.0.0"]
+        tеst {
+            manifestPlaceholders = [sentryEnvironment: "test",
+                                    sentryId         : "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808"
+            ]
             dimension "env"
             applicationIdSuffix ".test"
-            resValue "string", "sentryId", "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808"
         }
-        prod {
-            manifestPlaceholders = [sentryEnvironment:"production",
-                                    appName: "@string/app_name",
-                                    releaseName: "1.0.0"]
+        production {
+            manifestPlaceholders = [sentryEnvironment: "production",
+                                    sentryId         : "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808",
+            ]
             dimension "env"
-            resValue "string", "sentryId", "https://539987c5d950463c9223aff4eba00e5b@o1090649.ingest.sentry.io/4504037569527808"
 
         }
     }
@@ -59,11 +56,11 @@ android {
             res.srcDirs = ['src/main/res'
             ]
         }
-        prod {
-            java.srcDirs = ['src/prod/java/com/waveneuro/data']
+        production {
+            java.srcDirs = ['src/production/java/com/waveneuro/data']
         }
-        qa {
-            java.srcDirs = ['src/qa/java/com/waveneuro/data']
+        tеst {
+            java.srcDirs = ['src/test/java/com/waveneuro/data']
         }
         dev {
             java.srcDirs = ['src/dev/java/com/waveneuro/data']
