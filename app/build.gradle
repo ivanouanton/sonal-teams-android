@@ -60,7 +60,7 @@ android {
             java.srcDirs = ['src/production/java/com/waveneuro/data']
         }
         tеst {
-            java.srcDirs = ['src/test/java/com/waveneuro/data']
+            java.srcDirs = ['src/tеst/java/com/waveneuro/data']
         }
         dev {
             java.srcDirs = ['src/dev/java/com/waveneuro/data']
