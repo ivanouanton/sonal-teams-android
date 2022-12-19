@@ -61,4 +61,8 @@ public interface PreferenceManager {
     boolean getOnboardingDisplayed();
 
     void setOnboardingDisplayed();
+
+    boolean getPrecautionsDisplayed();
+
+    void setPrecautionsDisplayed();
 }

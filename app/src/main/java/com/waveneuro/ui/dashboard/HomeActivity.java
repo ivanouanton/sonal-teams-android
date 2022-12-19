@@ -142,7 +142,6 @@ public class HomeActivity extends BaseActivity {
             }
         };
 
-//        drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayout.setDrawerElevation(0f);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 

@@ -5,11 +5,9 @@ import android.app.Application;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
-import android.content.Context;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ap.ble.callback.BleGattCallback;
 import com.ap.ble.callback.BleNotifyCallback;
@@ -35,6 +33,12 @@ public class BluetoothManager {
     String errorDetail;
     String deviceCharacteristicValue;
     Application context;
+
+    public static final String INACTIVE = "00";
+    public static final String START_SESSION = "02";
+    public static final String PAUSE_SESSION = "03";
+    public static final String END_SESSION = "04";
+    public static final String ERROR = "05";
 
     static List<DeviceConnectionCallback> deviceConnectionCallbackList = new ArrayList<>();
 

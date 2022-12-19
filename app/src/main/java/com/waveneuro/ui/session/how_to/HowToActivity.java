@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet;
@@ -32,6 +33,9 @@ public class HowToActivity extends BaseActivity {
     @BindView(R.id.btn_got_it)
     MaterialButton btnGotIt;
 
+    @BindView(R.id.tl_dots)
+    TabLayout tlDots;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,7 @@ public class HowToActivity extends BaseActivity {
         tvSkipOnboarding.setPaintFlags(tvSkipOnboarding.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new HowToAdapter(this));
+        tlDots.setupWithViewPager(viewPager);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

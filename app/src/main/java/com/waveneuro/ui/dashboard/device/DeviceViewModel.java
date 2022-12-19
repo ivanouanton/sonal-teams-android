@@ -110,7 +110,5 @@ public class DeviceViewModel extends ViewModel {
             dataManager.setOnboardingDisplayed();
             return false;
         }
-
     }
-
 }

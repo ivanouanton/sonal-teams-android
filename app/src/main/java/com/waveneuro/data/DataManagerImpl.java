@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
-import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
@@ -282,5 +281,13 @@ public class DataManagerImpl implements DataManager {
         return this.userService.updateUser(request);
     }
 
+    @Override
+    public boolean getPrecautionsDisplayed() {
+        return preferenceManager.getPrecautionsDisplayed();
+    }
 
+    @Override
+    public void setPrecautionsDisplayed() {
+        preferenceManager.setPrecautionsDisplayed();
+    }
 }

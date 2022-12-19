@@ -27,6 +27,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -73,6 +74,7 @@ public interface UserService {
     @PUT("patients/{id}")
     Observable<PatientResponse> updateClient(@Path("id") int id, @Body PatientRequest request);
 
+    @Headers("X-Client: Android")
     @GET("sonal/sessions/{id}")
     Observable<SessionResponse> getSessions(@Path("id") int id);
 

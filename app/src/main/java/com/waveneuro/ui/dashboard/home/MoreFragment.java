@@ -1,7 +1,5 @@
 package com.waveneuro.ui.dashboard.home;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.waveneuro.BuildConfig;
 import com.waveneuro.R;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
@@ -94,13 +93,6 @@ public class MoreFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        try {
-            PackageInfo pInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
-            String version = pInfo.versionName;
-            tvAppVersion.setText("App version: " + version);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        tvAppVersion.setText("App version: " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
     }
 }

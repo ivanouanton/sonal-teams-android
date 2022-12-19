@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.waveneuro.R;
 
 public class HowToAdapter extends PagerAdapter {
@@ -25,7 +26,7 @@ public class HowToAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_how_to, collection, false);
         ((TextView)layout.findViewById(R.id.tv_name)).setText(modelObject.getTitleRes());
-        ((ImageView)layout.findViewById(R.id.iv_illustration)).setImageResource(modelObject.getDrawableRes());
+        Glide.with(mContext).load(modelObject.getDrawableRes()).into((ImageView) layout.findViewById(R.id.iv_illustration));
         collection.addView(layout);
         return layout;
     }
