@@ -15,7 +15,7 @@ import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
-import com.waveneuro.data.model.response.device.SonalDeviceResponse;
+import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
@@ -189,7 +189,7 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<List<SonalDeviceResponse>> getSonalDevices() {
+    public Observable<SonalDevicesResponse> getSonalDevices() {
         return userService.getSonalDevices();
     }
 
@@ -206,11 +206,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public void setOnboardingDisplayed() {
         preferenceManager.setOnboardingDisplayed();
-    }
-
-    @Override
-    public Observable<SonalDeviceResponse> postSonalDevice(SonalDeviceRequest newDevice) {
-        return userService.addSonalDevice(newDevice);
     }
 
     @Override

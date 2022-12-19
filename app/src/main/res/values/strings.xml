@@ -206,6 +206,8 @@
     <string name="waveneuro">WaveNeuro</string>
     <string name="search">Search</string>
     <string name="no_client_with_this_name_is_found">No client with this name is found</string>
+    <string name="icon_back"><![CDATA[<-]]></string>
+    <string name="label_last_connection">\"Last connection: \"</string>
 
 
 </resources>

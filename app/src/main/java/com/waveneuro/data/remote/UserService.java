@@ -1,7 +1,6 @@
 package com.waveneuro.data.remote;
 
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
-import com.waveneuro.data.model.request.device.SonalDeviceRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
@@ -9,7 +8,7 @@ import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
-import com.waveneuro.data.model.response.device.SonalDeviceResponse;
+import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
@@ -59,11 +58,8 @@ public interface UserService {
     @PUT("users/me")
     Observable<UserInfoResponse> updateUser(@Body AccountUpdateRequest request);
 
-    @GET("sonal-devices")
-    Observable<List<SonalDeviceResponse>> getSonalDevices();
-
-    @POST("sonal-devices")
-    Observable<SonalDeviceResponse> addSonalDevice(@Body SonalDeviceRequest request);
+    @GET("sonal/user_devices")
+    Observable<SonalDevicesResponse> getSonalDevices();
 
     @POST("confirm-software-token")
     Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
@@ -85,5 +81,4 @@ public interface UserService {
 
     @GET("orgs/me")
     Observable<List<PatientListResponse.Patient.Organization>> getOrganizations();
-
 }
