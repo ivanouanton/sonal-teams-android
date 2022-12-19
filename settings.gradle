@@ -6,7 +6,7 @@ dependencyResolutionManagement {
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "WaveNeuro-Android"
+rootProject.name = "Sonal Teams"
 include ':app'
 include ':messagebar'
 include ':ble'
