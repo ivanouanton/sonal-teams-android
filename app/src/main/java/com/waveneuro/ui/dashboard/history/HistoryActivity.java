@@ -47,10 +47,6 @@ public class HistoryActivity extends BaseActivity {
         this.rvDevicesHistory.setAdapter(rvDevicesHistoryAdapter);
     }
 
-    private void setView() {
-
-    }
-
     private void setObserver() {
         this.historyViewModel.getData().observe(this, historyViewStateObserver);
     }
