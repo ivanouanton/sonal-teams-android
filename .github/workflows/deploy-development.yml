@@ -1,50 +1,44 @@
-name: Build and Deploy Dev
+name: Deploy Development Environment
+
+concurrency:
+  group: Development
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   deploy:
-    name: Build and Deploy Dev
+    name: Build & Upload Mobile Application
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: Development
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set Google credentials
+      - name: Set Google Credentials
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
           echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 --decode > google_account.json
-
-      - name: Clone certificactes repository
+      - name: Clone Certificactes Repository
         uses: actions/checkout@v2
         with:
           repository: waveneuroscience/certificates
           token: ${{ secrets.PAT }}
           path: ./keystore
 
-      - name: Decrypt keystore
+      - name: Decrypt Keystore
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE_B2B }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application-b2b-dev.keystore.gpg
-      
-      - name: Install deps
+      - name: Install Deps
         run: |
           sudo apt-get update && sudo apt-get install libcurl3-dev
           sudo gem install bundler
-          bundle install    
-
-      - name: Setup git identity
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "Github Actions [BOT]"
-      
-      - name: Build and Deploy
+          bundle install
+      - name: Run Fastlane
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B_DEV }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS_B2B_DEV }}
