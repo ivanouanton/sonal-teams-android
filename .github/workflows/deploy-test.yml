@@ -50,3 +50,4 @@ jobs:
           FLAVOR: 'tеst'
         run: |
           bundle exec fastlane android draft --env tеst
+
