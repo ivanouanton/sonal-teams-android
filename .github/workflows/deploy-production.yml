@@ -48,4 +48,4 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B }}
           FLAVOR: 'production'
         run: |
-          bundle exec fastlane android draft --env production
+          bundle exec fastlane android beta --env production
