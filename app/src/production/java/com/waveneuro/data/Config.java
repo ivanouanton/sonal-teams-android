@@ -7,6 +7,8 @@ public class Config {
             "api-ecs.braincare.wavesynchrony.com"
     };
 
+    public static final String MIXPANEL_TOKEN = "114bf1599e7ffee17d839579cee0f6a0";
+
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/";
 
     public static final String SONAL_URL = PROTOCOL_S + "www.waveneuro.com";

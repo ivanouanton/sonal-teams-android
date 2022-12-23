@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.asif.abase.injection.qualifier.ApplicationContext;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.waveneuro.data.Config;
 
 import org.json.JSONObject;
 
@@ -11,7 +12,7 @@ import javax.inject.Inject;
 
 public class AnalyticsManagerImpl implements AnalyticsManager{
 
-    public static final String MIXPANEL_API_TOKEN = "4ae4c1b4c948a7d8b0ec61fb6375ff6d";
+    public static final String MIXPANEL_API_TOKEN = Config.MIXPANEL_TOKEN;
 
     private MixpanelAPI mMixpanel;
 
