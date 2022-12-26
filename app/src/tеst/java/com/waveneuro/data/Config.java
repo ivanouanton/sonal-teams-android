@@ -7,6 +7,8 @@ public class Config {
             "api-ecs.wn.repmvbx.xyz"
     };
 
+    public static final String MIXPANEL_TOKEN = "4c63058d89ee8316836005609bd67126";
+
     public static final String BASE_URL = PROTOCOL_S + HOSTS[0] + "/";
 
     public static final String SONAL_URL = PROTOCOL_S + "www.waveneuro.com";

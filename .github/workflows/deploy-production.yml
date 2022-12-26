@@ -1,1 +1,51 @@
+name: Deploy Production Environment
 
+concurrency:
+  group: Production
+  cancel-in-progress: true
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    timeout-minutes: 15
+    name: Build & Upload Mobile Application
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Google Credentials
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+        run: |
+          echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 --decode > google_account.json
+      - name: Clone Certificactes Repository
+        uses: actions/checkout@v2
+        with:
+          repository: waveneuroscience/certificates
+          token: ${{ secrets.PAT }}
+          path: ./keystore
+
+      - name: Decrypt keystore
+        env:
+          PASSPHRASE: ${{ secrets.PASSPHRASE_B2B }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application-b2b.keystore.gpg
+
+      - name: Install Deps
+        run: |
+          sudo apt-get update && sudo apt-get install libcurl3-dev
+          sudo gem install bundler
+          bundle install
+
+      - name: Run Fastlane
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_B2B_ALIAS }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B }}
+          FLAVOR: 'production'
+        run: |
+          bundle exec fastlane android beta --env production

@@ -1,1 +1,52 @@
+name: Deploy Test Environment
 
+concurrency:
+  group: Test
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [opened, ready_for_review, synchronize, labeled, reopened]
+
+jobs:
+  deploy:
+    if: contains(github.event.pull_request.labels.*.name, 'ready for test')
+    name: Build & Upload Mobile Application
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Google Credentials
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+        run: |
+          echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 --decode > google_account.json
+      - name: Clone Certificactes Repository
+        uses: actions/checkout@v2
+        with:
+          repository: waveneuroscience/certificates
+          token: ${{ secrets.PAT }}
+          path: ./keystore
+
+      - name: Decrypt Keystore
+        env:
+          PASSPHRASE: ${{ secrets.PASSPHRASE_B2B }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output application.keystore keystore/keystore/application-b2b-qa.keystore.gpg
+      - name: Install Deps
+        run: |
+          sudo apt-get update && sudo apt-get install libcurl3-dev
+          sudo gem install bundler
+          bundle install
+      - name: Run Fastlane
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B_QA }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS_B2B_QA }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD_B2B_QA }}
+          FLAVOR: 'tеst'
+        run: |
+          bundle exec fastlane android beta --env test

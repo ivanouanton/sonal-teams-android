@@ -75,6 +75,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     ConstraintLayout clPrecautions;
 
     AlertDialog readyDialog;
+    AlertDialog precautionsWarningDialog;
 
     @Inject
     SessionCompleteCommand sessionCompleteCommand;
@@ -508,7 +509,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
             btnPrimary.setText(R.string.continue_button);
             CheckBox cbDontShowAgain = dialogView.findViewById(R.id.dont_show_again);
             builder.setView(dialogView);
-            AlertDialog precautionsWarningDialog = builder.create();
+            precautionsWarningDialog = builder.create();
             precautionsWarningDialog.setCanceledOnTouchOutside(false);
             precautionsWarningDialog.show();
 
