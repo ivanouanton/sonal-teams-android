@@ -151,7 +151,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    analyticsManager.sendEvent("BLE_VALUE", properties, AnalyticsManager.MIX_PANEL);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
