@@ -46,16 +46,16 @@ public class DashBoardViewModel extends ViewModel {
                 this.mDataViewEffect.postValue(new DashboardViewEffect.Device(connect.getData().getName()));
             }
         }else if (viewEvent instanceof DashboardViewEvent.LogoutClicked) {
-            sentLogoutEvent(dataManager.getUser().getId());
+            sentLogoutEvent(dataManager.getUser().getId().toString());
             logout();
             this.mDataViewEffect.postValue(new DashboardViewEffect.Login());
         }
     }
 
-    private void sentLogoutEvent(String username) {
+    private void sentLogoutEvent(String userId) {
         JSONObject properties = new JSONObject();
         try {
-            properties.put("user_id", username);
+            properties.put("user_id", userId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

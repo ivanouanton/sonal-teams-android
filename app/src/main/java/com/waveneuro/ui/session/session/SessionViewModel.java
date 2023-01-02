@@ -42,7 +42,7 @@ public class SessionViewModel extends ViewModel {
             Timber.e("SESSION_STATE :: %s", "" + (this.mDataLive.getValue().getClass().getSimpleName()));
         if (viewEvent instanceof SessionViewEvent.Start) {
             sentSessionEvent(AnalyticsEvent.SESSION_STARTED,
-                    dataManager.getUser().getId(),
+                    dataManager.getUser().getId().toString(),
                     dataManager.getEegId(),
                     dataManager.getProtocolId(),
                     dataManager.getSonalId());
@@ -64,7 +64,7 @@ public class SessionViewModel extends ViewModel {
             this.mDataLive.postValue(new SessionViewState.SessionStarted());
         } else if (viewEvent instanceof SessionViewEvent.EndSession) {
             sentSessionEvent(AnalyticsEvent.SESSION_COMPLETED,
-                    dataManager.getUser().getId(),
+                    dataManager.getUser().getId().toString(),
                     dataManager.getEegId(),
                     dataManager.getProtocolId(),
                     dataManager.getSonalId());
@@ -75,7 +75,7 @@ public class SessionViewModel extends ViewModel {
             this.mDataLive.postValue(new SessionViewState.DeviceDisconnected());
         } else if (viewEvent instanceof SessionViewEvent.DevicePaused) {
             sentSessionEvent(AnalyticsEvent.SESSION_PAUSED,
-                    dataManager.getUser().getId(),
+                    dataManager.getUser().getId().toString(),
                     dataManager.getEegId(),
                     dataManager.getProtocolId(),
                     dataManager.getSonalId());
@@ -84,7 +84,7 @@ public class SessionViewModel extends ViewModel {
             this.mDataLive.postValue(new SessionViewState.ResumeSession());
         } else if (viewEvent instanceof SessionViewEvent.DeviceError) {
             sentSessionEvent(AnalyticsEvent.SESSION_TERMINATED_EARLY,
-                    dataManager.getUser().getId(),
+                    dataManager.getUser().getId().toString(),
                     dataManager.getEegId(),
                     dataManager.getProtocolId(),
                     dataManager.getSonalId());
@@ -154,10 +154,10 @@ public class SessionViewModel extends ViewModel {
 
     }
 
-    private void sentSessionEvent(String eventName, String username, String eggId, String protocolId, String sonalId) {
+    private void sentSessionEvent(String eventName, String userId, String eggId, String protocolId, String sonalId) {
         JSONObject properties = new JSONObject();
         try {
-            properties.put("user_id", username);
+            properties.put("user_id", userId);
             properties.put("protocol_id", protocolId);
             properties.put("treatment_eeg_id", eggId);
             properties.put("sonal_id", sonalId);
