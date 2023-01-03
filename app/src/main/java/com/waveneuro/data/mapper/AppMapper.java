@@ -10,6 +10,7 @@ public class AppMapper {
 
     public static User toAppUser(UserInfoResponse response) {
         User user = new User();
+        user.setId(response.getSub());
         user.setEmail(response.getEmail());
         user.setName(response.getFirstName());
         user.setUsername(response.getUsername());
