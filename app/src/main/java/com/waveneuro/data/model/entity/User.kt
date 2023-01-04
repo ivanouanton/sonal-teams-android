@@ -3,6 +3,7 @@ package com.waveneuro.data.model.entity
 import com.asif.abase.data.model.BaseModel
 
 class User : BaseModel {
+    var id: Int? = null
     var email: String? = null
     var username: String? = null
     var name: String? = null
@@ -16,10 +17,11 @@ class User : BaseModel {
 
     constructor()
     constructor(
-        email: String?, username: String?, name: String?, givenName: String?, familyName: String?,
+        id: Int?, email: String?, username: String?, name: String?, givenName: String?, familyName: String?,
         birthdate: String?, imageThumbnailUrl: String?, gender: String?, location: String?,
         customGoal: String?
     ) {
+        this.id = id
         this.email = email
         this.username = username
         this.name = name
