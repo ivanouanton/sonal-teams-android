@@ -3,7 +3,7 @@ package com.waveneuro.data.model.entity
 import com.asif.abase.data.model.BaseModel
 
 class User : BaseModel {
-    var id: Int? = null
+    var id: String
     var email: String? = null
     var username: String? = null
     var name: String? = null
@@ -15,23 +15,10 @@ class User : BaseModel {
     var location: String? = null
     var customGoal: String? = null
 
-    constructor()
     constructor(
-        id: Int?, email: String?, username: String?, name: String?, givenName: String?, familyName: String?,
-        birthdate: String?, imageThumbnailUrl: String?, gender: String?, location: String?,
-        customGoal: String?
+        id: String
     ) {
         this.id = id
-        this.email = email
-        this.username = username
-        this.name = name
-        this.givenName = givenName
-        this.familyName = familyName
-        this.birthdate = birthdate
-        this.imageThumbnailUrl = imageThumbnailUrl
-        this.gender = gender
-        this.location = location
-        this.customGoal = customGoal
     }
 
     val isNameAvailable: Boolean
