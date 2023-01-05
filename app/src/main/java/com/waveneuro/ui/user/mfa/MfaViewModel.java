@@ -50,83 +50,11 @@ public class MfaViewModel extends ViewModel {
     private final MutableLiveData<LoginViewState> mDataLive = new MutableLiveData<>();
     private final SingleLiveEvent<LoginViewEffect> mDataViewEffect = new SingleLiveEvent<>();
 
-    private final LoginUseCase loginUseCase;
-    private final GetPersonalInfoUseCase getPersonalInfoUseCase;
     private final ConfirmTokenUseCase confirmTokenUseCase;
 
     @Inject
-    public MfaViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase,  ConfirmTokenUseCase confirmTokenUseCase) {
-        this.loginUseCase = loginUseCase;
-        this.getPersonalInfoUseCase = getPersonalInfoUseCase;
+    public MfaViewModel(ConfirmTokenUseCase confirmTokenUseCase, ConfirmTokenUseCase confirmTokenUseCase2) {
         this.confirmTokenUseCase = confirmTokenUseCase;
-    }
-
-    void processEvent(LoginViewEvent viewEvent) {
-        if (viewEvent instanceof LoginViewEvent.Start) {
-            isRememberDataExist();
-        } else if (viewEvent instanceof LoginViewEvent.LoginClicked) {
-            LoginViewEvent.LoginClicked loginClicked = (LoginViewEvent.LoginClicked) viewEvent;
-            login(loginClicked.getUsername(), loginClicked.getPassword());
-        } else if (viewEvent instanceof LoginViewEvent.ForgotPasswordClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.ForgotPassword());
-        } else if (viewEvent instanceof LoginViewEvent.RegisterClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.Register());
-        } else if (viewEvent instanceof LoginViewEvent.RememberUser) {
-//            this.mDataViewEffect.postValue(new LoginViewEffect.RememberMe());
-            LoginViewEvent.RememberUser rememberUser = (LoginViewEvent.RememberUser) viewEvent;
-            saveUserLoginDetails(rememberUser.getUsername());
-        } else if (viewEvent instanceof LoginViewEvent.ClearRememberUser) {
-            removeRememberUserData();
-        } else if (viewEvent instanceof LoginViewEvent.SupportClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.Support());
-        }
-    }
-
-    private void removeRememberUserData() {
-        if (!TextUtils.isEmpty(dataManager.getRememberUsername())) {
-            this.dataManager.removeRememberUser();
-        }
-        if (!TextUtils.isEmpty(dataManager.getRememberPassword())) {
-            this.dataManager.removeRememberPassword();
-        }
-    }
-
-    private void isRememberDataExist() {
-        if (!TextUtils.isEmpty(dataManager.getRememberUsername())) {
-            this.mDataViewEffect.postValue(
-                    new LoginViewEffect.RememberMe(
-                            dataManager.getRememberUsername()
-                    ));
-        }
-    }
-
-    private void saveUserLoginDetails(String username) {
-        this.dataManager.rememberUsername(username);
-    }
-
-    private void login(String username, String password) {
-        mDataLive.postValue(new LoginViewState.Loading(true));
-        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback<LoginResponseMfa>() {
-
-            @Override
-            public void onSuccess(LoginResponseMfa loginResponseMfa) {
-                if (loginResponseMfa.getChallengeName() != null && loginResponseMfa.getChallengeName().equals("SOFTWARE_TOKEN_MFA")){
-                    mDataViewEffect.postValue(new LoginViewEffect.EnterMfaCode(loginResponseMfa.getSession()));
-                }
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                mDataLive.postValue(new LoginViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new LoginViewState.Failure(error));
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
     }
 
     public void confirmToken(String mfaCode, String username, String session) {
@@ -146,37 +74,6 @@ public class MfaViewModel extends ViewModel {
             @Override
             public void onFinish() {
                 int x = 0;
-            }
-        });
-    }
-
-
-    private void getPersonalInfo(boolean firstEntrance) {
-        this.getPersonalInfoUseCase.execute(new UseCaseCallback<UserInfoResponse>() {
-            @Override
-            public void onSuccess(UserInfoResponse response) {
-                Timber.e("PROFILE_SUCCESS");
-                mDataLive.postValue(new LoginViewState.Loading(false));
-
-                dataManager.saveUser((UserInfoResponse) response);
-                if (firstEntrance) {
-                    mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
-                } else {
-                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
-                }
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Timber.e("PROFILE_FAILURE");
-                mDataLive.postValue(new LoginViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new LoginViewState.Failure(error));
-            }
-
-            @Override
-            public void onFinish() {
-
             }
         });
     }
