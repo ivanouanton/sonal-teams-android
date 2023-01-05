@@ -9,6 +9,9 @@ public class UserInfoResponse extends BaseModel {
 	@SerializedName("msg")
 	private String message;
 
+	@SerializedName("id")
+	private String id;
+
 	@SerializedName("error")
 	private String error;
 
@@ -99,6 +102,10 @@ public class UserInfoResponse extends BaseModel {
 
 	public int getSub(){
 		return sub;
+	}
+
+	public String getId(){
+		return id;
 	}
 
 	public void setBirthdate(String birthdate){
@@ -213,6 +220,7 @@ public class UserInfoResponse extends BaseModel {
 	public String toString() {
 		return "UserInfoResponse{" +
 				"message='" + message + '\'' +
+				", id='" + id + '\'' +
 				", error='" + error + '\'' +
 				", customGoal='" + customGoal + '\'' +
 				", sub=" + sub +
@@ -229,6 +237,10 @@ public class UserInfoResponse extends BaseModel {
 				", email='" + email + '\'' +
 				", username='" + username + '\'' +
 				'}';
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	class Organization {
