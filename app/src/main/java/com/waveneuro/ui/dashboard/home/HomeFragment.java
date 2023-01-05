@@ -71,13 +71,13 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @Override
     public void onClientUpdated() {
-        this.homeViewModel.processEvent(new HomeViewEvent.Start(0,"", null));
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(1,"", null));
     }
 
     @Override
     public void onFiltersChanged(Integer[] ids) {
         filters = ids;
-        homeViewModel.setNewPage(0);
+        homeViewModel.setNewPage(1);
         this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters));
     }
 
@@ -192,7 +192,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         srClients.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                homeViewModel.setNewPage(0);
+                homeViewModel.setNewPage(1);
                 homeViewModel.getClients(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters);
                 srClients.setRefreshing(false);
             }
@@ -212,7 +212,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                                 new TimerTask() {
                                     @Override
                                     public void run() {
-                                        homeViewModel.setNewPage(0);
+                                        homeViewModel.setNewPage(1);
                                         homeViewModel.getClients(homeViewModel.mPage.getValue(), charSequence.toString(), filters);
                                     }
                                 },
@@ -324,7 +324,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     Observer<Integer> pageObserver = new Observer<Integer>() {
         @Override
         public void onChanged(@Nullable final Integer newPage) {
-            if (newPage != null && newPage != 0) {
+            if (newPage != null && newPage != 1) {
                 homeViewModel.processEvent(new HomeViewEvent.Start(newPage,etSearch.getText().toString(), filters));
             }
         }
