@@ -34,6 +34,8 @@ public interface PreferenceManager {
 
     String getName();
 
+    String getUserId();
+
     String getImageUrl();
 
     String getUsername();

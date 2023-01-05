@@ -13,6 +13,7 @@ public class PreferenceKeys {
     public static final String LOCATION = "location";
     public static final String NAME = "name";
     public static final String USERNAME = "username";
+    public static final String USER_ID = "username";
     public static final String GIVEN_NAME = "given_name";
     public static final String FAMILY_NAME = "family_name";
     public static final String TREATMENT_LENGTH = "treatment_length";

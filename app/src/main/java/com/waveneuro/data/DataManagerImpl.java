@@ -134,7 +134,6 @@ public class DataManagerImpl implements DataManager {
     public Observable<TreatmentResponse> addTreatment(AddTreatmentRequest request) {
         Timber.e("ADD_TREATMENT :: %s", request.toString());
         return this.treatmentService.addTreatment(request);
-//        return null;
     }
 
     @Override
@@ -229,7 +228,7 @@ public class DataManagerImpl implements DataManager {
 
     @Override
     public User getUser() {
-        User user = new User();
+        User user = new User(preferenceManager.getUserId());
         user.setName(preferenceManager.getName());
         user.setImageThumbnailUrl(preferenceManager.getImageUrl());
         user.setUsername(preferenceManager.getUsername());

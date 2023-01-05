@@ -141,7 +141,7 @@ public class LoginActivity extends BaseFormActivity {
     };
 
     private void setRememberData(String username) {
-        etUsername.getEditText().setText(""+username);
+        etUsername.getEditText().setText(username);
         chkRememberMe.setChecked(true);
     }
 

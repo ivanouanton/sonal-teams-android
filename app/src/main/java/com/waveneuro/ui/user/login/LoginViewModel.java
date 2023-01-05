@@ -46,14 +46,9 @@ public class LoginViewModel extends ViewModel {
     private final SingleLiveEvent<LoginViewEffect> mDataViewEffect = new SingleLiveEvent<>();
 
     private final LoginUseCase loginUseCase;
-
-    private final GetPersonalInfoUseCase getPersonalInfoUseCase;
-
     @Inject
-    public LoginViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase) {
+    public LoginViewModel(LoginUseCase loginUseCase) {
         this.loginUseCase = loginUseCase;
-        this.getPersonalInfoUseCase = getPersonalInfoUseCase;
-
     }
 
     void processEvent(LoginViewEvent viewEvent) {
@@ -67,7 +62,6 @@ public class LoginViewModel extends ViewModel {
         } else if (viewEvent instanceof LoginViewEvent.RegisterClicked) {
             this.mDataViewEffect.postValue(new LoginViewEffect.Register());
         } else if (viewEvent instanceof LoginViewEvent.RememberUser) {
-//            this.mDataViewEffect.postValue(new LoginViewEffect.RememberMe());
             LoginViewEvent.RememberUser rememberUser = (LoginViewEvent.RememberUser) viewEvent;
             saveUserLoginDetails(rememberUser.getUsername());
         } else if (viewEvent instanceof LoginViewEvent.ClearRememberUser) {
@@ -113,46 +107,6 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onError(Throwable throwable) {
-                mDataLive.postValue(new LoginViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new LoginViewState.Failure(error));
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
-    }
-
-    private void sentLoginEvent(String username) {
-        JSONObject properties = new JSONObject();
-        try {
-            properties.put("username", username);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        analyticsManager.sendEvent(AnalyticsEvent.LOGIN, properties, AnalyticsManager.MIX_PANEL);
-    }
-
-    private void getPersonalInfo(boolean firstEntrance) {
-        this.getPersonalInfoUseCase.execute(new UseCaseCallback<UserInfoResponse>() {
-            @Override
-            public void onSuccess(UserInfoResponse response) {
-                Timber.e("PROFILE_SUCCESS");
-                mDataLive.postValue(new LoginViewState.Loading(false));
-
-                dataManager.saveUser((UserInfoResponse) response);
-                if (firstEntrance) {
-                    mDataViewEffect.postValue(new LoginViewEffect.SetNewPassword());
-                } else {
-                    mDataLive.postValue(new LoginViewState.Success(new BaseModel()));
-                }
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Timber.e("PROFILE_FAILURE");
                 mDataLive.postValue(new LoginViewState.Loading(false));
                 APIError error = errorUtil.parseError(throwable);
                 mDataLive.postValue(new LoginViewState.Failure(error));
