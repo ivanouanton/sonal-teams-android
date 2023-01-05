@@ -62,7 +62,8 @@ public class PreferenceManagerImpl implements PreferenceManager {
 
     @Override
     public void saveUser(UserInfoResponse user) {
-        getDefaultEditor().putString(PreferenceKeys.FAMILY_NAME, user.getFamilyName())
+        getDefaultEditor().putString(PreferenceKeys.USER_ID, user.getId())
+                .putString(PreferenceKeys.FAMILY_NAME, user.getFamilyName())
                 .putString(PreferenceKeys.NAME, user.getFirstName())
                 .putString(PreferenceKeys.GIVEN_NAME, user.getLastName())
                 .putString(PreferenceKeys.USERNAME, user.getUsername())
@@ -118,6 +119,11 @@ public class PreferenceManagerImpl implements PreferenceManager {
     @Override
     public String getName() {
         return defaultPreferences.getString(PreferenceKeys.NAME, "");
+    }
+
+    @Override
+    public String getUserId() {
+        return defaultPreferences.getString(PreferenceKeys.USER_ID, "");
     }
 
     @Override
