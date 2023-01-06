@@ -172,4 +172,9 @@ public class MfaActivity extends BaseFormActivity {
     public void submit() {
 
     }
+
+    @OnClick(R.id.tv_back_to_login)
+    public void onClickBack() {
+        onBackPressed();
+    }
 }

@@ -251,4 +251,7 @@
     <string name="warning_title">Warning!</string>
     <string name="warning_message">By continuing, you confirm that you aware of all precautions.</string>
     <string name="continue_button">Continue</string>
+    <string name="back_to_log_in">Back to log in</string>
+    <string name="waveneuro_logo_alt">WaveNeuro Logo</string>
+    <string name="sonal_logo">Sonal Logo</string>
 </resources>
