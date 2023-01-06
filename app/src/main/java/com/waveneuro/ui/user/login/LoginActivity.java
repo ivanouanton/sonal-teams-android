@@ -165,11 +165,12 @@ public class LoginActivity extends BaseFormActivity {
 
     @Override
     public void submit() {
-        if(chkRememberMe.isChecked())
+        if(chkRememberMe.isChecked()) {
             this.loginViewModel.processEvent(new LoginViewEvent.RememberUser(
                     etUsername.getEditText().getText().toString().trim()));
-        else
+        }else {
             this.loginViewModel.processEvent(new LoginViewEvent.ClearRememberUser());
+        }
         this.loginViewModel.processEvent(new LoginViewEvent.LoginClicked(
                 etUsername.getEditText().getText().toString().trim(),
                 etPassword.getEditText().getText().toString().trim()));

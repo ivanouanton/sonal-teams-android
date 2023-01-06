@@ -6,30 +6,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.asif.abase.data.model.APIError;
-import com.asif.abase.data.model.BaseModel;
 import com.asif.abase.domain.base.UseCaseCallback;
-import com.asif.abase.exception.SomethingWrongException;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.analytics.AnalyticsEvent;
 import com.waveneuro.data.analytics.AnalyticsManager;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.login.LoginRequest;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
-import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.domain.base.SingleLiveEvent;
-import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase;
 import com.waveneuro.domain.usecase.login.LoginUseCase;
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
 import com.waveneuro.utils.ErrorUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public class LoginViewModel extends ViewModel {
 
@@ -46,6 +32,7 @@ public class LoginViewModel extends ViewModel {
     private final SingleLiveEvent<LoginViewEffect> mDataViewEffect = new SingleLiveEvent<>();
 
     private final LoginUseCase loginUseCase;
+
     @Inject
     public LoginViewModel(LoginUseCase loginUseCase) {
         this.loginUseCase = loginUseCase;
@@ -99,9 +86,25 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onSuccess(LoginResponseMfa loginResponseMfa) {
-                if (loginResponseMfa.getChallengeName() != null && loginResponseMfa.getChallengeName().equals("SOFTWARE_TOKEN_MFA")){
-                    mDataViewEffect.postValue(new LoginViewEffect.EnterMfaCode(loginResponseMfa.getSession()));
+                if(loginResponseMfa.getChallengeName() != null) {
+                  if(loginResponseMfa.getChallengeName().equals("SOFTWARE_TOKEN_MFA")) {
+                      mDataViewEffect.postValue(new LoginViewEffect.EnterMfaCode(loginResponseMfa.getSession()));
+                      mDataLive.postValue(new LoginViewState.Loading(false));
+                  } else if(loginResponseMfa.getChallengeName().equals("NEW_PASSWORD_REQUIRED") || loginResponseMfa.getChallengeName().equals("MFA_SETUP")) {
+                      APIError error = new APIError();
+                      error.setMessage("Set up MFA to your account");
+                      mDataLive.postValue(new LoginViewState.Failure(error));
+                  } else {
+                      mDataLive.postValue(new LoginViewState.Loading(false));
+                      APIError error = new APIError();
+                      error.setMessage("Something went wrong…");
+                      mDataLive.postValue(new LoginViewState.Failure(error));
+                  }
+                } else {
                     mDataLive.postValue(new LoginViewState.Loading(false));
+                    APIError error = new APIError();
+                    error.setMessage("Something went wrong…");
+                    mDataLive.postValue(new LoginViewState.Failure(error));
                 }
             }
 
