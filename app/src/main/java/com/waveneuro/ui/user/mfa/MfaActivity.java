@@ -146,7 +146,6 @@ public class MfaActivity extends BaseFormActivity {
     private final View.OnKeyListener onKeyListener  = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int i, KeyEvent keyEvent) {
-            //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
             if(i == KeyEvent.KEYCODE_DEL) {
                 if (currentFocusedPosition > 1) {
                     viewsList.get(currentFocusedPosition - 2).requestFocus();
