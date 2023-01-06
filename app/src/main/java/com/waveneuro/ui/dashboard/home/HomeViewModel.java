@@ -48,7 +48,7 @@ public class HomeViewModel extends ViewModel {
 
     private ArrayList<PatientListResponse.Patient> mPatientList = new ArrayList<>();
 
-    public MutableLiveData<Integer> mPage = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> mPage = new MutableLiveData<>(1);
 
     @Inject
     public HomeViewModel(GetLatestProtocolUseCase getLatestProtocolUseCase,
@@ -255,7 +255,7 @@ public class HomeViewModel extends ViewModel {
 
     public void setNewPage(Integer newPage) {
         mPage.postValue(newPage);
-        if (newPage == 0) {
+        if (newPage == 1) {
             mPatientList.clear();
         }
     }
