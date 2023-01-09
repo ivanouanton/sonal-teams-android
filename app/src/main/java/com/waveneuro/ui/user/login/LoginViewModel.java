@@ -112,7 +112,7 @@ public class LoginViewModel extends ViewModel {
             public void onError(Throwable throwable) {
                 mDataLive.postValue(new LoginViewState.Loading(false));
                 APIError error = errorUtil.parseError(throwable);
-                error.setMessage("Your email or password is incorrect…");
+                error.setMessage("Your email or password is incorrect. Please try again.");
                 mDataLive.postValue(new LoginViewState.Failure(error));
             }
 
