@@ -156,7 +156,7 @@
     <string name="device_initializing">Device Initializing</string>
     <string name="please_wait">Please Wait...</string>
     <string name="stop_session_on_headset">Stop session on headset</string>
-    <string name="press_center_button">Press the center button on base station for 2 seconds to begin your session</string>
+    <string name="press_center_button">Firmly press the center button on the base station to begin your session</string>
     <string name="session_done">Your session is done for today, check back in tomorrow.</string>
     <string name="paused">paused</string>
     <string name="retry">Retry</string>
@@ -251,4 +251,7 @@
     <string name="warning_title">Warning!</string>
     <string name="warning_message">By continuing, you confirm that you aware of all precautions.</string>
     <string name="continue_button">Continue</string>
+    <string name="back_to_log_in">Back to log in</string>
+    <string name="waveneuro_logo_alt">WaveNeuro Logo</string>
+    <string name="sonal_logo">Sonal Logo</string>
 </resources>

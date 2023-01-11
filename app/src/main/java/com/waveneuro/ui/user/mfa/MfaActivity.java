@@ -55,7 +55,7 @@ public class MfaActivity extends BaseFormActivity {
 
     ArrayList<TextInputEditText> viewsList = null;
 
-    int currentFocusedPosition = 1;
+    int currentFocusedPosition = 0;
 
     @Inject
     DashboardCommand dashboardCommand;
@@ -104,7 +104,12 @@ public class MfaActivity extends BaseFormActivity {
 
         for (int i = 0; i < viewsList.size(); i++){
             viewsList.get(i).addTextChangedListener(mTextEditorWatcher);
-            viewsList.get(i).setOnKeyListener(onKeyListener);
+            viewsList.get(i).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    currentFocusedPosition = viewsList.indexOf(v);
+                }
+            });
         }
 
         viewsList.get(0).requestFocus();
@@ -121,11 +126,14 @@ public class MfaActivity extends BaseFormActivity {
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (s.length() == 1) {
-                if (currentFocusedPosition < 6) {
-                    viewsList.get(currentFocusedPosition).requestFocus();
-                    currentFocusedPosition++;
-                } else {
+                if (currentFocusedPosition == 5) {
                     mfaViewModel.confirmToken(buildMfaCode(), username, session);
+                } else {
+                    viewsList.get(currentFocusedPosition + 1).requestFocus();
+                }
+            } else if(s.length() == 0) {
+                if (currentFocusedPosition != 0) {
+                    viewsList.get(currentFocusedPosition - 1).requestFocus();
                 }
             }
         }
@@ -143,24 +151,11 @@ public class MfaActivity extends BaseFormActivity {
         return mfaCode.toString();
     }
 
-    private final View.OnKeyListener onKeyListener  = new View.OnKeyListener() {
-        @Override
-        public boolean onKey(View view, int i, KeyEvent keyEvent) {
-            if(i == KeyEvent.KEYCODE_DEL) {
-                if (currentFocusedPosition > 1) {
-                    viewsList.get(currentFocusedPosition - 2).requestFocus();
-                    currentFocusedPosition--;
-                }
-            }
-            return false;
-        }
-    };
-
     Observer<LoginViewEffect> loginViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof LoginViewEffect.Home) {
             launchHomeScreen();
         } else if (viewEffect instanceof LoginViewEffect.WrongMfaCode) {
-            Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The code you entered doesn’t match", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -171,5 +166,10 @@ public class MfaActivity extends BaseFormActivity {
     @Override
     public void submit() {
 
+    }
+
+    @OnClick(R.id.tv_back_to_login)
+    public void onClickBack() {
+        onBackPressed();
     }
 }
