@@ -66,7 +66,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     private static final int REQUEST_CODE_OPEN_GPS = 1;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
 
-    private Integer[] filters;
     private ArrayList<PatientListResponse.Patient> currentList = new ArrayList<>();
 
     @Override
@@ -76,9 +75,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @Override
     public void onFiltersChanged(Integer[] ids) {
-        filters = ids;
-        homeViewModel.setNewPage(1);
-        this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters));
+        homeViewModel.filters = ids;
+        homeViewModel.getNewClients(etSearch.getText().toString());
+        this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), etSearch.getText().toString(), homeViewModel.filters));
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -143,7 +142,6 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @Override
     public void onItemClick(PatientListResponse.Patient patient) {
-
         homeViewModel.getClientWithId(patient.getId());
     }
 
@@ -154,7 +152,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
 
     @Override
     public void onListEnded() {
-        homeViewModel.setNewPage(homeViewModel.mPage.getValue() + 1);
+        homeViewModel.getMoreClients(etSearch.getText().toString());
     }
 
     @Override
@@ -192,8 +190,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         srClients.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                homeViewModel.setNewPage(1);
-                homeViewModel.getClients(homeViewModel.mPage.getValue(), etSearch.getText().toString(), filters);
+                homeViewModel.getNewClients(etSearch.getText().toString());
                 srClients.setRefreshing(false);
             }
         });
@@ -212,8 +209,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                                 new TimerTask() {
                                     @Override
                                     public void run() {
-                                        homeViewModel.setNewPage(1);
-                                        homeViewModel.getClients(homeViewModel.mPage.getValue(), charSequence.toString(), filters);
+                                        homeViewModel.getNewClients(charSequence.toString());
                                     }
                                 },
                                 DELAY
@@ -294,7 +290,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         } else if (viewState instanceof HomeClientsViewState.OrganizationSuccess) {
             HomeClientsViewState.OrganizationSuccess success = (HomeClientsViewState.OrganizationSuccess) viewState;
             List<PatientListResponse.Patient.Organization> orgs = success.getItem();
-            filtersBottomSheet = FiltersBottomSheet.newInstance(orgs, filters);
+            filtersBottomSheet = FiltersBottomSheet.newInstance(orgs, homeViewModel.filters);
             filtersBottomSheet.setListener(this);
 
         } else if (viewState instanceof HomeClientsViewState.PatientSessionSuccess) {
@@ -325,7 +321,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         @Override
         public void onChanged(@Nullable final Integer newPage) {
             if (newPage != null && newPage != 1) {
-                homeViewModel.processEvent(new HomeViewEvent.Start(newPage,etSearch.getText().toString(), filters));
+                homeViewModel.processEvent(new HomeViewEvent.Start(newPage,etSearch.getText().toString(), homeViewModel.filters));
             }
         }
     };
