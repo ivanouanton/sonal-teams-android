@@ -6,5 +6,5 @@
 
 | Environment    | Version |
 | -------------- | ------- |
-| Google Play    | 1.0.0   |
-| In Development | 1.1.0   |
+| Google Play    | 1.1.0   |
+| Development    | 1.1.0   |
