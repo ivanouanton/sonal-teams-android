@@ -118,7 +118,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void getNewClients(String startsWith) {
-        mPage.setValue(1);
+        mPage.postValue(1);
         mPatientList.clear();
         getClients(mPage.getValue(), startsWith, filters);
     }
