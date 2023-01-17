@@ -1,12 +1,9 @@
 name: Deploy Development Environment
-
 concurrency:
   group: Development
   cancel-in-progress: true
-
 on:
   workflow_dispatch:
-
 jobs:
   deploy:
     name: Build & Upload Mobile Application
