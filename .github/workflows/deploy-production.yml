@@ -1,13 +1,10 @@
 name: Deploy Production Environment
-
 concurrency:
   group: Production
   cancel-in-progress: true
-
 on:
   release:
     types: [published]
-
 jobs:
   deploy:
     timeout-minutes: 15
