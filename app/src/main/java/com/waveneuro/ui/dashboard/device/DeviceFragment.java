@@ -113,6 +113,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     @BindView(R.id.rv_device_available)
     RecyclerViewWithEmpty rvDeviceAvailable;
 
+    Boolean isSearching = false;
+
     DeviceAdapter deviceAdapter;
 
     @Inject
@@ -206,6 +208,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     }
 
     Observer<DeviceViewState> notesViewStateObserver = viewState -> {
+        this.isSearching = false;
         if (getLifecycle().getCurrentState() != Lifecycle.State.RESUMED) {
             return;
         }
@@ -214,7 +217,6 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvDeviceAvailable.setVisibility(View.VISIBLE);
             llContainerDevice.setVisibility(View.GONE);
             DeviceViewState.Success success = (DeviceViewState.Success) viewState;
-//            loadNotesData(success.getItem());
         } else if (viewState instanceof DeviceViewState.Failure) {
 
         } else if (viewState instanceof DeviceViewState.Loading) {
@@ -254,6 +256,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.GONE);
         } else if (viewState instanceof DeviceViewState.Searching) {
+            this.isSearching = true;
             tvLabelWelcome.setVisibility(View.GONE);
             cvLocateDevice.setVisibility(View.GONE);
             cvDeviceAvailable.setVisibility(View.GONE);
@@ -263,6 +266,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             Glide.with(requireContext()).load(R.drawable.searching).into(ivDeviceScanning);
             locateDevice();
         } else if (viewState instanceof DeviceViewState.Connecting) {
+            this.isSearching = true;
             DeviceViewState.Connecting connecting = (DeviceViewState.Connecting) viewState;
             connectToDevice(connecting.getBleDevice());
         } else if (viewState instanceof DeviceViewState.Connected) {
@@ -271,6 +275,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             cvDeviceAvailable.setVisibility(View.GONE);
             llContainerDevice.setVisibility(View.VISIBLE);
         } else if (viewState instanceof DeviceViewState.Searched) {
+            this.isSearching = true;
             cvLocateDevice.setVisibility(View.VISIBLE);
             cvDeviceAvailable.setVisibility(View.VISIBLE);
             llContainerDevice.setVisibility(View.GONE);
@@ -291,11 +296,11 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         }
     }
 
-    private void launchHowToActivity(){
+    private void launchHowToActivity() {
         howToCommand.navigate();
     }
 
-    private void launchPairingSuccessfulDialog(){
+    private void launchPairingSuccessfulDialog() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
         ViewGroup viewGroup = getView().findViewById(android.R.id.content);
@@ -326,7 +331,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     }
 
     private void launchSessionScreen(String treatmentLength, String protocolFrequency, String sonalId) {
-        if(TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
+        if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -338,7 +343,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
             @Override
             public void onConnected(BleDevice bleDevice) {
-                if(requireActivity() instanceof BaseActivity) {
+                if (requireActivity() instanceof BaseActivity) {
                     ((BaseActivity) getActivity()).removeWait();
                 }
                 deviceViewModel.processEvent(new DeviceViewEvent.Connected());
@@ -356,7 +361,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
             @Override
             public void onDisconnected() {
-                if(requireActivity() instanceof BaseActivity) {
+                if (requireActivity() instanceof BaseActivity) {
                     ((BaseActivity) getActivity()).removeWait();
                 }
                 deviceViewModel.processEvent(new DeviceViewEvent.Disconnected());
@@ -365,12 +370,9 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
         });
     }
 
-//    BluetoothManager bluetoothManager;
     private Animation operatingAnim;
 
     private void locateDevice() {
-//        if (bluetoothManager == null)
-//            bluetoothManager = new BluetoothManager();
         BluetoothManager.getInstance().deviceList(new BleScanCallback() {
             @Override
             public void onScanFinished(List<BleDevice> scanResultList) {
@@ -419,7 +421,11 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @OnClick(R.id.iv_back)
     public void onClickBack() {
-        dashboardCommand.navigate();
+        if (this.isSearching) {
+            this.deviceViewModel.processEvent(new DeviceViewEvent.Start());
+        } else {
+            dashboardCommand.navigate();
+        }
     }
 
     @OnClick(R.id.tv_first_time)
@@ -429,7 +435,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     @Override
     public void onClickDevice(com.waveneuro.data.model.entity.BleDevice data) {
-        if(requireActivity() instanceof BaseActivity) {
+        if (requireActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).displayWait();
         }
         this.deviceViewModel.processEvent(new DeviceViewEvent.DeviceClicked(data));
@@ -442,9 +448,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             return;
         }
 
-//        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
         List<String> permissions = new ArrayList<>();
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
@@ -460,7 +465,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
             }
         }
         if (!permissionDeniedList.isEmpty()) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 new AlertDialog.Builder(requireActivity())
                         .setTitle("Location Permission Request")
                         .setMessage("WaveNeuro requires that Location permission be enabled to scan for Bluetooth Low Energy devices.\nPlease allow Location permission to continue.")
