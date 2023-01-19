@@ -2,6 +2,7 @@ package com.waveneuro.ui.base;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,6 @@ import com.asif.abase.base.ProgressWaitView;
 import com.asif.abase.data.model.APIError;
 import com.asif.abase.data.model.BaseError;
 import com.asif.abase.data.model.BaseModel;
-import com.messagebar.messagebar.Flashbar;
 import com.waveneuro.R;
 import com.waveneuro.WaveNeuroApplication;
 import com.waveneuro.injection.component.ActivityComponent;
@@ -44,7 +44,6 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
                 savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();
 
 
-
         mActivityComponent = getActivityComponent();
         waveProgressDialog = new WaveProgressDialog(this);
 
@@ -62,11 +61,11 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
             Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
             persistComponent = sComponentsMap.get(mActivityId);
         }
-       return persistComponent.activityComponent(new ActivityModule(this));
+        return persistComponent.activityComponent(new ActivityModule(this));
     }
 
     public ActivityComponent activityComponent() {
-        if(this.mActivityComponent == null)
+        if (this.mActivityComponent == null)
             this.mActivityComponent = getActivityComponent();
         return this.mActivityComponent;
     }
@@ -99,7 +98,7 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
     @Override
     public void onFailure(BaseError error) {
         APIError apiError = (APIError) error;
-        String message = "Please contact admin at support@waveneurohelp.zendesk.com";
+        String message = getString(R.string.default_error_message);
         if (!TextUtils.isEmpty(apiError.getMessage())) {
             message = apiError.getMessage();
         } else if (!TextUtils.isEmpty(apiError.getMsg())) {
@@ -109,16 +108,8 @@ public class BaseActivity extends AppCompatActivity implements ProgressWaitView,
         }
 
         removeWait();
-        new Flashbar.Builder(BaseActivity.this)
-                .gravity(Flashbar.Gravity.BOTTOM)
-                .message(message)
-                .messageColorRes(R.color.white)
-                .backgroundColorRes(R.color.black)
-                .primaryActionText("DISMISS")
-                .primaryActionTapListener(Flashbar::dismiss)
-                .showOverlay()
-                .dismissOnTapOutside()
-                .build().show();
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override
