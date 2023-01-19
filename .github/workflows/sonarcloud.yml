@@ -1,10 +1,13 @@
 name: CodeQuality Gate
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 on:
   push:
+    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
-
+    branches: [main]
 jobs:
   analyze:
     name: SonarCloud
