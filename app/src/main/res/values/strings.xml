@@ -254,4 +254,5 @@
     <string name="back_to_log_in">Back to log in</string>
     <string name="waveneuro_logo_alt">WaveNeuro Logo</string>
     <string name="sonal_logo">Sonal Logo</string>
+    <string name="default_error_message">Please contact admin at support@waveneurohelp.zendesk.com</string>
 </resources>

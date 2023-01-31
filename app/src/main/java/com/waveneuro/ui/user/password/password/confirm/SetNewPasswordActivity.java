@@ -13,18 +13,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.messagebar.messagebar.Flashbar;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
 import com.waveneuro.R;
-import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
 import com.waveneuro.ui.user.login.LoginCommand;

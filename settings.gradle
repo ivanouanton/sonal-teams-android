@@ -8,5 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Sonal Teams"
 include ':app'
-include ':messagebar'
 include ':ble'

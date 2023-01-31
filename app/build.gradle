@@ -87,7 +87,6 @@ sonarqube {
 dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation project(path: ':messagebar')
     implementation project(path: ':ble')
     implementation 'com.google.firebase:firebase-firestore:24.0.1'
     testImplementation 'junit:junit:4.+'

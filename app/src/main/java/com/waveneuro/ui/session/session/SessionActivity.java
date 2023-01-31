@@ -472,7 +472,6 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     public void onClickStartSession() {
         btnStartSession.setVisibility(View.INVISIBLE);
         startSession();
-        this.sessionViewModel.processEvent(new SessionViewEvent.Start());
     }
 
     private void showStartSessionPopup() {
@@ -496,6 +495,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
     private void startSession() {
         if (dataManager.getPrecautionsDisplayed()) {
             showStartSessionPopup();
+            this.sessionViewModel.processEvent(new SessionViewEvent.Start());
         } else {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
             ViewGroup viewGroup = findViewById(android.R.id.content);
@@ -518,6 +518,7 @@ public class SessionActivity extends BaseActivity implements CountDownTimer.OnCo
                 }
                 precautionsWarningDialog.hide();
                 showStartSessionPopup();
+                this.sessionViewModel.processEvent(new SessionViewEvent.Start());
             });
         }
     }
