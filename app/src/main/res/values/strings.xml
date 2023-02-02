@@ -224,6 +224,7 @@
     <string name="avatar">Avatar</string>
     <string name="battery_level_label">Battery level:</string>
     <string name="device_id">Device ID:</string>
+    <string name="client">Client:</string>
     <string name="illustration">Illustration</string>
     <string name="magnet_icon">Magnet Icon</string>
     <string name="pager_placeholder">1 of 5</string>

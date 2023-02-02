@@ -22,6 +22,7 @@ import com.ap.ble.data.BleDevice
 import com.waveneuro.R
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
+import com.waveneuro.databinding.DialogInfoBinding
 import com.waveneuro.databinding.FragmentSessionBinding
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.dashboard.DashboardCommand
@@ -90,13 +91,18 @@ class SessionActivity : BaseActivity(), OnCountDownListener {
     }
 
     private fun setView() {
-        binding.clPrecautions.setOnClickListener {
-            val precautionsBottomSheet = PrecautionsBottomSheet.newInstance()
-            precautionsBottomSheet.show(this.supportFragmentManager, "")
-        }
-        binding.btnStartSession.setOnClickListener {
-            binding.btnStartSession.visibility = View.INVISIBLE
-            startSession()
+        with(binding) {
+            clPrecautions.setOnClickListener {
+                val precautionsBottomSheet = PrecautionsBottomSheet.newInstance()
+                precautionsBottomSheet.show(supportFragmentManager, "")
+            }
+            btnStartSession.setOnClickListener {
+                btnStartSession.visibility = View.INVISIBLE
+                startSession()
+            }
+            ivInfo.setOnClickListener {
+                showDialogInfo()
+            }
         }
     }
 
@@ -488,4 +494,20 @@ class SessionActivity : BaseActivity(), OnCountDownListener {
             }
         }
     }
+
+    private fun showDialogInfo() {
+        val binding = DialogInfoBinding.inflate(layoutInflater)
+        val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+        val dialog = builder.create()
+
+        with(binding) {
+            tvDeviceIdValue.text = "Sonal - 3438909"
+            tvClientValue.text = "Ann Doe"
+            tvBatteryValue.text = "87%"
+            ivClose.setOnClickListener { dialog.dismiss() }
+        }
+
+        dialog.show()
+    }
+
 }
