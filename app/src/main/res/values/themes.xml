@@ -101,7 +101,7 @@
 
     <style name="BaseText.Heading2" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/inter_semi_bold</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">28sp</item>
     </style>
 
     <style name="BaseText.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">

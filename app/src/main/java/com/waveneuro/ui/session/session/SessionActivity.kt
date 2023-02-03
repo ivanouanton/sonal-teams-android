@@ -1,6 +1,5 @@
 package com.waveneuro.ui.session.session
 
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Build
@@ -9,10 +8,12 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.ap.ble.BluetoothManager
 import com.ap.ble.BluetoothManager.DeviceConnectionCallback
 import com.ap.ble.data.BleDevice
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
@@ -258,7 +259,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private fun showCloseSessionDialog() {
         if (!isFinishing) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                 .setTitle("Are you sure?")
                 .setMessage("You want to leave session?")
                 .setNegativeButton(
@@ -278,7 +279,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private fun showEndSessionDialog(title: String, message: String) {
         if (!isFinishing) {
             val binding = DialogPopupBinding.inflate(layoutInflater)
-            val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+            val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
 
             with(binding) {
                 ivPrimary.visibility = View.GONE
@@ -298,7 +299,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private fun showErrorSendingDialog() {
         val binding = DialogPopupBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
         val dialog = builder.create()
 
         with(binding) {
@@ -317,7 +318,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private fun launchSessionCompleteScreen() {
         val binding = DialogPopupBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
 
         with(binding) {
             ivPrimary.visibility = View.GONE
@@ -441,7 +442,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private fun showStartSessionPopup() {
         val binding = DialogPopupBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
         readyDialog = builder.create()
 
         with(binding) {
@@ -461,7 +462,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             sessionViewModel.processEvent(SessionViewEvent.Start)
         } else {
             val binding = DialogPopupWithCheckboxBinding.inflate(layoutInflater)
-            val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+            val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
             precautionsWarningDialog = builder.create()
 
             with(binding) {
@@ -485,19 +486,21 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private fun showDialogInfo() {
         val binding = DialogInfoBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(this, R.style.PopUp).setView(binding.root)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
         val dialog = builder.create()
+        val client = sessionViewModel.currentClient.value
 
         sessionViewModel.batteryLevel.observe(this, Observer { batteryLevel ->
             with(binding) {
                 tvDeviceIdValue.text = sonalId
-                tvClientValue.text = sessionViewModel.currentClient.value
+                tvClientValue.text = client
                 tvBatteryValue.text = "$batteryLevel%"
                 ivClose.setOnClickListener { dialog.dismiss() }
             }
         })
 
-        dialog.show()
+        if (client != null)
+            dialog.show()
     }
 
 }
