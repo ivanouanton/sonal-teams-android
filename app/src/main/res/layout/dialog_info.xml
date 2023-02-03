@@ -32,15 +32,17 @@
         <TextView
             android:id="@+id/tv_device_id"
             style="@style/SmallTextBold.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.4"
             android:text="@string/device_id"/>
 
         <TextView
             android:id="@+id/tv_device_id_value"
             style="@style/SmallTextRegular.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.6"
             android:paddingStart="4dp"
             tools:text="Sonal - 456783"/>
     </LinearLayout>
@@ -54,16 +56,18 @@
         <TextView
             android:id="@+id/tv_client"
             style="@style/SmallTextBold.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.4"
             app:autoSizeTextType="uniform"
             android:text="@string/client"/>
 
         <TextView
             android:id="@+id/tv_client_value"
             style="@style/SmallTextRegular.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.6"
             android:paddingStart="4dp"
             tools:text="Ann Doe"/>
     </LinearLayout>
@@ -78,15 +82,17 @@
         <TextView
             android:id="@+id/tv_battery_id"
             style="@style/SmallTextBold.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.4"
             android:text="@string/battery_level_label"/>
 
         <TextView
             android:id="@+id/tv_battery_value"
             style="@style/SmallTextRegular.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.6"
             android:paddingStart="4dp"
             tools:text="56%"/>
     </LinearLayout>

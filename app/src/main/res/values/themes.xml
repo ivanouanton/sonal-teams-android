@@ -100,7 +100,7 @@
     </style>
 
     <style name="BaseText.Heading2" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="fontFamily">@font/romana_semi</item>
+        <item name="fontFamily">@font/inter_semi_bold</item>
         <item name="android:textSize">32sp</item>
     </style>
 

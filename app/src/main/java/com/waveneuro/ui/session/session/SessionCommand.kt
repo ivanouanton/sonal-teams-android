@@ -25,11 +25,9 @@ class SessionCommand @Inject constructor(
         }
     }
 
-    fun navigate(treatmentLength: String?, protocolFrequency: String?,
-                 sonalId: String?) {
+    fun navigate(treatmentLength: String?, protocolFrequency: String?, sonalId: String?) {
         val intent = Intent(mContext, SessionActivity::class.java)
         intent.putExtra(SONAL_ID, sonalId)
-//        intent.putExtra(CLIENT, client)
         intent.putExtra(TREATMENT_LENGTH, treatmentLength)
         intent.putExtra(PROTOCOL_FREQUENCY, protocolFrequency)
         mContext.startActivity(intent)
@@ -40,6 +38,5 @@ class SessionCommand @Inject constructor(
         const val TREATMENT_LENGTH = "treatment_length"
         const val PROTOCOL_FREQUENCY = "protocol_frequency"
         const val SONAL_ID = "sonal_id"
-        const val CLIENT = "client"
     }
 }

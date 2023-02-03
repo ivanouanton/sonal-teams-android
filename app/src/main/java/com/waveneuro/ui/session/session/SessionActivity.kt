@@ -82,6 +82,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         if (intent.hasExtra(SessionCommand.PROTOCOL_FREQUENCY)) {
             protocolFrequency = intent.getStringExtra(SessionCommand.PROTOCOL_FREQUENCY)
         }
+
         stopSpanText()
         pauseSpanText(false)
         setBleListeners()
@@ -489,8 +490,8 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
         sessionViewModel.batteryLevel.observe(this, Observer { batteryLevel ->
             with(binding) {
-                tvDeviceIdValue.text = "Sonal - $sonalId"
-                tvClientValue.text = "Ann Doe"
+                tvDeviceIdValue.text = sonalId
+                tvClientValue.text = sessionViewModel.currentClient.value
                 tvBatteryValue.text = "$batteryLevel%"
                 ivClose.setOnClickListener { dialog.dismiss() }
             }

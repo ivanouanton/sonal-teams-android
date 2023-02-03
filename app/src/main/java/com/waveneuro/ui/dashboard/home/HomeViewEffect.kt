@@ -6,7 +6,6 @@ sealed class HomeViewEffect {
     data class SessionRedirect(
         val treatmentLength: String,
         val protocolFrequency: String,
-        val sonalId: String,
-//        val client: String = "HomeViewEffect"
+        val sonalId: String
     ) : HomeViewEffect()
 }

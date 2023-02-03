@@ -2,25 +2,31 @@ package com.waveneuro.ui.session.session
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest
+import com.waveneuro.data.model.response.patient.PatientResponse
 import com.waveneuro.data.model.response.treatment.TreatmentResponse
 import com.waveneuro.domain.base.SingleLiveEvent
+import com.waveneuro.domain.usecase.patient.GetPatientUseCase
 import com.waveneuro.domain.usecase.treatment.AddTreatmentUseCase
 import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.ErrorSession
 import com.waveneuro.ui.session.session.SessionViewState.SessionPaused
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
 
 class SessionViewModel @Inject constructor(
-    private val addTreatmentUseCase: AddTreatmentUseCase
+    private val addTreatmentUseCase: AddTreatmentUseCase,
+    private val getPatientUseCase: GetPatientUseCase
 ) : ViewModel() {
 
     @Inject
@@ -31,82 +37,95 @@ class SessionViewModel @Inject constructor(
     val data = MutableLiveData<SessionViewState?>()
     val viewEffect = SingleLiveEvent<SessionViewEffect>()
     val batteryLevel = MutableLiveData<Byte>()
+    val currentClient = MutableLiveData<String>()
 
     var batteryLevelChangeCallback =
         BluetoothManager.OnBatteryLevelChangedCallback { newValue: Byte ->
             batteryLevel.value = newValue
-            Timber.e("batteryLevel = ${batteryLevel.value}")
         }
+
+    init {
+        getClient()
+    }
 
     fun processEvent(viewEvent: SessionViewEvent) {
         Timber.e("SESSION_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
         if (data.value != null)
             Timber.e("SESSION_STATE :: %s", "" + data.value!!.javaClass.simpleName)
-        if (viewEvent is Start) {
-            sentSessionEvent(
-                AnalyticsEvent.SESSION_STARTED,
-                dataManager.user.id,
-                dataManager.eegId,
-                dataManager.protocolId,
-                dataManager.sonalId
-            )
-            if (data.value is SessionPaused) {
-                data.postValue(SessionViewState.ResumeSession)
-            } else {
-//                this.mDataLive.postValue(new SessionViewState.Initializing());
-                data.postValue(SessionViewState.LocateDevice)
-                viewEffect.postValue(SessionViewEffect.InitializeBle)
-            }
-        } else if (viewEvent is SessionViewEvent.BackClicked) {
-            viewEffect.postValue(SessionViewEffect.Back)
-        } else if (viewEvent is InitializeDevice) {
-//            this.mDataLive.postValue(new SessionViewState.Initializing());
-            data.postValue(SessionViewState.LocateDevice)
-        } else if (viewEvent is LocatingDevice) {
-            data.postValue(SessionViewState.LocateDevice)
-        } else if (viewEvent is SessionViewEvent.StartSession) {
-            data.postValue(SessionViewState.SessionStarted)
-        } else if (viewEvent is EndSession) {
-            sentSessionEvent(
-                AnalyticsEvent.SESSION_COMPLETED,
-                dataManager.user.id,
-                dataManager.eegId,
-                dataManager.protocolId,
-                dataManager.sonalId
-            )
-            data.postValue(SessionViewState.SessionEnded)
-            //DONE API call
-            addTreatmentData()
-        } else if (viewEvent is SessionViewEvent.DeviceDisconnected) {
-            data.postValue(SessionViewState.DeviceDisconnected)
-        } else if (viewEvent is DevicePaused) {
-            sentSessionEvent(
-                AnalyticsEvent.SESSION_PAUSED,
-                dataManager.user.id,
-                dataManager.eegId,
-                dataManager.protocolId,
-                dataManager.sonalId
-            )
-            data.postValue(SessionPaused)
-        } else if (viewEvent is SessionViewEvent.ResumeSession) {
-            data.postValue(SessionViewState.ResumeSession)
-        } else if (viewEvent is DeviceError) {
-            sentSessionEvent(
-                AnalyticsEvent.SESSION_TERMINATED_EARLY,
-                dataManager.user.id,
-                dataManager.eegId,
-                dataManager.protocolId,
-                dataManager.sonalId
-            )
-            val (title, message) = viewEvent
-            //DONE call API with true
-            data.postValue(
-                ErrorSession(
-                    title,
-                    message
+        when (viewEvent) {
+            is Start -> {
+                sentSessionEvent(
+                    AnalyticsEvent.SESSION_STARTED,
+                    dataManager.user.id,
+                    dataManager.eegId,
+                    dataManager.protocolId,
+                    dataManager.sonalId
                 )
-            )
-            sendErrorTreatmentData()
+                if (data.value is SessionPaused) {
+                    data.postValue(SessionViewState.ResumeSession)
+                } else {
+                    data.postValue(SessionViewState.LocateDevice)
+                    viewEffect.postValue(SessionViewEffect.InitializeBle)
+                }
+            }
+            is BackClicked -> {
+                viewEffect.postValue(SessionViewEffect.Back)
+            }
+            is InitializeDevice -> {
+                data.postValue(SessionViewState.LocateDevice)
+            }
+            is LocatingDevice -> {
+                data.postValue(SessionViewState.LocateDevice)
+            }
+            is StartSession -> {
+                data.postValue(SessionViewState.SessionStarted)
+            }
+            is EndSession -> {
+                sentSessionEvent(
+                    AnalyticsEvent.SESSION_COMPLETED,
+                    dataManager.user.id,
+                    dataManager.eegId,
+                    dataManager.protocolId,
+                    dataManager.sonalId
+                )
+                data.postValue(SessionViewState.SessionEnded)
+                //DONE API call
+                addTreatmentData()
+            }
+            is DeviceDisconnected -> {
+                data.postValue(SessionViewState.DeviceDisconnected)
+            }
+            is DevicePaused -> {
+                sentSessionEvent(
+                    AnalyticsEvent.SESSION_PAUSED,
+                    dataManager.user.id,
+                    dataManager.eegId,
+                    dataManager.protocolId,
+                    dataManager.sonalId
+                )
+                data.postValue(SessionPaused)
+            }
+            is ResumeSession -> {
+                data.postValue(SessionViewState.ResumeSession)
+            }
+            is DeviceError -> {
+                sentSessionEvent(
+                    AnalyticsEvent.SESSION_TERMINATED_EARLY,
+                    dataManager.user.id,
+                    dataManager.eegId,
+                    dataManager.protocolId,
+                    dataManager.sonalId
+                )
+                val (title, message) = viewEvent
+                //DONE call API with true
+                data.postValue(
+                    ErrorSession(
+                        title,
+                        message
+                    )
+                )
+                sendErrorTreatmentData()
+            }
         }
     }
 
@@ -149,9 +168,6 @@ class SessionViewModel @Inject constructor(
     ) {
         val properties = JSONObject()
         try {
-            Timber.e("eventName = $eventName")
-            Timber.e("sonal_id = $sonalId")
-
             properties.put("user_id", userId)
             properties.put("protocol_id", protocolId)
             properties.put("treatment_eeg_id", eggId)
@@ -160,6 +176,20 @@ class SessionViewModel @Inject constructor(
             e.printStackTrace()
         }
         analyticsManager.sendEvent(eventName, properties, AnalyticsManager.MIX_PANEL)
+    }
+
+    private fun getClient() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (this@SessionViewModel::dataManager.isInitialized) {
+                getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<PatientResponse?> {
+                    override fun onSuccess(response: PatientResponse?) {
+                        currentClient.postValue("${response?.firstName} ${response?.lastName}")
+                    }
+                    override fun onError(throwable: Throwable) {}
+                    override fun onFinish() {}
+                })
+            }
+        }
     }
 
     override fun onCleared() {

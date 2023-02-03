@@ -69,7 +69,6 @@ public class DeviceViewModel extends ViewModel {
                                 dataManager.getTreatmentLength(),
                                 dataManager.getProtocolFrequency(),
                                 dataManager.getSonalId()
-//                                dataManager.getUser().getName() + " " + dataManager.getUser().getFamilyName()
                         )
                 );
             }
