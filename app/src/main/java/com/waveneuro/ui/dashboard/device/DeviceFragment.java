@@ -405,7 +405,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     Observer<DeviceViewEffect> notesViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof DeviceViewEffect.SessionRedirect) {
             DeviceViewEffect.SessionRedirect sessionRedirect = (DeviceViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(),
+                    sessionRedirect.getSonalId());
         }
     };
 

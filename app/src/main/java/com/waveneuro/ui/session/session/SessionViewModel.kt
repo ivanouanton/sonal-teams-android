@@ -2,6 +2,7 @@ package com.waveneuro.ui.session.session
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ap.ble.BluetoothManager
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
@@ -29,6 +30,13 @@ class SessionViewModel @Inject constructor(
 
     val data = MutableLiveData<SessionViewState?>()
     val viewEffect = SingleLiveEvent<SessionViewEffect>()
+    val batteryLevel = MutableLiveData<Byte>()
+
+    var batteryLevelChangeCallback =
+        BluetoothManager.OnBatteryLevelChangedCallback { newValue: Byte ->
+            batteryLevel.value = newValue
+            Timber.e("batteryLevel = ${batteryLevel.value}")
+        }
 
     fun processEvent(viewEvent: SessionViewEvent) {
         Timber.e("SESSION_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
@@ -141,6 +149,9 @@ class SessionViewModel @Inject constructor(
     ) {
         val properties = JSONObject()
         try {
+            Timber.e("eventName = $eventName")
+            Timber.e("sonal_id = $sonalId")
+
             properties.put("user_id", userId)
             properties.put("protocol_id", protocolId)
             properties.put("treatment_eeg_id", eggId)
@@ -154,4 +165,5 @@ class SessionViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
     }
+
 }
