@@ -123,9 +123,9 @@
             android:id="@+id/cl_precautions"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_button_rounded_aqua"
-            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/bg_white_rounded_8"
             android:clipToPadding="false"
             android:elevation="4dp"
             app:layout_constraintBottom_toTopOf="@+id/ll_control_info"
@@ -137,7 +137,7 @@
                 android:layout_height="16dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:src="@drawable/ic_arrow_forward_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -156,13 +156,12 @@
 
             <TextView
                 android:id="@+id/textView3"
+                style="@style/BaseText.Caption.Black.14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_marginVertical="8dp"
                 android:maxLines="2"
                 android:text="@string/this_device_uses_magnets_nclick_here_for_the_list_of_precautions"
                 android:textAlignment="textStart"
@@ -186,13 +185,13 @@
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingStart="10dp"
-            android:paddingTop="8dp"
             android:paddingEnd="10dp"
             android:paddingBottom="8dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_pause"
@@ -200,7 +199,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:background="@drawable/bg_how_to"
+                android:background="@drawable/bg_white_rounded_8"
                 android:clipToPadding="false"
                 android:elevation="4dp">
 
@@ -220,15 +219,13 @@
 
                 <TextView
                     android:id="@+id/tv_pause_session_info"
+                    style="@style/BaseText.SemiBold.Black.12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:maxLines="1"
                     android:text="@string/heading_pause_session"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     app:autoSizeMaxTextSize="12sp"
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeTextType="uniform"
@@ -238,12 +235,10 @@
 
                 <TextView
                     android:id="@+id/tv_pause_session_info2"
+                    style="@style/BaseText.Caption.Black.12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_margin="8dp"
                     android:maxLines="3"
                     android:text="@string/description_pause_sessino"
                     android:textSize="11sp"
@@ -262,7 +257,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
-                android:background="@drawable/bg_how_to"
+                android:background="@drawable/bg_white_rounded_8"
                 android:clipToPadding="false"
                 android:elevation="4dp">
 
@@ -282,16 +277,14 @@
 
                 <TextView
                     android:id="@+id/textView7"
+                    style="@style/BaseText.SemiBold.Black.12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:lines="1"
                     android:maxLines="1"
                     android:text="@string/heading_cancel_session"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
                     app:autoSizeMaxTextSize="12sp"
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeTextType="uniform"
@@ -301,12 +294,10 @@
 
                 <TextView
                     android:id="@+id/tv_stop_session_info"
+                    style="@style/BaseText.Caption.Black.12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_margin="8dp"
                     android:maxLines="3"
                     android:text="@string/description_cancel_session"
                     android:textSize="11sp"

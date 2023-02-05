@@ -1,12 +1,8 @@
 package com.waveneuro.ui.session.session
 
 import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -85,8 +81,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             protocolFrequency = intent.getStringExtra(SessionCommand.PROTOCOL_FREQUENCY)
         }
 
-        stopSpanText()
-        pauseSpanText(false)
+        setPauseResumeText(false)
         setBleListeners()
     }
 
@@ -175,32 +170,9 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         })
     }
 
-    private fun pauseSpanText(isPaused: Boolean) {
-        var spannableString: SpannableString? = null
-        if (isPaused) {
-            spannableString = SpannableString(getString(R.string.resume_session_info))
-            spannableString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                10,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        } else {
-            spannableString = SpannableString(getString(R.string.pause_session_info))
-            spannableString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                9,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-        binding.tvPauseSessionInfo.text = spannableString
-    }
-
-    private fun stopSpanText() {
-        val spannableString = SpannableString(getString(R.string.cancel_session_info))
-        spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.tvStopSessionInfo.text = spannableString
+    private fun setPauseResumeText(isPaused: Boolean) {
+        binding.tvPauseSessionInfo.text = if (isPaused) getString(R.string.heading_resume_session)
+            else getString(R.string.heading_pause_session)
     }
 
     private var sessionViewStateObserver = Observer { viewState: SessionViewState? ->
@@ -229,7 +201,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 startCountdown()
             }
             is ResumeSession -> {
-                pauseSpanText(false)
+                setPauseResumeText(false)
                 binding.tvPaused.visibility = View.GONE
                 binding.ivPause.setImageResource(R.drawable.ic_pause_session)
                 binding.tvSessionTimer.visibility = View.VISIBLE
@@ -243,7 +215,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             }
             is SessionPaused -> {
                 binding.ivPause.setImageResource(R.drawable.ic_resume_session)
-                pauseSpanText(true)
+                setPauseResumeText(true)
                 binding.tvPaused.visibility = View.VISIBLE
                 pauseCountdown()
             }
@@ -494,13 +466,14 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         val dialog = builder.create()
         val client = sessionViewModel.currentClient.value
 
+        with(binding) {
+            tvDeviceIdValue.text = sonalId
+            tvClientValue.text = client
+            ivClose.setOnClickListener { dialog.dismiss() }
+        }
+
         sessionViewModel.batteryLevel.observe(this, Observer { batteryLevel ->
-            with(binding) {
-                tvDeviceIdValue.text = sonalId
-                tvClientValue.text = client
-                tvBatteryValue.text = "$batteryLevel%"
-                ivClose.setOnClickListener { dialog.dismiss() }
-            }
+            binding.tvBatteryValue.text = "${batteryLevel}%"
         })
 
         if (client != null)

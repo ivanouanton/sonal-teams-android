@@ -112,6 +112,14 @@
         <item name="fontFamily">@font/inter_regular</item>
     </style>
 
+    <style name="BaseText.SemiBold" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/inter_semi_bold</item>
+    </style>
+
+    <style name="BaseText.Bold" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/inter_bold</item>
+    </style>
+
     <style name="BaseText.Caption.Bold" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/inter_bold</item>
     </style>
@@ -148,6 +156,14 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="BaseText.SemiBold.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Bold.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="BaseText.Subtitle.GrayDimDark">
         <item name="android:textColor">@color/gray_dim_dark</item>
     </style>
@@ -162,6 +178,14 @@
 
     <style name="BaseText.Caption.Black">
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.Caption.Black.12">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BaseText.Caption.Black.14">
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="BaseText.Caption.Gray">
@@ -200,12 +224,16 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="BodyTextBold" parent="BaseText.Caption.Bold">
-        <item name="android:textSize">@dimen/text_size_standard_16</item>
+    <style name="BaseText.SemiBold.Black.12">
+        <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="BodyTextBold.Black" parent="BodyTextBold">
-        <item name="android:textColor">@color/black</item>
+    <style name="BaseText.Bold.Black.14">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BaseText.Bold.Black.16">
+        <item name="android:textSize">@dimen/text_size_standard_16</item>
     </style>
 
     <!--END TEXTVIEW STYLE-->
