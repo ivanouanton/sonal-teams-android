@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import com.ap.ble.BluetoothManager
 import com.ap.ble.BluetoothManager.DeviceConnectionCallback
 import com.ap.ble.data.BleDevice
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
 import com.waveneuro.data.DataManager
@@ -169,6 +170,9 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private fun setObserver() {
         sessionViewModel.data.observe(this, sessionViewStateObserver)
         sessionViewModel.viewEffect.observe(this, sessionViewEffectObserver)
+        sessionViewModel.currentClient.observe(this, Observer { client ->
+            client?.let { binding.tvTitle.text = it }
+        })
     }
 
     private fun pauseSpanText(isPaused: Boolean) {
@@ -446,7 +450,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         readyDialog = builder.create()
 
         with(binding) {
-            ivPrimary.setImageResource(R.drawable.ic_press_button)
+            Glide.with(this@SessionActivity).load(R.drawable.turn_on).into(ivPrimary)
             tvTitle.visibility = View.GONE
             tvContent.setText(R.string.press_center_button)
             btnPrimary.visibility = View.GONE
