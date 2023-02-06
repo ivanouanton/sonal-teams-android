@@ -1,135 +1,104 @@
-package com.waveneuro.ui.dashboard.account;
+package com.waveneuro.ui.dashboard.account
 
-import android.text.TextUtils;
+import android.text.TextUtils
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.asif.abase.domain.base.UseCaseCallback
+import com.asif.abase.exception.SomethingWrongException
+import com.waveneuro.data.DataManager
+import com.waveneuro.data.model.request.account.update.AccountUpdateRequest
+import com.waveneuro.data.model.response.user.UserInfoResponse
+import com.waveneuro.domain.base.SingleLiveEvent
+import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.domain.usecase.user.UpdatePersonalInfoUseCase
+import com.waveneuro.ui.dashboard.account.AccountViewEffect.UpdateSuccess
+import com.waveneuro.ui.dashboard.account.AccountViewEvent.UpdatedUser
+import com.waveneuro.utils.ErrorUtil
+import javax.inject.Inject
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.asif.abase.data.model.APIError;
-import com.asif.abase.domain.base.UseCaseCallback;
-import com.asif.abase.exception.SomethingWrongException;
-import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
-import com.waveneuro.data.model.response.user.UserInfoResponse;
-import com.waveneuro.domain.base.SingleLiveEvent;
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
-import com.waveneuro.domain.usecase.user.UpdatePersonalInfoUseCase;
-import com.waveneuro.utils.ErrorUtil;
-
-import javax.inject.Inject;
-
-public class AccountViewModel extends ViewModel {
-
-    @Inject
-    ErrorUtil errorUtil;
+class AccountViewModel @Inject constructor(
+    private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
+    private val updatePersonalInfoUseCase: UpdatePersonalInfoUseCase
+) : ViewModel() {
 
     @Inject
-    DataManager dataManager;
-
-    private final MutableLiveData<AccountViewState> mDataLive = new MutableLiveData<>();
-    private final SingleLiveEvent<AccountViewEffect> mDataViewEffect = new SingleLiveEvent<>();
-    private final GetPersonalInfoUseCase getPersonalInfoUseCase;
-    private final UpdatePersonalInfoUseCase updatePersonalInfoUseCase;
-
+    lateinit var errorUtil: ErrorUtil
     @Inject
-    public AccountViewModel(GetPersonalInfoUseCase getPersonalInfoUseCase,
-                            UpdatePersonalInfoUseCase updatePersonalInfoUseCase) {
-        this.getPersonalInfoUseCase = getPersonalInfoUseCase;
-        this.updatePersonalInfoUseCase = updatePersonalInfoUseCase;
-    }
+    lateinit var dataManager: DataManager
 
-    public void processEvent(AccountViewEvent viewEvent) {
-        if (viewEvent instanceof AccountViewEvent.Start) {
-            getPersonalInfo();
-        } else if (viewEvent instanceof AccountViewEvent.UpdatedUser) {
-            AccountViewEvent.UpdatedUser updatedUser = (AccountViewEvent.UpdatedUser) viewEvent;
-            updateUser(updatedUser.getFirstName(), updatedUser.getLastName());
-        } else if (viewEvent instanceof AccountViewEvent.BackClicked) {
-            this.mDataViewEffect.postValue(new AccountViewEffect.BackRedirect());
+    val data = MutableLiveData<AccountViewState>()
+    val viewEffect = SingleLiveEvent<AccountViewEffect>()
+
+    fun processEvent(viewEvent: AccountViewEvent?) {
+        when (viewEvent) {
+            is AccountViewEvent.Start -> getPersonalInfo()
+            is UpdatedUser -> updateUser(viewEvent.firstName, viewEvent.lastName)
+            is AccountViewEvent.BackClicked -> {
+                viewEffect.postValue(AccountViewEffect.BackRedirect)
+            }
+            else -> {}
         }
     }
 
-    private void updateUser(String firstName, String lastName) {
-        AccountUpdateRequest accountUpdateRequest = new AccountUpdateRequest();
-        accountUpdateRequest.setFirstName(firstName);
-        accountUpdateRequest.setLastName(lastName);
-        mDataLive.postValue(new AccountViewState.Loading(true));
-        this.updatePersonalInfoUseCase.execute(accountUpdateRequest, new UseCaseCallback() {
-            @Override
-            public void onSuccess(Object response) {
-                mDataLive.postValue(new AccountViewState.Loading(false));
-                if (response instanceof UserInfoResponse) {
-                    UserInfoResponse userInfoResponse = (UserInfoResponse) response;
-                    if (userInfoResponse.getError() != null
-                            && TextUtils.isEmpty(userInfoResponse.getError())) {
-                        mDataLive.postValue(new AccountViewState.Loading(false));
-                        APIError error = errorUtil.parseError(new SomethingWrongException(),
-                                userInfoResponse.getError());
-                        mDataLive.postValue(new AccountViewState.Failure(error));
-                    } else {
-                        dataManager.saveUser(userInfoResponse);
-                        mDataLive.setValue(new AccountViewState.Success(userInfoResponse));
-                    }
+    private fun updateUser(firstName: String, lastName: String) {
+        val accountUpdateRequest = AccountUpdateRequest()
+        accountUpdateRequest.firstName = firstName
+        accountUpdateRequest.lastName = lastName
+        data.postValue(AccountViewState.Loading(true))
+        updatePersonalInfoUseCase.execute(accountUpdateRequest, object : UseCaseCallback<UserInfoResponse> {
+            override fun onSuccess(response: UserInfoResponse) {
+                data.postValue(AccountViewState.Loading(false))
+                if (response.error != null && TextUtils.isEmpty(response.error)) {
+                    data.postValue(AccountViewState.Loading(false))
+                    val error = errorUtil.parseError(
+                        SomethingWrongException(),
+                        response.error
+                    )
+                    data.postValue(AccountViewState.Failure(error))
+                } else {
+                    dataManager.saveUser(response)
+                    data.setValue(AccountViewState.Success(response))
                 }
-                mDataViewEffect.postValue(new AccountViewEffect.UpdateSuccess());
+
+                viewEffect.postValue(UpdateSuccess)
             }
 
-            @Override
-            public void onError(Throwable throwable) {
-                mDataLive.postValue(new AccountViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new AccountViewState.Failure(error));
+            override fun onError(throwable: Throwable) {
+                data.postValue(AccountViewState.Loading(false))
+                val error = errorUtil.parseError(throwable)
+                data.postValue(AccountViewState.Failure(error))
             }
 
-            @Override
-            public void onFinish() {
-
-            }
-        });
-
+            override fun onFinish() {}
+        })
     }
 
-    private void getPersonalInfo() {
-        mDataLive.postValue(new AccountViewState.Loading(true));
-        this.getPersonalInfoUseCase.execute(new UseCaseCallback() {
-            @Override
-            public void onSuccess(Object response) {
-                mDataLive.postValue(new AccountViewState.Loading(false));
-                if (response instanceof UserInfoResponse) {
-                    UserInfoResponse userInfoResponse = (UserInfoResponse) response;
-                    if (userInfoResponse.getError() != null
-                            && TextUtils.isEmpty(userInfoResponse.getError())) {
-                        mDataLive.postValue(new AccountViewState.Loading(false));
-                        APIError error = errorUtil.parseError(new SomethingWrongException(),
-                                userInfoResponse.getError());
-                        mDataLive.postValue(new AccountViewState.Failure(error));
-                    } else {
-                        dataManager.saveUser(userInfoResponse);
-                        mDataLive.setValue(new AccountViewState.Success(userInfoResponse));
-                    }
+    private fun getPersonalInfo() {
+        data.postValue(AccountViewState.Loading(true))
+        getPersonalInfoUseCase.execute(object : UseCaseCallback<UserInfoResponse> {
+            override fun onSuccess(response: UserInfoResponse) {
+                data.postValue(AccountViewState.Loading(false))
+                if (response.error != null && TextUtils.isEmpty(response.error)) {
+                    data.postValue(AccountViewState.Loading(false))
+                    val error = errorUtil.parseError(
+                        SomethingWrongException(),
+                        response.error
+                    )
+                    data.postValue(AccountViewState.Failure(error))
+                } else {
+                    dataManager.saveUser(response)
+                    data.setValue(AccountViewState.Success(response))
                 }
             }
 
-            @Override
-            public void onError(Throwable throwable) {
-                mDataLive.postValue(new AccountViewState.Loading(false));
-                APIError error = errorUtil.parseError(throwable);
-                mDataLive.postValue(new AccountViewState.Failure(error));
+            override fun onError(throwable: Throwable) {
+                data.postValue(AccountViewState.Loading(false))
+                val error = errorUtil.parseError(throwable)
+                data.postValue(AccountViewState.Failure(error))
             }
 
-            @Override
-            public void onFinish() {
-
-            }
-        });
-    }
-
-    public MutableLiveData<AccountViewState> getData() {
-        return mDataLive;
-    }
-
-    public SingleLiveEvent<AccountViewEffect> getViewEffect() {
-        return mDataViewEffect;
+            override fun onFinish() {}
+        })
     }
 
 }

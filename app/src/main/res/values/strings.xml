@@ -116,6 +116,7 @@
     <string name="account">Account</string>
     <string name="profile_information">Profile Information</string>
     <string name="organization">Organization</string>
+    <string name="organizations">Organizations</string>
     <string name="chief_complaint">Chief Complaint</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
