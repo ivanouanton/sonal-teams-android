@@ -14,6 +14,7 @@ import com.waveneuro.ui.dashboard.help.HelpActivity;
 import com.waveneuro.ui.dashboard.history.HistoryActivity;
 import com.waveneuro.ui.dashboard.more.WebActivity;
 import com.waveneuro.ui.dashboard.organization.OrganizationActivity;
+import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper;
 import com.waveneuro.ui.device.MyDeviceActivity;
 import com.waveneuro.ui.introduction.splash.SplashActivity;
 import com.waveneuro.ui.session.complete.SessionCompleteActivity;
@@ -48,6 +49,8 @@ public interface ActivityComponent {
     PreferenceManager preferenceManager();
 
     AnalyticsManager analyticsManager();
+
+    OrganizationMapper organizationMapper();
 
     void inject(SplashActivity splashActivity);
 

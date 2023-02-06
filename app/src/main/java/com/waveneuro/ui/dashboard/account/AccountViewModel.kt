@@ -1,10 +1,8 @@
 package com.waveneuro.ui.dashboard.account
 
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.asif.abase.domain.base.UseCaseCallback
-import com.asif.abase.exception.SomethingWrongException
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest
 import com.waveneuro.data.model.response.user.UserInfoResponse
@@ -48,18 +46,8 @@ class AccountViewModel @Inject constructor(
         updatePersonalInfoUseCase.execute(accountUpdateRequest, object : UseCaseCallback<UserInfoResponse> {
             override fun onSuccess(response: UserInfoResponse) {
                 data.postValue(AccountViewState.Loading(false))
-                if (response.error != null && TextUtils.isEmpty(response.error)) {
-                    data.postValue(AccountViewState.Loading(false))
-                    val error = errorUtil.parseError(
-                        SomethingWrongException(),
-                        response.error
-                    )
-                    data.postValue(AccountViewState.Failure(error))
-                } else {
-                    dataManager.saveUser(response)
-                    data.setValue(AccountViewState.Success(response))
-                }
-
+                dataManager.saveUser(response)
+                data.value = AccountViewState.Success(response)
                 viewEffect.postValue(UpdateSuccess)
             }
 
@@ -78,17 +66,8 @@ class AccountViewModel @Inject constructor(
         getPersonalInfoUseCase.execute(object : UseCaseCallback<UserInfoResponse> {
             override fun onSuccess(response: UserInfoResponse) {
                 data.postValue(AccountViewState.Loading(false))
-                if (response.error != null && TextUtils.isEmpty(response.error)) {
-                    data.postValue(AccountViewState.Loading(false))
-                    val error = errorUtil.parseError(
-                        SomethingWrongException(),
-                        response.error
-                    )
-                    data.postValue(AccountViewState.Failure(error))
-                } else {
-                    dataManager.saveUser(response)
-                    data.setValue(AccountViewState.Success(response))
-                }
+                dataManager.saveUser(response)
+                data.value = AccountViewState.Success(response)
             }
 
             override fun onError(throwable: Throwable) {

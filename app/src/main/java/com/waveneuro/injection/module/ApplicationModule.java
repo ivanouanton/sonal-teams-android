@@ -17,6 +17,8 @@ import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.data.preference.PreferenceManagerImpl;
 import com.waveneuro.data.remote.TreatmentService;
 import com.waveneuro.data.remote.UserService;
+import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper;
+import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapperImpl;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -176,6 +178,12 @@ public class ApplicationModule {
     @Provides
     public AnalyticsManager provideAnalyticsManager(@ApplicationContext Context context) {
         return new AnalyticsManagerImpl(context);
+    }
+
+    @Singleton
+    @Provides
+    public OrganizationMapper provideOrganizationMapper() {
+        return new OrganizationMapperImpl();
     }
 }
 

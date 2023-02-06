@@ -63,15 +63,9 @@ public class PreferenceManagerImpl implements PreferenceManager {
     @Override
     public void saveUser(UserInfoResponse user) {
         getDefaultEditor().putString(PreferenceKeys.USER_ID, user.getId())
-                .putString(PreferenceKeys.FAMILY_NAME, user.getFamilyName())
                 .putString(PreferenceKeys.NAME, user.getFirstName())
                 .putString(PreferenceKeys.GIVEN_NAME, user.getLastName())
-                .putString(PreferenceKeys.USERNAME, user.getUsername())
                 .putString(PreferenceKeys.EMAIL, user.getEmail())
-                .putString(PreferenceKeys.CUSTOM_GOAL, user.getCustomGoal())
-                .putString(PreferenceKeys.GENDER, user.getGender())
-                .putString(PreferenceKeys.IMAGE_THUMBNAIL_URL, user.getImageThumbnailUrl())
-                .putString(PreferenceKeys.LOCATION, user.getLocation())
                 .commit();
         defaultPreferences.getAll();
     }

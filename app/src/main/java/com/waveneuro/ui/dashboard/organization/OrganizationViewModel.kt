@@ -1,18 +1,19 @@
 package com.waveneuro.ui.dashboard.organization
 
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.asif.abase.domain.base.UseCaseCallback
-import com.asif.abase.exception.SomethingWrongException
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.ui.dashboard.organization.adapter.model.OrganizationItem
+import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapperImpl
 import com.waveneuro.utils.ErrorUtil
 import javax.inject.Inject
 
 class OrganizationViewModel @Inject constructor(
     private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
+    private val mapper: OrganizationMapperImpl
 ) : ViewModel() {
 
     @Inject
@@ -31,21 +32,15 @@ class OrganizationViewModel @Inject constructor(
         }
     }
 
+    fun getOrganizations(response: UserInfoResponse): List<OrganizationItem> =
+        mapper.fromDomainToUi(response.organizations)
+
     private fun getPersonalInfo() {
         data.postValue(OrganizationViewState.Loading(true))
         getPersonalInfoUseCase.execute(object : UseCaseCallback<UserInfoResponse> {
             override fun onSuccess(response: UserInfoResponse) {
                 data.postValue(OrganizationViewState.Loading(false))
-                if (response.error != null && TextUtils.isEmpty(response.error)) {
-                    data.postValue(OrganizationViewState.Loading(false))
-                    val error = errorUtil.parseError(
-                        SomethingWrongException(),
-                        response.error
-                    )
-                    data.postValue(OrganizationViewState.Failure(error))
-                } else {
-                    data.setValue(OrganizationViewState.Success(response))
-                }
+                data.value = OrganizationViewState.Success(response)
             }
 
             override fun onError(throwable: Throwable) {

@@ -1,28 +1,24 @@
 package com.waveneuro.ui.dashboard.account
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.asif.abase.data.model.BaseModel
-import com.bumptech.glide.Glide
 import com.waveneuro.R
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.databinding.ActivityAccountBinding
 import com.waveneuro.ui.base.BaseFormActivity
-import com.waveneuro.ui.dashboard.account.AccountViewEffect.*
+import com.waveneuro.ui.dashboard.account.AccountViewEffect.BackRedirect
+import com.waveneuro.ui.dashboard.account.AccountViewEffect.UpdateSuccess
 import com.waveneuro.ui.dashboard.account.AccountViewState.*
 import com.waveneuro.ui.dashboard.organization.OrganizationCommand
+import com.waveneuro.utils.ext.toast
 import javax.inject.Inject
 
-//TODO change on BaseActivity
 class AccountActivity : BaseFormActivity() {
 
     private lateinit var binding: ActivityAccountBinding
@@ -55,17 +51,13 @@ class AccountActivity : BaseFormActivity() {
         input.layoutParams = lp
         input.setText(textView?.text)
         alertDialog.setView(input)
-        alertDialog.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            getString(R.string.btn_save)
-        ) { dialog: DialogInterface?, which: Int ->
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.btn_save)) { _, _ ->
             textView?.text = input.text
             submit()
         }
-        alertDialog.setButton(
-            AlertDialog.BUTTON_NEGATIVE,
-            getString(R.string.btn_cancel)
-        ) { dialog: DialogInterface?, which: Int -> alertDialog.dismiss() }
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.btn_cancel)) { _, _ ->
+            alertDialog.dismiss()
+        }
         return alertDialog
     }
 
@@ -104,13 +96,7 @@ class AccountActivity : BaseFormActivity() {
         accountViewModel.viewEffect.observe(this, Observer { viewEffect: AccountViewEffect? ->
             when (viewEffect) {
                 is BackRedirect -> goBack()
-                is UpdateSuccess -> {
-                    //TODO add Base Toast
-                    Toast.makeText(
-                        this@AccountActivity, "Profile updated successfully.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                is UpdateSuccess -> toast("Profile updated successfully.")
                 else -> {}
             }
         })
@@ -133,15 +119,16 @@ class AccountActivity : BaseFormActivity() {
                     else -> "Unknown"
                 }
                 tvEmailValue.text = model.email
-                tvOrganizationValue.text = model.organizationName
-                if (!TextUtils.isEmpty(model.imageThumbnailUrl)) {
-                    ivProfileImage.visibility = View.VISIBLE
-                    Glide.with(this@AccountActivity)
-                        .load(model.imageThumbnailUrl)
-                        .into(ivProfileImage)
-                } else {
+                tvOrganizationValue.text = model.organizations.size.toString()
+                //TODO where is image url?
+//                if (!TextUtils.isEmpty(model.imageThumbnailUrl)) {
+//                    ivProfileImage.visibility = View.VISIBLE
+//                    Glide.with(this@AccountActivity)
+//                        .load(model.imageThumbnailUrl)
+//                        .into(ivProfileImage)
+//                } else {
 //                    ivProfileImage.visibility = View.INVISIBLE
-                }
+//                }
             }
         }
     }
