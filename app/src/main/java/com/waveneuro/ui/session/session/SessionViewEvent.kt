@@ -1,14 +1,14 @@
 package com.waveneuro.ui.session.session
 
 sealed class SessionViewEvent {
-    class BackClicked : SessionViewEvent()
-    class Start : SessionViewEvent()
-    class InitializeDevice : SessionViewEvent()
-    class LocatingDevice : SessionViewEvent()
-    class StartSession : SessionViewEvent()
-    class DevicePaused : SessionViewEvent()
-    class ResumeSession : SessionViewEvent()
-    class EndSession : SessionViewEvent()
-    class DeviceError(val title: String, val message: String) : SessionViewEvent()
-    class DeviceDisconnected : SessionViewEvent()
+    object BackClicked : SessionViewEvent()
+    object Start : SessionViewEvent()
+    object InitializeDevice : SessionViewEvent()
+    object LocatingDevice : SessionViewEvent()
+    object StartSession : SessionViewEvent()
+    object DevicePaused : SessionViewEvent()
+    object ResumeSession : SessionViewEvent()
+    object EndSession : SessionViewEvent()
+    data class DeviceError(val title: String, val message: String) : SessionViewEvent()
+    object DeviceDisconnected : SessionViewEvent()
 }

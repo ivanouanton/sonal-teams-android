@@ -68,7 +68,9 @@ public class DeviceViewModel extends ViewModel {
                         new DeviceViewEffect.SessionRedirect(
                                 dataManager.getTreatmentLength(),
                                 dataManager.getProtocolFrequency(),
-                                dataManager.getSonalId()));
+                                dataManager.getSonalId()
+                        )
+                );
             }
     }
 

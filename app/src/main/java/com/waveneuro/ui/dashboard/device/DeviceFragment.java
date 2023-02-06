@@ -1,7 +1,6 @@
 package com.waveneuro.ui.dashboard.device;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
@@ -42,6 +42,7 @@ import com.asif.abase.view.RecyclerViewWithEmpty;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.waveneuro.R;
 import com.waveneuro.data.model.entity.User;
@@ -302,7 +303,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     private void launchPairingSuccessfulDialog() {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.PopUp);
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext(), R.style.PopUp);
         ViewGroup viewGroup = getView().findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_popup, viewGroup, false);
         TextView tvTitle = dialogView.findViewById(R.id.tv_title);
@@ -405,7 +406,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     Observer<DeviceViewEffect> notesViewEffectObserver = viewEffect -> {
         if (viewEffect instanceof DeviceViewEffect.SessionRedirect) {
             DeviceViewEffect.SessionRedirect sessionRedirect = (DeviceViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(),
+                    sessionRedirect.getSonalId());
         }
     };
 

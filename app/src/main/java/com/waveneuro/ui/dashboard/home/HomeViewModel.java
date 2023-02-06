@@ -81,7 +81,7 @@ public class HomeViewModel extends ViewModel {
         } else if (viewEvent instanceof HomeViewEvent.DeviceConnected) {
             this.mDataDeviceLive.postValue(new HomeDeviceViewState.StartSession());
         } else if (viewEvent instanceof HomeViewEvent.StartSessionClicked) {
-            this.mDataViewEffect.postValue(new HomeViewEffect.DeviceRedirect());
+            this.mDataViewEffect.postValue(HomeViewEffect.DeviceRedirect.INSTANCE);
         }
     }
 

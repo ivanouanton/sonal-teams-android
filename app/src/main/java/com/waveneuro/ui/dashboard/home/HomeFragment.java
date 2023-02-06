@@ -303,7 +303,8 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         if (viewEffect instanceof HomeViewEffect.BackRedirect) {
         } else if (viewEffect instanceof HomeViewEffect.SessionRedirect) {
             HomeViewEffect.SessionRedirect sessionRedirect = (HomeViewEffect.SessionRedirect) viewEffect;
-            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(), sessionRedirect.getSonalId());
+            launchSessionScreen(sessionRedirect.getTreatmentLength(), sessionRedirect.getProtocolFrequency(),
+                    sessionRedirect.getSonalId());
         }
     };
 

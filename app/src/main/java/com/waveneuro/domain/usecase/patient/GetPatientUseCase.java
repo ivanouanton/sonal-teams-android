@@ -3,9 +3,6 @@ package com.waveneuro.domain.usecase.patient;
 import com.asif.abase.domain.base.ObservableUseCase;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
-import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 
 import javax.inject.Inject;

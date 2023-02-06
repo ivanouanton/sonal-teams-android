@@ -34,13 +34,21 @@ public class BluetoothManager {
     String deviceCharacteristicValue;
     Application context;
 
+    public byte batteryLevel;
+
     public static final String INACTIVE = "00";
     public static final String START_SESSION = "02";
     public static final String PAUSE_SESSION = "03";
     public static final String END_SESSION = "04";
     public static final String ERROR = "05";
 
+    public static final String OPERATING_MODE = "6e400005";
+    public static final String CLEAR_ERROR = "6e400018";
+    public static final String SESSION_CONFIG = "6e40000e";
+    public static final String BATTERY_INFO = "6e400009";
+
     static List<DeviceConnectionCallback> deviceConnectionCallbackList = new ArrayList<>();
+    static List<OnBatteryLevelChangedCallback> batteryLevelChangedCallbacks = new ArrayList<>();
 
     public static BluetoothManager getInstance() {
         return BluetoothManagerHolder.S_BLE_MANAGER_1;
@@ -187,6 +195,20 @@ public class BluetoothManager {
     public void unregisterDeviceConnectionCallback(DeviceConnectionCallback callback) {
         if (!deviceConnectionCallbackList.contains(callback)) {
             deviceConnectionCallbackList.remove(callback);
+        }
+    }
+
+    public void registerBatteryLevelChangedCallback(OnBatteryLevelChangedCallback callback) {
+        if (!batteryLevelChangedCallbacks.contains(callback)) {
+            batteryLevelChangedCallbacks.add(callback);
+            Log.e("Bluetooth manager", "Registered");
+        }
+    }
+
+    public void unregisterBatteryLevelChangedCallback(OnBatteryLevelChangedCallback callback) {
+        if (!batteryLevelChangedCallbacks.contains(callback)) {
+            batteryLevelChangedCallbacks.remove(callback);
+            Log.e("Bluetooth manager", "Unregistered");
         }
     }
 
@@ -413,8 +435,41 @@ public class BluetoothManager {
                                 }
                             });
                 } else if (characteristic.getUuid().toString().contains("6e400013")) {
-                } else if (characteristic.getUuid().toString().contains("6e400009")) {
+                } else if (characteristic.getUuid().toString().contains(BATTERY_INFO)) {
                     characterstic9 = characteristic;
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    BleManager.getInstance().notify(
+                            bleDevice,
+                            characterstic9.getService().getUuid().toString(),
+                            characterstic9.getUuid().toString(),
+                            new BleNotifyCallback() {
+
+                                @Override
+                                public void onNotifySuccess() {
+                                    Log.d("TAG_BATTERY", "onNotifySuccess: ");
+                                }
+
+                                @Override
+                                public void onNotifyFailure(final BleException exception) {
+                                    Log.d("TAG_BATTERY", "onNotifyFailure: ");
+
+                                }
+
+                                @Override
+                                public void onCharacteristicChanged(byte[] data) {
+                                    if (data.length >= 5) {
+                                        batteryLevel = data[4];
+                                        for (OnBatteryLevelChangedCallback callback : batteryLevelChangedCallbacks) {
+                                            callback.onBatteryLevelChanged(data[4]);
+                                        }
+                                    }
+                                    Log.d("TAG_BATTERY", "onCharacteristicChanged: data = " + data);
+                                }
+                            });
                 }
             }
             if (characterstic9 != null) {
@@ -539,4 +594,9 @@ public class BluetoothManager {
         int decimal = (int) (10 * Double.parseDouble(frequency));
         return Integer.toHexString(decimal);
     }
+
+    public interface OnBatteryLevelChangedCallback {
+        void onBatteryLevelChanged(byte newValue);
+    }
+
 }

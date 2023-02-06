@@ -1,6 +1,5 @@
 package com.waveneuro.ui.user.password.reset;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +18,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -174,7 +174,7 @@ public class ResetPasswordActivity extends BaseFormActivity {
     }
 
     private void launchCheckEmailDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PopUp);
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.PopUp);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_popup, viewGroup, false);
         TextView tvTitle = dialogView.findViewById(R.id.tv_title);

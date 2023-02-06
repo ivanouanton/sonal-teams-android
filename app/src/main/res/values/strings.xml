@@ -224,6 +224,7 @@
     <string name="avatar">Avatar</string>
     <string name="battery_level_label">Battery level:</string>
     <string name="device_id">Device ID:</string>
+    <string name="client">Client:</string>
     <string name="illustration">Illustration</string>
     <string name="magnet_icon">Magnet Icon</string>
     <string name="pager_placeholder">1 of 5</string>
@@ -246,6 +247,8 @@
     <string name="description_pause_sessino">Press the center button on the base station firmly for 2 seconds.</string>
     <string name="heading_cancel_session">Cancel session</string>
     <string name="description_cancel_session">Press the center button on the base station for 5 seconds.</string>
+    <string name="heading_resume_session">Resume session</string>
+    <string name="description_resume_session">Press the center button on the base station firmly for 1 second.</string>
     <string name="timer_initial_value">30:00</string>
     <string name="don_t_show_again">Don\'t show again</string>
     <string name="warning_title">Warning!</string>
