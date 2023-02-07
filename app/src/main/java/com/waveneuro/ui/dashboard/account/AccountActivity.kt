@@ -120,15 +120,6 @@ class AccountActivity : BaseFormActivity() {
                 }
                 tvEmailValue.text = model.email
                 tvOrganizationValue.text = model.organizations.size.toString()
-                //TODO where is image url?
-//                if (!TextUtils.isEmpty(model.imageThumbnailUrl)) {
-//                    ivProfileImage.visibility = View.VISIBLE
-//                    Glide.with(this@AccountActivity)
-//                        .load(model.imageThumbnailUrl)
-//                        .into(ivProfileImage)
-//                } else {
-//                    ivProfileImage.visibility = View.INVISIBLE
-//                }
             }
         }
     }
