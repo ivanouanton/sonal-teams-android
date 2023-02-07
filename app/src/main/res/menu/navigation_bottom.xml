@@ -9,7 +9,7 @@
     <item
         android:id="@+id/bottom_navigation_more"
         android:enabled="true"
-        android:icon="@drawable/ic_more"
+        android:icon="@drawable/ic_more_gray"
         android:orderInCategory="1"
         android:title="@string/account" />
 </menu>

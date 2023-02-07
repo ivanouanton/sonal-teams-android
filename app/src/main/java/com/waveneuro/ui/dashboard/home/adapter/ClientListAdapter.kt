@@ -1,4 +1,4 @@
-package com.waveneuro.ui.dashboard.home
+package com.waveneuro.ui.dashboard.home.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

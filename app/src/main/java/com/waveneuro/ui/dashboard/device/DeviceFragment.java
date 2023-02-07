@@ -322,7 +322,8 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
     private void launchHomeScreen(boolean launchWithDelay) {
         new Handler().postDelayed(() -> {
             if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).switchToHome();
+                //TODO uncomment
+//                ((HomeActivity) getActivity()).switchToHome();
             }
         }, (launchWithDelay ? 1_500 : 0));
     }
@@ -366,7 +367,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
                     ((BaseActivity) getActivity()).removeWait();
                 }
                 deviceViewModel.processEvent(new DeviceViewEvent.Disconnected());
-                dashBoardViewModel.processEvent(new DashboardViewEvent.Disconnected());
+                dashBoardViewModel.processEvent(DashboardViewEvent.Disconnected.INSTANCE);
             }
         });
     }

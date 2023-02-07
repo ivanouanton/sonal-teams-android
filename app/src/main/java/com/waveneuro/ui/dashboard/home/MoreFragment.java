@@ -31,20 +31,20 @@ public class MoreFragment extends BaseFragment {
     @BindView(R.id.tv_app_version)
     TextView tvAppVersion;
 
-    @OnClick(R.id.btnLogOut)
-    public void onClickLogout() {
-        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.LogoutClicked());
-    }
-
-    @OnClick(R.id.llProfile)
-    public void onClickProfile() {
-        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.AccountClicked());
-    }
-
-    @OnClick(R.id.ll_device_history)
-    public void onClickDeviceHistory() {
-        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(new DashboardViewEvent.DeviceHistoryClicked());
-    }
+//    @OnClick(R.id.btnLogOut)
+//    public void onClickLogout() {
+//        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(DashboardViewEvent.LogoutClicked.INSTANCE);
+//    }
+//
+//    @OnClick(R.id.llProfile)
+//    public void onClickProfile() {
+//        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(DashboardViewEvent.AccountClicked.INSTANCE);
+//    }
+//
+//    @OnClick(R.id.ll_device_history)
+//    public void onClickDeviceHistory() {
+//        ((HomeActivity)requireActivity()).dashBoardViewModel.processEvent(DashboardViewEvent.DeviceHistoryClicked.INSTANCE);
+//    }
 
     @OnClick(R.id.llHelp)
     public void onClickHelp() {

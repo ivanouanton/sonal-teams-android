@@ -174,7 +174,8 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvViewHistory.setOnClickListener(v -> sessionHistoryCommand.navigate(requireActivity(), String.valueOf(id), firstName + " " + lastName, treatmentDataPresent));
         btnStartSession.setOnClickListener(v -> {
             dismiss();
-            ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
+            // TODO uncomment
+//            ((HomeActivity)requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
         });
         btnStartSession.setEnabled(treatmentDataPresent);
     }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ import com.waveneuro.ui.dashboard.HomeActivity;
 import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
 import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
+import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter;
 import com.waveneuro.ui.dashboard.more.WebCommand;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
 import com.waveneuro.ui.session.session.SessionCommand;
@@ -179,7 +181,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         ButterKnife.bind(this, view);
         setView();
         if (dashBoardViewModel.getData().getValue() instanceof DashboardViewState.Connect) {
-            this.homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
+            this.homeViewModel.processEvent(HomeViewEvent.DeviceConnected.INSTANCE);
         } else {
             this.homeViewModel.processEvent(new HomeViewEvent.Start(homeViewModel.mPage.getValue(), "", null));
         }
@@ -251,9 +253,9 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject");
             if (dashboardViewState != null) {
                 if (dashboardViewState instanceof DashboardViewState.Connect) {
-                    homeViewModel.processEvent(new HomeViewEvent.DeviceConnected());
+                    homeViewModel.processEvent(HomeViewEvent.DeviceConnected.INSTANCE);
                 } else if (dashboardViewState instanceof DashboardViewState.Disconnect) {
-                    homeViewModel.processEvent(new HomeViewEvent.DeviceDisconnected());
+                    homeViewModel.processEvent(HomeViewEvent.DeviceDisconnected.INSTANCE);
                 }
             }
         });
@@ -294,7 +296,8 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
             filtersBottomSheet.setListener(this);
 
         } else if (viewState instanceof HomeClientsViewState.PatientSessionSuccess) {
-            ((HomeActivity) requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
+            //TODO uncomment
+//            ((HomeActivity) requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
 
         }
     };
@@ -354,7 +357,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
                             .setCancelable(false)
                             .show();
                 } else {
-                    this.homeViewModel.processEvent(new HomeViewEvent.StartSessionClicked());
+                    this.homeViewModel.processEvent(HomeViewEvent.StartSessionClicked.INSTANCE);
                 }
                 break;
         }
@@ -385,4 +388,16 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
         }
     }
 
+//    final public Fragment newInstance() {
+//        return new HomeFragment();
+//    }
+
 }
+
+//public class HomeFragmentFactory {
+//
+//        public Fragment newInstance() {
+//            return new HomeFragment().newInstance();
+//        }
+//
+//}

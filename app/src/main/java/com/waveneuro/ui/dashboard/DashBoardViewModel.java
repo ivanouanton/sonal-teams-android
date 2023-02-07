@@ -33,13 +33,13 @@ public class DashBoardViewModel extends ViewModel {
             DashboardViewEvent.Connected connected = (DashboardViewEvent.Connected) viewEvent;
             this.mDataLive.postValue(new DashboardViewState.Connect(connected.getBleDevice()));
         } else if (viewEvent instanceof DashboardViewEvent.Disconnected) {
-            this.mDataLive.postValue(new DashboardViewState.Disconnect());
+            this.mDataLive.postValue(DashboardViewState.Disconnect.INSTANCE);
         } else if (viewEvent instanceof DashboardViewEvent.AccountClicked) {
-            this.mDataViewEffect.postValue(new DashboardViewEffect.Account());
+            this.mDataViewEffect.postValue(DashboardViewEffect.Account.INSTANCE);
         } else if (viewEvent instanceof DashboardViewEvent.HelpClicked) {
-            this.mDataViewEffect.postValue(new DashboardViewEffect.Help());
+            this.mDataViewEffect.postValue(DashboardViewEffect.Help.INSTANCE);
         } else if (viewEvent instanceof DashboardViewEvent.DeviceHistoryClicked) {
-            this.mDataViewEffect.postValue(new DashboardViewEffect.DeviceHistory());
+            this.mDataViewEffect.postValue(DashboardViewEffect.DeviceHistory.INSTANCE);
         } else if (viewEvent instanceof DashboardViewEvent.DeviceClicked) {
             if(this.getData().getValue() instanceof DashboardViewState.Connect) {
                 DashboardViewState.Connect connect = (DashboardViewState.Connect) this.getData().getValue();
@@ -48,7 +48,7 @@ public class DashBoardViewModel extends ViewModel {
         }else if (viewEvent instanceof DashboardViewEvent.LogoutClicked) {
             sentLogoutEvent(dataManager.getUser().getId().toString());
             logout();
-            this.mDataViewEffect.postValue(new DashboardViewEffect.Login());
+            this.mDataViewEffect.postValue(DashboardViewEffect.Login.INSTANCE);
         }
     }
 

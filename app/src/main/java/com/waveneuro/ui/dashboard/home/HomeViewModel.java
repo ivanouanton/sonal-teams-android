@@ -72,14 +72,14 @@ public class HomeViewModel extends ViewModel {
             if (this.mDataDeviceLive.getValue() instanceof HomeDeviceViewState.StartSession) {
                 return;
             }
-            this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
+            this.mDataDeviceLive.postValue(HomeDeviceViewState.PairDevice.INSTANCE);
             getUserDetails();
             getClients(start.getPage(), start.getStartsWith(), start.getFilters());
             getOrganizations();
         } else if (viewEvent instanceof HomeViewEvent.DeviceDisconnected) {
-            this.mDataDeviceLive.postValue(new HomeDeviceViewState.PairDevice());
+            this.mDataDeviceLive.postValue(HomeDeviceViewState.PairDevice.INSTANCE);
         } else if (viewEvent instanceof HomeViewEvent.DeviceConnected) {
-            this.mDataDeviceLive.postValue(new HomeDeviceViewState.StartSession());
+            this.mDataDeviceLive.postValue(HomeDeviceViewState.StartSession.INSTANCE);
         } else if (viewEvent instanceof HomeViewEvent.StartSessionClicked) {
             this.mDataViewEffect.postValue(HomeViewEffect.DeviceRedirect.INSTANCE);
         }

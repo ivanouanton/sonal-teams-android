@@ -3,14 +3,10 @@ package com.waveneuro.ui.dashboard.edit_client;
 import static com.waveneuro.utils.DateUtil.PATTERN_RFC1123;
 
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,22 +16,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.waveneuro.R;
-import com.waveneuro.domain.usecase.patient.GetPatientUseCase;
-import com.waveneuro.domain.usecase.patient.UpdatePatientUseCase;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.component.FragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
 import com.waveneuro.ui.base.BaseActivity;
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState;
-import com.waveneuro.ui.dashboard.home.HomeFragment;
-import com.waveneuro.ui.dashboard.home.HomeUserViewState;
 import com.waveneuro.utils.DateUtil;
 
 import java.util.Date;
 
 import javax.inject.Inject;
-
-import butterknife.OnClick;
 
 public class EditClientBottomSheet extends BottomSheetDialogFragment {
 
