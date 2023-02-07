@@ -57,7 +57,7 @@ import com.waveneuro.ui.dashboard.DashBoardViewModel;
 import com.waveneuro.ui.dashboard.DashboardCommand;
 import com.waveneuro.ui.dashboard.DashboardViewEvent;
 import com.waveneuro.ui.dashboard.DashboardViewState;
-import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.DashboardActivity;
 import com.waveneuro.ui.session.how_to.HowToCommand;
 import com.waveneuro.ui.session.session.SessionCommand;
 
@@ -321,7 +321,7 @@ public class DeviceFragment extends BaseListFragment implements OnDeviceItemClic
 
     private void launchHomeScreen(boolean launchWithDelay) {
         new Handler().postDelayed(() -> {
-            if (getActivity() instanceof HomeActivity) {
+            if (getActivity() instanceof DashboardActivity) {
                 //TODO uncomment
 //                ((HomeActivity) getActivity()).switchToHome();
             }

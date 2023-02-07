@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseActivity;
-import com.waveneuro.ui.dashboard.more.WebCommand;
+import com.waveneuro.ui.dashboard.web.WebCommand;
 
 import javax.inject.Inject;
 

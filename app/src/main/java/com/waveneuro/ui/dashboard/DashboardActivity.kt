@@ -3,19 +3,19 @@ package com.waveneuro.ui.dashboard
 import android.os.Bundle
 import android.view.MenuItem
 import com.waveneuro.R
-import com.waveneuro.databinding.ActivityHomeBinding
+import com.waveneuro.databinding.ActivityDashboardBinding
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.dashboard.home.HomeFragment
-import com.waveneuro.ui.dashboard.home.MoreFragment
+import com.waveneuro.ui.dashboard.more.MoreFragment
 
-class HomeActivity : BaseActivity() {
+class DashboardActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityHomeBinding
+    private lateinit var binding: ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityComponent()?.inject(this)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(::onNavItemSelected)
@@ -24,12 +24,8 @@ class HomeActivity : BaseActivity() {
 
     private fun onNavItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.bottom_navigation_home -> {
-                HomeFragment.newInstance()
-            }
-            R.id.bottom_navigation_more -> {
-                MoreFragment.newInstance()
-            }
+            R.id.bottom_navigation_home -> HomeFragment.newInstance()
+            R.id.bottom_navigation_more -> MoreFragment.newInstance()
             else -> null
         }?.let { fragment ->
             supportFragmentManager.beginTransaction()
@@ -57,10 +53,4 @@ class HomeActivity : BaseActivity() {
 //        }
 //    }
 
-    companion object {
-        const val TAB_HOME = 0
-        const val TAB_DEVICE = 1
-        const val TAB_HISTORY = 2
-        const val TAB_MORE = 3
-    }
 }

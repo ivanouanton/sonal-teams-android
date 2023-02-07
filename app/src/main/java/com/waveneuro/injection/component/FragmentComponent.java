@@ -9,7 +9,7 @@ import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
 import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
 import com.waveneuro.ui.dashboard.home.HomeFragment;
-import com.waveneuro.ui.dashboard.home.MoreFragment;
+import com.waveneuro.ui.dashboard.more.MoreFragment;
 import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet;
 

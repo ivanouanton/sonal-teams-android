@@ -8,11 +8,11 @@ import com.waveneuro.data.DataManager;
 import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.injection.module.ActivityModule;
-import com.waveneuro.ui.dashboard.HomeActivity;
+import com.waveneuro.ui.dashboard.DashboardActivity;
 import com.waveneuro.ui.dashboard.account.AccountActivity;
 import com.waveneuro.ui.dashboard.help.HelpActivity;
 import com.waveneuro.ui.dashboard.history.HistoryActivity;
-import com.waveneuro.ui.dashboard.more.WebActivity;
+import com.waveneuro.ui.dashboard.web.WebActivity;
 import com.waveneuro.ui.dashboard.organization.OrganizationActivity;
 import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper;
 import com.waveneuro.ui.device.MyDeviceActivity;
@@ -72,7 +72,7 @@ public interface ActivityComponent {
 
     void inject(ResetPasswordActivity resetPasswordActivity);
 
-    void inject(HomeActivity homeActivity);
+    void inject(DashboardActivity dashboardActivity);
 
     void inject(SessionActivity sessionActivity);
 

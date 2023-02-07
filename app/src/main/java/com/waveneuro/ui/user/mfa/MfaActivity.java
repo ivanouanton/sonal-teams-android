@@ -4,13 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -18,23 +12,13 @@ import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 
-import com.asif.abase.data.model.BaseModel;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
-import com.waveneuro.ui.dashboard.more.WebCommand;
-import com.waveneuro.ui.device.MyDeviceCommand;
+import com.waveneuro.ui.dashboard.web.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginViewEffect;
-import com.waveneuro.ui.user.login.LoginViewEvent;
-import com.waveneuro.ui.user.login.LoginViewModel;
-import com.waveneuro.ui.user.login.LoginViewState;
 import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordCommand;
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand;
 import com.waveneuro.ui.user.registration.RegistrationCommand;
@@ -43,10 +27,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class MfaActivity extends BaseFormActivity {
 

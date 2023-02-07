@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.dashboard.HomeActivity">
+    tools:context=".ui.dashboard.DashboardActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fr_container"

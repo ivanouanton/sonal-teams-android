@@ -21,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@+id/llHelp" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
         <TextView
             android:id="@+id/tvProfile"
@@ -54,7 +54,6 @@
             android:text="@string/profile_information"
             android:textColor="@color/black"
             android:textSize="14sp" />
-
 
         <ImageView
             android:id="@+id/iv_arrow_profile"
@@ -78,7 +77,7 @@
         android:background="@color/gray_15"/>
 
     <RelativeLayout
-        android:id="@+id/ll_device_history"
+        android:id="@+id/llDeviceHistory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -116,7 +115,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/ll_device_history"
+        app:layout_constraintTop_toBottomOf="@+id/llDeviceHistory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/gray_15"/>

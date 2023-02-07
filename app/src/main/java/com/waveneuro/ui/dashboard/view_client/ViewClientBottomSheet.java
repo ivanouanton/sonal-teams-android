@@ -20,8 +20,6 @@ import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.component.FragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
 import com.waveneuro.ui.base.BaseActivity;
-import com.waveneuro.ui.dashboard.HomeActivity;
-import com.waveneuro.ui.dashboard.device.DeviceFragment;
 import com.waveneuro.ui.dashboard.edit_client.EditClientBottomSheet;
 import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
 import com.waveneuro.ui.session.history.SessionHistoryCommand;
