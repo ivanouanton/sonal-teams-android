@@ -27,4 +27,7 @@
     <color name="modal">#80272727</color>
     <color name="slate_black">#FF333333</color>
     <color name="yellow">#FFEB3B</color>
+
+    <color name="gray_text">#6B6B6B</color>
+    <color name="gray_divider">#C2C7C8</color>
 </resources>

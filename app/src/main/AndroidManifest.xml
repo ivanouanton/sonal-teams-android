@@ -29,6 +29,10 @@
         tools:ignore="DataExtractionRules"
         tools:targetApi="m">
         <activity
+            android:name=".ui.dashboard.organization.OrganizationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.dashboard.history.HistoryActivity"
             android:exported="false" />
         <activity android:name=".ui.dashboard.help.HelpActivity" />

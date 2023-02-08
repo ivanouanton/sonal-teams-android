@@ -132,7 +132,7 @@ public class HomeFragment extends BaseFragment implements ClientListAdapter.OnIt
     FiltersBottomSheet filtersBottomSheet;
 
 
-    private HomeFragment() {
+    public HomeFragment() {
         // Required empty public constructor
     }
 

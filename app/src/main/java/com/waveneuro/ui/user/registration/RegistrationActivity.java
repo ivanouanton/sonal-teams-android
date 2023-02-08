@@ -89,4 +89,5 @@ public class RegistrationActivity extends BaseFormActivity {
     public void submit() {
 
     }
+
 }

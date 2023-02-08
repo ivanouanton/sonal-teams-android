@@ -12,14 +12,7 @@ public class AppMapper {
         User user = new User(response.getId());
         user.setEmail(response.getEmail());
         user.setName(response.getFirstName());
-        user.setUsername(response.getUsername());
         user.setGivenName(response.getLastName());
-        user.setFamilyName(response.getFamilyName());
-        user.setGender(response.getGender());
-        user.setBirthdate(response.getBirthdate());
-        user.setImageThumbnailUrl(response.getImageThumbnailUrl());
-        user.setCustomGoal(response.getCustomGoal());
-        user.setLocation(response.getLocation());
         return user;
     }
 

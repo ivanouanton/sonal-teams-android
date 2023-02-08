@@ -42,7 +42,6 @@ public class ForgotUsernameActivity extends BaseFormActivity {
 
     @Inject
     ForgotUsernameViewModel forgotUsernameViewModel;
-
     @Inject
     ResetPasswordCommand resetPasswordCommand;
     @Inject

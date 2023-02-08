@@ -59,7 +59,7 @@ public class MoreFragment extends BaseFragment {
     @Inject
     HomeViewModel homeViewModel;
 
-    private MoreFragment() {
+    public MoreFragment() {
     }
 
     public static MoreFragment newInstance() {

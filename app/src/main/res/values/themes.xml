@@ -181,7 +181,7 @@
     </style>
 
     <style name="BaseText.Caption.Black.12">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="BaseText.Caption.Black.14">
@@ -189,7 +189,11 @@
     </style>
 
     <style name="BaseText.Caption.Gray">
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">@color/gray_text</item>
+    </style>
+
+    <style name="BaseText.Caption.Gray.14">
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="BaseText.Caption.DarkGray">
