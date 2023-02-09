@@ -1,120 +1,80 @@
-package com.waveneuro.ui.dashboard.filters;
+package com.waveneuro.ui.dashboard.filters
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.waveneuro.R
+import com.waveneuro.data.model.response.organization.OrganizationResponse
+import com.waveneuro.databinding.DialogFiltersBinding
+import com.waveneuro.injection.component.DaggerFragmentComponent
+import com.waveneuro.injection.component.FragmentComponent
+import com.waveneuro.injection.module.FragmentModule
+import com.waveneuro.ui.base.BaseActivity
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class FiltersBottomSheet : BottomSheetDialogFragment() {
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.waveneuro.R;
-import com.waveneuro.data.model.response.organization.OrganizationResponse;
-import com.waveneuro.injection.component.DaggerFragmentComponent;
-import com.waveneuro.injection.component.FragmentComponent;
-import com.waveneuro.injection.module.FragmentModule;
-import com.waveneuro.ui.base.BaseActivity;
-import com.waveneuro.ui.dashboard.home.OnFiltersChangedListener;
+    private lateinit var binding: DialogFiltersBinding
+    private lateinit var adapter: OrgsListAdapter
+    private lateinit var fragmentComponent: FragmentComponent
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+    private var organizationList: List<OrganizationResponse> = listOf()
+    private var selectedIds: MutableList<Int> = mutableListOf()
+    private var onFiltersChanged: ((List<Int>) -> Unit)? = null
 
-import butterknife.BindView;
-
-public class FiltersBottomSheet extends BottomSheetDialogFragment implements OrgsListAdapter.OnItemClickListener {
-
-    @BindView(R.id.rvOrganizations)
-    RecyclerView rvOrganizations;
-
-    protected FragmentComponent fragmentComponent;
-
-    List<OrganizationResponse> orgs = new ArrayList<>();
-
-    List<Integer> selectedIds = new ArrayList<>();
-
-    protected OrgsListAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
-
-    private OnFiltersChangedListener listener;
-
-    public void setListener(OnFiltersChangedListener listener){
-        this.listener = listener;
-    }
-
-
-    public static FiltersBottomSheet newInstance(List<OrganizationResponse> organizations, Integer[] selected) {
-        FiltersBottomSheet viewClientBottomSheet = new FiltersBottomSheet(organizations, selected);
-        return viewClientBottomSheet;
-    }
-
-    public FiltersBottomSheet() {
-    }
-
-    public FiltersBottomSheet(List<OrganizationResponse> orgs, Integer[] selected) {
-        this.orgs = orgs;
-        selectedIds.clear();
-        if (selected != null && selected.length > 0) {
-            selectedIds.addAll(Arrays.asList(selected));
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.dialog_filters, container,
-                false);
-
-        rvOrganizations = view.findViewById(R.id.rvOrganizations);
-
-        mAdapter = new OrgsListAdapter(orgs, selectedIds);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        rvOrganizations.setLayoutManager(mLayoutManager);
-        rvOrganizations.setAdapter(mAdapter);
-        mAdapter.setListener(this);
-
-        view.findViewById(R.id.tv_clear).setOnClickListener(v -> {
-            selectedIds.clear();
-            mAdapter.notifyDataSetChanged();
-        });
-
-        view.findViewById(R.id.btn_apply).setOnClickListener(v -> {
-            Integer[] a = new Integer[selectedIds.size()];
-            listener.onFiltersChanged(selectedIds.toArray(a));
-            dismiss();
-        });
-
-        return view;
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
-                .activityComponent(((BaseActivity) getActivity()).activityComponent())
-                .fragmentModule(new FragmentModule(this))
-                .build();
-
-        fragmentComponent.inject(this);
-        super.onCreate(savedInstanceState);
+            .activityComponent((activity as BaseActivity?)?.activityComponent())
+            .fragmentModule(FragmentModule(this))
+            .build()
+        fragmentComponent.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
-    @Override
-    public int getTheme() {
-        return R.style.CustomBottomSheetDialog;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DialogFiltersBinding.inflate(layoutInflater)
+
+        adapter = OrgsListAdapter(requireContext(), organizationList, selectedIds, ::onSelected, ::onDeselected)
+        binding.rvOrganizations.adapter = adapter
+
+        binding.tvClear.setOnClickListener {
+            selectedIds.clear()
+            adapter.notifyDataSetChanged()
+        }
+        binding.btnApply.setOnClickListener {
+            onFiltersChanged?.invoke(selectedIds)
+            dismiss()
+        }
+
+        return binding.root
     }
 
-    @Override
-    public void onSelected(int id) {
-        selectedIds.add(id);
+    override fun getTheme(): Int {
+        return R.style.CustomBottomSheetDialog
     }
 
-    @Override
-    public void onDeselected(int id) {
-        selectedIds.remove((Integer) id);
+    private fun onSelected(id: Int) {
+        selectedIds.add(id)
+    }
+
+    private fun onDeselected(id: Int) {
+        selectedIds.remove(id)
+    }
+
+    companion object {
+        fun newInstance(
+            organizations: List<OrganizationResponse>,
+            selected: List<Int>,
+            onApplyClick: (List<Int>) -> Unit
+        ): FiltersBottomSheet = FiltersBottomSheet().apply {
+            this.organizationList = organizations
+            this.selectedIds = selected.toMutableList()
+            this.onFiltersChanged = onApplyClick
+        }
     }
 }

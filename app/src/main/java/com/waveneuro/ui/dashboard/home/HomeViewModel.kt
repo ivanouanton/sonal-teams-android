@@ -1,14 +1,17 @@
 package com.waveneuro.ui.dashboard.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
+import com.waveneuro.data.model.response.organization.OrganizationResponse
 import com.waveneuro.data.model.response.patient.PatientListResponse
 import com.waveneuro.data.model.response.patient.PatientResponse
 import com.waveneuro.data.model.response.protocol.ProtocolResponse
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
+import com.waveneuro.domain.usecase.patient.GetOrganizationsUseCase
 import com.waveneuro.domain.usecase.patient.GetPatientUseCase
 import com.waveneuro.domain.usecase.patient.GetPatientsUseCase
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase
@@ -26,6 +29,7 @@ class HomeViewModel @Inject constructor(
     private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
     private val getPatientsUseCase: GetPatientsUseCase,
     private val getPatientUseCase: GetPatientUseCase,
+    private val getOrganizationsUseCase: GetOrganizationsUseCase,
     private val mapper: PatientMapperImpl
 ) : ViewModel() {
 
@@ -40,10 +44,13 @@ class HomeViewModel @Inject constructor(
     val clientsData = MutableLiveData<HomeClientsViewState>()
     val viewEffect = SingleLiveEvent<HomeViewEffect>()
 
+    private val _filters = MutableLiveData(listOf<Int>())
+    val filters: LiveData<List<Int>> = _filters
+
     private var page = 1
     private var totalPages = 0
-    private var filters = arrayOf<Int>()
-    private var patientList = mutableListOf<PatientItem>()
+    private val patientList = mutableListOf<PatientItem>()
+//    private val organizationList = mutableListOf<OrganizationResponse>()
 
     fun processEvent(viewEvent: HomeViewEvent?) {
         when (viewEvent) {
@@ -53,22 +60,23 @@ class HomeViewModel @Inject constructor(
 //                }
 //                deviceData.postValue(HomeDeviceViewState.PairDevice)
 //                getUserDetails()
-                page = 1
-                getClients(page, "", filters, true)
+                resetPage()
+                getClients(page, "", filters.value, true)
+                getOrganizations()
             }
             is NewQuery -> {
-                page = 1
-                getClients(page, viewEvent.query, filters, true)
+                resetPage()
+                getClients(page, viewEvent.query, filters.value, true)
             }
-            is DeviceDisconnected -> {
-                deviceData.postValue(HomeDeviceViewState.PairDevice)
-            }
-            is DeviceConnected -> {
-                deviceData.postValue(HomeDeviceViewState.StartSession)
-            }
-            is StartSessionClicked -> {
-                viewEffect.postValue(HomeViewEffect.DeviceRedirect)
-            }
+//            is DeviceDisconnected -> {
+//                deviceData.postValue(HomeDeviceViewState.PairDevice)
+//            }
+//            is DeviceConnected -> {
+//                deviceData.postValue(HomeDeviceViewState.StartSession)
+//            }
+//            is StartSessionClicked -> {
+//                viewEffect.postValue(HomeViewEffect.DeviceRedirect)
+//            }
             else -> {}
         }
     }
@@ -105,16 +113,17 @@ class HomeViewModel @Inject constructor(
         })
     }
 
-    private fun getClients(page: Int?, query: String?, filters: Array<Int>?, isNew: Boolean = false) {
+    private fun getClients(page: Int?, query: String?, filters: List<Int>?, isNew: Boolean = false) {
         protocolData.postValue(HomeProtocolViewState.Loading(true))
-        getPatientsUseCase.execute(page, query, filters,
+        getPatientsUseCase.execute(page, query, filters?.toTypedArray(),
             object : UseCaseCallback<PatientListResponse> {
+
                 override fun onSuccess(response: PatientListResponse) {
                     Timber.e("response = $response")
                     protocolData.postValue(HomeProtocolViewState.Loading(false))
                     if (isNew) patientList.clear()
                     patientList.addAll(mapper.fromDomainToUi(response.patients))
-                    clientsData.postValue(Success((patientList)))
+                    clientsData.postValue(SuccessClients((patientList)))
                     totalPages = response.pages
                 }
 
@@ -133,6 +142,7 @@ class HomeViewModel @Inject constructor(
         protocolData.postValue(HomeProtocolViewState.Loading(true))
         getPatientUseCase.execute(id, object : UseCaseCallback<PatientResponse> {
             override fun onSuccess(response: PatientResponse) {
+
                 val patientResponse = response as PatientResponse
                 getLatestProtocolUseCase.execute(id, object : UseCaseCallback<ProtocolResponse> {
                     override fun onSuccess(protocolResponse: ProtocolResponse) {
@@ -163,6 +173,24 @@ class HomeViewModel @Inject constructor(
         })
     }
 
+    private fun getOrganizations() {
+        protocolData.postValue(HomeProtocolViewState.Loading(true))
+        getOrganizationsUseCase.execute(object: UseCaseCallback<List<OrganizationResponse>> {
+
+            override fun onSuccess(response: List<OrganizationResponse>) {
+//                organizationList.addAll(response)
+                clientsData.postValue(SuccessOrganizations(response))
+                protocolData.postValue(HomeProtocolViewState.Loading(false))
+            }
+
+            override fun onError(throwable: Throwable) {
+                protocolData.postValue(HomeProtocolViewState.Loading(false))
+            }
+
+            override fun onFinish() {}
+        })
+    }
+
     fun startSessionForClientWithId(id: Int) {
         protocolData.postValue(HomeProtocolViewState.Loading(true))
         getLatestProtocolUseCase.execute(id, object : UseCaseCallback<ProtocolResponse> {
@@ -185,12 +213,16 @@ class HomeViewModel @Inject constructor(
         Timber.e("page = $page\ntotalPages = $totalPages")
         if (page < totalPages) {
             page += 1
-            getClients(page, query, filters)
+            getClients(page, query, filters.value)
         }
     }
 
-    fun setNewFilters(newFilters: Array<Int>) {
-        filters = newFilters
+    private fun resetPage() {
+        page = 1
+    }
+
+    fun setNewFilters(newFilters: List<Int>) {
+        _filters.value = newFilters
     }
 
 }

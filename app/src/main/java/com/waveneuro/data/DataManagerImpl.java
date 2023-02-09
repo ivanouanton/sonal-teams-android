@@ -18,6 +18,7 @@ import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
@@ -33,6 +34,8 @@ import com.waveneuro.data.model.response.user.UserInfoResponse;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.data.remote.TreatmentService;
 import com.waveneuro.data.remote.UserService;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import timber.log.Timber;
@@ -101,6 +104,11 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids) {
         return this.userService.getClientList(page, ids, startsWith);
+    }
+
+    @Override
+    public Observable<List<OrganizationResponse>> organizations() {
+        return this.userService.getOrganizations();
     }
 
     @Override

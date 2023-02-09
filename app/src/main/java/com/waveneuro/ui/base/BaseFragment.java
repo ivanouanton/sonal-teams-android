@@ -6,5 +6,4 @@ import com.waveneuro.injection.component.FragmentComponent;
 
 public class BaseFragment extends Fragment {
     protected FragmentComponent fragmentComponent;
-
 }

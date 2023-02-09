@@ -28,7 +28,9 @@ import com.waveneuro.injection.component.DaggerFragmentComponent
 import com.waveneuro.injection.module.FragmentModule
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.base.BaseFragment
-import com.waveneuro.ui.dashboard.home.HomeClientsViewState.Success
+import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet
+import com.waveneuro.ui.dashboard.home.HomeClientsViewState.SuccessClients
+import com.waveneuro.ui.dashboard.home.HomeClientsViewState.SuccessOrganizations
 import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter
 import com.waveneuro.ui.dashboard.home.adapter.model.PatientItem
 import com.waveneuro.ui.dashboard.web.WebCommand
@@ -37,7 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListener
+class HomeFragment : BaseFragment() { // OnClientUpdated
 
     @Inject
     lateinit var sessionCommand: SessionCommand
@@ -51,22 +53,10 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
 
     private val currentList = mutableListOf<PatientItem>()
 
-//    private var dashBoardViewModel: DashBoardViewModel? = null
-//
-//    var filtersBottomSheet: FiltersBottomSheet? = null
-//
+    private var filtersBottomSheet: FiltersBottomSheet? = null
+
 //    override fun onClientUpdated() {
 //        homeViewModel.processEvent(HomeViewEvent.Start(1, "", null))
-//    }
-//
-//    override fun onFiltersChanged(ids: Array<Int>) {
-//        homeViewModel.filters.addAll(ids)
-//        homeViewModel.getNewClients(binding.etSearch.text.toString())
-//        homeViewModel.processEvent(
-//            HomeViewEvent.Start(
-//                homeViewModel.page.value!!, binding.etSearch.text.toString(), homeViewModel.filters
-//            )
-//        )
 //    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,11 +86,11 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
         super.onViewCreated(view, savedInstanceState)
         setObserver()
         binding.spinKit.visibility = View.INVISIBLE
-//        binding.tilSearch.setEndIconOnClickListener { v: View? ->
-//            if (filtersBottomSheet != null) {
-//                filtersBottomSheet!!.show(childFragmentManager, "")
-//            }
-//        }
+    }
+
+    private fun onFilterChanged(ids: List<Int>) {
+        viewModel.setNewFilters(ids)
+        viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
     }
 
     private fun setView() {
@@ -111,6 +101,9 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
             }
             etSearch.onTextChanged {
                 viewModel.processEvent(HomeViewEvent.NewQuery(it))
+            }
+            tilSearch.setEndIconOnClickListener {
+                filtersBottomSheet?.show(childFragmentManager, "")
             }
         }
     }
@@ -150,17 +143,25 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
 //        }
 //    }
     private val homeClientsViewStateObserver = Observer { viewState: HomeClientsViewState? ->
-        if (viewState is Success) {
-            updateList(viewState.patientList)
+        when (viewState) {
+            is SuccessClients -> {
+                updateList(viewState.patientList)
 
-            if (viewState.patientList.isEmpty()) {
-                binding.tvEmptyResult.isVisible = true
-                binding.rvClients.isVisible = false
-            } else {
-                binding.tvEmptyResult.isVisible = false
-                binding.rvClients.isVisible = true
+                if (viewState.patientList.isEmpty()) {
+                    binding.tvEmptyResult.isVisible = true
+                    binding.rvClients.isVisible = false
+                } else {
+                    binding.tvEmptyResult.isVisible = false
+                    binding.rvClients.isVisible = true
+                }
             }
-        } else {
+            is SuccessOrganizations -> {
+                filtersBottomSheet = viewModel.filters.value?.let { filters ->
+                    FiltersBottomSheet
+                        .newInstance(viewState.organizationList, filters, ::onFilterChanged)
+                }
+            }
+            else -> {}
 //            when (viewState) {
 //                is PatientSuccess -> {
 //                    val patient = viewState.item
@@ -192,14 +193,10 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
         }
     }
     private val homeProtocolDataObserver = Observer { protocol: HomeProtocolViewState? ->
-        if (protocol is HomeProtocolViewState.Loading) {
-            if (protocol.loading) {
-                binding.pbProgress.visibility = View.VISIBLE
-            } else {
-                binding.pbProgress.visibility = View.INVISIBLE
-            }
-        }
+        if (protocol is HomeProtocolViewState.Loading)
+            binding.pbProgress.isVisible = protocol.loading
     }
+
 //    private val pageObserver: Observer<Int> = Observer { newPage ->
 //        if (newPage != null && newPage != 1) {
 //            viewModel.processEvent(
@@ -324,4 +321,5 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
             return HomeFragment()
         }
     }
+
 }

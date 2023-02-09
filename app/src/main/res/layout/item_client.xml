@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    android:paddingVertical="8dp"
     android:paddingHorizontal="16dp"
     android:id="@+id/clContainer"
     android:background="@drawable/bg_client">
@@ -13,7 +14,6 @@
         android:id="@+id/iv_profile_image"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginVertical="8dp"
         android:adjustViewBounds="true"
         android:background="@color/salomie_yellow"
         android:scaleType="centerInside"
@@ -25,13 +25,13 @@
 
     <TextView
         android:id="@+id/tv_name"
+        style="@style/BaseText.Bold.Black.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="-4dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
         app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
@@ -39,16 +39,16 @@
 
     <TextView
         android:id="@+id/tvOrganization"
+        style="@style/BaseText.Caption.Gray.14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="-2dp"
         android:ellipsize="end"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@+id/iv_profile_image"
         app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:text="LODE134" />
 
     <ImageView

@@ -1,86 +1,49 @@
-package com.waveneuro.ui.dashboard.filters;
+package com.waveneuro.ui.dashboard.filters
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import com.waveneuro.data.model.response.organization.OrganizationResponse
+import com.waveneuro.databinding.ItemOrganizationBinding
 
-import androidx.recyclerview.widget.RecyclerView;
+class OrgsListAdapter(
+    private val context: Context,
+    private val orgs: List<OrganizationResponse>,
+    private val selected: List<Int>,
+    private val onSelected: (Int) -> Unit,
+    private val onDeselected: (Int) -> Unit
+) : RecyclerView.Adapter<OrgsListAdapter.ViewHolder>() {
 
-import com.waveneuro.R;
-import com.waveneuro.data.model.response.organization.OrganizationResponse;
-
-import java.util.List;
-
-public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHolder> {
-
-    public interface OnItemClickListener {
-        void onSelected(int id);
-        void onDeselected(int id);
-    }
-
-    private List<OrganizationResponse> orgs;
-    private List<Integer> selected;
-
-    public void setListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    public OnItemClickListener listener;
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvName;
-        private final ImageView ivTick;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            tvName = view.findViewById(R.id.tv_name);
-            ivTick = view.findViewById(R.id.iv_tick);
-        }
-    }
-
-    public OrgsListAdapter(List<OrganizationResponse> pt, List<Integer> sel) {
-        orgs = pt;
-        selected = sel;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_organization, viewGroup, false);
-
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
-        viewHolder.tvName.setText(orgs.get(position).getName());
-
-        if (selected.contains(orgs.get(position).getId())) {
-            viewHolder.ivTick.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.ivTick.setVisibility(View.INVISIBLE);
-        }
-
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selected.contains(orgs.get(position).getId())) {
-                    listener.onDeselected(orgs.get(position).getId());
-                    viewHolder.ivTick.setVisibility(View.INVISIBLE);
-                } else {
-                    listener.onSelected(orgs.get(position).getId());
-                    viewHolder.ivTick.setVisibility(View.VISIBLE);
-
+    inner class ViewHolder(private val binding: ItemOrganizationBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind() {
+            with(binding) {
+                tvName.text = orgs[bindingAdapterPosition].name
+                ivTick.isVisible = selected.contains(orgs[bindingAdapterPosition].id)
+                root.setOnClickListener {
+                    if (selected.contains(orgs[bindingAdapterPosition].id)) {
+                        onDeselected(orgs[bindingAdapterPosition].id)
+                        ivTick.visibility = View.INVISIBLE
+                    } else {
+                        onSelected(orgs[bindingAdapterPosition].id)
+                        ivTick.visibility = View.VISIBLE
+                    }
                 }
             }
-        });
+        }
     }
 
-    public int getItemCount() {
-        return orgs.size();
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder(ItemOrganizationBinding.inflate(LayoutInflater.from(context), viewGroup, false))
+
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind()
     }
+
+    override fun getItemCount(): Int {
+        return orgs.size
+    }
+
 }

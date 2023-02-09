@@ -8,10 +8,10 @@ import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
-import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
@@ -81,4 +81,7 @@ public interface UserService {
 
     @GET("sonal/protocols/{id}")
     Observable<ProtocolResponse> getProtocolForUser(@Path("id") int id);
+
+    @GET("orgs/me")
+    Observable<List<OrganizationResponse>> getOrganizations();
 }

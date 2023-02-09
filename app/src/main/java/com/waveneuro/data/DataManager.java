@@ -55,6 +55,8 @@ public interface DataManager {
 
     Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids);
 
+    Observable<List<OrganizationResponse>> organizations();
+
     Observable<PatientResponse> patientWithId(int id);
 
     Observable<PatientResponse> updatePatientWithId(int id, PatientRequest request);
