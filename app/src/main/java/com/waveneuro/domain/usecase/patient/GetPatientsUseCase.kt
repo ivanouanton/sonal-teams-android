@@ -1,37 +1,61 @@
-package com.waveneuro.domain.usecase.patient;
+package com.waveneuro.domain.usecase.patient
 
-import com.asif.abase.domain.base.ObservableUseCase;
-import com.asif.abase.domain.base.UseCaseCallback;
-import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
+import javax.inject.Inject
+import com.waveneuro.data.DataManager
+import com.asif.abase.domain.base.ObservableUseCase
+import com.waveneuro.data.model.response.patient.PatientListResponse
+import com.asif.abase.domain.base.UseCaseCallback
+import io.reactivex.rxjava3.core.Observable
 
-import javax.inject.Inject;
+class GetPatientsUseCase @Inject constructor(
+    private val dataManager: DataManager
+) : ObservableUseCase<PatientListResponse>() {
 
-import io.reactivex.rxjava3.core.Observable;
+    //TODO check null
+    private var page: Int? = null
+    private var ids: Array<Int>? = null
+    private var query: String? = null
 
-public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
-
-    private final DataManager dataManager;
-
-    private Integer page;
-    private Integer[] ids;
-    private String startsWith;
-
-    @Inject
-    public GetPatientsUseCase(DataManager dataManager) {
-        this.dataManager = dataManager;
+    override fun buildUseCaseSingle(): Observable<PatientListResponse> {
+        return dataManager.patients(page, query, ids)
     }
 
-    @Override
-    public Observable<PatientListResponse> buildUseCaseSingle() {
-        return dataManager.patients(page, startsWith, ids);
-    }
+    fun execute(
+        newPage: Int?, newQuery: String?, newIds: Array<Int>?,
+        useCaseCallback: UseCaseCallback<PatientListResponse>
+    ) {
+        page = newPage
+        query = newQuery
+        ids = newIds
 
-    public void execute(Integer page, String starsWith, Integer[] ids, UseCaseCallback<ForgotUsernameResponse> useCaseCallback) {
-        this.page = page;
-        this.ids=ids;
-        this.startsWith = starsWith;
-        super.execute(useCaseCallback);
+        super.execute(useCaseCallback)
     }
 }
+
+// TODO
+//public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
+//
+//    private final DataManager dataManager;
+//
+//    private Integer page;
+//    private Integer[] ids;
+//    private String startsWith;
+//
+//    @Inject
+//    public GetPatientsUseCase(DataManager dataManager) {
+//        this.dataManager = dataManager;
+//    }
+//
+//    @Override
+//    public Observable<PatientListResponse> buildUseCaseSingle() {
+//        return dataManager.patients(page, startsWith, ids);
+//    }
+//
+//    public void execute(Integer page, String starsWith, Integer[] ids,
+//        UseCaseCallback<PatientListResponse> useCaseCallback) {
+//        this.page = page;
+//        this.ids=ids;
+//        this.startsWith = starsWith;
+//        super.execute(useCaseCallback);
+//    }
+//}

@@ -1,7 +1,8 @@
 package com.waveneuro.ui.dashboard.home
 
 sealed class HomeViewEvent {
-    class Start(val page: Integer, val startsWith: String, val filters: Array<Int>?) : HomeViewEvent()
+    object Start : HomeViewEvent()
+    data class NewQuery(val query: String) : HomeViewEvent()
     object PairDevice : HomeViewEvent()
     object DeviceConnected : HomeViewEvent()
     object DeviceDisconnected : HomeViewEvent()

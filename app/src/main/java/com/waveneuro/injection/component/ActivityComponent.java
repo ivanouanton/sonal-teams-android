@@ -50,8 +50,6 @@ public interface ActivityComponent {
 
     AnalyticsManager analyticsManager();
 
-    OrganizationMapper organizationMapper();
-
     void inject(SplashActivity splashActivity);
 
     void inject(LoginActivity loginActivity);

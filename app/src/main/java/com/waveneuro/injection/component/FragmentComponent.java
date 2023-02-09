@@ -36,5 +36,4 @@ public interface FragmentComponent {
 
     void inject(PrecautionsBottomSheet precautionsBottomSheet);
 
-
 }

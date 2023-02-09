@@ -180,10 +180,5 @@ public class ApplicationModule {
         return new AnalyticsManagerImpl(context);
     }
 
-    @Singleton
-    @Provides
-    public OrganizationMapper provideOrganizationMapper() {
-        return new OrganizationMapperImpl();
-    }
 }
 

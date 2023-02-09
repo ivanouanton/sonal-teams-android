@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.waveneuro.R;
+import com.waveneuro.data.model.response.common.TosStatus;
 import com.waveneuro.data.model.response.patient.PatientResponse;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.component.FragmentComponent;
@@ -46,7 +47,7 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
     private String email;
     private String username;
     private String organization;
-    private int tosStatus;
+    private TosStatus tosStatus;
 
     private boolean treatmentDataPresent;
 
@@ -81,11 +82,11 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         viewClientBottomSheet.id = patient.getId();
         viewClientBottomSheet.firstName = patient.getFirstName();
         viewClientBottomSheet.lastName = patient.getLastName();
-        viewClientBottomSheet.dob = patient.getBirthday();
+        viewClientBottomSheet.dob = patient.getBirthday().toString(); //TODO change birthday
         viewClientBottomSheet.isMale = patient.isMale();
         viewClientBottomSheet.email = patient.getEmail();
         viewClientBottomSheet.username = patient.getUsername();
-        viewClientBottomSheet.organization = patient.getOrganizationName();
+        viewClientBottomSheet.organization = patient.getOrganization().getName();
         viewClientBottomSheet.tosStatus = patient.getTosStatus();
         viewClientBottomSheet.treatmentDataPresent = treatmentDataPresent;
         return viewClientBottomSheet;
@@ -153,16 +154,16 @@ public class ViewClientBottomSheet extends BottomSheetDialogFragment {
         tvOrganization.setText(organization);
 
         switch (tosStatus) {
-            case 0:
-            case 3:
+            case SIGNED:
+            case SIGNED_MANUALLY:
                 tvTosSignedLabel.setVisibility(View.VISIBLE);
                 tvTosSignedIcon.setVisibility(View.VISIBLE);
                 break;
-            case 2:
+            case WAITING_SIGNATURE:
                 tvTosWaitingLabel.setVisibility(View.VISIBLE);
                 tvTosWaitingIcon.setVisibility(View.VISIBLE);
                 break;
-            case 1:
+            case NOT_SIGNED:
             default:
                 tvTosNotSignedLabel.setVisibility(View.VISIBLE);
                 tvTosNotSignedIcon.setVisibility(View.VISIBLE);

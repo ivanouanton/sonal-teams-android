@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.waveneuro.R;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
         void onDeselected(int id);
     }
 
-    private List<PatientListResponse.Patient.Organization> orgs;
+    private List<OrganizationResponse> orgs;
     private List<Integer> selected;
 
     public void setListener(OnItemClickListener listener) {
@@ -41,7 +41,7 @@ public class OrgsListAdapter extends RecyclerView.Adapter<OrgsListAdapter.ViewHo
         }
     }
 
-    public OrgsListAdapter(List<PatientListResponse.Patient.Organization> pt, List<Integer> sel) {
+    public OrgsListAdapter(List<OrganizationResponse> pt, List<Integer> sel) {
         orgs = pt;
         selected = sel;
     }

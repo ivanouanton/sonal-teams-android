@@ -8,6 +8,7 @@ import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.request.patient.PatientRequest;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
@@ -47,7 +48,7 @@ public interface UserService {
     @POST("forgot_password_confirm")
     Observable<ForgotPasswordConfirmResponse> forgotPasswordConfirm(@Body ForgotPasswordConfirmRequest request);
 
-    @POST("refresh")
+    @POST("refresh-token")
     Observable<RefreshResponse> refreshToken();
 
     @POST("users/confirm_forgot_password")
@@ -80,7 +81,4 @@ public interface UserService {
 
     @GET("sonal/protocols/{id}")
     Observable<ProtocolResponse> getProtocolForUser(@Path("id") int id);
-
-    @GET("orgs/me")
-    Observable<List<PatientListResponse.Patient.Organization>> getOrganizations();
 }

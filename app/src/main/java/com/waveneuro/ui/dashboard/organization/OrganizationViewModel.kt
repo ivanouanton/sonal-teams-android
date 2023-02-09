@@ -7,6 +7,7 @@ import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
 import com.waveneuro.ui.dashboard.organization.adapter.model.OrganizationItem
+import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper
 import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapperImpl
 import com.waveneuro.utils.ErrorUtil
 import javax.inject.Inject

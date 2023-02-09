@@ -7,7 +7,4 @@ sealed class DashboardViewEvent {
     object Disconnected : DashboardViewEvent()
     object AccountClicked : DashboardViewEvent()
     object DeviceClicked : DashboardViewEvent()
-    object LogoutClicked : DashboardViewEvent()
-    object HelpClicked : DashboardViewEvent()
-    object DeviceHistoryClicked : DashboardViewEvent()
 }

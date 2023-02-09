@@ -16,6 +16,7 @@ import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
@@ -53,8 +54,6 @@ public interface DataManager {
     Observable<ProtocolResponse> protocol(int id);
 
     Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids);
-
-    Observable<List<PatientListResponse.Patient.Organization>> organizations();
 
     Observable<PatientResponse> patientWithId(int id);
 

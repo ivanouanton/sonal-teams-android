@@ -34,8 +34,6 @@ import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.data.remote.TreatmentService;
 import com.waveneuro.data.remote.UserService;
 
-import java.util.List;
-
 import io.reactivex.rxjava3.core.Observable;
 import timber.log.Timber;
 
@@ -103,11 +101,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids) {
         return this.userService.getClientList(page, ids, startsWith);
-    }
-
-    @Override
-    public Observable<List<PatientListResponse.Patient.Organization>> organizations() {
-        return this.userService.getOrganizations();
     }
 
     @Override

@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/sr_clients"
+        android:id="@+id/srl_clients"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -49,6 +49,7 @@
             android:id="@+id/rvClients"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_client" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -87,8 +88,8 @@
         android:layout_height="wrap_content"
         android:text="@string/no_client_with_this_name_is_found"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/sr_clients"
-        app:layout_constraintTop_toTopOf="@+id/sr_clients" />
+        app:layout_constraintStart_toStartOf="@+id/srl_clients"
+        app:layout_constraintTop_toTopOf="@+id/srl_clients" />
 
     <ProgressBar
         android:id="@+id/pb_progress"

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.waveneuro.R;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.injection.component.DaggerFragmentComponent;
 import com.waveneuro.injection.component.FragmentComponent;
 import com.waveneuro.injection.module.FragmentModule;
@@ -31,7 +31,7 @@ public class FiltersBottomSheet extends BottomSheetDialogFragment implements Org
 
     protected FragmentComponent fragmentComponent;
 
-    List<PatientListResponse.Patient.Organization> orgs = new ArrayList<>();
+    List<OrganizationResponse> orgs = new ArrayList<>();
 
     List<Integer> selectedIds = new ArrayList<>();
 
@@ -45,7 +45,7 @@ public class FiltersBottomSheet extends BottomSheetDialogFragment implements Org
     }
 
 
-    public static FiltersBottomSheet newInstance(List<PatientListResponse.Patient.Organization> organizations, Integer[] selected) {
+    public static FiltersBottomSheet newInstance(List<OrganizationResponse> organizations, Integer[] selected) {
         FiltersBottomSheet viewClientBottomSheet = new FiltersBottomSheet(organizations, selected);
         return viewClientBottomSheet;
     }
@@ -53,7 +53,7 @@ public class FiltersBottomSheet extends BottomSheetDialogFragment implements Org
     public FiltersBottomSheet() {
     }
 
-    public FiltersBottomSheet(List<PatientListResponse.Patient.Organization> orgs, Integer[] selected) {
+    public FiltersBottomSheet(List<OrganizationResponse> orgs, Integer[] selected) {
         this.orgs = orgs;
         selectedIds.clear();
         if (selected != null && selected.length > 0) {

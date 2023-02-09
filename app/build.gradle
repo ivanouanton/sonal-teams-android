@@ -135,8 +135,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.3'
     kapt 'com.jakewharton:butterknife-compiler:10.2.3'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-
     implementation 'com.jakewharton.timber:timber:4.7.1'
     debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
@@ -152,6 +150,12 @@ dependencies {
 
     implementation 'io.sentry:sentry-android:6.1.4'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+
+    // Paging3
+    def paging_version = "3.1.1"
+
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation "androidx.paging:paging-rxjava3:$paging_version"
 
 }

@@ -26,5 +26,4 @@ public interface ApplicationComponent {
 
     AnalyticsManager analyticsManager();
 
-    OrganizationMapper organizationMapper();
 }
