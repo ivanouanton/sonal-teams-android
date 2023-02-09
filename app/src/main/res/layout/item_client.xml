@@ -10,13 +10,12 @@
     android:background="@drawable/bg_client">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_profile_image2"
+        android:id="@+id/iv_profile_image"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginVertical="8dp"
         android:adjustViewBounds="true"
-        android:background="@color/aqua"
+        android:background="@color/salomie_yellow"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +33,8 @@
         android:singleLine="true"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
-        app:layout_constraintStart_toEndOf="@+id/iv_profile_image2"
-        app:layout_constraintTop_toTopOf="@+id/iv_profile_image2"
+        app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
+        app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
         tools:text="John Doe" />
 
     <TextView
@@ -46,9 +45,9 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:singleLine="true"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_profile_image2"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_profile_image"
         app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
-        app:layout_constraintStart_toEndOf="@+id/iv_profile_image2"
+        app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:text="LODE134" />
 

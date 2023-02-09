@@ -2,10 +2,8 @@ package com.waveneuro.ui.dashboard.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
-import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse
 import com.waveneuro.data.model.response.patient.PatientListResponse
 import com.waveneuro.data.model.response.patient.PatientResponse
 import com.waveneuro.data.model.response.protocol.ProtocolResponse
@@ -18,12 +16,8 @@ import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
 import com.waveneuro.ui.dashboard.home.HomeViewEvent.*
 import com.waveneuro.ui.dashboard.home.adapter.model.PatientItem
-import com.waveneuro.ui.dashboard.home.mapper.PatientMapper
 import com.waveneuro.ui.dashboard.home.mapper.PatientMapperImpl
 import com.waveneuro.utils.ErrorUtil
-import kotlinx.coroutines.Delay
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,21 +40,26 @@ class HomeViewModel @Inject constructor(
     val clientsData = MutableLiveData<HomeClientsViewState>()
     val viewEffect = SingleLiveEvent<HomeViewEffect>()
 
-    val page = MutableLiveData(1)
-    private val filters = MutableLiveData(arrayOf<Int>()) //TODO check
-    private val patientList = MutableLiveData<List<PatientItem>>()
+    private var page = 1
+    private var totalPages = 0
+    private var filters = arrayOf<Int>()
+    private var patientList = mutableListOf<PatientItem>()
 
     fun processEvent(viewEvent: HomeViewEvent?) {
         when (viewEvent) {
             is Start -> {
-                if (deviceData.value is HomeDeviceViewState.StartSession) {
-                    return
-                }
-                deviceData.postValue(HomeDeviceViewState.PairDevice)
-                getUserDetails()
-                getClients(page.value, "", filters.value)
+//                if (deviceData.value is HomeDeviceViewState.StartSession) {
+//                    return
+//                }
+//                deviceData.postValue(HomeDeviceViewState.PairDevice)
+//                getUserDetails()
+                page = 1
+                getClients(page, "", filters, true)
             }
-            is NewQuery -> getClients(page.value, viewEvent.query, filters.value)
+            is NewQuery -> {
+                page = 1
+                getClients(page, viewEvent.query, filters, true)
+            }
             is DeviceDisconnected -> {
                 deviceData.postValue(HomeDeviceViewState.PairDevice)
             }
@@ -106,21 +105,17 @@ class HomeViewModel @Inject constructor(
         })
     }
 
-    fun getMoreClients(startsWith: String) {
-        page.postValue(page.value!! + 1)
-        getClients(page.value, startsWith, filters.value)
-    }
-
-    private fun getClients(page: Int?, startsWith: String?, filters: Array<Int>?) {
+    private fun getClients(page: Int?, query: String?, filters: Array<Int>?, isNew: Boolean = false) {
         protocolData.postValue(HomeProtocolViewState.Loading(true))
-        getPatientsUseCase.execute(page, startsWith, filters,
+        getPatientsUseCase.execute(page, query, filters,
             object : UseCaseCallback<PatientListResponse> {
                 override fun onSuccess(response: PatientListResponse) {
                     Timber.e("response = $response")
                     protocolData.postValue(HomeProtocolViewState.Loading(false))
-                    patientList.value = mapper.fromDomainToUi(response.patients)
-                    patientList.value?.let { clientsData.postValue(Success((it))) }
-                        ?: clientsData.postValue(Error("List is empty"))
+                    if (isNew) patientList.clear()
+                    patientList.addAll(mapper.fromDomainToUi(response.patients))
+                    clientsData.postValue(Success((patientList)))
+                    totalPages = response.pages
                 }
 
                 override fun onError(throwable: Throwable) {
@@ -155,9 +150,7 @@ class HomeViewModel @Inject constructor(
                         clientsData.postValue(PatientSuccess(patientResponse, false))
                     }
 
-                    override fun onFinish() {
-                        val x = 0
-                    }
+                    override fun onFinish() {}
                 })
             }
 
@@ -188,10 +181,16 @@ class HomeViewModel @Inject constructor(
         })
     }
 
-    fun setNewFilters(newFilters: Array<Int>?) {
-        filters.value = newFilters
+    fun getMoreClients(query: String) {
+        Timber.e("page = $page\ntotalPages = $totalPages")
+        if (page < totalPages) {
+            page += 1
+            getClients(page, query, filters)
+        }
     }
 
-
+    fun setNewFilters(newFilters: Array<Int>) {
+        filters = newFilters
+    }
 
 }

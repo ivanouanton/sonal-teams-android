@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
@@ -86,11 +87,7 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
         setView()
         setAdapter()
 
-//        if (dashBoardViewModel!!.data.value is Connect) {
-//            homeViewModel.processEvent(HomeViewEvent.DeviceConnected)
-//        } else {
-            viewModel.processEvent(HomeViewEvent.Start)
-//        }
+        viewModel.processEvent(HomeViewEvent.Start)
 
         return binding.root
     }
@@ -119,7 +116,12 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
     }
 
     private fun setAdapter() {
-        adapter = ClientListAdapter(requireContext(), ::onItemClick, ::onStartSessionClick)
+        adapter = ClientListAdapter(
+            requireContext(),
+            ::onItemClick,
+            ::onStartSessionClick,
+            ::moreRequest
+        )
         binding.rvClients.adapter = adapter
         adapter.submitList(currentList)
     }
@@ -152,11 +154,11 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
             updateList(viewState.patientList)
 
             if (viewState.patientList.isEmpty()) {
-                binding.tvEmptyResult.visibility = View.VISIBLE
-                binding.rvClients.visibility = View.INVISIBLE
+                binding.tvEmptyResult.isVisible = true
+                binding.rvClients.isVisible = false
             } else {
-                binding.tvEmptyResult.visibility = View.INVISIBLE
-                binding.rvClients.visibility = View.VISIBLE
+                binding.tvEmptyResult.isVisible = false
+                binding.rvClients.isVisible = true
             }
         } else {
 //            when (viewState) {
@@ -278,6 +280,10 @@ class HomeFragment : BaseFragment() { // OnClientUpdated, OnFiltersChangedListen
                 }
             }
         }
+    }
+
+    private fun moreRequest() {
+        viewModel.getMoreClients(binding.etSearch.text.toString())
     }
 
     @SuppressLint("NotifyDataSetChanged")

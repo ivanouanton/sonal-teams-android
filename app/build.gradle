@@ -117,6 +117,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 
     // Arch
     implementation "com.google.dagger:dagger:2.44"
@@ -151,11 +152,5 @@ dependencies {
     implementation 'io.sentry:sentry-android:6.1.4'
 
     implementation 'com.github.bumptech.glide:glide:4.13.2'
-
-    // Paging3
-    def paging_version = "3.1.1"
-
-    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-    implementation "androidx.paging:paging-rxjava3:$paging_version"
 
 }
