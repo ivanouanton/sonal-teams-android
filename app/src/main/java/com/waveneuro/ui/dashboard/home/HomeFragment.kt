@@ -17,7 +17,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -28,18 +27,21 @@ import com.waveneuro.injection.component.DaggerFragmentComponent
 import com.waveneuro.injection.module.FragmentModule
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.base.BaseFragment
-import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet
-import com.waveneuro.ui.dashboard.home.HomeClientsViewState.SuccessClients
-import com.waveneuro.ui.dashboard.home.HomeClientsViewState.SuccessOrganizations
+import com.waveneuro.ui.dashboard.device.DeviceFragment
+import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
 import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter
-import com.waveneuro.ui.dashboard.home.adapter.model.PatientItem
+import com.waveneuro.ui.dashboard.home.bottom_sheet.filters.FiltersBottomSheet
+import com.waveneuro.ui.dashboard.home.bottom_sheet.view_client.ViewClientBottomSheet
 import com.waveneuro.ui.dashboard.web.WebCommand
+import com.waveneuro.ui.model.client.ClientUi
 import com.waveneuro.ui.session.session.SessionCommand
+import com.waveneuro.utils.ext.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment() { // OnClientUpdated
+class HomeFragment : BaseFragment() {
 
     @Inject
     lateinit var sessionCommand: SessionCommand
@@ -51,13 +53,8 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: ClientListAdapter
 
-    private val currentList = mutableListOf<PatientItem>()
-
     private var filtersBottomSheet: FiltersBottomSheet? = null
-
-//    override fun onClientUpdated() {
-//        homeViewModel.processEvent(HomeViewEvent.Start(1, "", null))
-//    }
+    private val currentList = mutableListOf<ClientUi>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -88,11 +85,6 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
         binding.spinKit.visibility = View.INVISIBLE
     }
 
-    private fun onFilterChanged(ids: List<Int>) {
-        viewModel.setNewFilters(ids)
-        viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
-    }
-
     private fun setView() {
         with(binding) {
             srlClients.setOnRefreshListener {
@@ -112,7 +104,6 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
         adapter = ClientListAdapter(
             requireContext(),
             ::onItemClick,
-            ::onStartSessionClick,
             ::moreRequest
         )
         binding.rvClients.adapter = adapter
@@ -120,34 +111,27 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
     }
 
     private fun setObserver() {
-//        viewModel.userData.observe(this.viewLifecycleOwner, homeUserViewStateObserver)
         viewModel.clientsData.observe(this.viewLifecycleOwner, homeClientsViewStateObserver)
         viewModel.viewEffect.observe(this.viewLifecycleOwner, homeViewEffectObserver)
         viewModel.protocolData.observe(this.viewLifecycleOwner, homeProtocolDataObserver)
 //        dashBoardViewModel!!.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
 //            Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
 //            if (dashboardViewState != null) {
-//                if (dashboardViewState is Connect) {3
+//                if (dashboardViewState is Connect) {
 //                    homeViewModel.processEvent(HomeViewEvent.DeviceConnected)
 //                } else if (dashboardViewState is Disconnect) {
 //                    homeViewModel.processEvent(HomeViewEvent.DeviceDisconnected)
 //                }
 //            }
 //        }
-//        viewModel.page.observe(this.viewLifecycleOwner, pageObserver)
     }
 
-//    var homeUserViewStateObserver = Observer { viewState: HomeUserViewState? ->
-//        if (viewState is HomeUserViewState.Success) {
-//            val success = viewState
-//        }
-//    }
     private val homeClientsViewStateObserver = Observer { viewState: HomeClientsViewState? ->
         when (viewState) {
-            is SuccessClients -> {
-                updateList(viewState.patientList)
+            is ClientsSuccess -> {
+                updateList(viewState.clientList)
 
-                if (viewState.patientList.isEmpty()) {
+                if (viewState.clientList.isEmpty()) {
                     binding.tvEmptyResult.isVisible = true
                     binding.rvClients.isVisible = false
                 } else {
@@ -155,66 +139,42 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
                     binding.rvClients.isVisible = true
                 }
             }
-            is SuccessOrganizations -> {
+            is OrganizationsSuccess -> {
                 filtersBottomSheet = viewModel.filters.value?.let { filters ->
                     FiltersBottomSheet
                         .newInstance(viewState.organizationList, filters, ::onFilterChanged)
                 }
             }
-            else -> {}
-//            when (viewState) {
-//                is PatientSuccess -> {
-//                    val patient = viewState.item
-//                    val viewClientBottomSheet =
-//                        ViewClientBottomSheet.newInstance(this, patient, viewState.treatmentDataPresent)
-//                    viewClientBottomSheet.show(childFragmentManager, "")
-//                }
-//                is OrganizationSuccess -> {
-//                    filtersBottomSheet = FiltersBottomSheet.newInstance(viewState.item, homeViewModel.filters.toTypedArray())
-//                    filtersBottomSheet?.setListener(this)
-//                }
-//                is PatientSessionSuccess -> {
-//                    //TODO uncomment
-//                    //            ((HomeActivity) requireActivity()).addFragment(R.id.fr_home, DeviceFragment.newInstance());
-//                }
-//                else -> {}
+            is ClientProtocolSuccess -> {
+                val viewClientBottomSheet = ViewClientBottomSheet.newInstance(
+                    ::onStartSession, ::onClientUpdated,
+                    viewState.client, viewState.isTreatmentDataPresent
+                )
+                viewClientBottomSheet.show(childFragmentManager, "");
+            }
+//            is PatientSessionSuccess -> {
+//                DeviceFragment.newInstance()
 //            }
+            else -> {}
         }
     }
 
     private val homeViewEffectObserver = Observer { viewEffect: HomeViewEffect? ->
-        if (viewEffect is HomeViewEffect.BackRedirect) {
-        } else if (viewEffect is HomeViewEffect.SessionRedirect) {
-            val (treatmentLength, protocolFrequency, sonalId) = viewEffect
-            launchSessionScreen(
-                treatmentLength, protocolFrequency,
-                sonalId
-            )
+        when (viewEffect) {
+            is HomeViewEffect.BackRedirect -> {}
+            is HomeViewEffect.SessionRedirect -> {
+                launchSessionScreen(
+                    viewEffect.treatmentLength,
+                    viewEffect.protocolFrequency,
+                    viewEffect.sonalId
+                )
+            }
+            else -> {}
         }
     }
     private val homeProtocolDataObserver = Observer { protocol: HomeProtocolViewState? ->
         if (protocol is HomeProtocolViewState.Loading)
             binding.pbProgress.isVisible = protocol.loading
-    }
-
-//    private val pageObserver: Observer<Int> = Observer { newPage ->
-//        if (newPage != null && newPage != 1) {
-//            viewModel.processEvent(
-//                HomeViewEvent.Start(
-//                    newPage,
-//                    binding.etSearch.text.toString(),
-//                    viewModel.filters
-//                )
-//            )
-//        }
-//    }
-
-    private fun onItemClick(patient: PatientItem) {
-        viewModel.getClientWithId(patient.id)
-    }
-
-    private fun onStartSessionClick(patient: PatientItem) {
-        viewModel.startSessionForClientWithId(patient.id)
     }
 
     private fun launchSessionScreen(
@@ -223,60 +183,14 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
         sonalId: String
     ) {
         if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
-            Toast.makeText(requireActivity(), "Treatment data not available.", Toast.LENGTH_SHORT)
-                .show()
+            requireActivity().toast("Treatment data not available.")
             return
         }
-//        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId)
+        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId)
     }
 
-    private fun onPermissionGranted(permission: String) {
-        when (permission) {
-            Manifest.permission.ACCESS_FINE_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
-                AlertDialog.Builder(requireActivity())
-                    .setTitle("Location Services not enabled")
-                    .setMessage("Android requires that Location Services to enabled to scan for Bluetooth Low Energy devices.\nPlease enable Location Services in Settings to continue. ")
-                    .setNegativeButton(
-                        R.string.cancel
-                    ) { dialog: DialogInterface?, which: Int -> }
-                    .setPositiveButton(
-                        "Setting"
-                    ) { dialog: DialogInterface?, which: Int ->
-                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                        startActivityForResult(intent, REQUEST_CODE_OPEN_GPS)
-                    }
-                    .setCancelable(false)
-                    .show()
-            } else {
-                viewModel.processEvent(HomeViewEvent.StartSessionClicked)
-            }
-        }
-    }
-
-    private fun checkGPSIsOpen(): Boolean {
-        val locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                ?: return false
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CODE_PERMISSION_LOCATION -> if (grantResults.size > 0) {
-                var i = 0
-                while (i < grantResults.size) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        onPermissionGranted(permissions[i])
-                    }
-                    i++
-                }
-            }
-        }
+    private fun onItemClick(client: ClientUi) {
+        viewModel.processEvent(HomeViewEvent.OnClientClick(client.id))
     }
 
     private fun moreRequest() {
@@ -284,10 +198,29 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateList(list: List<PatientItem>) {
+    private fun updateList(list: List<ClientUi>) {
         currentList.clear()
         currentList.addAll(list)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun onFilterChanged(ids: List<Int>) {
+        viewModel.setNewFilters(ids)
+        viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
+    }
+
+    private fun onStartSession() {
+//        sessionCommand.navigate()
+//        parentFragmentManager.beginTransaction()
+//            .add(DeviceFragment.newInstance(), "Device Fragment").commit()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fr_container, DeviceFragment.newInstance())
+            .commit()
+    }
+
+    private fun onClientUpdated() {
+        requireActivity().toast("Success!!!")
+        viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
     }
 
     private fun TextInputEditText.onTextChanged(onTextChanged: (String) -> Unit) {
@@ -303,6 +236,55 @@ class HomeFragment : BaseFragment() { // OnClientUpdated
 
             override fun afterTextChanged(editable: Editable?) {}
         })
+    }
+
+    // TODO check bottom
+    private fun onPermissionGranted(permission: String) {
+        when (permission) {
+            Manifest.permission.ACCESS_FINE_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
+                AlertDialog.Builder(requireActivity())
+                    .setTitle("Location Services not enabled")
+                    .setMessage("Android requires that Location Services to enabled to scan for Bluetooth Low Energy devices.\nPlease enable Location Services in Settings to continue. ")
+                    .setNegativeButton(
+                        R.string.cancel
+                    ) { _: DialogInterface?, _: Int -> }
+                    .setPositiveButton(
+                        "Setting"
+                    ) { _: DialogInterface?, _: Int ->
+                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                        startActivityForResult(intent, REQUEST_CODE_OPEN_GPS)
+                    }
+                    .setCancelable(false)
+                    .show()
+            } else {
+                viewModel.processEvent(HomeViewEvent.StartSessionClicked())
+            }
+        }
+    }
+
+    private fun checkGPSIsOpen(): Boolean {
+        val locationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_PERMISSION_LOCATION -> if (grantResults.isNotEmpty()) {
+                var i = 0
+                while (i < grantResults.size) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        onPermissionGranted(permissions[i])
+                    }
+                    i++
+                }
+            }
+        }
     }
 
     companion object {

@@ -3,26 +3,26 @@ package com.waveneuro.domain.usecase.patient
 import javax.inject.Inject
 import com.waveneuro.data.DataManager
 import com.asif.abase.domain.base.ObservableUseCase
-import com.waveneuro.data.model.response.patient.PatientListResponse
+import com.waveneuro.data.model.response.client.ClientListResponse
 import com.asif.abase.domain.base.UseCaseCallback
 import io.reactivex.rxjava3.core.Observable
 
 class GetPatientsUseCase @Inject constructor(
     private val dataManager: DataManager
-) : ObservableUseCase<PatientListResponse>() {
+) : ObservableUseCase<ClientListResponse>() {
 
     //TODO check null
     private var page: Int? = null
     private var ids: Array<Int>? = null
     private var query: String? = null
 
-    override fun buildUseCaseSingle(): Observable<PatientListResponse> {
+    override fun buildUseCaseSingle(): Observable<ClientListResponse> {
         return dataManager.patients(page, query, ids)
     }
 
     fun execute(
         newPage: Int?, newQuery: String?, newIds: Array<Int>?,
-        useCaseCallback: UseCaseCallback<PatientListResponse>
+        useCaseCallback: UseCaseCallback<ClientListResponse>
     ) {
         page = newPage
         query = newQuery

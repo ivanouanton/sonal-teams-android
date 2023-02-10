@@ -1,14 +1,14 @@
 package com.waveneuro.ui.dashboard.home
 
 import com.waveneuro.data.model.response.organization.OrganizationResponse
-import com.waveneuro.data.model.response.patient.PatientResponse
-import com.waveneuro.ui.dashboard.home.adapter.model.PatientItem
+import com.waveneuro.ui.model.client.ClientUi
 
 sealed class HomeClientsViewState {
-    data class SuccessClients(val patientList: List<PatientItem>) : HomeClientsViewState()
-    data class Error(val message: String?) : HomeClientsViewState()
-    data class SuccessOrganizations(val organizationList: List<OrganizationResponse>) : HomeClientsViewState()
+    data class ClientsSuccess(val clientList: List<ClientUi>) : HomeClientsViewState()
+    data class ClientProtocolSuccess(val client: ClientUi, val isTreatmentDataPresent: Boolean) : HomeClientsViewState()
+    data class OrganizationsSuccess(val organizationList: List<OrganizationResponse>) : HomeClientsViewState()
 
-    data class PatientSuccess(val item: PatientResponse, val treatmentDataPresent: Boolean) : HomeClientsViewState()
+    data class Error(val message: String?) : HomeClientsViewState()
+
     data class PatientSessionSuccess(val id: Int) : HomeClientsViewState()
 }

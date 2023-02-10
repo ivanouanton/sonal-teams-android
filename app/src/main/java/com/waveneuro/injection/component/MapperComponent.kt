@@ -1,8 +1,8 @@
 package com.waveneuro.injection.component
 
 import com.waveneuro.injection.module.MapperModule
-import com.waveneuro.ui.dashboard.home.mapper.PatientMapper
-import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper
+import com.waveneuro.ui.model.client.mapper.ClientMapper
+import com.waveneuro.ui.model.organization.mapper.OrganizationMapper
 import dagger.Component
 import javax.inject.Singleton
 
@@ -12,6 +12,6 @@ interface MapperComponent {
 
     fun organizationMapper(): OrganizationMapper
 
-    fun patientMapper(): PatientMapper
+    fun clientMapper(): ClientMapper
 
 }

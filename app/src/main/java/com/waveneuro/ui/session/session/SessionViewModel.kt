@@ -9,7 +9,7 @@ import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest
-import com.waveneuro.data.model.response.patient.PatientResponse
+import com.waveneuro.data.model.response.client.ClientResponse
 import com.waveneuro.data.model.response.treatment.TreatmentResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.patient.GetPatientUseCase
@@ -181,8 +181,8 @@ class SessionViewModel @Inject constructor(
     private fun getClient() {
         viewModelScope.launch(Dispatchers.IO) {
             if (this@SessionViewModel::dataManager.isInitialized) {
-                getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<PatientResponse?> {
-                    override fun onSuccess(response: PatientResponse?) {
+                getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<ClientResponse?> {
+                    override fun onSuccess(response: ClientResponse?) {
                         currentClient.postValue("${response?.firstName} ${response?.lastName}")
                     }
                     override fun onError(throwable: Throwable) {}

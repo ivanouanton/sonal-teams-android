@@ -24,15 +24,27 @@
         tools:src="@drawable/ic_user_test" />
 
     <TextView
+        android:id="@+id/tv_initials"
+        style="@style/BaseText.Bold.Black.16"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
+        tools:visibility="visible"
+        tools:text="JD" />
+
+    <TextView
         android:id="@+id/tv_name"
         style="@style/BaseText.Bold.Black.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-4dp"
         android:ellipsize="end"
         android:singleLine="true"
-        app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
         app:layout_constraintTop_toTopOf="@+id/iv_profile_image"
         tools:text="John Doe" />
@@ -42,22 +54,12 @@
         style="@style/BaseText.Caption.Gray.14"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="-2dp"
+        android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@+id/iv_profile_image"
-        app:layout_constraintEnd_toStartOf="@+id/ivStartSession"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_image"
         tools:text="LODE134" />
-
-    <ImageView
-        android:id="@+id/ivStartSession"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_start_session" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

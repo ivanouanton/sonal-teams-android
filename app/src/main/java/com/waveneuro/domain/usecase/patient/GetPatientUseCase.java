@@ -3,13 +3,13 @@ package com.waveneuro.domain.usecase.patient;
 import com.asif.abase.domain.base.ObservableUseCase;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.client.ClientResponse;
 
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class GetPatientUseCase extends ObservableUseCase<PatientResponse> {
+public class GetPatientUseCase extends ObservableUseCase<ClientResponse> {
 
     private final DataManager dataManager;
 
@@ -21,11 +21,11 @@ public class GetPatientUseCase extends ObservableUseCase<PatientResponse> {
     }
 
     @Override
-    public Observable<PatientResponse> buildUseCaseSingle() {
+    public Observable<ClientResponse> buildUseCaseSingle() {
         return dataManager.patientWithId(id);
     }
 
-    public void execute(int id, UseCaseCallback<PatientResponse> useCaseCallback) {
+    public void execute(int id, UseCaseCallback<ClientResponse> useCaseCallback) {
         this.id=id;
         super.execute(useCaseCallback);
     }

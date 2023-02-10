@@ -1,4 +1,4 @@
-package com.waveneuro.ui.dashboard.filters
+package com.waveneuro.ui.dashboard.home.bottom_sheet.filters
 
 import android.content.Context
 import android.view.LayoutInflater

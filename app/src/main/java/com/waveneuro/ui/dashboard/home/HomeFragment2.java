@@ -40,10 +40,10 @@
 //import com.waveneuro.ui.base.BaseFragment;
 //import com.waveneuro.ui.dashboard.DashBoardViewModel;
 //import com.waveneuro.ui.dashboard.DashboardViewState;
-//import com.waveneuro.ui.dashboard.edit_client.EditClientViewModel;
-//import com.waveneuro.ui.dashboard.filters.FiltersBottomSheet;
+//import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewModel;
+//import com.waveneuro.ui.dashboard.home.bottom_sheet.filters.FiltersBottomSheet;
 //import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter;
-//import com.waveneuro.ui.dashboard.view_client.ViewClientBottomSheet;
+//import com.waveneuro.ui.dashboard.home.bottom_sheet.view_client.ViewClientBottomSheet;
 //import com.waveneuro.ui.dashboard.web.WebCommand;
 //import com.waveneuro.ui.session.session.SessionCommand;
 //

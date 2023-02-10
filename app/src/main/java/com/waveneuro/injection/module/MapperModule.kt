@@ -1,9 +1,9 @@
 package com.waveneuro.injection.module
 
-import com.waveneuro.ui.dashboard.home.mapper.PatientMapper
-import com.waveneuro.ui.dashboard.home.mapper.PatientMapperImpl
-import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper
-import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapperImpl
+import com.waveneuro.ui.model.client.mapper.ClientMapper
+import com.waveneuro.ui.model.client.mapper.ClientMapperImpl
+import com.waveneuro.ui.model.organization.mapper.OrganizationMapper
+import com.waveneuro.ui.model.organization.mapper.OrganizationMapperImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -19,8 +19,8 @@ class MapperModule {
 
     @Singleton
     @Provides
-    fun providePatientMapper(): PatientMapper {
-        return PatientMapperImpl()
+    fun provideClientMapper(): ClientMapper {
+        return ClientMapperImpl()
     }
 
 }

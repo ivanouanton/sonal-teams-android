@@ -7,7 +7,7 @@ import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRe
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.patient.PatientRequest;
+import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
@@ -16,8 +16,8 @@ import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmR
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
-import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.client.ClientListResponse;
+import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
@@ -67,13 +67,13 @@ public interface UserService {
     Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
 
     @GET("patients")
-    Observable<PatientListResponse> getClientList(@Query("page") int page, @Query("organization") Integer[] org, @Query("search") String startsWith);
+    Observable<ClientListResponse> getClientList(@Query("page") int page, @Query("organization") Integer[] org, @Query("search") String startsWith);
 
     @GET("patients/{id}")
-    Observable<PatientResponse> getClient(@Path("id") int id);
+    Observable<ClientResponse> getClient(@Path("id") int id);
 
     @PUT("patients/{id}")
-    Observable<PatientResponse> updateClient(@Path("id") int id, @Body PatientRequest request);
+    Observable<ClientResponse> updateClient(@Path("id") int id, @Body ClientRequest request);
 
     @Headers("X-Client: Android")
     @GET("sonal/sessions/{id}")

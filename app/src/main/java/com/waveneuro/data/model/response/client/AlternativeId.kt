@@ -1,4 +1,4 @@
-package com.waveneuro.data.model.response.patient
+package com.waveneuro.data.model.response.client
 
 import com.asif.abase.data.model.BaseModel
 import com.google.gson.annotations.SerializedName

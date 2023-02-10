@@ -102,6 +102,7 @@
             android:layout_height="wrap_content"
             android:hint="Date of Birth"
             android:maxLines="1"
+            android:focusable="false"
             android:minHeight="48dp"
             android:drawableEnd="@drawable/ic_baseline_calendar_month_24"
             android:singleLine="true" />
