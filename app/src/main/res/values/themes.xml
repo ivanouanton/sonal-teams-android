@@ -53,10 +53,6 @@
         <item name="shapeAppearance">@style/RoundShapeAppearance</item>
     </style>
 
-<!--    <style name="RoundedButton.AquaWhite">-->
-<!--        <item name="materialThemeOverlay">@style/AquaButtonThemeOverlay</item>-->
-<!--    </style>-->
-
     <style name="RoundedButton.AquaBlack">
         <item name="materialThemeOverlay">@style/AquaButtonThemeOverlayBlack</item>
     </style>
@@ -184,6 +180,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="BaseText.Caption.Black.16">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="BaseText.Caption.Gray">
         <item name="android:textColor">@color/gray_text</item>
     </style>
@@ -206,6 +206,18 @@
 
     <style name="BaseText.Caption.Red">
         <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="BaseText.Caption.Aqua">
+        <item name="android:textColor">@color/aqua</item>
+    </style>
+
+    <style name="BaseText.Caption.Aqua.14">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BaseText.Caption.Aqua.16">
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="SmallTextRegular.Black" parent="BaseText.Caption">

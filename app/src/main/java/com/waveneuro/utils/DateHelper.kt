@@ -2,7 +2,6 @@ package com.waveneuro.utils
 
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateHelper {
@@ -10,7 +9,7 @@ object DateHelper {
     private const val BIRTHDAY_PATTERN = "MM/dd/yyyy"
     private const val PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz"
 
-    private var birthdayFormatter = SimpleDateFormat(BIRTHDAY_PATTERN, Locale.getDefault())
+    private var birthdayFormatter = SimpleDateFormat(BIRTHDAY_PATTERN, Locale.US)
     private var dateFormatter = SimpleDateFormat(PATTERN_RFC1123, Locale.US)
 
     fun getBirthdayDate(birthday: String?): Date? = try {

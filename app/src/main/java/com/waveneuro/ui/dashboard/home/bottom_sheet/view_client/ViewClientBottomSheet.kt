@@ -114,8 +114,8 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
         val editClientBottomSheet = EditClientBottomSheet.newInstance(
             onClientUpdated, clientId, firstName, lastName, birthday, isMale, email
         )
-        editClientBottomSheet.show(parentFragmentManager, "")
-        dismiss()
+        editClientBottomSheet.show(parentFragmentManager, "EditClient BottomSheet")
+//        dismiss()
     }
 
     override fun getTheme(): Int {
