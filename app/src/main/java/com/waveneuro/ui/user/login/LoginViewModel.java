@@ -45,16 +45,16 @@ public class LoginViewModel extends ViewModel {
             LoginViewEvent.LoginClicked loginClicked = (LoginViewEvent.LoginClicked) viewEvent;
             login(loginClicked.getUsername(), loginClicked.getPassword());
         } else if (viewEvent instanceof LoginViewEvent.ForgotPasswordClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.ForgotPassword());
+            this.mDataViewEffect.postValue(LoginViewEffect.ForgotPassword.INSTANCE);
         } else if (viewEvent instanceof LoginViewEvent.RegisterClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.Register());
+            this.mDataViewEffect.postValue(LoginViewEffect.Register.INSTANCE);
         } else if (viewEvent instanceof LoginViewEvent.RememberUser) {
             LoginViewEvent.RememberUser rememberUser = (LoginViewEvent.RememberUser) viewEvent;
             saveUserLoginDetails(rememberUser.getUsername());
         } else if (viewEvent instanceof LoginViewEvent.ClearRememberUser) {
             removeRememberUserData();
         } else if (viewEvent instanceof LoginViewEvent.SupportClicked) {
-            this.mDataViewEffect.postValue(new LoginViewEffect.Support());
+            this.mDataViewEffect.postValue(LoginViewEffect.Support.INSTANCE);
         }
     }
 

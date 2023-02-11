@@ -252,6 +252,14 @@
         <item name="android:textSize">@dimen/text_size_standard_16</item>
     </style>
 
+    <style name="BaseText.Bold.Red">
+        <item name="android:textColor">@color/red_logout</item>
+    </style>
+
+    <style name="BaseText.Bold.Red.14">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!--END TEXTVIEW STYLE-->
 
     <!--START EDITTEXT STYLE-->

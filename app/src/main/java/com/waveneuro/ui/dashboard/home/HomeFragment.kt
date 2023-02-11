@@ -38,7 +38,6 @@ import com.waveneuro.ui.session.session.SessionCommand
 import com.waveneuro.utils.ext.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
@@ -152,9 +151,12 @@ class HomeFragment : BaseFragment() {
                 )
                 viewClientBottomSheet.show(childFragmentManager, "");
             }
-//            is PatientSessionSuccess -> {
-//                DeviceFragment.newInstance()
-//            }
+            is PatientSessionSuccess -> {
+//              sessionCommand.navigate()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fr_container, DeviceFragment.newInstance())
+                    .commit()
+            }
             else -> {}
         }
     }
@@ -209,13 +211,9 @@ class HomeFragment : BaseFragment() {
         viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
     }
 
+    //TODO what is sonal id?
     private fun onStartSession() {
-//        sessionCommand.navigate()
-//        parentFragmentManager.beginTransaction()
-//            .add(DeviceFragment.newInstance(), "Device Fragment").commit()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fr_container, DeviceFragment.newInstance())
-            .commit()
+        viewModel.processEvent(HomeViewEvent.StartSessionClicked())
     }
 
     private fun onClientUpdated() {

@@ -68,13 +68,14 @@ class HomeViewModel @Inject constructor(
             is ClientSuccess -> {
                 getProtocol(viewEvent.client)
             }
-//            is StartSessionClicked -> {
+            is StartSessionClicked -> {
+                clientsData.postValue(PatientSessionSuccess())
 //                viewEffect.postValue(HomeViewEffect.SessionRedirect(
 //                    viewEvent.treatmentLength,
 //                    viewEvent.protocolFrequency,
 //                    viewEvent.sonalId
 //                ))
-//            }
+            }
 //            is DeviceDisconnected -> {
 //                deviceData.postValue(HomeDeviceViewState.PairDevice)
 //            }

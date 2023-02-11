@@ -9,6 +9,16 @@
     android:background="@color/white"
     tools:context=".ui.dashboard.home.HomeFragment">
 
+    <!-- Prevent autofocus -->
+    <View
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        tools:ignore="MissingConstraints,UselessLeaf"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!--START SPIN KIT-->
     <TextView
         android:id="@+id/tv_clients_list"
@@ -43,7 +53,6 @@
             android:backgroundTint="@color/gray_light"
             android:hint="@string/search"
             android:maxLines="1"
-            android:minHeight="40dp"
             android:singleLine="true"
             tools:ignore="TextContrastCheck" />
 

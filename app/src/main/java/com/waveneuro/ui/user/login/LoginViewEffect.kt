@@ -1,12 +1,12 @@
 package com.waveneuro.ui.user.login
 
 sealed class LoginViewEffect {
-    class Home : LoginViewEffect()
-    class ForgotPassword : LoginViewEffect()
+    object Home : LoginViewEffect()
+    object ForgotPassword : LoginViewEffect()
     data class RememberMe(val username: String) : LoginViewEffect()
-    class Register : LoginViewEffect()
-    class Support : LoginViewEffect()
-    class SetNewPassword : LoginViewEffect()
+    object Register : LoginViewEffect()
+    object Support : LoginViewEffect()
+    object SetNewPassword : LoginViewEffect()
     data class EnterMfaCode(val session: String) : LoginViewEffect()
-    class WrongMfaCode() : LoginViewEffect()
+    object WrongMfaCode : LoginViewEffect()
 }

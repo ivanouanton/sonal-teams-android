@@ -7,6 +7,7 @@ sealed class HomeViewEvent {
     data class NewQuery(val query: String) : HomeViewEvent()
     data class OnClientClick(val id: Int) : HomeViewEvent()
     data class ClientSuccess(val client: ClientUi) : HomeViewEvent()
+    //TODO
     class StartSessionClicked(
 //        val treatmentLength: String,
 //        val protocolFrequency: String,
@@ -16,5 +17,4 @@ sealed class HomeViewEvent {
     object PairDevice : HomeViewEvent()
     object DeviceConnected : HomeViewEvent()
     object DeviceDisconnected : HomeViewEvent()
-    object SonalWebsiteClicked : HomeViewEvent()
 }

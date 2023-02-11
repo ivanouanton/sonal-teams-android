@@ -1,168 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Background.WhitePattern.Padding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.dashboard.home.HomeFragment">
-
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/white"
-        android:text="Log Out"
-        android:textAllCaps="false"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llHelp" />
 
     <TextView
         android:id="@+id/tvTitle"
+        style="@style/BaseText.Bold.Black.14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:text="@string/account"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:layout_gravity="center" />
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/llProfile"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/bg_profile_item_top"
+        android:background="@drawable/bg_profile_item"
         android:orientation="horizontal"
-        android:paddingVertical="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/tvProfile"
-            android:layout_width="wrap_content"
+            style="@style/BaseText.Caption.Black.14"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
-            android:text="@string/profile_information"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:layout_weight="1"
+            android:text="@string/profile_information"/>
 
         <ImageView
             android:id="@+id/iv_arrow_profile"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            tools:ignore="ContentDescription" />
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_forward_24"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        android:id="@+id/divProfile"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/llProfile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/gray_15"/>
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/llDeviceHistory"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_profile_item"
         android:orientation="horizontal"
-        android:paddingVertical="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divProfile">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/tv_device_history"
-            android:layout_width="wrap_content"
+            style="@style/BaseText.Caption.Black.14"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
-            android:text="@string/device_history"
-            android:textSize="14sp"
-            android:textColor="@color/black" />
+            android:layout_weight="1"
+            android:text="@string/device_history"/>
 
 
         <ImageView
             android:id="@+id/iv_arrow_device_history"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            tools:ignore="ContentDescription" />
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_forward_24"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        android:id="@+id/divDeviceHistory"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/llDeviceHistory"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/gray_15"/>
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/llHelp"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_profile_item_bottom"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_profile_item"
         android:orientation="horizontal"
-        android:paddingVertical="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divDeviceHistory">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/tvHelp"
-            android:layout_width="wrap_content"
+            style="@style/BaseText.Caption.Black.14"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
-            android:text="@string/help_support"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
+            android:layout_weight="1"
+            android:text="@string/help_support"/>
 
         <ImageView
             android:id="@+id/iv_arrow_help"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            tools:ignore="ContentDescription" />
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_forward_24"/>
 
-    </RelativeLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogOut"
+        style="@style/BaseText.Bold.Red.14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:stateListAnimator="@null"         android:background="@drawable/bg_profile_item"
+        android:text="@string/log_out"
+        android:textAllCaps="false" />
 
     <TextView
         android:id="@+id/tv_app_version"
+        style="@style/BaseText.Caption.Gray.14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogOut" />
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center"
+        tools:text="App version: 2.0"/>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
