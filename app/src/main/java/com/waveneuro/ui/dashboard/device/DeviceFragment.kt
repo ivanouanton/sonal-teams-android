@@ -74,8 +74,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     private lateinit var binding: FragmentDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter
 
-    var isSearching = false
-
+    private var isSearching = false
     private var dashBoardViewModel: DashBoardViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +147,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         deviceViewModel.viewEffect.removeObservers(viewLifecycleOwner)
         deviceViewModel.data.observe(viewLifecycleOwner, notesViewStateObserver)
         deviceViewModel.viewEffect.observe(viewLifecycleOwner, notesViewEffectObserver)
-        dashBoardViewModel!!.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
+        dashBoardViewModel?.data?.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
             Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
             if (dashboardViewState != null) {
                 if (dashboardViewState is Connect) {
@@ -327,7 +326,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                         (activity as BaseActivity?)?.removeWait()
                     }
                     deviceViewModel.processEvent(DeviceViewEvent.Disconnected)
-                    dashBoardViewModel!!.processEvent(DashboardViewEvent.Disconnected)
+                    dashBoardViewModel?.processEvent(DashboardViewEvent.Disconnected)
                 }
             })
     }
@@ -336,7 +335,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     private fun locateDevice() {
         BluetoothManager.getInstance().deviceList(object : BleScanCallback() {
             override fun onScanFinished(scanResultList: List<com.ap.ble.data.BleDevice>) {
-                Log.e("DEVICE_LIST", "" + Arrays.toString(scanResultList.toTypedArray()))
+                Log.e("DEVICE_LIST", "" + scanResultList.toTypedArray().contentToString())
                 if (scanResultList.isNotEmpty()) {
                     val bleDevices: MutableList<BleDevice> = ArrayList()
                     for (i in scanResultList.indices) {

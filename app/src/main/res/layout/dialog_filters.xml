@@ -59,9 +59,8 @@
 
     <Button
         android:id="@+id/btn_apply"
-        style="@style/RoundedButton.Aqua.BlackText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/RoundedButton.AquaBlack.Text"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="32dp"
         android:text="Apply"
         app:layout_constraintBottom_toBottomOf="parent"

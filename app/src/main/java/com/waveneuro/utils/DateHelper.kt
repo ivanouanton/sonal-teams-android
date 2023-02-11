@@ -11,16 +11,14 @@ object DateHelper {
     private const val PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz"
 
     private var birthdayFormatter = SimpleDateFormat(BIRTHDAY_PATTERN, Locale.getDefault())
-    private var dateFormatter = SimpleDateFormat(PATTERN_RFC1123, Locale.getDefault())
+    private var dateFormatter = SimpleDateFormat(PATTERN_RFC1123, Locale.US)
+
+    fun getBirthdayDate(birthday: String?): Date? = try {
+        dateFormatter.parse(birthday ?: "")
+    } catch (e: Exception) { null }
 
     fun birthdayFormat(date: Date?): String =
         date?.let { birthdayFormatter.format(it) } ?: ""
-
-    fun getBirthdayDate(birthday: String?): Date? = try {
-            dateFormatter.parse(birthday ?: "")
-        } catch (e: Exception) {
-            null
-        }
 
     fun birthdayFormat(stringDate: String?): String =
         getDate(stringDate)?.let { birthdayFormatter.format(it) } ?: ""

@@ -78,9 +78,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_session"
-        style="@style/RoundedButton.Aqua.BlackText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/RoundedButton.AquaBlack.Text"
         android:layout_marginHorizontal="32dp"
         android:layout_marginBottom="16dp"
         android:text="@string/start_session"
