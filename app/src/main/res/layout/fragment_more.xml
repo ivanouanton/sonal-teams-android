@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        style="@style/BaseText.Bold.Black.14"
+        style="@style/BaseText.Bold.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/account"

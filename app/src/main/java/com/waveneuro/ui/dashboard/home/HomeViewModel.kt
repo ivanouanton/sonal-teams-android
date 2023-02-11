@@ -189,17 +189,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getOrganizations() {
-        protocolData.postValue(HomeProtocolViewState.Loading(true))
         getOrganizationsUseCase.execute(object: UseCaseCallback<List<OrganizationResponse>> {
 
             override fun onSuccess(response: List<OrganizationResponse>) {
                 clientsData.postValue(OrganizationsSuccess(response))
-                protocolData.postValue(HomeProtocolViewState.Loading(false))
             }
 
-            override fun onError(throwable: Throwable) {
-                protocolData.postValue(HomeProtocolViewState.Loading(false))
-            }
+            override fun onError(throwable: Throwable) {}
 
             override fun onFinish() {}
         })
