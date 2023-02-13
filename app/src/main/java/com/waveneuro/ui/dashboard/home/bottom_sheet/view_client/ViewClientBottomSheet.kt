@@ -27,6 +27,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: DialogViewClientBinding
 
     private var clientId: Int = 0
+    private var clientUrl: String? = null
     private var firstName: String? = null
     private var lastName: String? = null
     private var birthday: String? = null
@@ -98,7 +99,9 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
                 sessionHistoryCommand.navigate(
                     requireActivity(),
                     clientId,
-                    "$firstName $lastName",
+                    clientUrl,
+                    firstName,
+                    lastName,
                     treatmentDataPresent
                 )
             }
@@ -132,6 +135,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
             this.onStartSession = onStartSession
             this.onClientUpdated = onClientUpdated
             this.clientId = client.id
+            this.clientUrl = client.imageURLString
             this.firstName = client.firstName
             this.lastName = client.lastName
             this.birthday = client.birthday
