@@ -19,15 +19,16 @@ class OrgsListAdapter(
 
     inner class ViewHolder(private val binding: ItemOrganizationBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
+            val organization = orgs[bindingAdapterPosition]
             with(binding) {
-                tvName.text = orgs[bindingAdapterPosition].name
-                ivTick.isVisible = selected.contains(orgs[bindingAdapterPosition].id)
+                tvName.text = organization.name
+                ivTick.isVisible = selected.contains(organization.id)
                 root.setOnClickListener {
-                    if (selected.contains(orgs[bindingAdapterPosition].id)) {
-                        onDeselected(orgs[bindingAdapterPosition].id)
+                    if (selected.contains(organization.id)) {
+                        onDeselected(organization.id)
                         ivTick.visibility = View.INVISIBLE
                     } else {
-                        onSelected(orgs[bindingAdapterPosition].id)
+                        onSelected(organization.id)
                         ivTick.visibility = View.VISIBLE
                     }
                 }
