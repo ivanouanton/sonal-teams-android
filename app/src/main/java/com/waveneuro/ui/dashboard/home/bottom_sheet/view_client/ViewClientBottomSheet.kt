@@ -38,7 +38,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
     private var tosStatus: TosStatus? = null
     private var treatmentDataPresent = false
     private var onStartSession: (() -> Unit)? = null
-    private var onClientUpdated: (() -> Unit)? = null
+    private var onClientUpdated: ((String?) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -118,7 +118,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
             onClientUpdated, clientId, firstName, lastName, birthday, isMale, email
         )
         editClientBottomSheet.show(parentFragmentManager, "EditClient BottomSheet")
-//        dismiss()
+        dismiss()
     }
 
     override fun getTheme(): Int {
@@ -128,7 +128,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
     companion object {
         fun newInstance(
             onStartSession: () -> Unit,
-            onClientUpdated: () -> Unit,
+            onClientUpdated: (String?) -> Unit,
             client: ClientUi,
             treatmentDataPresent: Boolean
         ) = ViewClientBottomSheet().apply {

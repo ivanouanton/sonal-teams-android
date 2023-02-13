@@ -101,6 +101,8 @@
     <string name="pair_device_title">Pair device</string>
     <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
     <string name="protocol_not_active">Your Protocol is processing. We will notify you via email once it ready</string>
+    <string name="info_updated">Info updated</string>
+    <string name="info_updated_description">%1$s\'s info details updated successfully</string>
 
     <!--Device F-->
     <string name="btn_next">Next</string>

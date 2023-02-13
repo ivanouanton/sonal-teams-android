@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.waveneuro.R
 import com.waveneuro.databinding.FragmentHomeBinding
@@ -216,9 +217,20 @@ class HomeFragment : BaseFragment() {
         viewModel.processEvent(HomeViewEvent.StartSessionClicked())
     }
 
-    private fun onClientUpdated() {
-        requireActivity().toast("Success!!!")
+    private fun onClientUpdated(fullName: String?) {
+        showSuccessDialog(fullName)
         viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
+    }
+
+    private fun showSuccessDialog(fullName: String?) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialDialogGeneral)
+            .setTitle(R.string.info_updated)
+            .setMessage(getString(R.string.info_updated_description, fullName))
+            .setPositiveButton(R.string.ok) { dialog: DialogInterface?, _: Int ->
+                dialog?.dismiss()
+            }
+            .setCancelable(true)
+            .show()
     }
 
     private fun TextInputEditText.onTextChanged(onTextChanged: (String) -> Unit) {

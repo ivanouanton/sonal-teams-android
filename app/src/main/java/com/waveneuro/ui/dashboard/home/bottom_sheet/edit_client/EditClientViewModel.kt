@@ -30,7 +30,7 @@ class EditClientViewModel @Inject constructor(
         updatePatientUseCase.execute(request, id, object : UseCaseCallback<ClientResponse> {
 
             override fun onSuccess(response: ClientResponse) {
-                dataEditClientLive.postValue(Success)
+                dataEditClientLive.postValue(Success("$firstName + $lastName"))
             }
 
             override fun onError(throwable: Throwable) {

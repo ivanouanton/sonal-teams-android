@@ -35,7 +35,7 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
     private var birthday: String? = null
     private var isMale: Boolean = false
     private var email: String? = null
-    private var onClientUpdated: (() -> Unit)? = null
+    private var onClientUpdated: ((String?) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -77,8 +77,8 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
     private var viewStateObserver = Observer<EditClientViewState> { viewState ->
         when (viewState) {
             is Success -> {
+                onClientUpdated?.invoke(viewState.fullName)
                 dismiss()
-                onClientUpdated?.invoke()
             }
             is Error -> viewState.message?.let { requireActivity().toast(it) }
         }
@@ -116,7 +116,7 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance(
-            onClientUpdated: (() -> Unit)?,
+            onClientUpdated: ((String?) -> Unit)?,
             id: Int,
             name: String?,
             lastName: String?,
