@@ -14,12 +14,12 @@ class HistoryViewModel @Inject constructor(
     private val getSonalDevicesUseCase: GetSonalDevicesUseCase
 ) : ViewModel() {
 
-    val data = MutableLiveData<HistoryViewState>()
-
     @Inject
     lateinit var errorUtil: ErrorUtil
     @Inject
     lateinit var dataManager: DataManager
+
+    val data = MutableLiveData<HistoryViewState>()
 
     fun processEvent(viewEvent: HistoryViewEvent?) {
         if (viewEvent is HistoryViewEvent.Start) {

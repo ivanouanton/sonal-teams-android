@@ -97,7 +97,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
             tvViewHistory.setOnClickListener {
                 sessionHistoryCommand.navigate(
                     requireActivity(),
-                    clientId.toString(),
+                    clientId,
                     "$firstName $lastName",
                     treatmentDataPresent
                 )

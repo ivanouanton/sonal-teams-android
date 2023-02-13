@@ -30,8 +30,6 @@ class DevicesHistoryAdapter(
         viewHolder.bind()
     }
 
-    override fun getItemCount(): Int {
-        return devices.size
-    }
+    override fun getItemCount(): Int = devices.size
 
 }
