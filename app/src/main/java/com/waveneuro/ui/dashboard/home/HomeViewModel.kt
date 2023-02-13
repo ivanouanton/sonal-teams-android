@@ -53,14 +53,14 @@ class HomeViewModel @Inject constructor(
     fun processEvent(viewEvent: HomeViewEvent?) {
         when (viewEvent) {
             is Start -> {
-                getUserDetails() // TODO check
+                getUserDetails()
                 resetPage()
-                getClients(page, "", filters.value, true)
+                getClients(page, "", filters.value ?: emptyList(), true)
                 getOrganizations()
             }
             is NewQuery -> {
                 resetPage()
-                getClients(page, viewEvent.query, filters.value, true)
+                getClients(page, viewEvent.query, filters.value ?: emptyList(), true)
             }
             is OnClientClick -> {
                 getClient(viewEvent.id)
@@ -68,13 +68,8 @@ class HomeViewModel @Inject constructor(
             is ClientSuccess -> {
                 getProtocol(viewEvent.client)
             }
-            is StartSessionClicked -> {
-                clientsData.postValue(PatientSessionSuccess())
-//                viewEffect.postValue(HomeViewEffect.SessionRedirect(
-//                    viewEvent.treatmentLength,
-//                    viewEvent.protocolFrequency,
-//                    viewEvent.sonalId
-//                ))
+            is OnStartSessionClick -> {
+                viewEffect.postValue(HomeViewEffect.DeviceRedirect)
             }
 //            is DeviceDisconnected -> {
 //                deviceData.postValue(HomeDeviceViewState.PairDevice)
@@ -90,6 +85,7 @@ class HomeViewModel @Inject constructor(
     private fun getUserDetails() {
         if (dataManager.user != null && dataManager.user.isNameAvailable) {
             userData.postValue(HomeUserViewState.Success(dataManager.user))
+            Timber.e("dataManager.user = ${dataManager.user}")
         } else {
             getPersonalInfo()
         }
@@ -99,6 +95,7 @@ class HomeViewModel @Inject constructor(
         getPersonalInfoUseCase.execute(object : UseCaseCallback<UserInfoResponse> {
             override fun onSuccess(response: UserInfoResponse) {
                 Timber.e("PROFILE_SUCCESS")
+                Timber.e("response: UserInfoResponse = $response")
                 dataManager.saveUser(response)
                 userData.postValue(
                     HomeUserViewState.Success(
@@ -115,13 +112,12 @@ class HomeViewModel @Inject constructor(
         })
     }
 
-    private fun getClients(page: Int?, query: String?, filters: List<Int>?, isNew: Boolean = false) {
+    private fun getClients(page: Int, query: String, filters: List<Int>, isNew: Boolean = false) {
         protocolData.postValue(HomeProtocolViewState.Loading(true))
-        getPatientsUseCase.execute(page, query, filters?.toTypedArray(),
+        getPatientsUseCase.execute(page, query, filters.toTypedArray(),
             object : UseCaseCallback<ClientListResponse> {
 
                 override fun onSuccess(response: ClientListResponse) {
-                    Timber.e("response = $response")
                     totalPages = response.pages
                     if (isNew) clientList.clear()
                     clientList.addAll(mapper.fromApiToUi(response.patients))
@@ -145,7 +141,6 @@ class HomeViewModel @Inject constructor(
         getPatientUseCase.execute(id, object : UseCaseCallback<ClientResponse> {
 
                 override fun onSuccess(response: ClientResponse) {
-                    Timber.e("response = $response")
                     processEvent(ClientSuccess(mapper.fromApiToUi(response)))
                     protocolData.postValue(HomeProtocolViewState.Loading(false))
                 }
@@ -166,13 +161,11 @@ class HomeViewModel @Inject constructor(
         getLatestProtocolUseCase.execute(client.id, object : UseCaseCallback<ProtocolResponse> {
             override fun onSuccess(response: ProtocolResponse) {
                 with(response) {
-                    dataManager.apply {
-                        saveProtocolFrequency(protocolFrequency)
-                        saveTreatmentLength(treatmentLength)
-                        saveProtocolId(id)
-                        saveEegId(eegId)
-                        savePatientId(client.id.toLong())
-                    }
+                    dataManager.saveProtocolFrequency(protocolFrequency)
+                    dataManager.saveTreatmentLength(treatmentLength)
+                    dataManager.saveProtocolId(id)
+                    dataManager.saveEegId(eegId)
+                    dataManager.savePatientId(client.id.toLong())
                 }
 
                 protocolData.postValue(HomeProtocolViewState.Loading(false))
@@ -208,7 +201,7 @@ class HomeViewModel @Inject constructor(
     fun getMoreClients(query: String) {
         if (page < totalPages) {
             page += 1
-            getClients(page, query, filters.value)
+            getClients(page, query, filters.value ?: emptyList())
         }
     }
 

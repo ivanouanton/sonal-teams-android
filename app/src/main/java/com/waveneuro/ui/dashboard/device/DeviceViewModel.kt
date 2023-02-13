@@ -35,7 +35,7 @@ class DeviceViewModel @Inject constructor(
         Timber.e("DEVICE_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
         if (data.value != null) Timber.e(
             "DEVICE_STATE :: %s",
-            "" + data.value!!.javaClass.simpleName
+            "" + data.value?.javaClass?.simpleName
         )
         when (viewEvent) {
             is Start -> data.postValue(InitLocateDevice(dataManager.user))

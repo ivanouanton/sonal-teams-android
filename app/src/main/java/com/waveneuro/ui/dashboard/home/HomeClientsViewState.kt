@@ -9,7 +9,4 @@ sealed class HomeClientsViewState {
     data class OrganizationsSuccess(val organizationList: List<OrganizationResponse>) : HomeClientsViewState()
 
     data class Error(val message: String?) : HomeClientsViewState()
-
-    // TODO What is sonal id? (val id: Int)
-    class PatientSessionSuccess() : HomeClientsViewState()
 }

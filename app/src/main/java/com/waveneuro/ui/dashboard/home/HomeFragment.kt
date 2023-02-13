@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -33,20 +32,13 @@ import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
 import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter
 import com.waveneuro.ui.dashboard.home.bottom_sheet.filters.FiltersBottomSheet
 import com.waveneuro.ui.dashboard.home.bottom_sheet.view_client.ViewClientBottomSheet
-import com.waveneuro.ui.dashboard.web.WebCommand
 import com.waveneuro.ui.model.client.ClientUi
-import com.waveneuro.ui.session.session.SessionCommand
-import com.waveneuro.utils.ext.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
 
-    @Inject
-    lateinit var sessionCommand: SessionCommand
-    @Inject
-    lateinit var webCommand: WebCommand
     @Inject
     lateinit var viewModel: HomeViewModel
 
@@ -101,11 +93,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setAdapter() {
-        adapter = ClientListAdapter(
-            requireContext(),
-            ::onItemClick,
-            ::moreRequest
-        )
+        adapter = ClientListAdapter(requireContext(), ::onItemClick, ::moreRequest)
         binding.rvClients.adapter = adapter
         adapter.submitList(currentList)
     }
@@ -150,13 +138,7 @@ class HomeFragment : BaseFragment() {
                     ::onStartSession, ::onClientUpdated,
                     viewState.client, viewState.isTreatmentDataPresent
                 )
-                viewClientBottomSheet.show(childFragmentManager, "");
-            }
-            is PatientSessionSuccess -> {
-//              sessionCommand.navigate()
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fr_container, DeviceFragment.newInstance())
-                    .commit()
+                viewClientBottomSheet.show(childFragmentManager, "ViewClient BottomSheet");
             }
             else -> {}
         }
@@ -165,31 +147,22 @@ class HomeFragment : BaseFragment() {
     private val homeViewEffectObserver = Observer { viewEffect: HomeViewEffect? ->
         when (viewEffect) {
             is HomeViewEffect.BackRedirect -> {}
-            is HomeViewEffect.SessionRedirect -> {
-                launchSessionScreen(
-                    viewEffect.treatmentLength,
-                    viewEffect.protocolFrequency,
-                    viewEffect.sonalId
-                )
+            is HomeViewEffect.DeviceRedirect -> {
+                launchDeviceScreen()
             }
             else -> {}
         }
     }
+
     private val homeProtocolDataObserver = Observer { protocol: HomeProtocolViewState? ->
         if (protocol is HomeProtocolViewState.Loading)
             binding.pbProgress.isVisible = protocol.loading
     }
 
-    private fun launchSessionScreen(
-        treatmentLength: String,
-        protocolFrequency: String,
-        sonalId: String
-    ) {
-        if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
-            requireActivity().toast("Treatment data not available.")
-            return
-        }
-        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId)
+    private fun launchDeviceScreen() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fr_container, DeviceFragment.newInstance())
+            .commit()
     }
 
     private fun onItemClick(client: ClientUi) {
@@ -212,17 +185,16 @@ class HomeFragment : BaseFragment() {
         viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
     }
 
-    //TODO what is sonal id?
     private fun onStartSession() {
-        viewModel.processEvent(HomeViewEvent.StartSessionClicked())
+        viewModel.processEvent(HomeViewEvent.OnStartSessionClick)
     }
 
     private fun onClientUpdated(fullName: String?) {
-        showSuccessDialog(fullName)
+        showSuccessUserChangedDialog(fullName)
         viewModel.processEvent(HomeViewEvent.NewQuery(binding.etSearch.text.toString()))
     }
 
-    private fun showSuccessDialog(fullName: String?) {
+    private fun showSuccessUserChangedDialog(fullName: String?) {
         MaterialAlertDialogBuilder(requireContext(), R.style.MaterialDialogGeneral)
             .setTitle(R.string.info_updated)
             .setMessage(getString(R.string.info_updated_description, fullName))
@@ -248,7 +220,6 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    // TODO check bottom
     private fun onPermissionGranted(permission: String) {
         when (permission) {
             Manifest.permission.ACCESS_FINE_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
@@ -267,7 +238,7 @@ class HomeFragment : BaseFragment() {
                     .setCancelable(false)
                     .show()
             } else {
-                viewModel.processEvent(HomeViewEvent.StartSessionClicked())
+                viewModel.processEvent(HomeViewEvent.OnStartSessionClick)
             }
         }
     }

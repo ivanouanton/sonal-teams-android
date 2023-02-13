@@ -125,7 +125,6 @@ public interface DataManager {
 
     void setOnboardingDisplayed();
 
-
     boolean getPrecautionsDisplayed();
 
     void setPrecautionsDisplayed();

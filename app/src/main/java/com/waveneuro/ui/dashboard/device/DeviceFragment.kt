@@ -25,8 +25,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ap.ble.BluetoothManager
 import com.ap.ble.BluetoothManager.DeviceConnectionCallback
@@ -57,7 +57,6 @@ import com.waveneuro.ui.session.how_to.HowToCommand
 import com.waveneuro.ui.session.session.SessionCommand
 import com.waveneuro.utils.ext.toast
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
@@ -71,11 +70,13 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     @Inject
     lateinit var deviceViewModel: DeviceViewModel
 
+    private val dashBoardViewModel: DashBoardViewModel by viewModels()
+
     private lateinit var binding: FragmentDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter
 
     private var isSearching = false
-    private var dashBoardViewModel: DashBoardViewModel? = null
+    private var operatingAnim: Animation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -84,9 +85,6 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
             .build()
         fragmentComponent.inject(this)
         super.onCreate(savedInstanceState)
-        dashBoardViewModel = ViewModelProviders.of(activity!!).get(
-            DashBoardViewModel::class.java
-        )
     }
 
     override fun onCreateView(
@@ -147,7 +145,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         deviceViewModel.viewEffect.removeObservers(viewLifecycleOwner)
         deviceViewModel.data.observe(viewLifecycleOwner, notesViewStateObserver)
         deviceViewModel.viewEffect.observe(viewLifecycleOwner, notesViewEffectObserver)
-        dashBoardViewModel?.data?.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
+        dashBoardViewModel.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
             Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
             if (dashboardViewState != null) {
                 if (dashboardViewState is Connect) {
@@ -259,7 +257,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     private fun setUserDetail(user: User) {
         // DONE Which name need to display
         if (TextUtils.isEmpty(user.imageThumbnailUrl)) {
-            val strArray = user.name!!.split(" ").toTypedArray()
+            val strArray = user.name?.split(" ")?.toTypedArray() ?: arrayOf()
             val builder = StringBuilder()
             if (strArray.isNotEmpty()) {
                 builder.append(strArray[0], 0, 1)
@@ -313,7 +311,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                     }
                     deviceViewModel.processEvent(DeviceViewEvent.Connected)
                     deviceViewModel.setDeviceId(bleDevice.name)
-                    dashBoardViewModel?.processEvent(
+                    dashBoardViewModel.processEvent(
                         DashboardViewEvent.Connected(
                             BleDevice(bleDevice)
                         )
@@ -326,12 +324,11 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                         (activity as BaseActivity?)?.removeWait()
                     }
                     deviceViewModel.processEvent(DeviceViewEvent.Disconnected)
-                    dashBoardViewModel?.processEvent(DashboardViewEvent.Disconnected)
+                    dashBoardViewModel.processEvent(DashboardViewEvent.Disconnected)
                 }
             })
     }
 
-    private var operatingAnim: Animation? = null
     private fun locateDevice() {
         BluetoothManager.getInstance().deviceList(object : BleScanCallback() {
             override fun onScanFinished(scanResultList: List<com.ap.ble.data.BleDevice>) {
@@ -362,10 +359,10 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
 
     private val notesViewEffectObserver: Observer<DeviceViewEffect?> = Observer { viewEffect: DeviceViewEffect? ->
         if (viewEffect is DeviceViewEffect.SessionRedirect) {
-            val (treatmentLength, protocolFrequency, sonalId) = viewEffect
             launchSessionScreen(
-                treatmentLength, protocolFrequency,
-                sonalId
+                viewEffect.treatmentLength,
+                viewEffect.protocolFrequency,
+                viewEffect.sonalId
             )
         }
     }
@@ -376,7 +373,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
 
     override fun onClickDevice(data: BleDevice) {
         if (requireActivity() is BaseActivity) {
-            (activity as BaseActivity?)!!.displayWait()
+            (activity as BaseActivity?)?.displayWait()
         }
         deviceViewModel.processEvent(DeviceViewEvent.DeviceClicked(data))
     }

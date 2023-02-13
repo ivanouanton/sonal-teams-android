@@ -240,10 +240,10 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 .setMessage("You want to leave session?")
                 .setNegativeButton(
                     "No"
-                ) { dialog: DialogInterface?, which: Int -> }
+                ) { _: DialogInterface?, _: Int -> }
                 .setPositiveButton(
                     "Yes"
-                ) { dialog: DialogInterface?, which: Int ->
+                ) { _: DialogInterface?, _: Int ->
                     if (!sessionTimer.isFinished) sessionTimer.pause()
                     dashboardCommand.navigate()
                 }

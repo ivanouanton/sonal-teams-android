@@ -11,7 +11,6 @@ class GetPatientsUseCase @Inject constructor(
     private val dataManager: DataManager
 ) : ObservableUseCase<ClientListResponse>() {
 
-    //TODO check null
     private var page: Int? = null
     private var ids: Array<Int>? = null
     private var query: String? = null
@@ -21,7 +20,7 @@ class GetPatientsUseCase @Inject constructor(
     }
 
     fun execute(
-        newPage: Int?, newQuery: String?, newIds: Array<Int>?,
+        newPage: Int, newQuery: String, newIds: Array<Int>,
         useCaseCallback: UseCaseCallback<ClientListResponse>
     ) {
         page = newPage
@@ -31,31 +30,3 @@ class GetPatientsUseCase @Inject constructor(
         super.execute(useCaseCallback)
     }
 }
-
-// TODO
-//public class GetPatientsUseCase extends ObservableUseCase<PatientListResponse> {
-//
-//    private final DataManager dataManager;
-//
-//    private Integer page;
-//    private Integer[] ids;
-//    private String startsWith;
-//
-//    @Inject
-//    public GetPatientsUseCase(DataManager dataManager) {
-//        this.dataManager = dataManager;
-//    }
-//
-//    @Override
-//    public Observable<PatientListResponse> buildUseCaseSingle() {
-//        return dataManager.patients(page, startsWith, ids);
-//    }
-//
-//    public void execute(Integer page, String starsWith, Integer[] ids,
-//        UseCaseCallback<PatientListResponse> useCaseCallback) {
-//        this.page = page;
-//        this.ids=ids;
-//        this.startsWith = starsWith;
-//        super.execute(useCaseCallback);
-//    }
-//}
