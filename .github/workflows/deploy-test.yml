@@ -9,6 +9,8 @@ on:
     types: [opened, ready_for_review, synchronize, labeled, reopened]
 jobs:
   deploy:
+    outputs:
+      jobstatus: ${{ job.status }}
     if: contains(github.event.pull_request.labels.*.name, 'ready for test')
     name: Build & Upload Mobile Application
     runs-on: ubuntu-latest
@@ -47,3 +49,63 @@ jobs:
           FLAVOR: 'tеst'
         run: |
           bundle exec fastlane android beta --env test
+      
+  slack:
+    needs: deploy
+    if: contains(github.event.pull_request.labels.*.name, 'ready for test') && ${{ always() }}
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send slack notification
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "attachments": [
+                {
+                  "pretext": "*Pull Request:* <https://github.com/waveneuroscience/sonal-mobile-app-ios/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>",
+                  "color": "dbab09",
+                  "fields": [
+                    {
+                      "title": "OS",
+                      "short": true,
+                      "value": ":robot_face: Android"
+                    },
+                    {
+                      "title": "Build result",
+                      "short": true,
+                      "value": "${{ needs.deploy.outputs.jobstatus }}"
+                    },
+                    {
+                      "title": "App Name",
+                      "short": true,
+                      "value": "Sonal Teams"
+                    },
+                    {
+                      "title": "Version (Build)",
+                      "short": true,
+                      "value": "${{ env.FL_BUILD_VERSION }}"
+                    }
+                  ]
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Environment: *Test*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Subscriptions tags: wn_android_${{ needs.deploy.outputs.jobstatus }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_URL_SLACK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

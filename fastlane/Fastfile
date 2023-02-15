@@ -3,7 +3,7 @@ default_platform(:android)
 def set_version_code(version_code)
   path = '../app/build.gradle'
   re = /versionCode\s+(\d+)/
-
+  sh("echo FL_BUILD_VERSION=#{re} >> $GITHUB_ENV")
   s = File.read(path)
   s[re, 1] = String(version_code)
 
