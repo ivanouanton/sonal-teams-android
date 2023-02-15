@@ -310,9 +310,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_session"
-        style="@style/RoundedButton.Aqua.BlackText"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
+        style="@style/RoundedButton.AquaBlack.Text"
         android:layout_marginBottom="8dp"
         android:stateListAnimator="@null"
         android:text="@string/start_session"

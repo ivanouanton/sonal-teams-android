@@ -3,20 +3,18 @@ package com.waveneuro.domain.usecase.patient;
 import com.asif.abase.domain.base.ObservableUseCase;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
-import com.waveneuro.data.model.request.patient.PatientRequest;
-import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
-import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.request.client.ClientRequest;
+import com.waveneuro.data.model.response.client.ClientResponse;
 
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class UpdatePatientUseCase extends ObservableUseCase<PatientResponse> {
+public class UpdatePatientUseCase extends ObservableUseCase<ClientResponse> {
 
     private final DataManager dataManager;
 
-    private PatientRequest request;
+    private ClientRequest request;
     private int id;
 
     @Inject
@@ -25,11 +23,11 @@ public class UpdatePatientUseCase extends ObservableUseCase<PatientResponse> {
     }
 
     @Override
-    public Observable<PatientResponse> buildUseCaseSingle() {
+    public Observable<ClientResponse> buildUseCaseSingle() {
         return dataManager.updatePatientWithId(id, request);
     }
 
-    public void execute(PatientRequest request, int id,  UseCaseCallback<PatientResponse> useCaseCallback) {
+    public void execute(ClientRequest request, int id, UseCaseCallback<ClientResponse> useCaseCallback) {
         this.request=request;
         this.id=id;
         super.execute(useCaseCallback);

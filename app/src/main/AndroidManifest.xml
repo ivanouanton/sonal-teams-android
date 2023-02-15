@@ -53,7 +53,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.dashboard.more.WebActivity"
+            android:name=".ui.dashboard.web.WebActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -65,7 +65,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.dashboard.HomeActivity"
+            android:name=".ui.dashboard.DashboardActivity"
             android:exported="false"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

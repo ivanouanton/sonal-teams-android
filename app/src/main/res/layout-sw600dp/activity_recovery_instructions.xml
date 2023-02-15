@@ -52,9 +52,7 @@
 
         <Button
             android:id="@+id/btn_open_email_app"
-            style="@style/RoundedButton.Aqua"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
+            style="@style/RoundedButton.AquaBlack.Text"
             android:layout_marginTop="@dimen/margin_32dp"
             android:text="@string/open_email_app"
             app:layout_constraintBottom_toTopOf="@+id/tv_label_dont_receive"

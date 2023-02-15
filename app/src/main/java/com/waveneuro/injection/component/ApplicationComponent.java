@@ -7,7 +7,6 @@ import com.waveneuro.data.DataManager;
 import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.injection.module.ApplicationModule;
-import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapper;
 
 import javax.inject.Singleton;
 
@@ -26,5 +25,4 @@ public interface ApplicationComponent {
 
     AnalyticsManager analyticsManager();
 
-    OrganizationMapper organizationMapper();
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Background.WhitePattern"
-    tools:context=".ui.dashboard.more.WebActivity">
+    tools:context=".ui.dashboard.web.WebActivity">
 
     <ImageView
         android:id="@+id/iv_back"

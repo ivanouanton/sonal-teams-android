@@ -21,6 +21,7 @@
     <string name="powered_by">Powered by</string>
     <string name="auth_code">Auth code</string>
     <string name="enter_six_digit_mfa">Enter the six digit code from your authenticator app to complete login</string>
+    <string name="username_error">Enter username</string>
 
     <!--Register-->
     <string name="registration">Registration</string>
@@ -100,6 +101,8 @@
     <string name="pair_device_title">Pair device</string>
     <string name="visit_sonal_website">Please visit SONAL product website to manage your account</string>
     <string name="protocol_not_active">Your Protocol is processing. We will notify you via email once it ready</string>
+    <string name="info_updated">Info updated</string>
+    <string name="info_updated_description">%1$s\'s info details updated successfully</string>
 
     <!--Device F-->
     <string name="btn_next">Next</string>
@@ -171,7 +174,6 @@
     <string name="completed">Completed</string>
     <string name="terminated">Terminated</string>
 
-
     <!--How to use the device-->
     <string name="got_it">Got it</string>
     <string name="list_of_precautions">List of all precautions</string>
@@ -182,14 +184,12 @@
     <string name="how_to_step5">Choose a client above to start a session.</string>
     <string name="how_to_step6">This device uses strong magnets.    Avoid wearing metal items on or near your head. Ensure you are aware of all precautions before proceeding.</string>
 
-
     <!--Precautions-->
     <string name="precautions_title">The Sonal should NOT be used by individuals who have:</string>
     <string name="metal_objects_title">Metal objects such as:</string>
     <string name="precautions_list">\u2022 cardiac pacemakers \n\u2022 implanted medication pumps \n\u2022 defribrilators \n\u2022 intra cardiac lines \n\u2022 aneurysm clips \n\u2022 shunts \n\u2022 stimulators \n\u2022 cochlear implants \n\u2022 stents \n\u2022 electrodes \n\u2022 metallic objects in or on their head</string>
     <string name="metal_objects_list">\u2022 shrapnel \n\u2022 bullets or bullet fragments \n\u2022 magnetically activated dental implants</string>
     <string name="precautions_warning">Failure to follow this restriction could result in serious injury or death.</string>
-
 
     <!--Session Complete-->
     <string name="session_complete">Session Complete</string>
@@ -208,6 +208,16 @@
     <string name="search">Search</string>
     <string name="no_client_with_this_name_is_found">No client with this name is found</string>
     <string name="label_last_connection">\"Last connection: \"</string>
+
+    <!--View User-->
+    <string name="view_session_history"><u>View Session History</u></string>
+    <string name="edit">Edit</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="sex_at_birth">Sex at Birth</string>
+    <string name="tos_status">TOS Status</string>
+    <string name="signed">Signed</string>
+    <string name="not_signed">Not signed</string>
+    <string name="waiting_for_signature">Waiting for signature</string>
 
 
     <string name="update_required">Update Required</string>
@@ -259,4 +269,7 @@
     <string name="waveneuro_logo_alt">WaveNeuro Logo</string>
     <string name="sonal_logo">Sonal Logo</string>
     <string name="default_error_message">Please contact admin at support@waveneurohelp.zendesk.com</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="date_picker_birth_title">Select Birth date</string>
 </resources>

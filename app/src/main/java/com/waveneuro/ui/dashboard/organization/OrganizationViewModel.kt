@@ -6,8 +6,8 @@ import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
-import com.waveneuro.ui.dashboard.organization.adapter.model.OrganizationItem
-import com.waveneuro.ui.dashboard.organization.mapper.OrganizationMapperImpl
+import com.waveneuro.ui.model.organization.OrganizationUi
+import com.waveneuro.ui.model.organization.mapper.OrganizationMapperImpl
 import com.waveneuro.utils.ErrorUtil
 import javax.inject.Inject
 
@@ -32,8 +32,8 @@ class OrganizationViewModel @Inject constructor(
         }
     }
 
-    fun getOrganizations(response: UserInfoResponse): List<OrganizationItem> =
-        mapper.fromDomainToUi(response.organizations)
+    fun getOrganizations(response: UserInfoResponse): List<OrganizationUi> =
+        mapper.fromApiToUi(response.organizations)
 
     private fun getPersonalInfo() {
         data.postValue(OrganizationViewState.Loading(true))

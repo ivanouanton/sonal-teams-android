@@ -96,8 +96,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_locate_device"
-                style="@style/RoundedButton.Aqua.BlackText"
-                android:layout_width="0dp"
+                style="@style/RoundedButton.AquaBlack.Text"
                 android:layout_marginHorizontal="32dp"
                 android:text="@string/btn_next"
                 app:layout_constraintBottom_toTopOf="@+id/tv_first_time"

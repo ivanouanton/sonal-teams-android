@@ -4,52 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_edit_client"
+        style="@style/BaseText.Caption.Aqua.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Edit"
-        android:padding="8dp"
-        android:textColor="@color/aqua"
+        android:text="@string/edit"
+        android:paddingEnd="8dp"
+        android:paddingVertical="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_clients_name"
+        android:id="@+id/tv_name"
+        style="@style/BaseText.Bold.Black.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
+        android:layout_marginHorizontal="50dp"
         android:gravity="center"
-        android:singleLine="true"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_edit_client"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_edit_client"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_edit_client"
         tools:text="John Doe" />
 
     <TextView
         android:id="@+id/tv_dob"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Date of Birth"
-        android:textColor="@color/black"
+        android:layout_marginTop="24dp"
+        android:text="@string/date_of_birth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_edit_client" />
 
     <TextView
         android:id="@+id/tv_dob_value"
+        style="@style/BaseText.Caption.Gray.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
@@ -58,123 +54,138 @@
         app:layout_constraintTop_toTopOf="@+id/tv_dob" />
 
     <TextView
-        android:id="@+id/tv_sab"
+        android:id="@+id/tv_sex"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Sex at Birth"
-        android:textColor="@color/black"
+        android:text="@string/sex_at_birth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_dob" />
 
     <TextView
-        android:id="@+id/tv_sab_value"
+        android:id="@+id/tv_sex_value"
+        style="@style/BaseText.Caption.Gray.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_sab"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_sex"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_sab" />
+        app:layout_constraintTop_toTopOf="@+id/tv_sex" />
 
     <TextView
         android:id="@+id/tv_email"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Email"
-        android:textColor="@color/black"
+        android:text="@string/email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sab" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_sex" />
 
     <TextView
         android:id="@+id/tv_email_value"
-        android:layout_width="wrap_content"
+        style="@style/BaseText.Caption.Gray.16"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_email" />
+        app:layout_constraintTop_toTopOf="@+id/tv_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"
+        tools:text="patrick.williams+123343@remedypoints.com"/>
 
     <TextView
         android:id="@+id/tv_username"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Username"
-        android:textColor="@color/black"
+        android:text="@string/username"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
     <TextView
         android:id="@+id/tv_username_value"
-        android:layout_width="wrap_content"
+        style="@style/BaseText.Caption.Gray.16"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_username"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_username" />
+        app:layout_constraintTop_toTopOf="@+id/tv_username"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tv_organization"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Organization"
-        android:textColor="@color/black"
+        android:text="@string/organization"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_username" />
 
     <TextView
         android:id="@+id/tv_organization_value"
-        android:layout_width="wrap_content"
+        style="@style/BaseText.Caption.Gray.16"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_organization"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_organization" />
+        app:layout_constraintTop_toTopOf="@+id/tv_organization"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tv_tos_status"
+        style="@style/BaseText.Caption.Black.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TOS Status"
-        android:textColor="@color/black"
+        android:text="@string/tos_status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_organization" />
 
     <TextView
         android:id="@+id/tv_tos_status_signed_label"
+        style="@style/BaseText.Caption.Gray.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:text="Signed"
+        android:text="@string/signed"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_tos_status" />
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status"
+        tools:visibility="visible"/>
 
     <ImageView
         android:id="@+id/tv_tos_status_signed_icon"
-        android:layout_width="20dp"
-        android:layout_height="19dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
         android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status_signed_label"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_signed_label"
         app:layout_constraintStart_toEndOf="@+id/tv_tos_status_signed_label"
-        app:srcCompat="@drawable/tos_signed" />
+        app:srcCompat="@drawable/tos_signed"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/tv_tos_status_not_signed_label"
+        style="@style/BaseText.Caption.Gray.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:text="Not signed"
+        android:text="@string/not_signed"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
         app:layout_constraintStart_toStartOf="parent"
@@ -182,20 +193,22 @@
 
     <ImageView
         android:id="@+id/tv_tos_status_not_signed_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginStart="8dp"
         android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status_not_signed_label"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_not_signed_label"
         app:layout_constraintStart_toEndOf="@+id/tv_tos_status_not_signed_label"
         app:srcCompat="@drawable/tos_not_signed" />
 
     <TextView
         android:id="@+id/tv_tos_status_waiting_label"
+        style="@style/BaseText.Caption.Gray.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:text="Waiting for signature"
+        android:text="@string/waiting_for_signature"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status"
         app:layout_constraintStart_toStartOf="parent"
@@ -203,35 +216,31 @@
 
     <ImageView
         android:id="@+id/tv_tos_status_waiting_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="8dp"
         android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/tv_tos_status_waiting_label"
         app:layout_constraintBottom_toBottomOf="@+id/tv_tos_status_waiting_label"
         app:layout_constraintStart_toEndOf="@+id/tv_tos_status_waiting_label"
         app:srcCompat="@drawable/tos_waiting" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_session"
-        style="@style/RoundedButton.Aqua.Black"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="Start Session"
+        style="@style/RoundedButton.AquaBlack.Text"
+        android:layout_marginTop="40dp"
+        android:text="@string/start_session"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_tos_status" />
 
     <TextView
         android:id="@+id/tv_view_history"
+        style="@style/BaseText.Caption.Aqua.14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="View Session History"
-        android:textColor="@color/aqua"
+        android:layout_marginVertical="8dp"
+        android:text="@string/view_session_history"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

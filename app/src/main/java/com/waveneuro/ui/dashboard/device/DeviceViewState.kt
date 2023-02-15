@@ -5,14 +5,14 @@ import com.waveneuro.data.model.entity.BleDevice
 import com.waveneuro.data.model.entity.User
 
 sealed class DeviceViewState {
-    class Loading(val loading: Boolean) : DeviceViewState()
-    class Success(val item: List<BaseModel>) : DeviceViewState()
-    class Failure(val error: Error) : DeviceViewState()
-    class InitLocateDevice(val user: User) : DeviceViewState()
-    class LocateDevice : DeviceViewState()
-    class LocateDeviceNext : DeviceViewState()
-    class Searching : DeviceViewState()
-    class Connecting(val bleDevice: BleDevice) : DeviceViewState()
-    class Connected : DeviceViewState()
-    class Searched : DeviceViewState()
+    data class Loading(val loading: Boolean) : DeviceViewState()
+    data class Success(val item: List<BaseModel>) : DeviceViewState()
+    data class Failure(val error: Error) : DeviceViewState()
+    data class InitLocateDevice(val user: User) : DeviceViewState()
+    object LocateDevice : DeviceViewState()
+    object LocateDeviceNext : DeviceViewState()
+    object Searching : DeviceViewState()
+    data class Connecting(val bleDevice: BleDevice) : DeviceViewState()
+    object Connected : DeviceViewState()
+    object Searched : DeviceViewState()
 }

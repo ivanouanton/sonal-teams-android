@@ -10,19 +10,20 @@ import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRe
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.patient.PatientRequest;
+import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
-import com.waveneuro.data.model.response.patient.PatientListResponse;
-import com.waveneuro.data.model.response.patient.PatientResponse;
+import com.waveneuro.data.model.response.client.ClientListResponse;
+import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
@@ -52,13 +53,13 @@ public interface DataManager {
 
     Observable<ProtocolResponse> protocol(int id);
 
-    Observable<PatientListResponse> patients(Integer page, String startsWith, Integer[] ids);
+    Observable<ClientListResponse> patients(Integer page, String startsWith, Integer[] ids);
 
-    Observable<List<PatientListResponse.Patient.Organization>> organizations();
+    Observable<List<OrganizationResponse>> organizations();
 
-    Observable<PatientResponse> patientWithId(int id);
+    Observable<ClientResponse> patientWithId(int id);
 
-    Observable<PatientResponse> updatePatientWithId(int id, PatientRequest request);
+    Observable<ClientResponse> updatePatientWithId(int id, ClientRequest request);
 
     Observable<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
 
@@ -123,7 +124,6 @@ public interface DataManager {
     boolean getOnboardingDisplayed();
 
     void setOnboardingDisplayed();
-
 
     boolean getPrecautionsDisplayed();
 

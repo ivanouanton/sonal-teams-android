@@ -3,11 +3,8 @@ package com.waveneuro.ui.dashboard
 import com.waveneuro.data.model.entity.BleDevice
 
 sealed class DashboardViewEvent {
-    class Connected(val bleDevice: BleDevice) : DashboardViewEvent()
-    class Disconnected : DashboardViewEvent()
-    class AccountClicked : DashboardViewEvent()
-    class DeviceClicked : DashboardViewEvent()
-    class LogoutClicked : DashboardViewEvent()
-    class HelpClicked : DashboardViewEvent()
-    class DeviceHistoryClicked : DashboardViewEvent()
+    data class Connected(val bleDevice: BleDevice) : DashboardViewEvent()
+    object Disconnected : DashboardViewEvent()
+    object AccountClicked : DashboardViewEvent()
+    object DeviceClicked : DashboardViewEvent()
 }

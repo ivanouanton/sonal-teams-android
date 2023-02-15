@@ -52,8 +52,7 @@
 
     <Button
         android:id="@+id/btn_primary"
-        style="@style/RoundedButton.Aqua.BlackText"
-        android:layout_height="64dp"
+        style="@style/RoundedButton.AquaBlack.Text"
         android:layout_below="@+id/dont_show_again"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"

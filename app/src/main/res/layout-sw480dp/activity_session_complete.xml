@@ -43,9 +43,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_go_home"
-        style="@style/RoundedButton.Aqua"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
+        style="@style/RoundedButton.AquaBlack.Text"
         android:text="@string/go_home"
         android:layout_marginTop="@dimen/margin_32dp"
         android:textAllCaps="false"

@@ -30,4 +30,7 @@
 
     <color name="gray_text">#6B6B6B</color>
     <color name="gray_divider">#C2C7C8</color>
+    <color name="salomie_yellow">#FEDD70</color>
+    <color name="red_logout">#E8224E</color>
+
 </resources>

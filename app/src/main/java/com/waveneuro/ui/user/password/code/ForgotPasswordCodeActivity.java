@@ -23,7 +23,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseFormActivity;
 import com.waveneuro.ui.dashboard.DashboardCommand;
-import com.waveneuro.ui.dashboard.more.WebCommand;
+import com.waveneuro.ui.dashboard.web.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
 import com.waveneuro.ui.user.login.LoginViewEffect;

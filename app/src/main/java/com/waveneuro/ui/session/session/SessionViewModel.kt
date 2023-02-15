@@ -2,14 +2,13 @@ package com.waveneuro.ui.session.session
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest
-import com.waveneuro.data.model.response.patient.PatientResponse
+import com.waveneuro.data.model.response.client.ClientResponse
 import com.waveneuro.data.model.response.treatment.TreatmentResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.patient.GetPatientUseCase
@@ -17,8 +16,6 @@ import com.waveneuro.domain.usecase.treatment.AddTreatmentUseCase
 import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.ErrorSession
 import com.waveneuro.ui.session.session.SessionViewState.SessionPaused
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -26,13 +23,12 @@ import javax.inject.Inject
 
 class SessionViewModel @Inject constructor(
     private val addTreatmentUseCase: AddTreatmentUseCase,
-    private val getPatientUseCase: GetPatientUseCase
+    private val getPatientUseCase: GetPatientUseCase,
+    private val dataManager: DataManager
 ) : ViewModel() {
 
     @Inject
     lateinit var analyticsManager: AnalyticsManager
-    @Inject
-    lateinit var dataManager: DataManager
 
     val data = MutableLiveData<SessionViewState?>()
     val viewEffect = SingleLiveEvent<SessionViewEffect>()
@@ -179,21 +175,13 @@ class SessionViewModel @Inject constructor(
     }
 
     private fun getClient() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (this@SessionViewModel::dataManager.isInitialized) {
-                getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<PatientResponse?> {
-                    override fun onSuccess(response: PatientResponse?) {
-                        currentClient.postValue("${response?.firstName} ${response?.lastName}")
-                    }
-                    override fun onError(throwable: Throwable) {}
-                    override fun onFinish() {}
-                })
+        getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<ClientResponse?> {
+            override fun onSuccess(response: ClientResponse?) {
+                currentClient.value = ("${response?.firstName} ${response?.lastName}")
             }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
+            override fun onError(throwable: Throwable) {}
+            override fun onFinish() {}
+        })
     }
 
 }

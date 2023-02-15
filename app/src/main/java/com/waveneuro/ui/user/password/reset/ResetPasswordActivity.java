@@ -28,7 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.waveneuro.R;
 import com.waveneuro.ui.base.BaseFormActivity;
-import com.waveneuro.ui.dashboard.more.WebCommand;
+import com.waveneuro.ui.dashboard.web.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
 import com.waveneuro.ui.user.password.code.ForgotPasswordCodeCommand;

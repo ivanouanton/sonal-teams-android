@@ -44,20 +44,16 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_open_email_app"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
         android:text="@string/open_email_app"
         android:layout_marginTop="@dimen/margin_36dp"
-        style="@style/RoundedButton.Aqua"
+        style="@style/RoundedButton.AquaBlack.Text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_label_sent_username_info" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_open_login"
-        style="@style/RoundedButton.Aqua"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
+        style="@style/RoundedButton.AquaBlack.Text"
         android:layout_marginTop="16dp"
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"

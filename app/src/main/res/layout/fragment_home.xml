@@ -9,49 +9,26 @@
     android:background="@color/white"
     tools:context=".ui.dashboard.home.HomeFragment">
 
+    <!-- Prevent autofocus -->
+    <View
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        tools:ignore="MissingConstraints,UselessLeaf"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--START SPIN KIT-->
     <TextView
         android:id="@+id/tv_clients_list"
-        style="@style/BaseText.Bold.Black.16"
-        android:layout_width="wrap_content"
+        style="@style/BaseText.Bold.Black.16"        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:text="@string/clients_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit"
-        style="@style/SpinKitView.Small.Wave"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginVertical="10dp"
-        android:visibility="visible"
-        app:SpinKit_Color="@color/aqua"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/sr_clients"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_search">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvClients"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_client" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_search"
@@ -75,11 +52,29 @@
             android:backgroundTint="@color/gray_light"
             android:hint="@string/search"
             android:maxLines="1"
-            android:minHeight="40dp"
             android:singleLine="true"
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_clients"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_search">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvClients"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_client" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/tv_empty_result"
@@ -87,8 +82,8 @@
         android:layout_height="wrap_content"
         android:text="@string/no_client_with_this_name_is_found"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/sr_clients"
-        app:layout_constraintTop_toTopOf="@+id/sr_clients" />
+        app:layout_constraintStart_toStartOf="@+id/srl_clients"
+        app:layout_constraintTop_toTopOf="@+id/srl_clients" />
 
     <ProgressBar
         android:id="@+id/pb_progress"
@@ -96,6 +91,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Small.Wave"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginVertical="10dp"
+        android:visibility="visible"
+        app:SpinKit_Color="@color/aqua"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

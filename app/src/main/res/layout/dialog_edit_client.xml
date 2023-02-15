@@ -102,6 +102,7 @@
             android:layout_height="wrap_content"
             android:hint="Date of Birth"
             android:maxLines="1"
+            android:focusable="false"
             android:minHeight="48dp"
             android:drawableEnd="@drawable/ic_baseline_calendar_month_24"
             android:singleLine="true" />
@@ -169,12 +170,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save_changes"
-        style="@style/RoundedButton.Aqua.Black"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginStart="16dp"
+        style="@style/RoundedButton.AquaBlack.Text"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:text="Save Changes"
         app:layout_constraintBottom_toBottomOf="parent"

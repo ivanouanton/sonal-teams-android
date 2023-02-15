@@ -17,6 +17,7 @@ android {
         versionCode 2
         versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     flavorDimensions "env"
     productFlavors {
@@ -52,6 +53,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     sourceSets {
         main {
             res.srcDirs = ['src/main/res'
@@ -81,7 +85,7 @@ android {
             enable true
             reset()
             include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
-            universalApk true
+            universalApk false
         }
     }
 }
@@ -117,6 +121,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-ktx:1.6.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
 
     // Arch
     implementation "com.google.dagger:dagger:2.44"
@@ -135,8 +142,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.3'
     kapt 'com.jakewharton:butterknife-compiler:10.2.3'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-
     implementation 'com.jakewharton.timber:timber:4.7.1'
     debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
@@ -152,6 +157,6 @@ dependencies {
 
     implementation 'io.sentry:sentry-android:6.1.4'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
 
 }
