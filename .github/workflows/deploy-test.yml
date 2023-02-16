@@ -11,6 +11,7 @@ jobs:
   deploy:
     outputs:
       jobstatus: ${{ job.status }}
+      build_version: ${{ env.VERSION_INFORMATION }}
     if: contains(github.event.pull_request.labels.*.name, 'ready for test')
     name: Build & Upload Mobile Application
     runs-on: ubuntu-latest
@@ -49,7 +50,9 @@ jobs:
           FLAVOR: 'tеst'
         run: |
           bundle exec fastlane android beta --env test
-      
+      - name : Retrieve Version info
+        run: |
+          echo "VERSION_INFORMATION=$(${{github.workspace}}/gradlew -q printVersionInformation)" >> $GITHUB_ENV
   slack:
     needs: deploy
     if: contains(github.event.pull_request.labels.*.name, 'ready for test') && ${{ always() }}
@@ -63,7 +66,7 @@ jobs:
             {
               "attachments": [
                 {
-                  "pretext": "*Pull Request:* <https://github.com/waveneuroscience/sonal-mobile-app-ios/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>",
+                  "pretext": "*Pull Request:* <https://github.com/waveneuroscience/sonal-b2b-app-android/pull/${{ github.event.number }}|${{ github.event.pull_request.title }}>",
                   "color": "dbab09",
                   "fields": [
                     {
@@ -84,7 +87,7 @@ jobs:
                     {
                       "title": "Version (Build)",
                       "short": true,
-                      "value": "${{ env.FL_BUILD_VERSION }}"
+                      "value": "${{ needs.deploy.outputs.build_version }}"
                     }
                   ]
                 }
