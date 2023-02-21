@@ -67,7 +67,6 @@
         <activity
             android:name=".ui.dashboard.DashboardActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.password.changed.ResetPasswordInfoActivity"
@@ -100,37 +99,30 @@
         <activity
             android:name=".ui.user.registration.RegistrationActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.login.LoginActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.mfa.MfaActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.session.how_to.HowToActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.password.code.ForgotPasswordCodeActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.session.history.SessionHistoryActivity"
             android:exported="false"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.introduction.splash.SplashActivity"
             android:exported="true"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
