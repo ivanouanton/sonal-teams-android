@@ -196,6 +196,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="BaseText.Caption.White.20">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="BaseText.Caption.DarkGray">
         <item name="android:textColor">@color/gray_dark</item>
     </style>

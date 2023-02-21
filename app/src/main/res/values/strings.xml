@@ -166,6 +166,9 @@
     <string name="retry">Retry</string>
     <string name="error_sending_report">Error sending report</string>
     <string name="congratulations">Congratulations!</string>
+    <string name="preparing_session">Preparing your session</string>
+    <string name="error_battery_low">Battery level is low. We recommend you to plug your Sonal device to power, as the session can be terminated.</string>
+    <string name="error_battery_critical">The battery level is critical. Please, connect Sonal device to power otherwise the session will be terminated before completing.</string>
 
     <!--Sessions history-->
     <string name="session_history">Session History</string>
