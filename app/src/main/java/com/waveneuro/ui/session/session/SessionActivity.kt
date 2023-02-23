@@ -408,7 +408,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private fun setDeviceInitChars() {
         BluetoothManager.getInstance().sendFrequencyData(
             protocolFrequency,
-            "60",
+            treatmentLength,
             object : BluetoothManager.Callback {
                 override fun invoke(args: String) {
                     // follow the interface
