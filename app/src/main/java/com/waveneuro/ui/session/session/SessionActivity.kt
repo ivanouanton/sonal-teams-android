@@ -58,6 +58,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private var sonalId: String? = null
     private var treatmentLengthMinutes = 0
     private var ble6Value = ""
+    private var disconnectedIntentionally = false
     private var sessionTimer = CountDownTimer(0, 10, 1, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,12 +145,15 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                         )
                     )
                     "01" -> {}
-                    BluetoothManager.INACTIVE -> viewModel.processEvent(
-                        DeviceError(
-                            "Session Ended",
-                            "You manually stopped the device."
+                    BluetoothManager.INACTIVE -> {
+                        viewModel.processEvent(
+                            DeviceError(
+                                "Session Ended",
+                                "You manually stopped the device."
+                            )
                         )
-                    )
+                        disconnectedIntentionally = true
+                    }
                     else -> {}
                 }
                 ble6Value = args
@@ -208,6 +212,8 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                     is SessionEnded -> {
                         stopCountdown()
                         showSessionCompleteDialog()
+                        disconnectedIntentionally = true
+                        BluetoothManager.getInstance().disconnectDevice()
                     }
                     is SessionPaused -> {
                         binding.ivPause.setImageResource(R.drawable.ic_resume_session)
@@ -215,7 +221,11 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                         binding.tvPaused.visibility = View.VISIBLE
                         pauseCountdown()
                     }
-                    is ErrorSession -> showEndSessionDialog(viewState.title, viewState.message)
+                    is ErrorSession -> {
+                        disconnectedIntentionally = true
+                        showEndSessionDialog(viewState.title, viewState.message)
+                        BluetoothManager.getInstance().disconnectDevice()
+                    }
                     is ErrorSending -> showErrorSendingDialog()
                     else -> {}
                 }
@@ -422,7 +432,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private fun setDeviceInitChars() {
         BluetoothManager.getInstance().sendFrequencyData(
             protocolFrequency,
-            treatmentLength,
+            "60",
             object : BluetoothManager.Callback {
                 override fun invoke(args: String) {
                     // follow the interface
@@ -512,12 +522,16 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         if (!sessionTimer.isFinished) {
             sessionTimer.pause()
         }
-        viewModel.processEvent(
-            DeviceError(
-                "Session Ended",
-                "You manually stopped the device."
+
+        if (!disconnectedIntentionally) {
+            viewModel.processEvent(
+                DeviceError(
+                    "Session Ended",
+                    "You manually stopped the device."
+                )
             )
-        )
+            disconnectedIntentionally = true
+        }
     }
 
     override fun onDestroy() {
