@@ -318,7 +318,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                     )
                 }
 
-                override fun onCharacterises(value: String) {}
+                override fun onCharacterises(value: String?) {}
                 override fun onDisconnected() {
                     if (requireActivity() is BaseActivity) {
                         (activity as BaseActivity?)?.removeWait()

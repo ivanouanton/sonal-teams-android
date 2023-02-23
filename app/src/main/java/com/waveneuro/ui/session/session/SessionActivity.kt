@@ -110,67 +110,43 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     }
 
     private fun setBleListeners() {
-        BluetoothManager.getInstance().getSixthCharacteristic(object : BluetoothManager.Callback {
-            override fun invoke(args: String) {
-                Timber.e("SESSION_EVENT :: BLE_6_VALUE :: %s", args)
-                try {
-                    val properties = JSONObject()
-                    try {
-                        properties.put("ble_value", args)
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-                if (args == ble6Value) {
-                    return
-                }
-
-                when (args) {
-                    BluetoothManager.START_SESSION -> if (ble6Value == BluetoothManager.PAUSE_SESSION) {
+        BluetoothManager.getInstance().getSixthCharacteristic { newBle6Value: String ->
+            if (newBle6Value == ble6Value) {
+                return@getSixthCharacteristic
+            }
+            when (newBle6Value) {
+                BluetoothManager.START_SESSION -> {
+                    if (ble6Value == BluetoothManager.PAUSE_SESSION) {
                         viewModel.processEvent(SessionViewEvent.ResumeSession)
                     } else {
                         viewModel.processEvent(StartSession)
                     }
-                    BluetoothManager.PAUSE_SESSION -> viewModel.processEvent(
-                        DevicePaused
-                    )
-                    BluetoothManager.END_SESSION -> viewModel.processEvent(EndSession)
-                    BluetoothManager.ERROR -> viewModel.processEvent(
-                        DeviceError(
-                            "Uh Oh!",
-                            "Error detected on device"
-                        )
-                    )
-                    "01" -> {}
-                    BluetoothManager.INACTIVE -> {
-                        viewModel.processEvent(
-                            DeviceError(
-                                "Session Ended",
-                                "You manually stopped the device."
-                            )
-                        )
-                        disconnectedIntentionally = true
-                    }
-                    else -> {}
                 }
-                ble6Value = args
-                BluetoothManager.getInstance().registerBatteryLevelChangedCallback(
-                    viewModel.batteryLevelChangeCallback)
+                BluetoothManager.PAUSE_SESSION -> viewModel.processEvent(DevicePaused)
+                BluetoothManager.END_SESSION -> viewModel.processEvent(EndSession)
+                BluetoothManager.ERROR -> viewModel.processEvent(
+                    DeviceError(
+                        "Uh Oh!",
+                        "Error detected on device"
+                    )
+                )
+                BluetoothManager.LOADED -> {}
+                BluetoothManager.INACTIVE -> {
+                    viewModel.processEvent(
+                        DeviceError(
+                            "Session Ended",
+                            "You manually stopped the device."
+                        )
+                    )
+                    disconnectedIntentionally = true
+                }
+                else -> {}
             }
-
-            override fun invoke(args: List<BleDevice>) {
-                // follow the interface
-            }
-
-            override fun invoke(args: Array<String>) {
-                // follow the interface
-            }
-        })
-
+            ble6Value = newBle6Value
+        }
         BluetoothManager.getInstance().registerDeviceConnectionCallback(this)
+        BluetoothManager.getInstance().registerBatteryLevelChangedCallback(
+            viewModel.batteryLevelChangeCallback)
     }
 
     private fun setObserver() {
@@ -435,12 +411,6 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             "60",
             object : BluetoothManager.Callback {
                 override fun invoke(args: String) {
-                    // follow the interface
-                }
-                override fun invoke(args: List<BleDevice>) {
-                    // follow the interface
-                }
-                override fun invoke(args: Array<String>) {
                     // follow the interface
                 }
             })

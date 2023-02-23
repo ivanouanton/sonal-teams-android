@@ -71,7 +71,7 @@ public class BleManager {
         private static final BleManager S_BLE_MANAGER_1 = new BleManager();
     }
 
-    public void init(Application app) {
+    public void init(Application app, UUID[] uuid) {
         if (context == null && app != null) {
             context = app;
             if (isSupportBle()) {
@@ -79,7 +79,7 @@ public class BleManager {
             }
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             multipleBluetoothController = new MultipleBluetoothController();
-            bleScanRuleConfig = new BleScanRuleConfig();
+            bleScanRuleConfig = new BleScanRuleConfig.Builder().setServiceUuids(uuid).build();
         }
     }
 
