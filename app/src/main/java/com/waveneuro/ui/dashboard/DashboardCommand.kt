@@ -13,8 +13,7 @@ class DashboardCommand @Inject constructor(
 
     override fun navigate() {
         val intent = Intent(context, DashboardActivity::class.java)
-        intent.flags =
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         context.startActivity(intent)
         if (context is Activity) context.finish()
     }

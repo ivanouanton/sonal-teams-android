@@ -1,12 +1,16 @@
 package com.waveneuro.ui.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.fragment.app.FragmentManager
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityDashboardBinding
 import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.ui.dashboard.device.DeviceFragment
 import com.waveneuro.ui.dashboard.home.HomeFragment
 import com.waveneuro.ui.dashboard.more.MoreFragment
+import com.waveneuro.ui.session.history.SessionHistoryActivity
 
 class DashboardActivity : BaseActivity() {
 
@@ -48,7 +52,7 @@ class DashboardActivity : BaseActivity() {
 //        if (data != null && data.hasExtra(SessionHistoryActivity.START_SESSION)) {
 //            if (data.getBooleanExtra(SessionHistoryActivity.START_SESSION, false)) {
 //                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//                addFragment(R.id.fr_home, DeviceFragment.newInstance())
+//                addContentView(R.id.fr_container, DeviceFragment.newInstance())
 //            }
 //        }
 //    }

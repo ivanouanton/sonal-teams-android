@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.ap.ble.BluetoothManager
@@ -22,11 +23,12 @@ import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.dashboard.DashboardCommand
 import com.waveneuro.ui.session.complete.SessionCompleteCommand
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
-import com.waveneuro.ui.session.session.SessionViewEffect.InitializeBle
-import com.waveneuro.ui.session.session.SessionViewEvent.DeviceError
+import com.waveneuro.ui.session.session.SessionViewEffect.*
+import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.*
 import com.waveneuro.utils.CountDownTimer
 import com.waveneuro.utils.CountDownTimer.OnCountDownListener
+import com.waveneuro.views.sessionProgressDialogBuilder
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -39,7 +41,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     @Inject
     lateinit var dashboardCommand: DashboardCommand
     @Inject
-    lateinit var sessionViewModel: SessionViewModel
+    lateinit var viewModel: SessionViewModel
     @Inject
     lateinit var dataManager: DataManager
     @Inject
@@ -49,11 +51,14 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     private var readyDialog: AlertDialog? = null
     private var precautionsWarningDialog: AlertDialog? = null
+    private var preparingDialog: AlertDialog? = null
+
     private var treatmentLength: String? = null
     private var protocolFrequency: String? = null
     private var sonalId: String? = null
     private var treatmentLengthMinutes = 0
     private var ble6Value = ""
+    private var disconnectedIntentionally = false
     private var sessionTimer = CountDownTimer(0, 10, 1, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +66,6 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         activityComponent()?.inject(this)
         binding = FragmentSessionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        setView()
-        setObserver()
 
         if (intent.hasExtra(SessionCommand.SONAL_ID)) {
             sonalId = intent.getStringExtra(SessionCommand.SONAL_ID)
@@ -81,11 +83,17 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             protocolFrequency = intent.getStringExtra(SessionCommand.PROTOCOL_FREQUENCY)
         }
 
+        setView()
+        setObserver()
         setPauseResumeText(false)
         setBleListeners()
+
+        if (viewModel.isPrepareDialogShowed.value.not())
+            viewModel.processEvent(SessionViewEvent.Initializing)
     }
 
     private fun setView() {
+        preparingDialog = sessionProgressDialogBuilder()
         with(binding) {
             clPrecautions.setOnClickListener {
                 val precautionsBottomSheet = PrecautionsBottomSheet.newInstance()
@@ -96,78 +104,134 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 startSession()
             }
             ivInfo.setOnClickListener {
-                showDialogInfo()
+                showInfoDialog()
             }
         }
     }
 
     private fun setBleListeners() {
-        BluetoothManager.getInstance().getSixthCharacteristic(object : BluetoothManager.Callback {
-            override fun invoke(args: String) {
-                Timber.e("SESSION_EVENT :: BLE_6_VALUE :: %s", args)
-                try {
-                    val properties = JSONObject()
-                    try {
-                        properties.put("ble_value", args)
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-                if (args == ble6Value) {
-                    return
-                }
-
-                when (args) {
-                    BluetoothManager.START_SESSION -> if (ble6Value == BluetoothManager.PAUSE_SESSION) {
-                        sessionViewModel.processEvent(SessionViewEvent.ResumeSession)
+        BluetoothManager.getInstance().getSixthCharacteristic { newBle6Value: String ->
+            if (newBle6Value == ble6Value) {
+                return@getSixthCharacteristic
+            }
+            when (newBle6Value) {
+                BluetoothManager.START_SESSION -> {
+                    if (ble6Value == BluetoothManager.PAUSE_SESSION) {
+                        viewModel.processEvent(SessionViewEvent.ResumeSession)
                     } else {
-                        sessionViewModel.processEvent(SessionViewEvent.StartSession)
+                        viewModel.processEvent(StartSession)
                     }
-                    BluetoothManager.PAUSE_SESSION -> sessionViewModel.processEvent(
-                        SessionViewEvent.DevicePaused
+                }
+                BluetoothManager.PAUSE_SESSION -> viewModel.processEvent(DevicePaused)
+                BluetoothManager.END_SESSION -> viewModel.processEvent(EndSession)
+                BluetoothManager.ERROR -> viewModel.processEvent(
+                    DeviceError(
+                        "Uh Oh!",
+                        "Error detected on device"
                     )
-                    BluetoothManager.END_SESSION -> sessionViewModel.processEvent(SessionViewEvent.EndSession)
-                    BluetoothManager.ERROR -> sessionViewModel.processEvent(
-                        DeviceError(
-                            "Uh Oh!",
-                            "Error detected on device"
-                        )
-                    )
-                    "01" -> {}
-                    BluetoothManager.INACTIVE -> sessionViewModel.processEvent(
+                )
+                BluetoothManager.LOADED -> {}
+                BluetoothManager.INACTIVE -> {
+                    viewModel.processEvent(
                         DeviceError(
                             "Session Ended",
                             "You manually stopped the device."
                         )
                     )
-                    else -> {}
+                    disconnectedIntentionally = true
                 }
-                ble6Value = args
-                BluetoothManager.getInstance().registerBatteryLevelChangedCallback(
-                    sessionViewModel.batteryLevelChangeCallback)
+                else -> {}
             }
-
-            override fun invoke(args: List<BleDevice>) {
-                // follow the interface
-            }
-
-            override fun invoke(args: Array<String>) {
-                // follow the interface
-            }
-        })
-
+            ble6Value = newBle6Value
+        }
         BluetoothManager.getInstance().registerDeviceConnectionCallback(this)
+        BluetoothManager.getInstance().registerBatteryLevelChangedCallback(
+            viewModel.batteryLevelChangeCallback)
     }
 
     private fun setObserver() {
-        sessionViewModel.data.observe(this, sessionViewStateObserver)
-        sessionViewModel.viewEffect.observe(this, sessionViewEffectObserver)
-        sessionViewModel.currentClient.observe(this, Observer { client ->
-            client?.let { binding.tvTitle.text = it }
-        })
+        with(viewModel) {
+            data.observe(this@SessionActivity, Observer { viewState ->
+                when(viewState) {
+                    is Success -> onSuccess(viewState.item)
+                    is Failure -> onFailure(viewState.error)
+                    is Loading -> {
+                        if (viewState.loading) {
+                            displayWait("Loading...", null)
+                        } else {
+                            removeWait()
+                        }
+                    }
+                    is LocateDevice -> {
+                        binding.tvSessionTimer.visibility = View.VISIBLE
+                        binding.tvSessionTimer.text = "30:00"
+                        binding.tvStopSessionInfo.visibility = View.VISIBLE
+                        binding.llControlInfo.visibility = View.GONE
+                    }
+                    is SessionStarted -> {
+                        if (readyDialog != null) readyDialog?.dismiss()
+                        binding.btnStartSession.visibility = View.GONE
+                        binding.tvSessionTimer.visibility = View.VISIBLE
+                        binding.tvStopSessionInfo.visibility = View.VISIBLE
+                        binding.llControlInfo.visibility = View.VISIBLE
+                        startCountdown()
+                    }
+                    is SessionViewState.ResumeSession -> {
+                        setPauseResumeText(false)
+                        binding.tvPaused.visibility = View.GONE
+                        binding.ivPause.setImageResource(R.drawable.ic_pause_session)
+                        binding.tvSessionTimer.visibility = View.VISIBLE
+                        binding.tvStopSessionInfo.visibility = View.VISIBLE
+                        binding.llControlInfo.visibility = View.VISIBLE
+                        resumeCountdown()
+                    }
+                    is SessionEnded -> {
+                        stopCountdown()
+                        showSessionCompleteDialog()
+                        disconnectedIntentionally = true
+                        BluetoothManager.getInstance().disconnectDevice()
+                    }
+                    is SessionPaused -> {
+                        binding.ivPause.setImageResource(R.drawable.ic_resume_session)
+                        setPauseResumeText(true)
+                        binding.tvPaused.visibility = View.VISIBLE
+                        pauseCountdown()
+                    }
+                    is ErrorSession -> {
+                        disconnectedIntentionally = true
+                        showEndSessionDialog(viewState.title, viewState.message)
+                        BluetoothManager.getInstance().disconnectDevice()
+                    }
+                    is ErrorSending -> showErrorSendingDialog()
+                    else -> {}
+                }
+            })
+            viewEffect.observe(this@SessionActivity, Observer { viewEffect ->
+                when (viewEffect) {
+                    is Back -> showCloseSessionDialog()
+                    is InitializeBle -> setDeviceInitChars()
+                    is ShowLoader -> preparingDialog?.show()
+                    is HideLoader -> {
+                        preparingDialog?.dismiss()
+                        setPrepareIsShowed(true)
+                    }
+                }
+            })
+            currentClient.observe(this@SessionActivity, Observer { client ->
+                client?.let { binding.tvTitle.text = it }
+            })
+            batteryLevel.observe(this@SessionActivity, Observer { batteryLevel ->
+                if (batteryLevel in CRITICAL_BATTERY..LOW_BATTERY && !isLowDialogShowed.value)
+                    showBatteryDialog(R.string.error_battery_low, LOW_BATTERY)
+                else if (batteryLevel <= CRITICAL_BATTERY && !isCriticalDialogShowed.value)
+                    showBatteryDialog(R.string.error_battery_critical, CRITICAL_BATTERY)
+
+                if (batteryLevel > CRITICAL_BATTERY && isCriticalDialogShowed.value)
+                    setCriticalIsShowed(false)
+                if (batteryLevel > LOW_BATTERY && isLowDialogShowed.value)
+                    setLowIsShowed(false)
+            })
+        }
     }
 
     private fun setPauseResumeText(isPaused: Boolean) {
@@ -175,61 +239,35 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             else getString(R.string.heading_pause_session)
     }
 
-    private var sessionViewStateObserver = Observer { viewState: SessionViewState? ->
-        when(viewState) {
-            is Success -> onSuccess(viewState.item)
-            is Failure -> onFailure(viewState.error)
-            is Loading -> {
-                if (viewState.loading) {
-                    displayWait("Loading...", null)
-                } else {
-                    removeWait()
-                }
-            }
-            is LocateDevice -> {
-                binding.tvSessionTimer.visibility = View.VISIBLE
-                binding.tvSessionTimer.text = "30:00"
-                binding.tvStopSessionInfo.visibility = View.VISIBLE
-                binding.llControlInfo.visibility = View.GONE
-            }
-            is SessionStarted -> {
-                if (readyDialog != null) readyDialog?.dismiss()
-                binding.btnStartSession.visibility = View.GONE
-                binding.tvSessionTimer.visibility = View.VISIBLE
-                binding.tvStopSessionInfo.visibility = View.VISIBLE
-                binding.llControlInfo.visibility = View.VISIBLE
-                startCountdown()
-            }
-            is ResumeSession -> {
-                setPauseResumeText(false)
-                binding.tvPaused.visibility = View.GONE
-                binding.ivPause.setImageResource(R.drawable.ic_pause_session)
-                binding.tvSessionTimer.visibility = View.VISIBLE
-                binding.tvStopSessionInfo.visibility = View.VISIBLE
-                binding.llControlInfo.visibility = View.VISIBLE
-                resumeCountdown()
-            }
-            is SessionEnded -> {
-                stopCountdown()
-                launchSessionCompleteScreen()
-            }
-            is SessionPaused -> {
-                binding.ivPause.setImageResource(R.drawable.ic_resume_session)
-                setPauseResumeText(true)
-                binding.tvPaused.visibility = View.VISIBLE
-                pauseCountdown()
-            }
-            is ErrorSession -> showEndSessionDialog(viewState.title, viewState.message)
-            is ErrorSending -> showErrorSendingDialog()
-            else -> {}
+    private fun startSession() {
+        if (dataManager.precautionsDisplayed) {
+            showStartSessionDialog()
+            viewModel.processEvent(Start)
+        } else {
+            showPrecautionsWarningDialog()
         }
     }
 
-    private var sessionViewEffectObserver = Observer { viewEffect: SessionViewEffect? ->
-        when (viewEffect) {
-            is SessionViewEffect.Back -> showCloseSessionDialog()
-            is InitializeBle -> setDeviceInitChars()
-            else -> {}
+    private fun showBatteryDialog(@StringRes message: Int, type: Byte) {
+        val binding = DialogPopupBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+
+        with(binding) {
+            tvTitle.setText(R.string.warning_title)
+            tvContent.setText(message)
+            btnPrimary.setText(R.string.continue_button)
+            btnPrimary.setOnClickListener { readyDialog?.dismiss() }
+        }
+
+        if (readyDialog?.isShowing == true) readyDialog?.dismiss()
+
+        if (preparingDialog?.isShowing != true) {
+            readyDialog = builder.create()
+            readyDialog?.show()
+            when(type) {
+                LOW_BATTERY -> viewModel.setLowIsShowed(true)
+                CRITICAL_BATTERY -> viewModel.setCriticalIsShowed(true)
+            }
         }
     }
 
@@ -282,7 +320,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             tvTitle.setText(R.string.error_sending_report)
             btnPrimary.setText(R.string.retry)
             btnPrimary.setOnClickListener {
-                sessionViewModel.processEvent(
+                viewModel.processEvent(
                     DeviceError("Session Ended", "")
                 )
             }
@@ -292,7 +330,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         dialog.show()
     }
 
-    private fun launchSessionCompleteScreen() {
+    private fun showSessionCompleteDialog() {
         val binding = DialogPopupBinding.inflate(layoutInflater)
         val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
 
@@ -308,18 +346,71 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         readyDialog?.show()
     }
 
+    private fun showStartSessionDialog() {
+        val binding = DialogPopupBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+        readyDialog = builder.create()
+
+        with(binding) {
+            Glide.with(this@SessionActivity).load(R.drawable.turn_on).into(ivPrimary)
+            tvTitle.visibility = View.GONE
+            tvContent.setText(R.string.press_center_button)
+            btnPrimary.visibility = View.GONE
+        }
+
+        readyDialog?.setCanceledOnTouchOutside(false)
+        readyDialog?.show()
+    }
+
+    private fun showPrecautionsWarningDialog() {
+        val binding = DialogPopupWithCheckboxBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+        precautionsWarningDialog = builder.create()
+
+        with(binding) {
+            tvTitle.setText(R.string.warning)
+            tvContent.setText(R.string.warning_message)
+            btnPrimary.setText(R.string.continue_button)
+            btnPrimary.setOnClickListener {
+                if (dontShowAgain.isChecked) {
+                    dataManager.setPrecautionsDisplayed()
+                }
+                precautionsWarningDialog?.hide()
+                showStartSessionDialog()
+                viewModel.processEvent(Start)
+            }
+        }
+
+        precautionsWarningDialog?.setCanceledOnTouchOutside(false)
+        precautionsWarningDialog?.show()
+    }
+
+    private fun showInfoDialog() {
+        val binding = DialogInfoBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+        val dialog = builder.create()
+        val client = viewModel.currentClient.value
+
+        with(binding) {
+            tvDeviceIdValue.text = sonalId
+            tvClientValue.text = client
+            ivClose.setOnClickListener { dialog.dismiss() }
+        }
+
+        viewModel.batteryLevel.observe(this, Observer { batteryLevel ->
+            binding.tvBatteryValue.text = "${batteryLevel}%"
+        })
+
+        if (client != null)
+            dialog.show()
+    }
+
     private fun setDeviceInitChars() {
         BluetoothManager.getInstance().sendFrequencyData(
             protocolFrequency,
             treatmentLength,
             object : BluetoothManager.Callback {
                 override fun invoke(args: String) {
-                    // follow the interface
-                }
-                override fun invoke(args: List<BleDevice>) {
-                    // follow the interface
-                }
-                override fun invoke(args: Array<String>) {
                     // follow the interface
                 }
             })
@@ -385,7 +476,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         binding.tvSessionTimer.post {
             binding.tvSessionTimer.text = "00:00"
             ble6Value = "04"
-            sessionViewModel.processEvent(SessionViewEvent.EndSession)
+            viewModel.processEvent(SessionViewEvent.EndSession)
         }
     }
 
@@ -401,83 +492,27 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         if (!sessionTimer.isFinished) {
             sessionTimer.pause()
         }
-        sessionViewModel.processEvent(
-            DeviceError(
-                "Session Ended",
-                "You manually stopped the device."
+
+        if (!disconnectedIntentionally) {
+            viewModel.processEvent(
+                DeviceError(
+                    "Session Ended",
+                    "You manually stopped the device."
+                )
             )
-        )
+            disconnectedIntentionally = true
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         BluetoothManager.getInstance().unregisterDeviceConnectionCallback(this)
         BluetoothManager.getInstance().unregisterBatteryLevelChangedCallback(
-            sessionViewModel.batteryLevelChangeCallback)
+            viewModel.batteryLevelChangeCallback)
     }
 
-    private fun showStartSessionPopup() {
-        val binding = DialogPopupBinding.inflate(layoutInflater)
-        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
-        readyDialog = builder.create()
-
-        with(binding) {
-            Glide.with(this@SessionActivity).load(R.drawable.turn_on).into(ivPrimary)
-            tvTitle.visibility = View.GONE
-            tvContent.setText(R.string.press_center_button)
-            btnPrimary.visibility = View.GONE
-        }
-
-        readyDialog?.setCanceledOnTouchOutside(false)
-        readyDialog?.show()
+    companion object {
+        private const val LOW_BATTERY: Byte = 20
+        private const val CRITICAL_BATTERY: Byte = 10
     }
-
-    private fun startSession() {
-        if (dataManager.precautionsDisplayed) {
-            showStartSessionPopup()
-            sessionViewModel.processEvent(SessionViewEvent.Start)
-        } else {
-            val binding = DialogPopupWithCheckboxBinding.inflate(layoutInflater)
-            val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
-            precautionsWarningDialog = builder.create()
-
-            with(binding) {
-                tvTitle.setText(R.string.warning)
-                tvContent.setText(R.string.warning_message)
-                btnPrimary.setText(R.string.continue_button)
-                btnPrimary.setOnClickListener {
-                    if (dontShowAgain.isChecked) {
-                        dataManager.setPrecautionsDisplayed()
-                    }
-                    precautionsWarningDialog?.hide()
-                    showStartSessionPopup()
-                    sessionViewModel.processEvent(SessionViewEvent.Start)
-                }
-            }
-
-            precautionsWarningDialog?.setCanceledOnTouchOutside(false)
-            precautionsWarningDialog?.show()
-        }
-    }
-
-    private fun showDialogInfo() {
-        val binding = DialogInfoBinding.inflate(layoutInflater)
-        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
-        val dialog = builder.create()
-        val client = sessionViewModel.currentClient.value
-
-        with(binding) {
-            tvDeviceIdValue.text = sonalId
-            tvClientValue.text = client
-            ivClose.setOnClickListener { dialog.dismiss() }
-        }
-
-        sessionViewModel.batteryLevel.observe(this, Observer { batteryLevel ->
-            binding.tvBatteryValue.text = "${batteryLevel}%"
-        })
-
-        if (client != null)
-            dialog.show()
-    }
-
 }

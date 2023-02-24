@@ -1,6 +1,7 @@
 package com.waveneuro.ui.session.session
 
 sealed class SessionViewEvent {
+    object Initializing : SessionViewEvent()
     object BackClicked : SessionViewEvent()
     object Start : SessionViewEvent()
     object InitializeDevice : SessionViewEvent()

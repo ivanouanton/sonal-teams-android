@@ -2,6 +2,7 @@ package com.waveneuro.ui.session.session
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
@@ -16,6 +17,11 @@ import com.waveneuro.domain.usecase.treatment.AddTreatmentUseCase
 import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.ErrorSession
 import com.waveneuro.ui.session.session.SessionViewState.SessionPaused
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -35,6 +41,14 @@ class SessionViewModel @Inject constructor(
     val batteryLevel = MutableLiveData<Byte>()
     val currentClient = MutableLiveData<String>()
 
+    private var _isLowDialogShowed = MutableStateFlow(false)
+    private var _isCriticalDialogShowed = MutableStateFlow(false)
+    private var _isPrepareDialogShowed = MutableStateFlow(false)
+
+    val isCriticalDialogShowed: StateFlow<Boolean> get() = _isCriticalDialogShowed
+    val isLowDialogShowed: StateFlow<Boolean> get() = _isLowDialogShowed
+    val isPrepareDialogShowed: StateFlow<Boolean> get() = _isPrepareDialogShowed
+
     var batteryLevelChangeCallback =
         BluetoothManager.OnBatteryLevelChangedCallback { newValue: Byte ->
             batteryLevel.value = newValue
@@ -47,8 +61,15 @@ class SessionViewModel @Inject constructor(
     fun processEvent(viewEvent: SessionViewEvent) {
         Timber.e("SESSION_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
         if (data.value != null)
-            Timber.e("SESSION_STATE :: %s", "" + data.value!!.javaClass.simpleName)
+            Timber.e("SESSION_STATE :: %s", "" + data.value?.javaClass?.simpleName)
         when (viewEvent) {
+            is Initializing -> {
+                viewEffect.postValue(SessionViewEffect.ShowLoader)
+                viewModelScope.launch(Dispatchers.IO) {
+                    delay(DELAY)
+                    viewEffect.postValue(SessionViewEffect.HideLoader)
+                }
+            }
             is Start -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_STARTED,
@@ -182,6 +203,22 @@ class SessionViewModel @Inject constructor(
             override fun onError(throwable: Throwable) {}
             override fun onFinish() {}
         })
+    }
+
+    fun setPrepareIsShowed(newValue: Boolean) {
+        _isPrepareDialogShowed.value = newValue
+    }
+
+    fun setLowIsShowed(newValue: Boolean) {
+        _isLowDialogShowed.value = newValue
+    }
+
+    fun setCriticalIsShowed(newValue: Boolean) {
+        _isCriticalDialogShowed.value = newValue
+    }
+
+    companion object {
+        private const val DELAY = 10000L
     }
 
 }
