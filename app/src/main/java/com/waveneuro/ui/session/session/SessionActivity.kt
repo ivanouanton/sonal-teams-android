@@ -221,7 +221,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 client?.let { binding.tvTitle.text = it }
             })
             batteryLevel.observe(this@SessionActivity, Observer { batteryLevel ->
-                if (batteryLevel in CRITICAL_BATTERY..LOW_BATTERY && !isLowDialogShowed.value)
+                if (batteryLevel in (CRITICAL_BATTERY + 1) .. LOW_BATTERY && !isLowDialogShowed.value)
                     showBatteryDialog(R.string.error_battery_low, LOW_BATTERY)
                 else if (batteryLevel <= CRITICAL_BATTERY && !isCriticalDialogShowed.value)
                     showBatteryDialog(R.string.error_battery_critical, CRITICAL_BATTERY)
