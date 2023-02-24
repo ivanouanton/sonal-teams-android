@@ -54,8 +54,9 @@ jobs:
         run: |
           echo "VERSION_INFORMATION=$(${{github.workspace}}/gradlew -q printVersionInformation)" >> $GITHUB_ENV
   slack:
-    needs: deploy
-    if: contains(github.event.pull_request.labels.*.name, 'ready for test') && ${{ always() }}
+    continue-on-error: true
+    needs: [deploy]
+    if: contains(github.event.pull_request.labels.*.name, 'ready for test')  && ( failure() || success() )
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
