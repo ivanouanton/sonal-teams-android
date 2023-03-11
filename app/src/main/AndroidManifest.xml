@@ -41,11 +41,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.password.password.confirm.SetNewPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.password.first.SetPasswordActivity"
+            android:name=".ui.user.password.new_password.SetNewPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -69,31 +65,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.password.changed.ResetPasswordInfoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.change.ChangePasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.email.sent.SentUsernameActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.recovery.RecoveryInstructionsActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.email.forgot.ForgotUsernameActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.user.password.reset.ResetPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.profile.notactive.AccountNotActiveActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

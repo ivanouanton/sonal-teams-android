@@ -11,7 +11,7 @@ import com.waveneuro.data.DataManager;
 import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
-import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.api.user.model.login.ApiLoginResponseMfa;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.domain.base.SingleLiveEvent;
 import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase;
@@ -120,10 +120,10 @@ public class ForgotPasswordCodeViewModel extends ViewModel {
 
     private void login(String username, String password) {
         mDataLive.postValue(new LoginViewState.Loading(true));
-        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback<LoginResponseMfa>() {
+        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback<ApiLoginResponseMfa>() {
 
             @Override
-            public void onSuccess(LoginResponseMfa loginResponseMfa) {
+            public void onSuccess(ApiLoginResponseMfa loginResponseMfa) {
                 if (loginResponseMfa.getChallengeName() != null && loginResponseMfa.getChallengeName().equals("SOFTWARE_TOKEN_MFA")){
                     mDataViewEffect.postValue(new LoginViewEffect.EnterMfaCode(loginResponseMfa.getSession()));
                 }

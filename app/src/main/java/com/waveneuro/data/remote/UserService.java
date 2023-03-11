@@ -1,23 +1,21 @@
 package com.waveneuro.data.remote;
 
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
+import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
-import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
 import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.client.ClientRequest;
+import com.waveneuro.data.model.response.client.ClientListResponse;
+import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponseMfa;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
-import com.waveneuro.data.model.response.client.ClientListResponse;
-import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
@@ -36,8 +34,8 @@ import retrofit2.http.Query;
 
 public interface UserService {
 
-    @POST("login")
-    Observable<LoginResponseMfa> login(@Body LoginRequest request);
+//    @POST("login")
+//    Observable<LoginResponseMfa> login(@Body LoginRequest request);
 
     @GET("users/me")
     Observable<UserInfoResponse> getPersonalInfo();

@@ -27,7 +27,7 @@ import com.waveneuro.ui.dashboard.web.WebCommand;
 import com.waveneuro.ui.user.email.forgot.ForgotUsernameCommand;
 import com.waveneuro.ui.user.login.LoginCommand;
 import com.waveneuro.ui.user.login.LoginViewEffect;
-import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordCommand;
+import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand;
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand;
 import com.waveneuro.ui.user.registration.RegistrationCommand;
 

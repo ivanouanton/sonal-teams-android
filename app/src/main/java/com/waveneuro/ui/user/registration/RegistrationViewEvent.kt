@@ -1,8 +1,8 @@
 package com.waveneuro.ui.user.registration
 
 sealed class RegistrationViewEvent {
-    class BackClicked : RegistrationViewEvent()
-    class BookConsultationClicked : RegistrationViewEvent()
-    class FindOutMoreClicked : RegistrationViewEvent()
-    class Start : RegistrationViewEvent()
+    object BackClicked : RegistrationViewEvent()
+    object BookConsultationClicked : RegistrationViewEvent()
+    object FindOutMoreClicked : RegistrationViewEvent()
+    object Start : RegistrationViewEvent()
 }

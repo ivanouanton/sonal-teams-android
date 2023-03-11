@@ -17,7 +17,7 @@ import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.api.user.model.login.ApiLoginResponseMfa;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
@@ -52,7 +52,7 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<LoginResponseMfa> login(LoginRequest request) {
+    public Observable<ApiLoginResponseMfa> login(LoginRequest request) {
         return this.userService.login(request);
     }
 

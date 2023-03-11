@@ -9,4 +9,5 @@ sealed class LoginViewEffect {
     object SetNewPassword : LoginViewEffect()
     data class EnterMfaCode(val session: String) : LoginViewEffect()
     object WrongMfaCode : LoginViewEffect()
+    data class ShowErrorDialog(val title: String?, val message: String) : LoginViewEffect()
 }

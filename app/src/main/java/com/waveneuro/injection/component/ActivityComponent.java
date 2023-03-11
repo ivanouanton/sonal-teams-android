@@ -12,26 +12,19 @@ import com.waveneuro.ui.dashboard.DashboardActivity;
 import com.waveneuro.ui.dashboard.account.AccountActivity;
 import com.waveneuro.ui.dashboard.help.HelpActivity;
 import com.waveneuro.ui.dashboard.history.HistoryActivity;
-import com.waveneuro.ui.dashboard.web.WebActivity;
 import com.waveneuro.ui.dashboard.organization.OrganizationActivity;
+import com.waveneuro.ui.dashboard.web.WebActivity;
 import com.waveneuro.ui.device.MyDeviceActivity;
 import com.waveneuro.ui.introduction.splash.SplashActivity;
 import com.waveneuro.ui.session.complete.SessionCompleteActivity;
 import com.waveneuro.ui.session.history.SessionHistoryActivity;
 import com.waveneuro.ui.session.how_to.HowToActivity;
 import com.waveneuro.ui.session.session.SessionActivity;
-import com.waveneuro.ui.user.email.forgot.ForgotUsernameActivity;
-import com.waveneuro.ui.user.email.sent.SentUsernameActivity;
 import com.waveneuro.ui.user.login.LoginActivity;
 import com.waveneuro.ui.user.mfa.MfaActivity;
-import com.waveneuro.ui.user.password.change.ChangePasswordActivity;
-import com.waveneuro.ui.user.password.changed.ResetPasswordInfoActivity;
-import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordActivity;
-import com.waveneuro.ui.user.password.password.first.SetPasswordActivity;
-import com.waveneuro.ui.user.password.recovery.RecoveryInstructionsActivity;
-import com.waveneuro.ui.user.password.reset.ResetPasswordActivity;
 import com.waveneuro.ui.user.password.code.ForgotPasswordCodeActivity;
-import com.waveneuro.ui.user.profile.notactive.AccountNotActiveActivity;
+import com.waveneuro.ui.user.password.new_password.SetNewPasswordActivity;
+import com.waveneuro.ui.user.password.reset.ResetPasswordActivity;
 import com.waveneuro.ui.user.registration.RegistrationActivity;
 
 import dagger.Subcomponent;
@@ -55,18 +48,6 @@ public interface ActivityComponent {
 
     void inject(RegistrationActivity registrationActivity);
 
-    void inject(AccountNotActiveActivity accountNotActiveActivity);
-
-    void inject(ForgotUsernameActivity forgotUsernameActivity);
-
-    void inject(SentUsernameActivity sentUsernameActivity);
-
-    void inject(ChangePasswordActivity changePasswordActivity);
-
-    void inject(ResetPasswordInfoActivity resetPasswordInfoActivity);
-
-    void inject(RecoveryInstructionsActivity recoveryInstructionsActivity);
-
     void inject(ResetPasswordActivity resetPasswordActivity);
 
     void inject(DashboardActivity dashboardActivity);
@@ -82,8 +63,6 @@ public interface ActivityComponent {
     void inject(OrganizationActivity organizationActivity);
 
     void inject(SetNewPasswordActivity setNewPasswordActivity);
-
-    void inject(SetPasswordActivity setPasswordActivity);
 
     void inject(MyDeviceActivity deviceActivity);
 

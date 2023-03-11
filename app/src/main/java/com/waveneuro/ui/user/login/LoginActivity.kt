@@ -1,5 +1,7 @@
 package com.waveneuro.ui.user.login
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -9,34 +11,41 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
 import android.view.Window
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityLoginBinding
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.user.login.LoginViewEffect.*
 import com.waveneuro.ui.user.login.LoginViewEvent.ClearRememberUser
 import com.waveneuro.ui.user.login.LoginViewEvent.RememberUser
+import com.waveneuro.ui.user.login.viewmodel.LoginViewModel
+import com.waveneuro.ui.user.login.viewmodel.LoginViewModelImpl
 import com.waveneuro.ui.user.mfa.MfaCommand
-import com.waveneuro.ui.user.password.password.confirm.SetNewPasswordCommand
+import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand
-import com.waveneuro.ui.user.registration.RegistrationCommand
+import com.waveneuro.ui.user.registration.RegistrationActivity
+import com.waveneuro.utils.ext.getAppComponent
 import timber.log.Timber
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel>() {
 
     @Inject
     lateinit var resetPasswordCommand: ResetPasswordCommand
-    @Inject
-    lateinit var registrationCommand: RegistrationCommand
     @Inject
     lateinit var setNewPasswordCommand: SetNewPasswordCommand
     @Inject
     lateinit var mfaCommand: MfaCommand
     @Inject
-    lateinit var loginViewModel: LoginViewModel
+    lateinit var loginViewModelImpl: LoginViewModelImpl
 
-    private lateinit var binding: ActivityLoginBinding
+    override fun initBinding(): ActivityLoginBinding =
+        ActivityLoginBinding.inflate(layoutInflater)
+
+    override val viewModel: LoginViewModelImpl by viewModels {
+        getAppComponent().loginViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -44,13 +53,10 @@ class LoginActivity : BaseActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         window.statusBarColor = Color.TRANSPARENT
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         setView()
         setObserver()
-        loginViewModel.processEvent(LoginViewEvent.Start())
+        loginViewModelImpl.processEvent(LoginViewEvent.Start())
     }
 
     private fun setView() {
@@ -88,13 +94,13 @@ class LoginActivity : BaseActivity() {
         )
         binding.tvRecoverHere.text = spannableString
         binding.tvRecoverHere.setOnClickListener {
-            loginViewModel.processEvent(LoginViewEvent.ForgotPasswordClicked())
+            loginViewModelImpl.processEvent(LoginViewEvent.ForgotPasswordClicked())
         }
     }
 
     private fun setObserver() {
-        loginViewModel.data.observe(this, loginViewStateObserver)
-        loginViewModel.viewEffect.observe(this, loginViewEffectObserver)
+        loginViewModelImpl.data.observe(this, loginViewStateObserver)
+        loginViewModelImpl.viewEffect.observe(this, loginViewEffectObserver)
     }
 
     private val loginViewStateObserver = Observer { viewState: LoginViewState ->
@@ -142,23 +148,27 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun launchRegistrationScreen() {
-        registrationCommand.navigate()
+        startActivity(RegistrationActivity.newIntent(this))
     }
 
     private fun login() {
         if (binding.chkRememberMe.isChecked) {
-            loginViewModel.processEvent(
+            loginViewModelImpl.processEvent(
                 RememberUser(binding.tipUsername.text.toString().trim())
             )
         } else {
-            loginViewModel.processEvent(ClearRememberUser())
+            loginViewModelImpl.processEvent(ClearRememberUser())
         }
-        loginViewModel.processEvent(
+        loginViewModelImpl.processEvent(
             LoginViewEvent.LoginClicked(
                 binding.tipUsername.text.toString().trim(),
                 binding.tipPassword.text.toString().trim()
             )
         )
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, LoginActivity::class.java)
     }
 
 }

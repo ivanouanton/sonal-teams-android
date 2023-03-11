@@ -1,7 +1,7 @@
 package com.waveneuro.ui.user.registration
 
 sealed class RegistrationViewEffect {
-    class Back : RegistrationViewEffect()
-    class BookConsultation : RegistrationViewEffect()
-    class FindOutMore : RegistrationViewEffect()
+    object Back : RegistrationViewEffect()
+    object BookConsultation : RegistrationViewEffect()
+    object FindOutMore : RegistrationViewEffect()
 }

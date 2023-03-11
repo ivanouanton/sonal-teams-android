@@ -15,7 +15,7 @@ import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.model.response.login.LoginResponseMfa;
+import com.waveneuro.data.api.user.model.login.ApiLoginResponseMfa;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
@@ -35,7 +35,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
 
 public interface DataManager {
-    Observable<LoginResponseMfa> login(LoginRequest request);
+    Observable<ApiLoginResponseMfa> login(LoginRequest request);
 
     Observable<ConfirmTokenResponse> confirmToken(ConfirmTokenRequest request);
 

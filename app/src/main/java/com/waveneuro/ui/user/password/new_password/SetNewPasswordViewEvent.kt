@@ -1,0 +1,8 @@
+package com.waveneuro.ui.user.password.new_password
+
+sealed class SetNewPasswordViewEvent {
+    class Start : SetNewPasswordViewEvent()
+    data class SetNewPassword(val email: String,
+                              val code: String,
+                              val password: String) : SetNewPasswordViewEvent()
+}
