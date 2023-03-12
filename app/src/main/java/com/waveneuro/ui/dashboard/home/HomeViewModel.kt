@@ -15,7 +15,7 @@ import com.waveneuro.domain.usecase.patient.GetOrganizationsUseCase
 import com.waveneuro.domain.usecase.patient.GetPatientUseCase
 import com.waveneuro.domain.usecase.patient.GetPatientsUseCase
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
 import com.waveneuro.ui.dashboard.home.HomeViewEvent.*
 import com.waveneuro.ui.model.client.ClientUi
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
     private val getLatestProtocolUseCase: GetLatestProtocolUseCase,
-    private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
+    private val getPersonalInfoUseCase: GetUserInfoUseCase,
     private val getPatientsUseCase: GetPatientsUseCase,
     private val getPatientUseCase: GetPatientUseCase,
     private val getOrganizationsUseCase: GetOrganizationsUseCase,

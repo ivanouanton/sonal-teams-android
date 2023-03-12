@@ -17,7 +17,7 @@ import com.waveneuro.domain.base.SingleLiveEvent;
 import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase;
 import com.waveneuro.domain.usecase.login.LoginUseCase;
 import com.waveneuro.domain.usecase.password.ForgotPasswordUseCase;
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase;
+import com.waveneuro.domain.usecase.user.GetUserInfoUseCase;
 import com.waveneuro.ui.user.login.LoginViewEffect;
 import com.waveneuro.ui.user.login.LoginViewEvent;
 import com.waveneuro.ui.user.login.LoginViewState;
@@ -43,15 +43,15 @@ public class ForgotPasswordCodeViewModel extends ViewModel {
     private final SingleLiveEvent<LoginViewEffect> mDataViewEffect = new SingleLiveEvent<>();
 
     private final LoginUseCase loginUseCase;
-    private final GetPersonalInfoUseCase getPersonalInfoUseCase;
+    private final GetUserInfoUseCase getUserInfoUseCase;
     private final ConfirmTokenUseCase confirmTokenUseCase;
     private final ForgotPasswordUseCase forgotPasswordUseCase;
 
 
     @Inject
-    public ForgotPasswordCodeViewModel(LoginUseCase loginUseCase, GetPersonalInfoUseCase getPersonalInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase, ForgotPasswordUseCase forgotPasswordUseCase) {
+    public ForgotPasswordCodeViewModel(LoginUseCase loginUseCase, GetUserInfoUseCase getUserInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase, ForgotPasswordUseCase forgotPasswordUseCase) {
         this.loginUseCase = loginUseCase;
-        this.getPersonalInfoUseCase = getPersonalInfoUseCase;
+        this.getUserInfoUseCase = getUserInfoUseCase;
         this.confirmTokenUseCase = confirmTokenUseCase;
         this.forgotPasswordUseCase = forgotPasswordUseCase;
     }

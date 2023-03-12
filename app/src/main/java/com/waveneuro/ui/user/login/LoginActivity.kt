@@ -23,16 +23,14 @@ import com.waveneuro.ui.user.login.viewmodel.LoginViewModel
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModelImpl
 import com.waveneuro.ui.user.mfa.MfaCommand
 import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand
+import com.waveneuro.ui.user.password.reset.ResetPasswordActivity
 import com.waveneuro.ui.user.password.reset.ResetPasswordCommand
 import com.waveneuro.ui.user.registration.RegistrationActivity
 import com.waveneuro.utils.ext.getAppComponent
-import timber.log.Timber
 import javax.inject.Inject
 
 class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel>() {
 
-    @Inject
-    lateinit var resetPasswordCommand: ResetPasswordCommand
     @Inject
     lateinit var setNewPasswordCommand: SetNewPasswordCommand
     @Inject
@@ -56,7 +54,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
 
         setView()
         setObserver()
-        loginViewModelImpl.processEvent(LoginViewEvent.Start())
+        loginViewModelImpl.processEvent(LoginViewEvent.Start)
     }
 
     private fun setView() {
@@ -94,41 +92,27 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
         )
         binding.tvRecoverHere.text = spannableString
         binding.tvRecoverHere.setOnClickListener {
-            loginViewModelImpl.processEvent(LoginViewEvent.ForgotPasswordClicked())
+            loginViewModelImpl.processEvent(LoginViewEvent.ForgotPasswordClicked)
         }
     }
 
     private fun setObserver() {
-        loginViewModelImpl.data.observe(this, loginViewStateObserver)
-        loginViewModelImpl.viewEffect.observe(this, loginViewEffectObserver)
-    }
-
-    private val loginViewStateObserver = Observer { viewState: LoginViewState ->
-        when (viewState) {
-            is LoginViewState.Success -> onSuccess(viewState.item)
-            is LoginViewState.Failure -> onFailure(viewState.error)
-            is LoginViewState.Loading -> {
-                Timber.e("LOADING :: %s", viewState.loading)
-                if (viewState.loading) displayWait("Loading...", null) else removeWait()
+        loginViewModelImpl.viewEffect.observe(this, Observer { viewEffect ->
+            when (viewEffect) {
+                is ForgotPassword -> launchForgotPasswordScreen()
+                is RememberMe -> setRememberData(viewEffect.username)
+                is Register -> launchRegistrationScreen()
+                is Support -> {}
+                is SetNewPassword -> launchSetNewPasswordScreen()
+                is EnterMfaCode -> {
+                    mfaCommand.navigate(
+                        binding.etUsername.editText?.text.toString().trim(),
+                        viewEffect.session
+                    )
+                }
+                else -> {}
             }
-        }
-    }
-
-    private val loginViewEffectObserver = Observer { viewEffect: LoginViewEffect ->
-        when (viewEffect) {
-            is ForgotPassword -> launchForgotPasswordScreen()
-            is RememberMe -> setRememberData(viewEffect.username)
-            is Register -> launchRegistrationScreen()
-            is Support -> {}
-            is SetNewPassword -> launchSetNewPasswordScreen()
-            is EnterMfaCode -> {
-                mfaCommand.navigate(
-                    binding.etUsername.editText?.text.toString().trim(),
-                    viewEffect.session
-                )
-            }
-            else -> {}
-        }
+        })
     }
 
     private fun setRememberData(username: String) {
@@ -144,7 +128,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     private fun launchForgotPasswordScreen() {
-        resetPasswordCommand.navigate()
+        startActivity(ResetPasswordActivity.newIntent(this))
     }
 
     private fun launchRegistrationScreen() {
@@ -157,7 +141,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
                 RememberUser(binding.tipUsername.text.toString().trim())
             )
         } else {
-            loginViewModelImpl.processEvent(ClearRememberUser())
+            loginViewModelImpl.processEvent(ClearRememberUser)
         }
         loginViewModelImpl.processEvent(
             LoginViewEvent.LoginClicked(
@@ -168,7 +152,9 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, LoginActivity::class.java)
+        fun newIntent(context: Context) = Intent(context, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
     }
 
 }

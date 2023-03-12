@@ -7,7 +7,7 @@ import com.waveneuro.data.DataManager
 import com.waveneuro.data.model.request.account.update.AccountUpdateRequest
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.domain.usecase.user.UpdatePersonalInfoUseCase
 import com.waveneuro.ui.dashboard.account.AccountViewEffect.UpdateSuccess
 import com.waveneuro.ui.dashboard.account.AccountViewEvent.UpdatedUser
@@ -15,7 +15,7 @@ import com.waveneuro.utils.ErrorUtil
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
-    private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
+    private val getPersonalInfoUseCase: GetUserInfoUseCase,
     private val updatePersonalInfoUseCase: UpdatePersonalInfoUseCase
 ) : ViewModel() {
 

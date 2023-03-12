@@ -21,13 +21,8 @@ data class ApiError(
     @Json(name = "message") val message: String?
 ) : AppError()
 
-object ErrorMessage {
-    // for error
-    const val TOS_NOT_SIGNED = "ToS not signed"
-    const val BAD_USER_NAME_OR_PASSWORD = "Bad username or password"
-    const val INVALID_CODE = "Invalid code"
-    // for message
-    const val ACTIVE_SONAL_SESSION_NOT_FOUND = "Active Sonal session not found"
+object ErrorName {
+    const val USER_DOES_NOT_EXIST = "The user doesn't exist"
 }
 
 object ErrorType {

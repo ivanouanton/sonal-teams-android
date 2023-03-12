@@ -5,14 +5,14 @@ import androidx.lifecycle.ViewModel
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.model.organization.OrganizationUi
 import com.waveneuro.ui.model.organization.mapper.OrganizationMapperImpl
 import com.waveneuro.utils.ErrorUtil
 import javax.inject.Inject
 
 class OrganizationViewModel @Inject constructor(
-    private val getPersonalInfoUseCase: GetPersonalInfoUseCase,
+    private val getPersonalInfoUseCase: GetUserInfoUseCase,
     private val mapper: OrganizationMapperImpl
 ) : ViewModel() {
 

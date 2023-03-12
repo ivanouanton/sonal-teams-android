@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.waveneuro.data.DataManager
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.usecase.user.GetPersonalInfoUseCase
+import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.*
 import com.waveneuro.ui.dashboard.device.DeviceViewState.*
 import com.waveneuro.utils.ErrorUtil
@@ -12,7 +12,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DeviceViewModel @Inject constructor(
-    private val getPersonalInfoUseCase: GetPersonalInfoUseCase
+    private val getPersonalInfoUseCase: GetUserInfoUseCase
 ) : ViewModel() {
 
     @Inject

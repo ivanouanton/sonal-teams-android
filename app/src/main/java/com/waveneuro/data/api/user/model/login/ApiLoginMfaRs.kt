@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 
-data class ApiLoginRsMfa(
+data class ApiLoginMfaRs(
     @Json(name = "ChallengeName") val challengeName: String?,
     @Json(name = "Session") val session: String,
 )
