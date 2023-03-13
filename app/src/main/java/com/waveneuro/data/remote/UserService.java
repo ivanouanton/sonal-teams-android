@@ -3,7 +3,6 @@ package com.waveneuro.data.remote;
 import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
-import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.response.client.ClientListResponse;
 import com.waveneuro.data.model.response.client.ClientResponse;
@@ -11,7 +10,6 @@ import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
-import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
@@ -45,8 +43,8 @@ public interface UserService {
     @POST("refresh-token")
     Observable<RefreshResponse> refreshToken();
 
-    @POST("users/confirm_forgot_password")
-    Observable<SetNewPasswordResponse> changeTempPassword(@Body SetNewPasswordRequest request);
+//    @POST("users/confirm_forgot_password")
+//    Observable<SetNewPasswordResponse> changeTempPassword(@Body SetNewPasswordRequest request);
 
     @POST("forgot_password_confirm")
     Observable<SetPasswordResponse> changePassword(@Body SetPasswordRequest request);

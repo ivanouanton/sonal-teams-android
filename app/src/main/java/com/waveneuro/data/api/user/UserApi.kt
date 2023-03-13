@@ -1,8 +1,10 @@
 package com.waveneuro.data.api.user
 
-import com.waveneuro.data.api.user.model.login.ApiLoginRq
 import com.waveneuro.data.api.user.model.login.ApiLoginMfaRs
+import com.waveneuro.data.api.user.model.login.ApiLoginRq
 import com.waveneuro.data.api.user.model.password.ApiForgotPasswordRq
+import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRq
+import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
 import com.waveneuro.data.api.user.model.user.ApiUserUpdateRq
 import retrofit2.http.*
@@ -26,10 +28,10 @@ interface UserApi {
 //
 //    @POST("refresh-token")
 //    fun refreshToken(): Observable<RefreshResponse?>?
-//
-//    @POST("users/confirm_forgot_password")
-//    fun changeTempPassword(@Body request: SetNewPasswordRequest?): Observable<SetNewPasswordResponse?>?
-//
+
+    @POST("users/confirm_forgot_password")
+    suspend fun changeTempPassword(@Body request: ApiSetNewPasswordRq): ApiSetNewPasswordRs
+
 //    @POST("forgot_password_confirm")
 //    fun changePassword(@Body request: SetPasswordRequest?): Observable<SetPasswordResponse?>?
 //

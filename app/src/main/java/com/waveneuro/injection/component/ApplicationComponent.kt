@@ -8,6 +8,8 @@ import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.injection.module.ApplicationModule
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelFactory
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModelFactory
+import com.waveneuro.ui.user.password.code.viewmodel.ForgotPasswordCodeViewModelFactory
+import com.waveneuro.ui.user.password.new_password.viewmodel.SetNewPasswordViewModelFactory
 import com.waveneuro.ui.user.password.reset.viewmodel.ResetPasswordViewModelFactory
 import com.waveneuro.ui.user.registration.viewmodel.RegistrationViewModelFactory
 import dagger.Component
@@ -28,5 +30,7 @@ interface ApplicationComponent {
     fun registrationViewModelFactory(): RegistrationViewModelFactory
     fun resetPasswordViewModelFactory(): ResetPasswordViewModelFactory
     fun loginViewModelFactory(): LoginViewModelFactory
+    fun setNewPasswordViewModelFactory(): SetNewPasswordViewModelFactory
+    fun forgotPasswordCodeViewModelFactory(): ForgotPasswordCodeViewModelFactory
 
 }

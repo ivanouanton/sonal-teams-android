@@ -20,6 +20,7 @@ import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.web.WebCommand
 import com.waveneuro.ui.user.login.LoginActivity
+import com.waveneuro.ui.user.password.code.ForgotPasswordCodeActivity
 import com.waveneuro.ui.user.password.code.ForgotPasswordCodeCommand
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEffect.LoginRedirect
 import com.waveneuro.ui.user.password.reset.viewmodel.ResetPasswordViewModel
@@ -130,8 +131,11 @@ class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding
             btnPrimary.setText(R.string.open_email_app)
             btnPrimary.setOnClickListener {
                 dialog.dismiss()
-                forgotPasswordCodeCommand.navigate(
-                    binding.tipUsername.text.toString().trim())
+                startActivity(ForgotPasswordCodeActivity.newIntent(
+                    this@ResetPasswordActivity,
+                    binding.tipUsername.text.toString().trim()
+                ))
+
                 try {
                     val intent = Intent(Intent.ACTION_MAIN)
                     intent.addCategory(Intent.CATEGORY_APP_EMAIL)
@@ -141,9 +145,10 @@ class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding
             }
             ibtnClose.setOnClickListener {
                 dialog.dismiss()
-                forgotPasswordCodeCommand.navigate(
+                startActivity(ForgotPasswordCodeActivity.newIntent(
+                    this@ResetPasswordActivity,
                     binding.tipUsername.text.toString().trim()
-                )
+                ))
             }
         }
 

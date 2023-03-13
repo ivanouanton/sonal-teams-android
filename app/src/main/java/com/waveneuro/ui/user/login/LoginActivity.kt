@@ -24,7 +24,6 @@ import com.waveneuro.ui.user.login.viewmodel.LoginViewModelImpl
 import com.waveneuro.ui.user.mfa.MfaCommand
 import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand
 import com.waveneuro.ui.user.password.reset.ResetPasswordActivity
-import com.waveneuro.ui.user.password.reset.ResetPasswordCommand
 import com.waveneuro.ui.user.registration.RegistrationActivity
 import com.waveneuro.utils.ext.getAppComponent
 import javax.inject.Inject
