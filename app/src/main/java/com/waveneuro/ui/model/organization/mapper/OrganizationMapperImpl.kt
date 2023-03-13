@@ -1,14 +1,14 @@
 package com.waveneuro.ui.model.organization.mapper
 
-import com.waveneuro.data.model.response.organization.OrganizationResponse
-import com.waveneuro.ui.model.organization.OrganizationUi
+import com.waveneuro.domain.model.user.Organization
+import com.waveneuro.ui.model.organization.UiOrganization
 import javax.inject.Inject
 
 class OrganizationMapperImpl @Inject constructor() : OrganizationMapper {
 
-    override fun fromApiToUi(api: OrganizationResponse) = OrganizationUi(
-        api.id,
-        api.name
+    override fun fromDomainToUi(domain: Organization) = UiOrganization(
+        domain.id,
+        domain.name
     )
 
 }

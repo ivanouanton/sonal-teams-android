@@ -1,13 +1,13 @@
 package com.waveneuro.ui.model.organization.mapper
 
-import com.waveneuro.data.model.response.organization.OrganizationResponse
-import com.waveneuro.ui.model.organization.OrganizationUi
+import com.waveneuro.domain.model.user.Organization
+import com.waveneuro.ui.model.organization.UiOrganization
 
 interface OrganizationMapper {
 
-    fun fromApiToUi(api: OrganizationResponse) : OrganizationUi
+    fun fromDomainToUi(domain: Organization) : UiOrganization
 
-    fun fromApiToUi(api: List<OrganizationResponse>): List<OrganizationUi> =
-        api.map(::fromApiToUi)
+    fun fromDomainToUi(domain: List<Organization>): List<UiOrganization> =
+        domain.map(::fromDomainToUi)
 
 }

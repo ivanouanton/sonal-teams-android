@@ -17,8 +17,8 @@ class UserMapperImpl @Inject constructor() : UserMapper {
         )
     }
 
-    private fun fromApiToDomain(api: ApiOrganizationRs): OrganizationRs = with(api) {
-        OrganizationRs(
+    private fun fromApiToDomain(api: ApiOrganizationRs): Organization = with(api) {
+        Organization(
             id, name
         )
     }

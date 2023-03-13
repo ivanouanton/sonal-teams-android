@@ -15,7 +15,7 @@ import com.waveneuro.ui.base.BaseFormActivity
 import com.waveneuro.ui.dashboard.account.AccountViewEffect.BackRedirect
 import com.waveneuro.ui.dashboard.account.AccountViewEffect.UpdateSuccess
 import com.waveneuro.ui.dashboard.account.AccountViewState.*
-import com.waveneuro.ui.dashboard.organization.OrganizationCommand
+import com.waveneuro.ui.dashboard.organization.OrganizationActivity
 import com.waveneuro.utils.ext.toast
 import javax.inject.Inject
 
@@ -25,8 +25,6 @@ class AccountActivity : BaseFormActivity() {
 
     @Inject
     lateinit var accountViewModel: AccountViewModel
-    @Inject
-    lateinit var organizationCommand: OrganizationCommand
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +74,7 @@ class AccountActivity : BaseFormActivity() {
                 buildDialog(R.string.enter_email, tvEmailValue).show()
             }
             llOrganization.setOnClickListener {
-                organizationCommand.navigate()
+                startActivity(OrganizationActivity.newIntent(this@AccountActivity))
             }
         }
     }

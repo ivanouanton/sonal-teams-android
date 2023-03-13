@@ -61,8 +61,6 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     @Inject
     lateinit var sessionCommand: SessionCommand
     @Inject
-    lateinit var dashboardCommand: DashboardCommand
-    @Inject
     lateinit var howToCommand: HowToCommand
     @Inject
     lateinit var deviceViewModel: DeviceViewModel

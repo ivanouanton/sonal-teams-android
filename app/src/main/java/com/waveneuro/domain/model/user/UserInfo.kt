@@ -6,5 +6,5 @@ data class UserInfo(
     val lastName: String,
     val email: String,
     val role: String,
-    val organizations: List<OrganizationRs>
+    val organizations: List<Organization>
 )
