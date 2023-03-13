@@ -37,10 +37,6 @@
             android:exported="false" />
         <activity android:name=".ui.dashboard.help.HelpActivity" />
         <activity
-            android:name=".ui.device.MyDeviceActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.user.password.new_password.SetNewPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

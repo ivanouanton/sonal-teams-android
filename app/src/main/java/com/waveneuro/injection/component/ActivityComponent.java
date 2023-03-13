@@ -14,7 +14,6 @@ import com.waveneuro.ui.dashboard.help.HelpActivity;
 import com.waveneuro.ui.dashboard.history.HistoryActivity;
 import com.waveneuro.ui.dashboard.organization.OrganizationActivity;
 import com.waveneuro.ui.dashboard.web.WebActivity;
-import com.waveneuro.ui.device.MyDeviceActivity;
 import com.waveneuro.ui.introduction.splash.SplashActivity;
 import com.waveneuro.ui.session.complete.SessionCompleteActivity;
 import com.waveneuro.ui.session.history.SessionHistoryActivity;
@@ -63,8 +62,6 @@ public interface ActivityComponent {
     void inject(OrganizationActivity organizationActivity);
 
     void inject(SetNewPasswordActivity setNewPasswordActivity);
-
-    void inject(MyDeviceActivity deviceActivity);
 
     void inject(HelpActivity helpActivity);
 
