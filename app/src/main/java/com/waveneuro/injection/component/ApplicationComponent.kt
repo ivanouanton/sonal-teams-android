@@ -6,6 +6,7 @@ import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.injection.module.ApplicationModule
+import com.waveneuro.ui.dashboard.DashboardViewModelFactory
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelFactory
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModelFactory
 import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModelFactory
@@ -34,5 +35,6 @@ interface ApplicationComponent {
     fun setNewPasswordViewModelFactory(): SetNewPasswordViewModelFactory
     fun forgotPasswordCodeViewModelFactory(): ForgotPasswordCodeViewModelFactory
     fun mfaViewModelFactory(): MfaViewModelFactory
+    fun dashboardViewModelFactory(): DashboardViewModelFactory
 
 }

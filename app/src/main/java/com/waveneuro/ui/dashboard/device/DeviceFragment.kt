@@ -44,10 +44,7 @@ import com.waveneuro.ui.adapter.device.DeviceDelegate
 import com.waveneuro.ui.adapter.device.OnDeviceItemClickListener
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.base.BaseListFragment
-import com.waveneuro.ui.dashboard.DashBoardViewModel
-import com.waveneuro.ui.dashboard.DashboardCommand
-import com.waveneuro.ui.dashboard.DashboardViewEvent
-import com.waveneuro.ui.dashboard.DashboardViewState
+import com.waveneuro.ui.dashboard.*
 import com.waveneuro.ui.dashboard.DashboardViewState.Connect
 import com.waveneuro.ui.dashboard.DashboardViewState.Disconnect
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.LocateDeviceNextClicked
@@ -70,7 +67,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     @Inject
     lateinit var deviceViewModel: DeviceViewModel
 
-    private val dashBoardViewModel: DashBoardViewModel by viewModels()
+    private val dashBoardViewModel: DashBoardViewModelImpl by viewModels()
 
     private lateinit var binding: FragmentDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter
@@ -131,7 +128,8 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                 if (isSearching) {
                     deviceViewModel.processEvent(DeviceViewEvent.Start)
                 } else {
-                    dashboardCommand.navigate()
+                    //TODO check logic probably set bottom bar
+                    startActivity(DashboardActivity.newIntent(requireContext()))
                 }
             }
             tvFirstTime.setOnClickListener {

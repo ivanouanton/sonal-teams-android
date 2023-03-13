@@ -14,18 +14,14 @@ import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.waveneuro.databinding.ActivityMfaBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
+import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModel
 import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModelImpl
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.hideKeyboard
 import com.waveneuro.utils.ext.toast
-import javax.inject.Inject
 
 class MfaActivity : BaseViewModelActivity<ActivityMfaBinding, MfaViewModel>() {
-
-    @Inject
-    lateinit var dashboardCommand: DashboardCommand
 
     override val viewModel: MfaViewModelImpl by viewModels {
         getAppComponent().mfaViewModelFactory()
@@ -119,7 +115,8 @@ class MfaActivity : BaseViewModelActivity<ActivityMfaBinding, MfaViewModel>() {
 
     private fun launchHomeScreen() {
         binding.root.hideKeyboard()
-        dashboardCommand.navigate()
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
     }
 
     companion object {

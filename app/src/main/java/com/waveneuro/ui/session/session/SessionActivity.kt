@@ -20,7 +20,7 @@ import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.databinding.DialogPopupWithCheckboxBinding
 import com.waveneuro.databinding.FragmentSessionBinding
 import com.waveneuro.ui.base.BaseActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
+import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.session.complete.SessionCompleteCommand
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
 import com.waveneuro.ui.session.session.SessionViewEffect.*
@@ -29,8 +29,6 @@ import com.waveneuro.ui.session.session.SessionViewState.*
 import com.waveneuro.utils.CountDownTimer
 import com.waveneuro.utils.CountDownTimer.OnCountDownListener
 import com.waveneuro.views.sessionProgressDialogBuilder
-import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,8 +36,6 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
 
     @Inject
     lateinit var sessionCompleteCommand: SessionCompleteCommand
-    @Inject
-    lateinit var dashboardCommand: DashboardCommand
     @Inject
     lateinit var viewModel: SessionViewModel
     @Inject
@@ -283,7 +279,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                     "Yes"
                 ) { _: DialogInterface?, _: Int ->
                     if (!sessionTimer.isFinished) sessionTimer.pause()
-                    dashboardCommand.navigate()
+                    launchDashboard()
                 }
                 .setCancelable(false)
                 .show()
@@ -302,7 +298,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 btnPrimary.text = "Exit Session"
                 btnPrimary.setOnClickListener {
                     if (!sessionTimer.isFinished) sessionTimer.pause()
-                    dashboardCommand.navigate()
+                    launchDashboard()
                 }
             }
 
@@ -339,7 +335,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             tvTitle.setText(R.string.congratulations)
             tvContent.setText(R.string.session_done)
             btnPrimary.setText(R.string.go_home)
-            btnPrimary.setOnClickListener { v: View? -> dashboardCommand.navigate() }
+            btnPrimary.setOnClickListener { launchDashboard() }
         }
 
         readyDialog = builder.create()
@@ -502,6 +498,11 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             )
             disconnectedIntentionally = true
         }
+    }
+
+    private fun launchDashboard() {
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
     }
 
     override fun onDestroy() {

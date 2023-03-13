@@ -15,19 +15,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivitySetNewPasswordBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
 import com.waveneuro.ui.user.login.LoginActivity
 import com.waveneuro.ui.user.password.new_password.viewmodel.SetNewPasswordViewModel
 import com.waveneuro.ui.user.password.new_password.viewmodel.SetNewPasswordViewModelImpl
 import com.waveneuro.utils.ext.getAppComponent
 import java.util.regex.Pattern
-import javax.inject.Inject
 
 class SetNewPasswordActivity :
     BaseViewModelActivity<ActivitySetNewPasswordBinding, SetNewPasswordViewModel>() {
-
-    @Inject
-    var dashboardCommand: DashboardCommand? = null
 
     override val viewModel: SetNewPasswordViewModelImpl by viewModels {
         getAppComponent().setNewPasswordViewModelFactory()

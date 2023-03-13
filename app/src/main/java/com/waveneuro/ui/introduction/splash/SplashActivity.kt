@@ -7,17 +7,13 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.waveneuro.databinding.ActivitySplashBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
+import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModel
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelImpl
 import com.waveneuro.ui.user.login.LoginActivity
 import com.waveneuro.utils.ext.getAppComponent
-import javax.inject.Inject
 
 class SplashActivity : BaseViewModelActivity<ActivitySplashBinding, SplashViewModel>() {
-
-    @Inject
-    lateinit var dashboardCommand: DashboardCommand
 
     override val viewModel: SplashViewModelImpl by viewModels {
         getAppComponent().splashViewModelFactory()
@@ -50,6 +46,8 @@ class SplashActivity : BaseViewModelActivity<ActivitySplashBinding, SplashViewMo
     }
 
     private fun launchHomeScreen() {
-        dashboardCommand.navigate()
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
     }
+
 }

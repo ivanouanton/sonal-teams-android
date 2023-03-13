@@ -17,23 +17,18 @@ import com.google.android.material.textfield.TextInputEditText
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityForgotPasswordCodeBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
-import com.waveneuro.ui.dashboard.web.WebCommand
+import com.waveneuro.ui.dashboard.DashboardActivity
+import com.waveneuro.ui.dashboard.web.WebActivity
+import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_SUPPORT
 import com.waveneuro.ui.user.login.LoginActivity
 import com.waveneuro.ui.user.password.code.viewmodel.ForgotPasswordCodeViewModel
 import com.waveneuro.ui.user.password.code.viewmodel.ForgotPasswordCodeViewModelImpl
 import com.waveneuro.ui.user.password.new_password.SetNewPasswordActivity
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
-import javax.inject.Inject
 
 internal class ForgotPasswordCodeActivity :
     BaseViewModelActivity<ActivityForgotPasswordCodeBinding, ForgotPasswordCodeViewModel>() {
-
-    @Inject
-    var dashboardCommand: DashboardCommand? = null
-    @Inject
-    var webCommand: WebCommand? = null
 
     override val viewModel: ForgotPasswordCodeViewModelImpl by viewModels {
         getAppComponent().forgotPasswordCodeViewModelFactory()
@@ -83,7 +78,7 @@ internal class ForgotPasswordCodeActivity :
                 startActivity(LoginActivity.newIntent(this@ForgotPasswordCodeActivity))
             }
             tvSupport.setOnClickListener {
-                webCommand?.navigate(WebCommand.PAGE_SUPPORT)
+                startActivity(WebActivity.newIntent(this@ForgotPasswordCodeActivity, PAGE_SUPPORT))
             }
         }
 
@@ -184,7 +179,8 @@ internal class ForgotPasswordCodeActivity :
 
 
     private fun launchHomeScreen() {
-        dashboardCommand?.navigate()
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
     }
 
     companion object {
