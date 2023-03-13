@@ -22,7 +22,7 @@ import com.waveneuro.ui.dashboard.web.WebCommand
 import com.waveneuro.ui.user.login.LoginActivity
 import com.waveneuro.ui.user.password.code.viewmodel.ForgotPasswordCodeViewModel
 import com.waveneuro.ui.user.password.code.viewmodel.ForgotPasswordCodeViewModelImpl
-import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand
+import com.waveneuro.ui.user.password.new_password.SetNewPasswordActivity
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
 import javax.inject.Inject
@@ -30,21 +30,18 @@ import javax.inject.Inject
 internal class ForgotPasswordCodeActivity :
     BaseViewModelActivity<ActivityForgotPasswordCodeBinding, ForgotPasswordCodeViewModel>() {
 
-    var username: String? = ""
-    var session = ""
-    var viewsList: ArrayList<TextInputEditText>? = null
-    var currentFocusedPosition = 1
-
     @Inject
     var dashboardCommand: DashboardCommand? = null
-    @Inject
-    var setNewPasswordCommand: SetNewPasswordCommand? = null
     @Inject
     var webCommand: WebCommand? = null
 
     override val viewModel: ForgotPasswordCodeViewModelImpl by viewModels {
         getAppComponent().forgotPasswordCodeViewModelFactory()
     }
+
+    private var username: String? = ""
+    private val viewsList: MutableList<TextInputEditText> = mutableListOf()
+    private var currentFocusedPosition = 1
 
     override fun initBinding(): ActivityForgotPasswordCodeBinding =
         ActivityForgotPasswordCodeBinding.inflate(layoutInflater)
@@ -59,18 +56,17 @@ internal class ForgotPasswordCodeActivity :
         if (intent.hasExtra(EMAIL)) {
             username = intent.getStringExtra(EMAIL)
         }
-        viewsList = ArrayList()
-        viewsList!!.add(findViewById(R.id.tip_code1))
-        viewsList!!.add(findViewById(R.id.tip_code2))
-        viewsList!!.add(findViewById(R.id.tip_code3))
-        viewsList!!.add(findViewById(R.id.tip_code4))
-        viewsList!!.add(findViewById(R.id.tip_code5))
-        viewsList!!.add(findViewById(R.id.tip_code6))
-        for (i in viewsList!!.indices) {
-            viewsList!![i].addTextChangedListener(mTextEditorWatcher)
-            viewsList!![i].setOnKeyListener(onKeyListener)
+        viewsList.add(findViewById(R.id.tip_code1))
+        viewsList.add(findViewById(R.id.tip_code2))
+        viewsList.add(findViewById(R.id.tip_code3))
+        viewsList.add(findViewById(R.id.tip_code4))
+        viewsList.add(findViewById(R.id.tip_code5))
+        viewsList.add(findViewById(R.id.tip_code6))
+        for (i in viewsList.indices) {
+            viewsList[i].addTextChangedListener(mTextEditorWatcher)
+            viewsList[i].setOnKeyListener(onKeyListener)
         }
-        viewsList!![0].requestFocus()
+        viewsList[0].requestFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
@@ -81,13 +77,13 @@ internal class ForgotPasswordCodeActivity :
     private fun setView() {
         with(binding) {
             tvResendCode.setOnClickListener {
-                viewModel.resetPassword(username)
+                viewModel.processEvent(ForgotPasswordCodeViewEvent.ResetPassword(username))
             }
             tvLogIn.setOnClickListener {
                 startActivity(LoginActivity.newIntent(this@ForgotPasswordCodeActivity))
             }
             tvSupport.setOnClickListener {
-                webCommand!!.navigate(WebCommand.PAGE_SUPPORT)
+                webCommand?.navigate(WebCommand.PAGE_SUPPORT)
             }
         }
 
@@ -150,23 +146,27 @@ internal class ForgotPasswordCodeActivity :
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             if (s.length == 1) {
                 if (currentFocusedPosition < 6) {
-                    viewsList!![currentFocusedPosition].requestFocus()
+                    viewsList[currentFocusedPosition].requestFocus()
                     currentFocusedPosition++
                 } else {
-                    setNewPasswordCommand!!.navigate(username, buildCode())
+                    startActivity(
+                        SetNewPasswordActivity.newIntent(
+                            this@ForgotPasswordCodeActivity,
+                            username,
+                            buildCode()
+                        )
+                    )
                 }
             }
         }
 
-        override fun afterTextChanged(s: Editable) {
-            val x = 0
-        }
+        override fun afterTextChanged(s: Editable) {}
     }
 
     private fun buildCode(): String {
         val mfaCode = StringBuffer()
-        for (i in viewsList!!.indices) {
-            mfaCode.append(viewsList!![i].text.toString())
+        for (i in viewsList.indices) {
+            mfaCode.append(viewsList[i].text.toString())
         }
         return mfaCode.toString()
     }
@@ -175,7 +175,7 @@ internal class ForgotPasswordCodeActivity :
         View.OnKeyListener { view, i, keyEvent -> //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
             if (i == KeyEvent.KEYCODE_DEL) {
                 if (currentFocusedPosition > 1) {
-                    viewsList!![currentFocusedPosition - 2].requestFocus()
+                    viewsList[currentFocusedPosition - 2].requestFocus()
                     currentFocusedPosition--
                 }
             }
@@ -184,7 +184,7 @@ internal class ForgotPasswordCodeActivity :
 
 
     private fun launchHomeScreen() {
-        dashboardCommand!!.navigate()
+        dashboardCommand?.navigate()
     }
 
     companion object {
@@ -197,180 +197,4 @@ internal class ForgotPasswordCodeActivity :
         }
     }
 
-}
-//
-//public class ForgotPasswordCodeActivity extends BaseFormActivity {
-//
-//    String username = "";
-//    String session = "";
-//
-//    ArrayList<TextInputEditText> viewsList = null;
-//
-//    int currentFocusedPosition = 1;
-//
-//    @Inject
-//    DashboardCommand dashboardCommand;
-//    @Inject
-//    SetNewPasswordCommand setNewPasswordCommand;
-//    @Inject
-//    WebCommand webCommand;
-//    @Inject
-//    LoginCommand loginCommand;
-//
-//    @BindView(R.id.tv_log_in)
-//    TextView tvLogIn;
-//
-//    @BindView(R.id.tv_resend_code)
-//    TextView tvResendCode;
-//
-//    @BindView(R.id.tv_support)
-//    TextView tvSupport;
-//
-//
-//    @Inject
-//    ForgotPasswordCodeViewModelImpl forgotPasswordCodeViewModelImpl;
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//        getWindow().setStatusBarColor(Color.TRANSPARENT);
-//
-//        super.onCreate(savedInstanceState);
-//        activityComponent().inject(this);
-//
-//        setContentView(R.layout.activity_forgot_password_code);
-//        ButterKnife.bind(this);
-//
-//        if(getIntent().hasExtra(ForgotPasswordCodeCommand.EMAIL)) {
-//            username = getIntent().getStringExtra(ForgotPasswordCodeCommand.EMAIL);
-//        }
-//
-//        viewsList = new ArrayList<>();
-//        viewsList.add(findViewById(R.id.tip_code1));
-//        viewsList.add(findViewById(R.id.tip_code2));
-//        viewsList.add(findViewById(R.id.tip_code3));
-//        viewsList.add(findViewById(R.id.tip_code4));
-//        viewsList.add(findViewById(R.id.tip_code5));
-//        viewsList.add(findViewById(R.id.tip_code6));
-//
-//        for (int i = 0; i < viewsList.size(); i++){
-//        viewsList.get(i).addTextChangedListener(mTextEditorWatcher);
-//        viewsList.get(i).setOnKeyListener(onKeyListener);
-//    }
-//
-//        viewsList.get(0).requestFocus();
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//
-//        //this.loginViewModel.getViewEffect().observe(this, loginViewEffectObserver);
-//        this.forgotPasswordCodeViewModelImpl.getViewEffect().observe(this, loginViewEffectObserver);
-//
-//        setView();
-//    }
-//
-//    private void setView() {
-//        logInSpanText();
-//        supportSpanText();
-//        resendSpanText();
-//
-//    }
-//
-//    private void logInSpanText() {
-//        SpannableString spannableString = new SpannableString(getString(R.string.log_in));
-//        spannableString.setSpan(new UnderlineSpan(), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 6, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-//        tvLogIn.setText(spannableString);
-//    }
-//
-//    private void supportSpanText() {
-//        SpannableString spannableString = new SpannableString(getString(R.string.support));
-//        spannableString.setSpan(new UnderlineSpan(), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 7, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-//        tvSupport.setText(spannableString);
-//    }
-//
-//    private void resendSpanText() {
-//        SpannableString spannableString = new SpannableString(getString(R.string.resend_code));
-//        spannableString.setSpan(new UnderlineSpan(), 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.yellow_dim)), 0, 11, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-//        tvResendCode.setText(spannableString);
-//    }
-//
-//    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
-//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//        }
-//
-//        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            if (s.length() == 1) {
-//                if (currentFocusedPosition < 6) {
-//                    viewsList.get(currentFocusedPosition).requestFocus();
-//                    currentFocusedPosition++;
-//                } else {
-//                    setNewPasswordCommand.navigate(username, buildCode());
-//                }
-//            }
-//        }
-//
-//        public void afterTextChanged(Editable s) {
-//            int x = 0;
-//        }
-//    };
-//
-//    private String buildCode(){
-//        StringBuffer mfaCode = new StringBuffer();
-//        for (int i = 0; i < viewsList.size(); i++){
-//        mfaCode.append(viewsList.get(i).getText().toString());
-//    }
-//        return mfaCode.toString();
-//    }
-//
-//    private final View.OnKeyListener onKeyListener  = new View.OnKeyListener() {
-//        @Override
-//        public boolean onKey(View view, int i, KeyEvent keyEvent) {
-//            //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
-//            if(i == KeyEvent.KEYCODE_DEL) {
-//                if (currentFocusedPosition > 1) {
-//                    viewsList.get(currentFocusedPosition - 2).requestFocus();
-//                    currentFocusedPosition--;
-//                }
-//            }
-//            return false;
-//        }
-//    };
-//
-//    Observer<LoginViewEffect> loginViewEffectObserver = viewEffect -> {
-//        if (viewEffect instanceof LoginViewEffect.Home) {
-//            launchHomeScreen();
-//        } else if (viewEffect instanceof LoginViewEffect.WrongMfaCode) {
-//            Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show();
-//        }
-//    };
-//
-//    private void launchHomeScreen() {
-//        dashboardCommand.navigate();
-//    }
-//
-//    @Override
-//    public void submit() {
-//
-//    }
-//
-//    @OnClick(R.id.tv_resend_code)
-//    public void onClickResendCode() {
-//        forgotPasswordCodeViewModelImpl.resetPassword(username);
-//
-//    }
-//
-//    @OnClick(R.id.tv_log_in)
-//    public void onClickLogIn() {
-//        loginCommand.navigate();
-//
-//    }
-//
-//    @OnClick({R.id.tv_support})
-//    public void onClickSupport() {
-//        webCommand.navigate(WebCommand.PAGE_SUPPORT);
-//    }
 }

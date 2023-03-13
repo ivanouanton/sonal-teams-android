@@ -1,13 +1,11 @@
 package com.waveneuro.data.remote;
 
 import com.waveneuro.data.model.request.client.ClientRequest;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
 import com.waveneuro.data.model.response.client.ClientListResponse;
 import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
@@ -55,8 +53,8 @@ public interface UserService {
     @GET("sonal/user_devices")
     Observable<SonalDevicesResponse> getSonalDevices();
 
-    @POST("confirm-software-token")
-    Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
+//    @POST("confirm-software-token")
+//    Observable<ConfirmTokenResponse> confirmSoftwareToken(@Body ConfirmTokenRequest request);
 
     @GET("patients")
     Observable<ClientListResponse> getClientList(@Query("page") int page, @Query("organization") Integer[] org, @Query("search") String startsWith);

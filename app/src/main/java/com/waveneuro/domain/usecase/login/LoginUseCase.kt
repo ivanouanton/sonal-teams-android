@@ -7,11 +7,11 @@ import com.waveneuro.domain.model.login.LoginMfaRs
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
-    private val serviceApi: UserApi,
+    private val userApi: UserApi,
     private val mapper: LoginMapperImpl
 ) {
 
     suspend fun login(username: String, password: String): LoginMfaRs =
-        mapper.fromApiToDomain(serviceApi.login(ApiLoginRq(username, password)))
+        mapper.fromApiToDomain(userApi.login(ApiLoginRq(username, password)))
 
 }

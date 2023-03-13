@@ -7,5 +7,4 @@ sealed class ResetPasswordViewEvent {
     object LoginClicked : ResetPasswordViewEvent()
     object AboutUsClicked : ResetPasswordViewEvent()
     object ForgotUsernameClicked : ResetPasswordViewEvent()
-    object Start : ResetPasswordViewEvent()
 }

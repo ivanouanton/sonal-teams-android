@@ -2,12 +2,18 @@ package com.waveneuro.data.api.user
 
 import com.waveneuro.data.api.user.model.login.ApiLoginMfaRs
 import com.waveneuro.data.api.user.model.login.ApiLoginRq
+import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRq
+import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRs
 import com.waveneuro.data.api.user.model.password.ApiForgotPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
 import com.waveneuro.data.api.user.model.user.ApiUserUpdateRq
-import retrofit2.http.*
+import com.waveneuro.domain.model.token.Token
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface UserApi {
 
@@ -37,10 +43,10 @@ interface UserApi {
 //
 //    @GET("sonal/user_devices")
 //    fun getSonalDevices(): Observable<SonalDevicesResponse?>?
-//
-//    @POST("confirm-software-token")
-//    fun confirmSoftwareToken(@Body request: ConfirmTokenRequest?): Observable<ConfirmTokenResponse?>?
-//
+
+    @POST("confirm-software-token")
+    suspend fun confirmSoftwareToken(@Body request: ApiConfirmTokenRq): ApiConfirmTokenRs
+
 //    @GET("patients")
 //    fun getClientList(
 //        @Query("page") page: Int,

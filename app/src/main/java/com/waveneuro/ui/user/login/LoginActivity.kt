@@ -21,28 +21,20 @@ import com.waveneuro.ui.user.login.LoginViewEvent.ClearRememberUser
 import com.waveneuro.ui.user.login.LoginViewEvent.RememberUser
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModel
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModelImpl
-import com.waveneuro.ui.user.mfa.MfaCommand
-import com.waveneuro.ui.user.password.new_password.SetNewPasswordCommand
+import com.waveneuro.ui.user.mfa.MfaActivity
+import com.waveneuro.ui.user.password.new_password.SetNewPasswordActivity
 import com.waveneuro.ui.user.password.reset.ResetPasswordActivity
 import com.waveneuro.ui.user.registration.RegistrationActivity
 import com.waveneuro.utils.ext.getAppComponent
-import javax.inject.Inject
 
 class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel>() {
-
-    @Inject
-    lateinit var setNewPasswordCommand: SetNewPasswordCommand
-    @Inject
-    lateinit var mfaCommand: MfaCommand
-    @Inject
-    lateinit var loginViewModelImpl: LoginViewModelImpl
-
-    override fun initBinding(): ActivityLoginBinding =
-        ActivityLoginBinding.inflate(layoutInflater)
 
     override val viewModel: LoginViewModelImpl by viewModels {
         getAppComponent().loginViewModelFactory()
     }
+
+    override fun initBinding(): ActivityLoginBinding =
+        ActivityLoginBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -53,7 +45,7 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
 
         setView()
         setObserver()
-        loginViewModelImpl.processEvent(LoginViewEvent.Start)
+        viewModel.processEvent(LoginViewEvent.Start)
     }
 
     private fun setView() {
@@ -91,23 +83,23 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
         )
         binding.tvRecoverHere.text = spannableString
         binding.tvRecoverHere.setOnClickListener {
-            loginViewModelImpl.processEvent(LoginViewEvent.ForgotPasswordClicked)
+            viewModel.processEvent(LoginViewEvent.ForgotPasswordClicked)
         }
     }
 
     private fun setObserver() {
-        loginViewModelImpl.viewEffect.observe(this, Observer { viewEffect ->
+        viewModel.viewEffect.observe(this, Observer { viewEffect ->
             when (viewEffect) {
                 is ForgotPassword -> launchForgotPasswordScreen()
                 is RememberMe -> setRememberData(viewEffect.username)
                 is Register -> launchRegistrationScreen()
-                is Support -> {}
                 is SetNewPassword -> launchSetNewPasswordScreen()
                 is EnterMfaCode -> {
-                    mfaCommand.navigate(
+                    startActivity(MfaActivity.newIntent(
+                        this,
                         binding.etUsername.editText?.text.toString().trim(),
                         viewEffect.session
-                    )
+                    ))
                 }
                 else -> {}
             }
@@ -120,10 +112,11 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
     }
 
     private fun launchSetNewPasswordScreen() {
-        setNewPasswordCommand.navigate(
+        startActivity(SetNewPasswordActivity.newIntent(
+            this,
             binding.tipPassword.text.toString(),
             binding.tipPassword.text.toString()
-        )
+        ))
     }
 
     private fun launchForgotPasswordScreen() {
@@ -136,13 +129,13 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
 
     private fun login() {
         if (binding.chkRememberMe.isChecked) {
-            loginViewModelImpl.processEvent(
+            viewModel.processEvent(
                 RememberUser(binding.tipUsername.text.toString().trim())
             )
         } else {
-            loginViewModelImpl.processEvent(ClearRememberUser)
+            viewModel.processEvent(ClearRememberUser)
         }
-        loginViewModelImpl.processEvent(
+        viewModel.processEvent(
             LoginViewEvent.LoginClicked(
                 binding.tipUsername.text.toString().trim(),
                 binding.tipPassword.text.toString().trim()

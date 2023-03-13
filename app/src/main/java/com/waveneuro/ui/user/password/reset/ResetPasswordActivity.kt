@@ -18,24 +18,15 @@ import com.waveneuro.R
 import com.waveneuro.databinding.ActivityResetPasswordBinding
 import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
-import com.waveneuro.ui.dashboard.web.WebCommand
 import com.waveneuro.ui.user.login.LoginActivity
 import com.waveneuro.ui.user.password.code.ForgotPasswordCodeActivity
-import com.waveneuro.ui.user.password.code.ForgotPasswordCodeCommand
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEffect.LoginRedirect
 import com.waveneuro.ui.user.password.reset.viewmodel.ResetPasswordViewModel
 import com.waveneuro.ui.user.password.reset.viewmodel.ResetPasswordViewModelImpl
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
-import javax.inject.Inject
 
 class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding, ResetPasswordViewModel>() {
-
-    @Inject
-    lateinit var forgotPasswordCodeCommand: ForgotPasswordCodeCommand
-    @Inject
-    lateinit var webCommand: WebCommand
-
 
     override val viewModel: ResetPasswordViewModelImpl by viewModels {
         getAppComponent().resetPasswordViewModelFactory()
@@ -59,7 +50,6 @@ class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding
         with(binding) {
             tvLogIn.setOnClickListener {
                 startActivity(LoginActivity.newIntent(this@ResetPasswordActivity))
-//                finish()
             }
             btnSendResetLink.setOnClickListener {
                 if (tipUsername.text.isNullOrBlank()) {

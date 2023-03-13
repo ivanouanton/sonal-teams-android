@@ -46,11 +46,11 @@ class SetNewPasswordActivity :
         window.statusBarColor = Color.TRANSPARENT
         super.onCreate(savedInstanceState)
 
-        if (intent.hasExtra(SetNewPasswordCommand.EMAIL)
-            && intent.hasExtra(SetNewPasswordCommand.CODE)
+        if (intent.hasExtra(EMAIL)
+            && intent.hasExtra(CODE)
         ) {
-            email = intent.getStringExtra(SetNewPasswordCommand.EMAIL)
-            code = intent.getStringExtra(SetNewPasswordCommand.CODE)
+            email = intent.getStringExtra(EMAIL)
+            code = intent.getStringExtra(CODE)
         }
         setView()
         setObserver()

@@ -33,25 +33,19 @@ class ForgotPasswordCodeViewModelImpl @Inject constructor(
             is LoginClicked -> {
                 login(viewEvent.username, viewEvent.password)
             }
-            is ForgotPasswordClicked -> {
-                viewEffect.postValue(ForgotPasswordCodeViewEffect.ForgotPassword)
-            }
-            is RegisterClicked -> {
-                viewEffect.postValue(ForgotPasswordCodeViewEffect.Register)
-            }
             is RememberUser -> {
                 saveUserLoginDetails(viewEvent.username)
             }
             is ClearRememberUser -> {
                 removeRememberUserData()
             }
-            is SupportClicked -> {
-                viewEffect.postValue(ForgotPasswordCodeViewEffect.Support)
+            is ResetPassword -> {
+                resetPassword(viewEvent.username)
             }
         }
     }
 
-    fun resetPassword(username: String?) {
+    private fun resetPassword(username: String?) {
         launchPayload {
             username?.let { forgotPasswordUseCase.forgotPassword(it) }
         }
@@ -86,128 +80,3 @@ class ForgotPasswordCodeViewModelImpl @Inject constructor(
     }
 
 }
-
-//public class ForgotPasswordCodeViewModelImpl extends ViewModel {
-//
-//    @Inject
-//    DataManager dataManager;
-//
-//    private final MutableLiveData<LoginViewState> mDataLive = new MutableLiveData<>();
-//    private final SingleLiveEvent<LoginViewEffect> mDataViewEffect = new SingleLiveEvent<>();
-//
-//    private final LoginUseCase loginUseCase;
-//    private final GetUserInfoUseCase getUserInfoUseCase;
-//    private final ConfirmTokenUseCase confirmTokenUseCase;
-//    private final ForgotPasswordUseCase forgotPasswordUseCase;
-//
-//
-//    @Inject
-//    public ForgotPasswordCodeViewModelImpl(LoginUseCase loginUseCase, GetUserInfoUseCase getUserInfoUseCase, ConfirmTokenUseCase confirmTokenUseCase, ForgotPasswordUseCase forgotPasswordUseCase) {
-//        this.loginUseCase = loginUseCase;
-//        this.getUserInfoUseCase = getUserInfoUseCase;
-//        this.confirmTokenUseCase = confirmTokenUseCase;
-//        this.forgotPasswordUseCase = forgotPasswordUseCase;
-//    }
-//
-//    void processEvent(LoginViewEvent viewEvent) {
-//        if (viewEvent instanceof LoginViewEvent.Start) {
-//            isRememberDataExist();
-//        } else if (viewEvent instanceof LoginViewEvent.LoginClicked) {
-//            LoginViewEvent.LoginClicked loginClicked = (LoginViewEvent.LoginClicked) viewEvent;
-//            login(loginClicked.getUsername(), loginClicked.getPassword());
-//        } else if (viewEvent instanceof LoginViewEvent.ForgotPasswordClicked) {
-//            this.mDataViewEffect.postValue(LoginViewEffect.ForgotPassword.INSTANCE);
-//        } else if (viewEvent instanceof LoginViewEvent.RegisterClicked) {
-//            this.mDataViewEffect.postValue(LoginViewEffect.Register.INSTANCE);
-//        } else if (viewEvent instanceof LoginViewEvent.RememberUser) {
-////            this.mDataViewEffect.postValue(new LoginViewEffect.RememberMe());
-//            LoginViewEvent.RememberUser rememberUser = (LoginViewEvent.RememberUser) viewEvent;
-//            saveUserLoginDetails(rememberUser.getUsername());
-//        } else if (viewEvent instanceof LoginViewEvent.ClearRememberUser) {
-//            removeRememberUserData();
-//        } else if (viewEvent instanceof LoginViewEvent.SupportClicked) {
-//            this.mDataViewEffect.postValue(LoginViewEffect.Support.INSTANCE);
-//        }
-//    }
-//
-//    void resetPassword(String username) {
-//        this.forgotPasswordUseCase.execute(new ForgotPasswordRequest(username), new UseCaseCallback() {
-//            @Override
-//            public void onSuccess(Object response) {
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable throwable) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//
-//            }
-//        });
-//    }
-//
-//    private void removeRememberUserData() {
-//        if (!TextUtils.isEmpty(dataManager.getRememberUsername())) {
-//            this.dataManager.removeRememberUser();
-//        }
-//        if (!TextUtils.isEmpty(dataManager.getRememberPassword())) {
-//            this.dataManager.removeRememberPassword();
-//        }
-//    }
-//
-//    private void isRememberDataExist() {
-//        if (!TextUtils.isEmpty(dataManager.getRememberUsername())) {
-//            this.mDataViewEffect.postValue(
-//                new LoginViewEffect.RememberMe(
-//                        dataManager.getRememberUsername()
-//                        ));
-//        }
-//    }
-//
-//    private void saveUserLoginDetails(String username) {
-//        this.dataManager.rememberUsername(username);
-//    }
-//
-//    private void login(String username, String password) {
-//        mDataLive.postValue(new LoginViewState.Loading(true));
-//        this.loginUseCase.execute(new LoginRequest(username, password), new UseCaseCallback<ApiLoginResponseMfa>() {
-//
-//        @Override
-//        public void onSuccess(ApiLoginResponseMfa loginResponseMfa) {
-//            if (loginResponseMfa.getChallengeName() != null && loginResponseMfa.getChallengeName().equals("SOFTWARE_TOKEN_MFA")){
-//                mDataViewEffect.postValue(new LoginViewEffect.EnterMfaCode(loginResponseMfa.getSession()));
-//            }
-//        }
-//
-//        @Override
-//        public void onError(Throwable throwable) {
-//            mDataLive.postValue(new LoginViewState.Loading(false));
-//            APIError error = errorUtil.parseError(throwable);
-//            mDataLive.postValue(new LoginViewState.Failure(error));
-//        }
-//
-//        @Override
-//        public void onFinish() {
-//
-//        }
-//    });
-//    }
-//
-//
-//    public MutableLiveData<LoginViewState> getData() {
-//        return mDataLive;
-//    }
-//
-//    public SingleLiveEvent<LoginViewEffect> getViewEffect() {
-//        return mDataViewEffect;
-//    }
-//
-//    @Override
-//    protected void onCleared() {
-//        super.onCleared();
-//    }
-//
-//}

@@ -26,8 +26,6 @@ class ResetPasswordViewModelImpl @Inject constructor(
 
     override fun processEvent(viewEvent: ResetPasswordViewEvent) {
         when (viewEvent) {
-            is ResetPasswordViewEvent.Start -> {
-            }
             is ResetPasswordViewEvent.ForgotPasswordClicked -> {
                 resetPassword(viewEvent.username)
             }

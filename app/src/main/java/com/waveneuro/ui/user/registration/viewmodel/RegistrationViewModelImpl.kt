@@ -13,7 +13,6 @@ class RegistrationViewModelImpl @Inject constructor(
     errorHandler: ErrorHandler,
 ) : BaseAndroidViewModelImpl(app, errorHandler), RegistrationViewModel {
 
-
     override val viewEffect = SingleLiveEvent<RegistrationViewEffect>()
 
     override fun processEvent(viewEvent: RegistrationViewEvent) {
