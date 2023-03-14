@@ -1,5 +1,6 @@
 package com.waveneuro.data.api.user
 
+import com.waveneuro.data.api.user.model.device.ApiSonalDevicesRs
 import com.waveneuro.data.api.user.model.login.ApiLoginMfaRs
 import com.waveneuro.data.api.user.model.login.ApiLoginRq
 import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRq
@@ -9,7 +10,6 @@ import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
 import com.waveneuro.data.api.user.model.user.ApiUserUpdateRq
-import com.waveneuro.domain.model.token.Token
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -40,9 +40,9 @@ interface UserApi {
 
 //    @POST("forgot_password_confirm")
 //    fun changePassword(@Body request: SetPasswordRequest?): Observable<SetPasswordResponse?>?
-//
-//    @GET("sonal/user_devices")
-//    fun getSonalDevices(): Observable<SonalDevicesResponse?>?
+
+    @GET("sonal/user_devices")
+    suspend fun getSonalDevices(): ApiSonalDevicesRs
 
     @POST("confirm-software-token")
     suspend fun confirmSoftwareToken(@Body request: ApiConfirmTokenRq): ApiConfirmTokenRs

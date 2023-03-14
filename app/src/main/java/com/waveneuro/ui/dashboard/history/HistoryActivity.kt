@@ -1,34 +1,38 @@
 package com.waveneuro.ui.dashboard.history
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.asif.abase.data.model.BaseModel
-import com.waveneuro.data.model.response.device.SonalDevicesResponse
 import com.waveneuro.databinding.ActivityHistoryBinding
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.domain.model.device.Device
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.history.adapter.DevicesHistoryAdapter
-import javax.inject.Inject
+import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModel
+import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModelImpl
+import com.waveneuro.utils.ext.getAppComponent
 
-class HistoryActivity : BaseActivity() {
+class HistoryActivity : BaseViewModelActivity<ActivityHistoryBinding, HistoryViewModel>() {
 
-    @Inject
-    lateinit var historyViewModel: HistoryViewModel
-
-    private lateinit var binding: ActivityHistoryBinding
     private lateinit var adapter: DevicesHistoryAdapter
 
-    private val devices = mutableListOf<SonalDevicesResponse.Device>()
+    private val devices = mutableListOf<Device>()
+
+    override val viewModel: HistoryViewModelImpl by viewModels {
+        getAppComponent().historyViewModelFactory()
+    }
+
+    override fun initBinding(): ActivityHistoryBinding =
+        ActivityHistoryBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = ActivityHistoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         setView()
         setObserver()
 
-        historyViewModel.processEvent(HistoryViewEvent.Start)
+        viewModel.processEvent(HistoryViewEvent.Start)
     }
 
     private fun setView() {
@@ -38,30 +42,22 @@ class HistoryActivity : BaseActivity() {
     }
 
     private fun setObserver() {
-        historyViewModel.data.observe(this, historyViewStateObserver)
+        viewModel.viewEffect.observe(this, Observer { viewState ->
+            when (viewState) {
+                is HistoryViewEffect.Success -> {
+                    onSuccess(viewState.deviceList)
+                }
+            }
+        })
     }
 
-    private val historyViewStateObserver = Observer { viewState: HistoryViewState? ->
-        when (viewState) {
-            is HistoryViewState.Success -> {
-                onSuccess(viewState.data)
-            }
-            is HistoryViewState.Failure -> {
-                onFailure(viewState.error)
-            }
-            is HistoryViewState.Loading -> {
-                val loading = viewState
-            }
-            else -> {}
-        }
+
+    private fun onSuccess(deviceList: List<Device>) {
+        devices.addAll(deviceList)
+        adapter.notifyDataSetChanged()
     }
 
-    override fun onSuccess(model: BaseModel) {
-        super.onSuccess(model)
-        if (model is SonalDevicesResponse) {
-            devices.addAll(model.devices)
-            adapter.notifyDataSetChanged()
-        }
+    companion object {
+        fun newIntent(context: Context) = Intent(context, HistoryActivity::class.java)
     }
-
 }

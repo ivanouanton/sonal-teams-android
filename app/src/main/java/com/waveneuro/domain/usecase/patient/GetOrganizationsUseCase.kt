@@ -15,3 +15,4 @@ class GetOrganizationsUseCase @Inject constructor(
     }
 
 }
+

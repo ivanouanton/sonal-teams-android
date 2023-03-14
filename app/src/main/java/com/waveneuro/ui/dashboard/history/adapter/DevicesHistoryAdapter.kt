@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.waveneuro.data.model.response.device.SonalDevicesResponse
 import com.waveneuro.databinding.DevicesHistoryItemBinding
+import com.waveneuro.domain.model.device.Device
 
 class DevicesHistoryAdapter(
     private val context: Context,
-    private val devices: List<SonalDevicesResponse.Device>
+    private val devices: List<Device>
 ) : RecyclerView.Adapter<DevicesHistoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: DevicesHistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {

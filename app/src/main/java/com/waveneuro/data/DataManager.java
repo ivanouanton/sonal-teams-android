@@ -3,7 +3,6 @@ package com.waveneuro.data;
 import com.waveneuro.data.model.entity.User;
 import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
 import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
@@ -13,7 +12,6 @@ import com.waveneuro.data.model.response.client.ClientListResponse;
 import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
@@ -31,9 +29,6 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
 
 public interface DataManager {
-//    Observable<LoginMfaRs> login(LoginRequest request);
-
-    Observable<ConfirmTokenResponse> confirmToken(ConfirmTokenRequest request);
 
     void saveAccessToken(String accessToken);
 
@@ -112,8 +107,6 @@ public interface DataManager {
     String getProtocolId();
 
     String getSonalId();
-
-    Observable<SonalDevicesResponse> getSonalDevices();
 
     Observable<SessionResponse> getSessions(int id);
 

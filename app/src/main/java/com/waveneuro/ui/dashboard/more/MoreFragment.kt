@@ -12,7 +12,7 @@ import com.waveneuro.injection.module.FragmentModule
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.base.BaseFragment
 import com.waveneuro.ui.dashboard.account.AccountCommand
-import com.waveneuro.ui.dashboard.history.HistoryCommand
+import com.waveneuro.ui.dashboard.history.HistoryActivity
 import com.waveneuro.ui.dashboard.more.MoreViewEffect.*
 import com.waveneuro.ui.dashboard.more.MoreViewEvent.*
 import com.waveneuro.ui.dashboard.web.WebCommand
@@ -27,8 +27,6 @@ internal class MoreFragment : BaseFragment() {
     lateinit var moreViewModel: MoreViewModel
     @Inject
     lateinit var accountCommand: AccountCommand
-    @Inject
-    lateinit var historyCommand: HistoryCommand
     @Inject
     lateinit var webCommand: WebCommand
     @Inject
@@ -60,7 +58,7 @@ internal class MoreFragment : BaseFragment() {
             viewEffect.observe(this@MoreFragment, Observer { viewEffect ->
                 when(viewEffect) {
                     is ProfileInfo -> accountCommand.navigate()
-                    is DeviceHistory -> historyCommand.navigate()
+                    is DeviceHistory -> startActivity(HistoryActivity.newIntent(requireContext()))
                     is Help -> webCommand.navigate(WebCommand.PAGE_SUPPORT)
                     is Login -> loginCommand.navigate()
                     else -> {}

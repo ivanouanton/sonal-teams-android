@@ -3,29 +3,21 @@ package com.waveneuro.data;
 import android.text.TextUtils;
 
 import com.waveneuro.data.model.entity.User;
-import com.waveneuro.data.model.request.account.update.AccountUpdateRequest;
+import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.email.forgot.ForgotUsernameRequest;
-import com.waveneuro.data.model.request.login.ConfirmTokenRequest;
-import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
-import com.waveneuro.data.model.request.password.password.ForgotPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.client.ClientRequest;
 import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
-import com.waveneuro.data.model.response.device.SonalDevicesResponse;
+import com.waveneuro.data.model.response.client.ClientListResponse;
+import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
-import com.waveneuro.data.model.response.login.ConfirmTokenResponse;
-import com.waveneuro.data.api.user.model.login.ApiLoginResponseMfa;
 import com.waveneuro.data.model.response.organization.OrganizationResponse;
 import com.waveneuro.data.model.response.password.ResetPasswordResponse;
 import com.waveneuro.data.model.response.password.confirm.ForgotPasswordConfirmResponse;
-import com.waveneuro.data.model.response.password.password.ForgotPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetNewPasswordResponse;
 import com.waveneuro.data.model.response.password.password.SetPasswordResponse;
-import com.waveneuro.data.model.response.client.ClientListResponse;
-import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
@@ -49,16 +41,6 @@ public class DataManagerImpl implements DataManager {
         this.userService = userService;
         this.treatmentService = treatmentService;
         this.preferenceManager = preferenceManager;
-    }
-
-    @Override
-    public Observable<ApiLoginResponseMfa> login(LoginRequest request) {
-        return this.userService.login(request);
-    }
-
-    @Override
-    public Observable<ConfirmTokenResponse> confirmToken(ConfirmTokenRequest request) {
-        return this.userService.confirmSoftwareToken(request);
     }
 
     @Override
@@ -122,11 +104,6 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request) {
-        return this.userService.forgotPassword(request);
-    }
-
-    @Override
     public Observable<ForgotPasswordConfirmResponse> forgotPasswordConfirm(ForgotPasswordConfirmRequest request) {
         return this.userService.forgotPasswordConfirm(request);
     }
@@ -140,11 +117,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<RefreshResponse> refreshToken() {
         return this.userService.refreshToken();
-    }
-
-    @Override
-    public void saveUser(UserInfoResponse user) {
-        preferenceManager.saveUser(user);
     }
 
     @Override
@@ -185,11 +157,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public String getSonalId() {
         return preferenceManager.getSonalId();
-    }
-
-    @Override
-    public Observable<SonalDevicesResponse> getSonalDevices() {
-        return userService.getSonalDevices();
     }
 
     @Override
@@ -274,11 +241,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public void removeRememberPassword() {
         preferenceManager.removeRememberPassword();
-    }
-
-    @Override
-    public Observable<UserInfoResponse> updateUser(AccountUpdateRequest request) {
-        return this.userService.updateUser(request);
     }
 
     @Override
