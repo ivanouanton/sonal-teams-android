@@ -1,4 +1,4 @@
-package com.waveneuro.domain.model.user
+package com.waveneuro.domain.model.client
 
 data class Organization(
     val id: Int,

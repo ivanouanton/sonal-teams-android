@@ -11,9 +11,9 @@ import com.waveneuro.data.model.response.organization.OrganizationResponse
 import com.waveneuro.data.model.response.protocol.ProtocolResponse
 import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.usecase.patient.GetOrganizationsUseCase
-import com.waveneuro.domain.usecase.patient.GetPatientUseCase
-import com.waveneuro.domain.usecase.patient.GetPatientsUseCase
+import com.waveneuro.domain.usecase.client.GetOrganizationsUseCase
+import com.waveneuro.domain.usecase.client.GetPatientUseCase
+import com.waveneuro.domain.usecase.client.GetPatientsUseCase
 import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase
 import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*

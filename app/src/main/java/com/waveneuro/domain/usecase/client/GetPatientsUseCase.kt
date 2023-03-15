@@ -1,4 +1,4 @@
-package com.waveneuro.domain.usecase.patient
+package com.waveneuro.domain.usecase.client
 
 import javax.inject.Inject
 import com.waveneuro.data.DataManager

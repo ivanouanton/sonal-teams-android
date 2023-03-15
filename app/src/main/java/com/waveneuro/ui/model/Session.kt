@@ -1,4 +1,4 @@
-package com.waveneuro.ui.session.history
+package com.waveneuro.ui.model
 
 data class Session(
     val name: String,

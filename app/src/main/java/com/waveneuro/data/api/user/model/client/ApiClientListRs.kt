@@ -1,6 +1,5 @@
 package com.waveneuro.data.api.user.model.client
 
-import com.asif.abase.data.model.BaseModel
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -13,4 +12,4 @@ data class ApiClientListRs(
     @Json(name = "pages") val pages: Int,
     @Json(name = "patients") val patients: List<ApiClientRs>,
     @Json(name = "total") val total: Int,
-) : BaseModel()
+)

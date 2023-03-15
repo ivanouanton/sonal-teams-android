@@ -1,13 +1,13 @@
-package com.waveneuro.domain.model.user
+package com.waveneuro.domain.model.client
 
-import com.waveneuro.data.api.user.model.user.ApiOrganizationRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
+import com.waveneuro.data.api.user.model.user.ApiOrganizationRs
 import javax.inject.Inject
 
-class UserMapperImpl @Inject constructor() : UserMapper {
+class ClientMapperImpl @Inject constructor() : ClientMapper {
 
-    override fun fromApiToDomain(api: ApiUserInfoRs): UserInfo = with(api) {
-        UserInfo(
+    override fun fromApiToDomain(api: ApiUserInfoRs): ClientInfo = with(api) {
+        ClientInfo(
             id,
             firstName,
             lastName,

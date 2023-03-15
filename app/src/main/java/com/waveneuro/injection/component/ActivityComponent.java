@@ -9,8 +9,6 @@ import com.waveneuro.data.analytics.AnalyticsManager;
 import com.waveneuro.data.preference.PreferenceManager;
 import com.waveneuro.injection.module.ActivityModule;
 import com.waveneuro.ui.session.complete.SessionCompleteActivity;
-import com.waveneuro.ui.session.history.SessionHistoryActivity;
-import com.waveneuro.ui.session.session.SessionActivity;
 
 import dagger.Subcomponent;
 
@@ -27,11 +25,6 @@ public interface ActivityComponent {
 
     AnalyticsManager analyticsManager();
 
-
-    void inject(SessionActivity sessionActivity);
-
     void inject(SessionCompleteActivity sessionCompleteActivity);
-
-    void inject(SessionHistoryActivity sessionHistoryActivity);
 
 }

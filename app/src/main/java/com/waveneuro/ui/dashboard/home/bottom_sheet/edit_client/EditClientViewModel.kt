@@ -6,7 +6,7 @@ import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.model.request.client.ClientRequest
 import com.waveneuro.data.model.request.common.SexType
 import com.waveneuro.data.model.response.client.ClientResponse
-import com.waveneuro.domain.usecase.patient.UpdatePatientUseCase
+import com.waveneuro.domain.usecase.client.UpdatePatientUseCase
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Error
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Success
 import javax.inject.Inject

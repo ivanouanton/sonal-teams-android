@@ -1,4 +1,4 @@
-package com.waveneuro.domain.usecase.patient
+package com.waveneuro.domain.usecase.client
 
 import com.asif.abase.domain.base.ObservableUseCase
 import com.waveneuro.data.DataManager

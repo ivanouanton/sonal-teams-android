@@ -11,6 +11,7 @@ import com.waveneuro.ui.dashboard.account.viewmodel.AccountViewModelFactory
 import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModelFactory
 import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModelFactory
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelFactory
+import com.waveneuro.ui.session.history.viewmodel.SessionHistoryViewModelFactory
 import com.waveneuro.ui.session.session.viewmodel.SessionViewModelFactory
 import com.waveneuro.ui.user.login.viewmodel.LoginViewModelFactory
 import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModelFactory
@@ -44,5 +45,6 @@ interface ApplicationComponent {
     fun historyViewModelFactory(): HistoryViewModelFactory
     fun accountViewModelFactory(): AccountViewModelFactory
     fun sessionViewModelFactory(): SessionViewModelFactory
+    fun sessionHistoryViewModelFactory(): SessionHistoryViewModelFactory
 
 }

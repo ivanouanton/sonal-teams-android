@@ -4,14 +4,12 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
-import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
-import com.waveneuro.data.model.response.client.ClientResponse
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.model.session.SessionRq
-import com.waveneuro.domain.usecase.patient.GetPatientUseCase
+import com.waveneuro.domain.usecase.client.GetClientUseCase
 import com.waveneuro.domain.usecase.session.AddSessionUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
@@ -35,7 +33,7 @@ class SessionViewModelImpl @Inject constructor(
     app: Application,
     errorHandler: ErrorHandler,
     private val addSessionUseCase: AddSessionUseCase,
-    private val getPatientUseCase: GetPatientUseCase,
+    private val getClientUseCase: GetClientUseCase,
     private val dataManager: DataManager
 ) : BaseAndroidViewModelImpl(app, errorHandler), SessionViewModel {
 
@@ -114,7 +112,7 @@ class SessionViewModelImpl @Inject constructor(
                 )
                 data.postValue(SessionViewState.SessionEnded)
                 //DONE API call
-                addTreatmentData()
+                addSessionData(isCompleted = true)
             }
             is DeviceDisconnected -> {
                 data.postValue(SessionViewState.DeviceDisconnected)
@@ -148,31 +146,17 @@ class SessionViewModelImpl @Inject constructor(
                         message
                     )
                 )
-                sendErrorTreatmentData()
+                addSessionData(isCompleted = false)
             }
         }
     }
 
-    private fun sendErrorTreatmentData() {
+    private fun addSessionData(isCompleted: Boolean) {
         val request = SessionRq()
         request.eegId = dataManager.eegId.toLong()
         request.protocolId = dataManager.protocolId.toLong()
         request.sonalId = dataManager.sonalId
-        request.isCompleted = false
-        request.patientId = dataManager.patientId
-        request.finishedAt = System.currentTimeMillis() / 1000
-
-        launchPayload {
-            addSessionUseCase.addSession(request)
-        }
-    }
-
-    private fun addTreatmentData() {
-        val request = SessionRq()
-        request.eegId = dataManager.eegId.toLong()
-        request.protocolId = dataManager.protocolId.toLong()
-        request.sonalId = dataManager.sonalId
-        request.isCompleted = true
+        request.isCompleted = isCompleted
         request.patientId = dataManager.patientId
         request.finishedAt = System.currentTimeMillis() / 1000
 
@@ -201,13 +185,10 @@ class SessionViewModelImpl @Inject constructor(
     }
 
     private fun getClient() {
-        getPatientUseCase.execute(dataManager.patientId.toInt(), object : UseCaseCallback<ClientResponse?> {
-            override fun onSuccess(response: ClientResponse?) {
-                currentClient.value = ("${response?.firstName} ${response?.lastName}")
-            }
-            override fun onError(throwable: Throwable) {}
-            override fun onFinish() {}
-        })
+        launchPayload {
+            val response = getClientUseCase.getClient(dataManager.patientId.toInt())
+            currentClient.value = ("${response.firstName} ${response.lastName}")
+        }
     }
 
     fun setPrepareIsShowed(newValue: Boolean) {

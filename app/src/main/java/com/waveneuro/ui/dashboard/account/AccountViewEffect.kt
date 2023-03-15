@@ -1,9 +1,9 @@
 package com.waveneuro.ui.dashboard.account
 
-import com.waveneuro.domain.model.user.UserInfo
+import com.waveneuro.domain.model.client.ClientInfo
 
 sealed class AccountViewEffect {
     object BackRedirect : AccountViewEffect()
-    data class GetSuccess(val user: UserInfo) : AccountViewEffect()
-    data class UpdateSuccess(val user: UserInfo) : AccountViewEffect()
+    data class GetSuccess(val user: ClientInfo) : AccountViewEffect()
+    data class UpdateSuccess(val user: ClientInfo) : AccountViewEffect()
 }

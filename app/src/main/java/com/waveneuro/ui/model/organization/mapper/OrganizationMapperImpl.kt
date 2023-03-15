@@ -1,6 +1,6 @@
 package com.waveneuro.ui.model.organization.mapper
 
-import com.waveneuro.domain.model.user.Organization
+import com.waveneuro.domain.model.client.Organization
 import com.waveneuro.ui.model.organization.UiOrganization
 import javax.inject.Inject
 

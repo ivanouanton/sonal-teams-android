@@ -74,11 +74,6 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Observable<UserInfoResponse> getPersonalInfo() {
-        return userService.getPersonalInfo();
-    }
-
-    @Override
     public Observable<ProtocolResponse> protocol(int id) {
         return this.userService.getProtocolForUser(id);
     }
@@ -106,8 +101,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public Observable<ForgotPasswordConfirmResponse> forgotPasswordConfirm(ForgotPasswordConfirmRequest request) {
         return this.userService.forgotPasswordConfirm(request);
-    }
-
     }
 
     @Override
@@ -153,11 +146,6 @@ public class DataManagerImpl implements DataManager {
     @Override
     public String getSonalId() {
         return preferenceManager.getSonalId();
-    }
-
-    @Override
-    public Observable<SessionResponse> getSessions(int id) {
-        return userService.getSessions(id);
     }
 
     @Override

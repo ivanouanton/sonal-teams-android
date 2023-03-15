@@ -1,56 +1,58 @@
 package com.waveneuro.ui.session.history
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.waveneuro.data.model.response.session.SessionResponse
 import com.waveneuro.databinding.ActivitySessionHistoryBinding
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
+import com.waveneuro.ui.model.Session
 import com.waveneuro.ui.session.history.adapter.SessionListAdapter
-import com.waveneuro.ui.session.session.SessionCommand
+import com.waveneuro.ui.session.history.viewmodel.SessionHistoryViewModel
+import com.waveneuro.ui.session.history.viewmodel.SessionHistoryViewModelImpl
+import com.waveneuro.utils.ext.getAppComponent
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import javax.inject.Inject
 
-class SessionHistoryActivity : BaseActivity() {
+class SessionHistoryActivity :
+    BaseViewModelActivity<ActivitySessionHistoryBinding, SessionHistoryViewModel>() {
 
-    @Inject
-    lateinit var sessionCommand: SessionCommand
-    @Inject
-    lateinit var sessionHistoryViewModel: SessionHistoryViewModel
-
-    private lateinit var binding: ActivitySessionHistoryBinding
     private lateinit var adapter: SessionListAdapter
 
     private var userId = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        activityComponent()?.inject(this)
-        super.onCreate(savedInstanceState)
-        binding = ActivitySessionHistoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override val viewModel: SessionHistoryViewModelImpl by viewModels {
+        getAppComponent().sessionHistoryViewModelFactory()
+    }
 
-        if (intent.hasExtra(SessionHistoryCommand.USER_ID)) {
-            userId = intent.getIntExtra(SessionHistoryCommand.USER_ID, 0)
+    override fun initBinding(): ActivitySessionHistoryBinding =
+        ActivitySessionHistoryBinding.inflate(layoutInflater)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (intent.hasExtra(USER_ID)) {
+            userId = intent.getIntExtra(USER_ID, 0)
         }
-        if (intent.hasExtra(SessionHistoryCommand.TREATMENT_DATA_PRESENT)) {
+        if (intent.hasExtra(TREATMENT_DATA_PRESENT)) {
             binding.btnStartSession.isEnabled =
-                intent.getBooleanExtra(SessionHistoryCommand.TREATMENT_DATA_PRESENT, false)
+                intent.getBooleanExtra(TREATMENT_DATA_PRESENT, false)
         }
 
         setView()
         setObserver()
 
-        sessionHistoryViewModel.getSessionHistory(userId)
+        viewModel.processEvent(SessionHistoryViewEvent.Start(userId))
     }
 
     private fun setView() {
         with(binding) {
-            val firstName = intent.getStringExtra(SessionHistoryCommand.FIRST_NAME) ?: ""
-            val lastName = intent.getStringExtra(SessionHistoryCommand.LAST_NAME) ?: ""
-            val url = intent.getStringExtra(SessionHistoryCommand.USER_URL) ?: ""
+            val firstName = intent.getStringExtra(FIRST_NAME) ?: ""
+            val lastName = intent.getStringExtra(LAST_NAME) ?: ""
+            val url = intent.getStringExtra(USER_URL) ?: ""
 
             tvName.text = "$firstName $lastName"
             btnStartSession.setOnClickListener {
@@ -73,34 +75,51 @@ class SessionHistoryActivity : BaseActivity() {
     }
 
     private fun setObserver() {
-        sessionHistoryViewModel.data.observe(this, viewStateObserver)
-    }
+        viewModel.viewEffect.observe(this, Observer { viewEffect ->
+            when(viewEffect) {
+                is SessionHistoryViewEffect.Success -> {
+                    val sessions: MutableList<Session> = mutableListOf()
+                    viewEffect.sessionList.sessions.forEach { session ->
+                        val pattern = "dd/MM/yyyy"
+                        val simpleDateFormat = SimpleDateFormat(pattern)
+                        val dateRd = session.eegRecordedAt.let {
+                            val timestamp = Timestamp(Math.round(it) * 1000)
+                            simpleDateFormat.format(timestamp.time)
+                        } ?: ""
+                        val dateSd = session.finishedAt.let {
+                            val timestamp = Timestamp(Math.round(it) * 1000)
+                            simpleDateFormat.format(timestamp.time)
+                        } ?: ""
 
-    private val viewStateObserver = Observer { viewState: SessionResponse ->
-        val sessions: MutableList<Session> = mutableListOf()
-        for (i in viewState.sessions.indices) {
-            val pattern = "dd/MM/yyyy"
-            val simpleDateFormat = SimpleDateFormat(pattern)
-            val session = viewState.sessions[i]
-            val dateRd = session.eegRecordedAt?.let {
-                val timestamp = Timestamp(Math.round(it) * 1000)
-                simpleDateFormat.format(timestamp.time)
-            } ?: ""
-            val dateSd = session.finishedAt?.let {
-                val timestamp = Timestamp(Math.round(it) * 1000)
-                simpleDateFormat.format(timestamp.time)
-            } ?: ""
+                        sessions.add(Session(session.sonalId, dateRd, dateSd, session.isCompleted))
+                    }
 
-            sessions.add(Session(session.sonalId, dateRd, dateSd, session.isCompleted))
-        }
-
-        adapter = SessionListAdapter(this, sessions)
-        binding.rvSessions.adapter = adapter
-        adapter.notifyDataSetChanged()
+                    adapter = SessionListAdapter(this, sessions)
+                    binding.rvSessions.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        })
     }
 
     companion object {
         const val START_SESSION = "start_session"
+
+        private const val USER_ID = "user_id"
+        private const val USER_URL = "user_url"
+        private const val FIRST_NAME = "first_name"
+        private const val LAST_NAME = "last_name"
+        private const val TREATMENT_DATA_PRESENT = "treatment_data_present"
+
+        fun newIntent(context: Context, userId: Int?, userUrl: String?,
+                     firstName: String?, lastName: String?, treatmentDataPresent: Boolean) =
+            Intent(context, SessionHistoryActivity::class.java).apply {
+                putExtra(USER_ID, userId)
+                putExtra(USER_URL, userUrl)
+                putExtra(FIRST_NAME, firstName)
+                putExtra(LAST_NAME, lastName)
+                putExtra(TREATMENT_DATA_PRESENT, treatmentDataPresent)
+            }
     }
 
 }

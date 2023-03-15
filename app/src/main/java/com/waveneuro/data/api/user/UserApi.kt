@@ -8,12 +8,10 @@ import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRs
 import com.waveneuro.data.api.user.model.password.ApiForgotPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRs
+import com.waveneuro.data.api.user.model.session.ApiSessionListRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
 import com.waveneuro.data.api.user.model.user.ApiUserUpdateRq
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 interface UserApi {
 
@@ -53,20 +51,19 @@ interface UserApi {
 //        @Query("organization") org: Array<Int?>?,
 //        @Query("search") startsWith: String?
 //    ): Observable<ClientListResponse?>?
-//
-//    @GET("patients/{id}")
-//    fun getClient(@Path("id") id: Int): Observable<ClientResponse?>?
-//
+
+    @GET("patients/{id}")
+    suspend fun getClient(@Path("id") id: Int): ApiUserInfoRs
+
 //    @PUT("patients/{id}")
 //    fun updateClient(
 //        @Path("id") id: Int,
 //        @Body request: ClientRequest?
 //    ): Observable<ClientResponse?>?
-//
-//    @Headers("X-Client: Android")
-//    @GET("sonal/sessions/{id}")
-//    fun getSessions(@Path("id") id: Int): Observable<SessionResponse?>?
-//
+
+    @GET("sonal/sessions/{id}")
+    suspend fun getSessions(@Path("id") id: Int): ApiSessionListRs
+
 //    @GET("sonal/protocols/{id}")
 //    fun getProtocolForUser(@Path("id") id: Int): Observable<ProtocolResponse?>?
 //

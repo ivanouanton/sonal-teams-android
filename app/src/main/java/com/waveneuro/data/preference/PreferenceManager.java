@@ -1,6 +1,6 @@
 package com.waveneuro.data.preference;
 
-import com.waveneuro.domain.model.user.UserInfo;
+import com.waveneuro.domain.model.client.ClientInfo;
 
 public interface PreferenceManager {
 
@@ -14,7 +14,7 @@ public interface PreferenceManager {
 
     void logout();
 
-    void saveUser(UserInfo user);
+    void saveUser(ClientInfo user);
 
     void saveTreatmentLength(String treatmentLength);
 

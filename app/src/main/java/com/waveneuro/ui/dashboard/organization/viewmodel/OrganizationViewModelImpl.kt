@@ -2,7 +2,7 @@ package com.waveneuro.ui.dashboard.organization.viewmodel
 
 import android.app.Application
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.model.user.UserInfo
+import com.waveneuro.domain.model.client.ClientInfo
 import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
@@ -37,7 +37,7 @@ class OrganizationViewModelImpl @Inject constructor(
         }
     }
 
-    private fun getOrganizations(response: UserInfo): List<UiOrganization> =
+    private fun getOrganizations(response: ClientInfo): List<UiOrganization> =
         mapper.fromDomainToUi(response.organizations)
 
 }

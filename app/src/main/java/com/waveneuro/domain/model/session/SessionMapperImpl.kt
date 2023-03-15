@@ -1,5 +1,7 @@
 package com.waveneuro.domain.model.session
 
+import com.waveneuro.data.api.user.model.session.ApiSession
+import com.waveneuro.data.api.user.model.session.ApiSessionListRs
 import com.waveneuro.data.api.user.model.session.ApiSessionRq
 import javax.inject.Inject
 
@@ -13,6 +15,18 @@ class SessionMapperImpl @Inject constructor() : SessionMapper {
             patientId ?: 0,
             protocolId ?: 0,
             sonalId ?: ""
+        )
+    }
+
+    override fun fromApiToDomain(api: ApiSessionListRs): SessionListRs = with(api) {
+        SessionListRs(
+            sessions.map(::fromApiToDomain)
+        )
+    }
+
+    private fun fromApiToDomain(api: ApiSession): Session = with(api) {
+        Session(
+            eegRecordedAt, finishedAt, isCompleted, sonalId
         )
     }
 

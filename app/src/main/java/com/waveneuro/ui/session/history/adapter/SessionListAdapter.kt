@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.waveneuro.R
 import com.waveneuro.databinding.ItemSessionBinding
-import com.waveneuro.ui.session.history.Session
+import com.waveneuro.ui.model.Session
 
 class SessionListAdapter(
     private val context: Context,

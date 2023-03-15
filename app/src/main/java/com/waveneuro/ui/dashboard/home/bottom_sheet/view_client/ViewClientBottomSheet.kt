@@ -14,7 +14,7 @@ import com.waveneuro.injection.module.FragmentModule
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientBottomSheet
 import com.waveneuro.ui.model.client.ClientUi
-import com.waveneuro.ui.session.history.SessionHistoryCommand
+import com.waveneuro.ui.session.history.SessionHistoryActivity
 import com.waveneuro.utils.DateHelper
 import javax.inject.Inject
 
@@ -96,14 +96,15 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
 
             tvEditClient.setOnClickListener { editClient() }
             tvViewHistory.setOnClickListener {
-                sessionHistoryCommand.navigate(
-                    requireActivity(),
+                //TODO check
+                startActivityForResult(SessionHistoryActivity.newIntent(
+                    requireContext(),
                     clientId,
                     clientUrl,
                     firstName,
                     lastName,
                     treatmentDataPresent
-                )
+                ), 0)
             }
             btnStartSession.isEnabled = treatmentDataPresent
             btnStartSession.setOnClickListener {

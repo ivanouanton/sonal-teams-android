@@ -18,7 +18,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
-import com.waveneuro.databinding.*
+import com.waveneuro.databinding.ActivitySessionBinding
+import com.waveneuro.databinding.DialogInfoBinding
+import com.waveneuro.databinding.DialogPopupBinding
+import com.waveneuro.databinding.DialogPopupWithCheckboxBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.session.complete.SessionCompleteCommand
@@ -154,15 +157,6 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
         with(viewModel) {
             data.observe(this@SessionActivity, Observer { viewState ->
                 when(viewState) {
-                    is Success -> onSuccess(viewState.item)
-                    is Failure -> onFailure(viewState.error)
-                    is Loading -> {
-                        if (viewState.loading) {
-                            displayWait("Loading...", null)
-                        } else {
-                            removeWait()
-                        }
-                    }
                     is LocateDevice -> {
                         binding.tvSessionTimer.visibility = View.VISIBLE
                         binding.tvSessionTimer.text = "30:00"

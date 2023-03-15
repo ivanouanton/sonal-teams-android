@@ -3,7 +3,6 @@ package com.waveneuro.domain.usecase.registration;
 import com.asif.abase.domain.base.ObservableUseCase;
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.request.login.LoginRequest;
 import com.waveneuro.data.api.user.model.login.ApiLoginRs;
 
 import javax.inject.Inject;

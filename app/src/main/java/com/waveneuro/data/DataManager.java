@@ -21,8 +21,8 @@ import com.waveneuro.data.model.response.protocol.ProtocolResponse;
 import com.waveneuro.data.model.response.session.SessionResponse;
 import com.waveneuro.data.model.response.treatment.TreatmentResponse;
 import com.waveneuro.data.model.response.user.RefreshResponse;
-import com.waveneuro.domain.model.user.UserInfo;
-import com.waveneuro.domain.model.user.UserUpdateRq;
+import com.waveneuro.domain.model.client.ClientInfo;
+import com.waveneuro.domain.model.client.ClientUpdateRq;
 
 import java.util.List;
 
@@ -39,8 +39,6 @@ public interface DataManager {
     Observable<ForgotUsernameResponse> forgotUsername(ForgotUsernameRequest request);
 
     Observable<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
-
-    Observable<UserInfo> getPersonalInfo();
 
     Observable<ProtocolResponse> protocol(int id);
 
@@ -60,7 +58,7 @@ public interface DataManager {
 
     Observable<RefreshResponse> refreshToken();
 
-    void saveUser(UserInfo response);
+    void saveUser(ClientInfo response);
 
     void saveTreatmentLength(String treatmentLength);
 
@@ -100,13 +98,11 @@ public interface DataManager {
 
     void removeRememberPassword();
 
-    Observable<UserInfo> updateUser(UserUpdateRq request);
+    Observable<ClientInfo> updateUser(ClientUpdateRq request);
 
     String getProtocolId();
 
     String getSonalId();
-
-    Observable<SessionResponse> getSessions(int id);
 
     boolean getOnboardingDisplayed();
 

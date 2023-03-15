@@ -3,7 +3,7 @@ package com.waveneuro.data.api.user.model.client
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.waveneuro.data.model.response.common.TosStatus
-import com.waveneuro.domain.model.user.Organization
+import com.waveneuro.domain.model.client.Organization
 
 @JsonClass(generateAdapter = true)
 data class ApiClientRs(

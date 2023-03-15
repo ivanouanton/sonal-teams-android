@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityAccountBinding
-import com.waveneuro.domain.model.user.UserInfo
+import com.waveneuro.domain.model.client.ClientInfo
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.account.AccountViewEffect.*
 import com.waveneuro.ui.dashboard.account.viewmodel.AccountViewModel
@@ -93,7 +93,7 @@ class AccountActivity : BaseViewModelActivity<ActivityAccountBinding, AccountVie
         })
     }
 
-    private fun setValues(user: UserInfo) {
+    private fun setValues(user: ClientInfo) {
         with(binding) {
             tvFirstNameValue.text = user.firstName
             tvLastNameValue.text = user.lastName

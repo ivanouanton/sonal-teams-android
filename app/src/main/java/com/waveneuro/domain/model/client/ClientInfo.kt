@@ -1,6 +1,6 @@
-package com.waveneuro.domain.model.user
+package com.waveneuro.domain.model.client
 
-data class UserInfo(
+data class ClientInfo(
     val id: String,
     val firstName: String,
     val lastName: String,

@@ -40,10 +40,6 @@ public interface UserService {
     @PUT("patients/{id}")
     Observable<ClientResponse> updateClient(@Path("id") int id, @Body ClientRequest request);
 
-    @Headers("X-Client: Android")
-    @GET("sonal/sessions/{id}")
-    Observable<SessionResponse> getSessions(@Path("id") int id);
-
     @GET("sonal/protocols/{id}")
     Observable<ProtocolResponse> getProtocolForUser(@Path("id") int id);
 

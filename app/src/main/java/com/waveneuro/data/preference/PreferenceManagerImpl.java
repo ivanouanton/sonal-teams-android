@@ -3,7 +3,7 @@ package com.waveneuro.data.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.waveneuro.domain.model.user.UserInfo;
+import com.waveneuro.domain.model.client.ClientInfo;
 
 public class PreferenceManagerImpl implements PreferenceManager {
 
@@ -61,7 +61,7 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
-    public void saveUser(UserInfo user) {
+    public void saveUser(ClientInfo user) {
         getDefaultEditor().putString(PreferenceKeys.USER_ID, user.getId())
                 .putString(PreferenceKeys.NAME, user.getFirstName())
                 .putString(PreferenceKeys.GIVEN_NAME, user.getLastName())
