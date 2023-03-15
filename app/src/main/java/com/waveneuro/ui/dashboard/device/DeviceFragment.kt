@@ -51,15 +51,13 @@ import com.waveneuro.ui.dashboard.device.DeviceViewEvent.LocateDeviceNextClicked
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.NoDeviceFound
 import com.waveneuro.ui.dashboard.device.DeviceViewState.*
 import com.waveneuro.ui.session.how_to.HowToActivity
-import com.waveneuro.ui.session.session.SessionCommand
+import com.waveneuro.ui.session.session.SessionActivity
 import com.waveneuro.utils.ext.toast
 import timber.log.Timber
 import javax.inject.Inject
 
 class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
 
-    @Inject
-    lateinit var sessionCommand: SessionCommand
     @Inject
     lateinit var deviceViewModel: DeviceViewModel
 
@@ -293,7 +291,9 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
             requireActivity().toast("Treatment data not available.")
         }
-        sessionCommand.navigate(treatmentLength, protocolFrequency, sonalId)
+        startActivity(SessionActivity.newIntent(
+            requireContext(), treatmentLength, protocolFrequency, sonalId
+        ))
     }
 
     private fun connectToDevice(bleDevice: BleDevice) {

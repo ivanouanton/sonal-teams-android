@@ -5,9 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.asif.abase.domain.base.UseCaseCallback;
 import com.waveneuro.data.DataManager;
-import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
+import com.waveneuro.data.model.request.session.AddTreatmentRequest;
 import com.waveneuro.domain.base.SingleLiveEvent;
-import com.waveneuro.domain.usecase.treatment.AddTreatmentUseCase;
 import com.waveneuro.utils.ErrorUtil;
 
 import javax.inject.Inject;

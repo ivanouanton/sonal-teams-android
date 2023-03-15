@@ -1,9 +1,12 @@
 package com.waveneuro.ui.session.session
 
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -15,35 +18,37 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
-import com.waveneuro.databinding.DialogInfoBinding
-import com.waveneuro.databinding.DialogPopupBinding
-import com.waveneuro.databinding.DialogPopupWithCheckboxBinding
-import com.waveneuro.databinding.FragmentSessionBinding
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.databinding.*
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.session.complete.SessionCompleteCommand
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
 import com.waveneuro.ui.session.session.SessionViewEffect.*
 import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.*
+import com.waveneuro.ui.session.session.viewmodel.SessionViewModel
+import com.waveneuro.ui.session.session.viewmodel.SessionViewModelImpl
 import com.waveneuro.utils.CountDownTimer
 import com.waveneuro.utils.CountDownTimer.OnCountDownListener
+import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.views.sessionProgressDialogBuilder
 import timber.log.Timber
 import javax.inject.Inject
 
-class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCallback {
+class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionViewModel>(),
+    OnCountDownListener, DeviceConnectionCallback {
 
     @Inject
     lateinit var sessionCompleteCommand: SessionCompleteCommand
-    @Inject
-    lateinit var viewModel: SessionViewModel
+
+    override val viewModel: SessionViewModelImpl by viewModels {
+        getAppComponent().sessionViewModelFactory()
+    }
+
     @Inject
     lateinit var dataManager: DataManager
     @Inject
     lateinit var analyticsManager: AnalyticsManager
-
-    private lateinit var binding: FragmentSessionBinding
 
     private var readyDialog: AlertDialog? = null
     private var precautionsWarningDialog: AlertDialog? = null
@@ -57,17 +62,17 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private var disconnectedIntentionally = false
     private var sessionTimer = CountDownTimer(0, 10, 1, this)
 
+
+    override fun initBinding(): ActivitySessionBinding = ActivitySessionBinding.inflate(layoutInflater)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = FragmentSessionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        if (intent.hasExtra(SessionCommand.SONAL_ID)) {
-            sonalId = intent.getStringExtra(SessionCommand.SONAL_ID)
+        if (intent.hasExtra(SONAL_ID)) {
+            sonalId = intent.getStringExtra(SONAL_ID)
         }
-        if (intent.hasExtra(SessionCommand.TREATMENT_LENGTH)) {
-            treatmentLength = intent.getStringExtra(SessionCommand.TREATMENT_LENGTH)
+        if (intent.hasExtra(TREATMENT_LENGTH)) {
+            treatmentLength = intent.getStringExtra(TREATMENT_LENGTH)
             try {
                 treatmentLengthMinutes = treatmentLength!!.toInt() / 60
             } catch (e: Exception) {
@@ -75,8 +80,8 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 finish()
             }
         }
-        if (intent.hasExtra(SessionCommand.PROTOCOL_FREQUENCY)) {
-            protocolFrequency = intent.getStringExtra(SessionCommand.PROTOCOL_FREQUENCY)
+        if (intent.hasExtra(PROTOCOL_FREQUENCY)) {
+            protocolFrequency = intent.getStringExtra(PROTOCOL_FREQUENCY)
         }
 
         setView()
@@ -93,7 +98,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         with(binding) {
             clPrecautions.setOnClickListener {
                 val precautionsBottomSheet = PrecautionsBottomSheet.newInstance()
-                precautionsBottomSheet.show(supportFragmentManager, "")
+                precautionsBottomSheet.show(supportFragmentManager, "PrecautionsBottomSheet")
             }
             btnStartSession.setOnClickListener {
                 btnStartSession.visibility = View.INVISIBLE
@@ -515,5 +520,19 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     companion object {
         private const val LOW_BATTERY: Byte = 20
         private const val CRITICAL_BATTERY: Byte = 10
+
+        private const val BLE_DEVICE = "ble_device"
+        private const val TREATMENT_LENGTH = "treatment_length"
+        private const val PROTOCOL_FREQUENCY = "protocol_frequency"
+        private const val SONAL_ID = "sonal_id"
+
+        fun newIntent(context: Context, treatmentLength: String?,
+                      protocolFrequency: String?, sonalId: String?): Intent =
+            Intent(context, SessionActivity::class.java).apply {
+                putExtra(SONAL_ID, sonalId)
+                putExtra(TREATMENT_LENGTH, treatmentLength)
+                putExtra(PROTOCOL_FREQUENCY, protocolFrequency)
+            }
     }
+
 }

@@ -1,20 +1,24 @@
-package com.waveneuro.ui.session.session
+package com.waveneuro.ui.session.session.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
 import com.asif.abase.domain.base.UseCaseCallback
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
-import com.waveneuro.data.model.request.treatment.AddTreatmentRequest
 import com.waveneuro.data.model.response.client.ClientResponse
-import com.waveneuro.data.model.response.treatment.TreatmentResponse
 import com.waveneuro.domain.base.SingleLiveEvent
+import com.waveneuro.domain.model.session.SessionRq
 import com.waveneuro.domain.usecase.patient.GetPatientUseCase
-import com.waveneuro.domain.usecase.treatment.AddTreatmentUseCase
+import com.waveneuro.domain.usecase.session.AddSessionUseCase
+import com.waveneuro.ui.base.handler.error.ErrorHandler
+import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
+import com.waveneuro.ui.session.session.SessionViewEffect
+import com.waveneuro.ui.session.session.SessionViewEvent
 import com.waveneuro.ui.session.session.SessionViewEvent.*
+import com.waveneuro.ui.session.session.SessionViewState
 import com.waveneuro.ui.session.session.SessionViewState.ErrorSession
 import com.waveneuro.ui.session.session.SessionViewState.SessionPaused
 import kotlinx.coroutines.Dispatchers
@@ -27,17 +31,20 @@ import org.json.JSONObject
 import timber.log.Timber
 import javax.inject.Inject
 
-class SessionViewModel @Inject constructor(
-    private val addTreatmentUseCase: AddTreatmentUseCase,
+class SessionViewModelImpl @Inject constructor(
+    app: Application,
+    errorHandler: ErrorHandler,
+    private val addSessionUseCase: AddSessionUseCase,
     private val getPatientUseCase: GetPatientUseCase,
     private val dataManager: DataManager
-) : ViewModel() {
+) : BaseAndroidViewModelImpl(app, errorHandler), SessionViewModel {
 
     @Inject
     lateinit var analyticsManager: AnalyticsManager
 
+    override val viewEffect = SingleLiveEvent<SessionViewEffect>()
+
     val data = MutableLiveData<SessionViewState?>()
-    val viewEffect = SingleLiveEvent<SessionViewEffect>()
     val batteryLevel = MutableLiveData<Byte>()
     val currentClient = MutableLiveData<String>()
 
@@ -58,7 +65,7 @@ class SessionViewModel @Inject constructor(
         getClient()
     }
 
-    fun processEvent(viewEvent: SessionViewEvent) {
+    override fun processEvent(viewEvent: SessionViewEvent) {
         Timber.e("SESSION_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
         if (data.value != null)
             Timber.e("SESSION_STATE :: %s", "" + data.value?.javaClass?.simpleName)
@@ -147,33 +154,31 @@ class SessionViewModel @Inject constructor(
     }
 
     private fun sendErrorTreatmentData() {
-        val request = AddTreatmentRequest()
+        val request = SessionRq()
         request.eegId = dataManager.eegId.toLong()
         request.protocolId = dataManager.protocolId.toLong()
         request.sonalId = dataManager.sonalId
         request.isCompleted = false
         request.patientId = dataManager.patientId
         request.finishedAt = System.currentTimeMillis() / 1000
-        addTreatmentUseCase.execute(request, object : UseCaseCallback<TreatmentResponse> {
-            override fun onSuccess(response: TreatmentResponse) {}
-            override fun onError(throwable: Throwable) {}
-            override fun onFinish() {}
-        })
+
+        launchPayload {
+            addSessionUseCase.addSession(request)
+        }
     }
 
     private fun addTreatmentData() {
-        val request = AddTreatmentRequest()
+        val request = SessionRq()
         request.eegId = dataManager.eegId.toLong()
         request.protocolId = dataManager.protocolId.toLong()
         request.sonalId = dataManager.sonalId
         request.isCompleted = true
         request.patientId = dataManager.patientId
         request.finishedAt = System.currentTimeMillis() / 1000
-        addTreatmentUseCase.execute(request, object : UseCaseCallback<TreatmentResponse> {
-            override fun onSuccess(response: TreatmentResponse) {}
-            override fun onError(throwable: Throwable) {}
-            override fun onFinish() {}
-        })
+
+        launchPayload {
+            addSessionUseCase.addSession(request)
+        }
     }
 
     private fun sentSessionEvent(

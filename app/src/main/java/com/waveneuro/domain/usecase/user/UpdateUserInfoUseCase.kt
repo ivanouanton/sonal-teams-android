@@ -7,11 +7,11 @@ import com.waveneuro.domain.model.user.UserMapperImpl
 import javax.inject.Inject
 
 class UpdateUserInfoUseCase @Inject constructor(
-    private val serviceApi: UserApi,
+    private val userApi: UserApi,
     private val mapper: UserMapperImpl
 ) {
 
     suspend fun updateUser(firstName: String, lastName: String): UserInfo =
-        mapper.fromApiToDomain(serviceApi.updateUser(ApiUserUpdateRq(firstName, lastName)))
+        mapper.fromApiToDomain(userApi.updateUser(ApiUserUpdateRq(firstName, lastName)))
 
 }

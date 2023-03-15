@@ -6,11 +6,11 @@ import com.waveneuro.domain.model.user.UserMapperImpl
 import javax.inject.Inject
 
 class GetUserInfoUseCase @Inject constructor(
-    private val serviceApi: UserApi,
+    private val userApi: UserApi,
     private val mapper: UserMapperImpl
 ) {
 
     suspend fun getUser(): UserInfo =
-        mapper.fromApiToDomain(serviceApi.getUserInfo())
+        mapper.fromApiToDomain(userApi.getUserInfo())
 
 }

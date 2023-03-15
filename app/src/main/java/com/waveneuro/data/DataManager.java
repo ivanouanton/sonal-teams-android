@@ -7,7 +7,7 @@ import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
+import com.waveneuro.data.model.request.session.AddTreatmentRequest;
 import com.waveneuro.data.model.response.client.ClientListResponse;
 import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.device.SonalDevicesResponse;
@@ -55,8 +55,6 @@ public interface DataManager {
 //    Observable<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
 
     Observable<ForgotPasswordConfirmResponse> forgotPasswordConfirm(ForgotPasswordConfirmRequest request);
-
-    Observable<TreatmentResponse> addTreatment(AddTreatmentRequest request);
 
     void logout();
 

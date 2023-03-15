@@ -9,7 +9,7 @@ import com.waveneuro.data.model.request.password.ResetPasswordRequest;
 import com.waveneuro.data.model.request.password.confirm.ForgotPasswordConfirmRequest;
 import com.waveneuro.data.model.request.password.password.SetNewPasswordRequest;
 import com.waveneuro.data.model.request.password.password.SetPasswordRequest;
-import com.waveneuro.data.model.request.treatment.AddTreatmentRequest;
+import com.waveneuro.data.model.request.session.AddTreatmentRequest;
 import com.waveneuro.data.model.response.client.ClientListResponse;
 import com.waveneuro.data.model.response.client.ClientResponse;
 import com.waveneuro.data.model.response.email.forgot.ForgotUsernameResponse;
@@ -108,10 +108,6 @@ public class DataManagerImpl implements DataManager {
         return this.userService.forgotPasswordConfirm(request);
     }
 
-    @Override
-    public Observable<TreatmentResponse> addTreatment(AddTreatmentRequest request) {
-        Timber.e("ADD_TREATMENT :: %s", request.toString());
-        return this.treatmentService.addTreatment(request);
     }
 
     @Override

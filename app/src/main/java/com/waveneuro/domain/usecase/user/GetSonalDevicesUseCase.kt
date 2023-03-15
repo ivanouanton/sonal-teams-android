@@ -6,11 +6,11 @@ import com.waveneuro.domain.model.device.SonalDevicesRs
 import javax.inject.Inject
 
 class GetSonalDevicesUseCase @Inject constructor(
-    private val serviceApi: UserApi,
+    private val userApi: UserApi,
     private val mapper: DeviceMapperImpl
 ) {
 
     suspend fun getSonalDevices(): SonalDevicesRs =
-        mapper.fromApiToDomain(serviceApi.getSonalDevices())
+        mapper.fromApiToDomain(userApi.getSonalDevices())
 
 }
