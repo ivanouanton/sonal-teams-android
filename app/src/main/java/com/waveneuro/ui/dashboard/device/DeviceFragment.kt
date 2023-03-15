@@ -26,223 +26,207 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.ap.ble.BluetoothManager
 import com.ap.ble.BluetoothManager.DeviceConnectionCallback
 import com.ap.ble.callback.BleScanCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
-import com.waveneuro.data.model.entity.BleDevice
 import com.waveneuro.data.model.entity.User
 import com.waveneuro.databinding.FragmentDeviceBinding
-import com.waveneuro.injection.component.DaggerFragmentComponent
-import com.waveneuro.injection.module.FragmentModule
-import com.waveneuro.ui.adapter.DeviceAdapter
-import com.waveneuro.ui.adapter.device.DeviceDelegate
-import com.waveneuro.ui.adapter.device.OnDeviceItemClickListener
-import com.waveneuro.ui.base.BaseActivity
-import com.waveneuro.ui.base.BaseListFragment
-import com.waveneuro.ui.dashboard.*
+import com.waveneuro.domain.model.ble.BleDevice
+import com.waveneuro.ui.base.fragment.BaseViewModelFragment
+import com.waveneuro.ui.dashboard.DashBoardViewModelImpl
+import com.waveneuro.ui.dashboard.DashboardActivity
+import com.waveneuro.ui.dashboard.DashboardViewEvent
+import com.waveneuro.ui.dashboard.DashboardViewState
 import com.waveneuro.ui.dashboard.DashboardViewState.Connect
 import com.waveneuro.ui.dashboard.DashboardViewState.Disconnect
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.LocateDeviceNextClicked
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.NoDeviceFound
 import com.waveneuro.ui.dashboard.device.DeviceViewState.*
+import com.waveneuro.ui.dashboard.device.adapter.DeviceAdapter
+import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModel
+import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelImpl
 import com.waveneuro.ui.session.how_to.HowToActivity
 import com.waveneuro.ui.session.session.SessionActivity
+import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
 import timber.log.Timber
-import javax.inject.Inject
 
-class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
-
-    @Inject
-    lateinit var deviceViewModel: DeviceViewModel
+class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewModel>() {
 
     private val dashBoardViewModel: DashBoardViewModelImpl by viewModels()
 
-    private lateinit var binding: FragmentDeviceBinding
     private lateinit var deviceAdapter: DeviceAdapter
+    private val deviceList = mutableListOf<BleDevice>()
 
     private var isSearching = false
     private var operatingAnim: Animation? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        fragmentComponent = DaggerFragmentComponent.builder()
-            .activityComponent((activity as BaseActivity?)?.activityComponent())
-            .fragmentModule(FragmentModule(this))
-            .build()
-        fragmentComponent.inject(this)
-        super.onCreate(savedInstanceState)
+    override val viewModel: DeviceViewModelImpl by viewModels {
+        getAppComponent().deviceViewModelFactory()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentDeviceBinding.inflate(layoutInflater, container, false)
-        setView()
-
-        return binding.root
-    }
+    override fun initBinding(container: ViewGroup?): FragmentDeviceBinding =
+        FragmentDeviceBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setObserver()
-        deviceViewModel.processEvent(DeviceViewEvent.Start)
-        if (!deviceViewModel.onboardingDisplayed) {
+
+        viewModel.processEvent(DeviceViewEvent.Start)
+        if (!viewModel.onboardingDisplayed) {
             startActivity(HowToActivity.newIntent(requireContext()))
         }
     }
 
-    private fun setView() {
-        with(binding) {
-            rvDeviceAvailable.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL, false
-            )
-            deviceAdapter = DeviceAdapter.Builder()
-                .setList(ArrayList())
-                .setDelegate(DeviceDelegate())
-                .setOnNoteListener { data: BleDevice -> onClickDevice(data) }
-                .create()
-            rvDeviceAvailable.adapter = deviceAdapter
-            initializeList(null, null, deviceAdapter)
-            operatingAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
-            operatingAnim?.interpolator = LinearInterpolator()
-            tvFirstTime.paintFlags = tvFirstTime.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+    override fun initViews(savedInstanceState: Bundle?) {
+        super.initViews(savedInstanceState)
+        binding?.let { binding ->
+            with(binding) {
+                deviceAdapter = DeviceAdapter(requireContext(), ::onClickDevice)
+                binding.rvDeviceAvailable.adapter = deviceAdapter
+                deviceAdapter.submitList(deviceList)
 
-            btnLocateDevice.setOnClickListener {
-                checkPermissions()
-                deviceViewModel.processEvent(DeviceViewEvent.LocateDevice)
-            }
-            ivBack.setOnClickListener {
-                if (isSearching) {
-                    deviceViewModel.processEvent(DeviceViewEvent.Start)
-                } else {
-                    //TODO check logic probably set bottom bar
-                    startActivity(DashboardActivity.newIntent(requireContext()))
+                operatingAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
+                operatingAnim?.interpolator = LinearInterpolator()
+                tvFirstTime.paintFlags = tvFirstTime.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+                btnLocateDevice.setOnClickListener {
+                    checkPermissions()
+                    viewModel.processEvent(DeviceViewEvent.LocateDevice)
                 }
-            }
-            tvFirstTime.setOnClickListener {
-                launchHowToActivity()
+                ivBack.setOnClickListener {
+                    if (isSearching) {
+                        viewModel.processEvent(DeviceViewEvent.Start)
+                    } else {
+                        //TODO check logic probably set bottom bar
+                        startActivity(DashboardActivity.newIntent(requireContext()))
+                    }
+                }
+                tvFirstTime.setOnClickListener {
+                    launchHowToActivity()
+                }
             }
         }
     }
+
 
     private fun setObserver() {
-        deviceViewModel.data.removeObservers(viewLifecycleOwner)
-        deviceViewModel.viewEffect.removeObservers(viewLifecycleOwner)
-        deviceViewModel.data.observe(viewLifecycleOwner, notesViewStateObserver)
-        deviceViewModel.viewEffect.observe(viewLifecycleOwner, notesViewEffectObserver)
-        dashBoardViewModel.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
-            Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
-            if (dashboardViewState != null) {
-                if (dashboardViewState is Connect) {
-                    deviceViewModel.processEvent(DeviceViewEvent.Connected)
-                } else if (dashboardViewState is Disconnect) {
-                    deviceViewModel.processEvent(DeviceViewEvent.Disconnected)
+        binding?.let { binding ->
+            viewModel.data.removeObservers(viewLifecycleOwner)
+            viewModel.viewEffect.removeObservers(viewLifecycleOwner)
+            viewModel.data.observe(viewLifecycleOwner, Observer { viewState ->
+                if (lifecycle.currentState != Lifecycle.State.RESUMED) {
+                    return@Observer
                 }
-            }
-        }
-    }
-
-    private val notesViewStateObserver = Observer { viewState: DeviceViewState? ->
-        isSearching = false
-//        if (lifecycle.currentState != Lifecycle.State.RESUMED) {
-//            return
-//        }
-        when (viewState) {
-            is Success -> {
-                binding.llLocateDevice.visibility = View.GONE
-                binding.cvDeviceAvailable.visibility = View.VISIBLE
-                binding.llContainerDevice.visibility = View.GONE
-            }
-            is Failure -> {}
-            is Loading -> {
-                if (viewState.loading) {
-                    displayListProgress()
-                } else {
-                    removeListProgress()
+                isSearching = false
+                when (viewState) {
+                    is Success -> {
+                        binding.llLocateDevice.visibility = View.GONE
+                        binding.cvDeviceAvailable.visibility = View.VISIBLE
+                        binding.llContainerDevice.visibility = View.GONE
+                    }
+                    is InitLocateDevice -> {
+                        setUserDetail(viewState.user)
+                        with(binding) {
+                            tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
+                            tvLabelWelcome.visibility = View.VISIBLE
+                            ivDevice.visibility = View.VISIBLE
+                            tvLocateDeviceInfo.visibility = View.VISIBLE
+                            llLocateDevice.visibility = View.VISIBLE
+                            cvDeviceAvailable.visibility = View.GONE
+                            llContainerDevice.visibility = View.GONE
+                            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
+                        }
+                    }
+                    is LocateDevice -> {
+                        with(binding) {
+                            tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
+                            tvLabelWelcome.visibility = View.VISIBLE
+                            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
+                            ivDevice.visibility = View.VISIBLE
+                            llLocateDevice.visibility = View.VISIBLE
+                            cvDeviceAvailable.visibility = View.GONE
+                            llContainerDevice.visibility = View.GONE
+                        }
+                    }
+                    is LocateDeviceNext -> {
+                        with(binding) {
+                            tvLabelWelcome.text = getString(R.string.activate_your_device)
+                            tvLabelWelcome.visibility = View.VISIBLE
+                            ivDevice.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.img_device_sonal_connector_with_wave
+                                )
+                            )
+                            ivDevice.visibility = View.VISIBLE
+                            tvLocateDeviceInfo.visibility = View.VISIBLE
+                            llLocateDevice.visibility = View.VISIBLE
+                            cvDeviceAvailable.visibility = View.GONE
+                            llContainerDevice.visibility = View.GONE
+                        }
+                    }
+                    is Searching -> {
+                        isSearching = true
+                        with(binding) {
+                            tvLabelWelcome.visibility = View.GONE
+                            llLocateDevice.visibility = View.GONE
+                            cvDeviceAvailable.visibility = View.GONE
+                            tvScanningDeviceInfo.visibility = View.VISIBLE
+                            tvLabelScanning.visibility = View.VISIBLE
+                            llContainerDevice.visibility = View.VISIBLE
+                            Glide.with(requireContext()).load(R.drawable.searching).into(ivDeviceScanning)
+                        }
+                        locateDevice()
+                    }
+                    is Connecting -> {
+                        isSearching = true
+                        connectToDevice(viewState.bleDevice)
+                    }
+                    is Connected -> {
+                        launchPairingSuccessfulDialog()
+                        with(binding) {
+                            llLocateDevice.visibility = View.GONE
+                            cvDeviceAvailable.visibility = View.GONE
+                            llContainerDevice.visibility = View.VISIBLE
+                        }
+                    }
+                    is Searched -> {
+                        isSearching = true
+                        with(binding) {
+                            llLocateDevice.visibility = View.VISIBLE
+                            cvDeviceAvailable.visibility = View.VISIBLE
+                            llContainerDevice.visibility = View.GONE
+                        }
+                    }
+                    else -> {}
                 }
-            }
-            is InitLocateDevice -> {
-                setUserDetail(viewState.user)
-                with(binding) {
-                    tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
-                    tvLabelWelcome.visibility = View.VISIBLE
-                    ivDevice.visibility = View.VISIBLE
-                    tvLocateDeviceInfo.visibility = View.VISIBLE
-                    llLocateDevice.visibility = View.VISIBLE
-                    cvDeviceAvailable.visibility = View.GONE
-                    llContainerDevice.visibility = View.GONE
-                    Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
-                }
-            }
-            is LocateDevice -> {
-                with(binding) {
-                    tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
-                    tvLabelWelcome.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
-                    ivDevice.visibility = View.VISIBLE
-                    llLocateDevice.visibility = View.VISIBLE
-                    cvDeviceAvailable.visibility = View.GONE
-                    llContainerDevice.visibility = View.GONE
-                }
-            }
-            is LocateDeviceNext -> {
-                with(binding) {
-                    tvLabelWelcome.text = getString(R.string.activate_your_device)
-                    tvLabelWelcome.visibility = View.VISIBLE
-                    ivDevice.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.img_device_sonal_connector_with_wave
-                        )
+            })
+            viewModel.viewEffect.observe(viewLifecycleOwner, Observer { viewEffect: DeviceViewEffect? ->
+                if (viewEffect is DeviceViewEffect.SessionRedirect) {
+                    launchSessionScreen(
+                        viewEffect.treatmentLength,
+                        viewEffect.protocolFrequency,
+                        viewEffect.sonalId
                     )
-                    ivDevice.visibility = View.VISIBLE
-                    tvLocateDeviceInfo.visibility = View.VISIBLE
-                    llLocateDevice.visibility = View.VISIBLE
-                    cvDeviceAvailable.visibility = View.GONE
-                    llContainerDevice.visibility = View.GONE
+                }
+            })
+            dashBoardViewModel.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
+                Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
+                if (dashboardViewState != null) {
+                    if (dashboardViewState is Connect) {
+                        viewModel.processEvent(DeviceViewEvent.Connected)
+                    } else if (dashboardViewState is Disconnect) {
+                        viewModel.processEvent(DeviceViewEvent.Disconnected)
+                    }
                 }
             }
-            is Searching -> {
-                isSearching = true
-                with(binding) {
-                    tvLabelWelcome.visibility = View.GONE
-                    llLocateDevice.visibility = View.GONE
-                    cvDeviceAvailable.visibility = View.GONE
-                    tvScanningDeviceInfo.visibility = View.VISIBLE
-                    tvLabelScanning.visibility = View.VISIBLE
-                    llContainerDevice.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(R.drawable.searching).into(ivDeviceScanning)
-                }
-                locateDevice()
-            }
-            is Connecting -> {
-                isSearching = true
-                connectToDevice(viewState.bleDevice)
-            }
-            is Connected -> {
-                launchPairingSuccessfulDialog()
-                with(binding) {
-                    llLocateDevice.visibility = View.GONE
-                    cvDeviceAvailable.visibility = View.GONE
-                    llContainerDevice.visibility = View.VISIBLE
-                }
-            }
-            is Searched -> {
-                isSearching = true
-                with(binding) {
-                    llLocateDevice.visibility = View.VISIBLE
-                    cvDeviceAvailable.visibility = View.VISIBLE
-                    llContainerDevice.visibility = View.GONE
-                }
-            }
-            else -> {}
         }
     }
 
@@ -278,7 +262,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         builder.setView(dialogView)
         val ad = builder.create()
         btnPrimary.setOnClickListener {
-            deviceViewModel.processEvent(DeviceViewEvent.StartSessionClicked)
+            viewModel.processEvent(DeviceViewEvent.StartSessionClicked)
         }
         ad.show()
     }
@@ -300,24 +284,20 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         BluetoothManager.getInstance()
             .getDeviceName(bleDevice.mac, bleDevice.name, object : DeviceConnectionCallback {
                 override fun onConnected(bleDevice: com.ap.ble.data.BleDevice) {
-                    if (requireActivity() is BaseActivity) {
-                        (activity as BaseActivity?)?.removeWait()
-                    }
-                    deviceViewModel.processEvent(DeviceViewEvent.Connected)
-                    deviceViewModel.setDeviceId(bleDevice.name)
+                    showLoading(false)
+
+                    viewModel.processEvent(DeviceViewEvent.Connected)
+                    viewModel.processEvent(DeviceViewEvent.SetDeviceId(bleDevice.name))
                     dashBoardViewModel.processEvent(
                         DashboardViewEvent.Connected(
-                            BleDevice(bleDevice)
+                            BleDevice(bleDevice.name, bleDevice.mac)
                         )
                     )
                 }
-
                 override fun onCharacterises(value: String?) {}
                 override fun onDisconnected() {
-                    if (requireActivity() is BaseActivity) {
-                        (activity as BaseActivity?)?.removeWait()
-                    }
-                    deviceViewModel.processEvent(DeviceViewEvent.Disconnected)
+                    showLoading(false)
+                    viewModel.processEvent(DeviceViewEvent.Disconnected)
                     dashBoardViewModel.processEvent(DashboardViewEvent.Disconnected)
                 }
             })
@@ -328,14 +308,14 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
             override fun onScanFinished(scanResultList: List<com.ap.ble.data.BleDevice>) {
                 Log.e("DEVICE_LIST", "" + scanResultList.toTypedArray().contentToString())
                 if (scanResultList.isNotEmpty()) {
-                    val bleDevices: MutableList<BleDevice> = ArrayList()
-                    for (i in scanResultList.indices) {
-                        bleDevices.add(BleDevice(scanResultList[i]))
+                    val bleDevices = mutableListOf<BleDevice>()
+                    for (device in scanResultList) {
+                        bleDevices.add(BleDevice(device.name, device.mac))
                     }
                     loadBleDevices(bleDevices)
-                    deviceViewModel.processEvent(DeviceViewEvent.Searched)
+                    viewModel.processEvent(DeviceViewEvent.Searched)
                 } else {
-                    deviceViewModel.processEvent(NoDeviceFound)
+                    viewModel.processEvent(NoDeviceFound)
                     try {
                         requireActivity().toast("No device found.")
                     } catch (e: IllegalStateException) {
@@ -347,29 +327,25 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
             override fun onScanStarted(success: Boolean) {}
             override fun onScanning(bleDevice: com.ap.ble.data.BleDevice) {
                 Log.e("DEVICES", "" + bleDevice.name + " :: " + bleDevice.key)
+                val newDevice = BleDevice(bleDevice.name, bleDevice.mac)
+                if (deviceList.contains(newDevice).not()) {
+                    deviceList.add(newDevice)
+                    if (viewModel.data.value !is Searched)
+                        viewModel.processEvent(DeviceViewEvent.Searched)
+                }
             }
         })
     }
 
-    private val notesViewEffectObserver: Observer<DeviceViewEffect?> = Observer { viewEffect: DeviceViewEffect? ->
-        if (viewEffect is DeviceViewEffect.SessionRedirect) {
-            launchSessionScreen(
-                viewEffect.treatmentLength,
-                viewEffect.protocolFrequency,
-                viewEffect.sonalId
-            )
-        }
+    private fun loadBleDevices(list: List<BleDevice>) {
+        deviceList.clear()
+        deviceList.addAll(list)
+        deviceAdapter.notifyDataSetChanged()
     }
 
-    private fun loadBleDevices(item: List<BleDevice>) {
-        addAll(item)
-    }
-
-    override fun onClickDevice(data: BleDevice) {
-        if (requireActivity() is BaseActivity) {
-            (activity as BaseActivity?)?.displayWait()
-        }
-        deviceViewModel.processEvent(DeviceViewEvent.DeviceClicked(data))
+    private fun onClickDevice(data: BleDevice) {
+        showLoading(true)
+        viewModel.processEvent(DeviceViewEvent.DeviceClicked(data))
     }
 
     private fun checkPermissions() {
@@ -444,11 +420,11 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
                     .setCancelable(false)
                     .show()
             } else {
-                deviceViewModel.processEvent(LocateDeviceNextClicked)
+                viewModel.processEvent(LocateDeviceNextClicked)
             }
             Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN -> {
                 Timber.e("PERMISSION_GRANTED :: %s", permission)
-                deviceViewModel.processEvent(LocateDeviceNextClicked)
+                viewModel.processEvent(LocateDeviceNextClicked)
             }
         }
     }
@@ -496,4 +472,5 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
             return DeviceFragment()
         }
     }
+
 }

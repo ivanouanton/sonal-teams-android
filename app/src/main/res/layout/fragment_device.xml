@@ -162,10 +162,11 @@
 
             </LinearLayout>
 
-            <com.asif.abase.view.RecyclerViewWithEmpty
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_device_available"
                 android:layout_width="match_parent"
-                android:layout_height="320dp" />
+                android:layout_height="320dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </LinearLayout>
 

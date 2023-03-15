@@ -1,27 +1,29 @@
-package com.waveneuro.ui.dashboard.device
+package com.waveneuro.ui.dashboard.device.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.waveneuro.data.DataManager
 import com.waveneuro.domain.base.SingleLiveEvent
-import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
+import com.waveneuro.ui.base.handler.error.ErrorHandler
+import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
+import com.waveneuro.ui.dashboard.device.DeviceViewEffect
+import com.waveneuro.ui.dashboard.device.DeviceViewEvent
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.*
+import com.waveneuro.ui.dashboard.device.DeviceViewState
 import com.waveneuro.ui.dashboard.device.DeviceViewState.*
-import com.waveneuro.utils.ErrorUtil
 import timber.log.Timber
 import javax.inject.Inject
 
-class DeviceViewModel @Inject constructor(
-    private val getPersonalInfoUseCase: GetUserInfoUseCase
-) : ViewModel() {
+class DeviceViewModelImpl @Inject constructor(
+    app: Application,
+    errorHandler: ErrorHandler
+) : BaseAndroidViewModelImpl(app, errorHandler), DeviceViewModel {
 
-    @Inject
-    lateinit var errorUtil: ErrorUtil
     @Inject
     lateinit var dataManager: DataManager
 
     val data = MutableLiveData<DeviceViewState>()
-    val viewEffect = SingleLiveEvent<DeviceViewEffect>()
+    override val viewEffect = SingleLiveEvent<DeviceViewEffect>()
 
     val onboardingDisplayed: Boolean
         get() = if (dataManager.onboardingDisplayed) {
@@ -31,7 +33,7 @@ class DeviceViewModel @Inject constructor(
             false
         }
 
-    fun processEvent(viewEvent: DeviceViewEvent) {
+    override fun processEvent(viewEvent: DeviceViewEvent) {
         Timber.e("DEVICE_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
         if (data.value != null) Timber.e(
             "DEVICE_STATE :: %s",
@@ -39,7 +41,6 @@ class DeviceViewModel @Inject constructor(
         )
         when (viewEvent) {
             is Start -> data.postValue(InitLocateDevice(dataManager.user))
-            is BackClicked -> {}
             is DeviceClicked -> data.postValue(Connecting(viewEvent.bleDevice))
             is DeviceViewEvent.LocateDevice -> {
                 Timber.e("DEVICE_STATE :: %s", "" + (data.value is DeviceViewState.LocateDevice))
@@ -64,10 +65,13 @@ class DeviceViewModel @Inject constructor(
                     )
                 )
             }
+            is SetDeviceId -> {
+                setDeviceId(viewEvent.deviceId)
+            }
         }
     }
 
-    fun setDeviceId(sonalId: String?) {
+    private fun setDeviceId(sonalId: String?) {
         dataManager.saveSonalId(sonalId)
     }
 

@@ -8,6 +8,7 @@ import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.injection.module.ApplicationModule
 import com.waveneuro.ui.dashboard.DashboardViewModelFactory
 import com.waveneuro.ui.dashboard.account.viewmodel.AccountViewModelFactory
+import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelFactory
 import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModelFactory
 import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModelFactory
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelFactory
@@ -46,5 +47,6 @@ interface ApplicationComponent {
     fun accountViewModelFactory(): AccountViewModelFactory
     fun sessionViewModelFactory(): SessionViewModelFactory
     fun sessionHistoryViewModelFactory(): SessionHistoryViewModelFactory
+    fun deviceViewModelFactory(): DeviceViewModelFactory
 
 }

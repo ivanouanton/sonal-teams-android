@@ -1,13 +1,10 @@
 package com.waveneuro.ui.dashboard.device
 
-import com.asif.abase.data.model.BaseModel
-import com.waveneuro.data.model.entity.BleDevice
 import com.waveneuro.data.model.entity.User
+import com.waveneuro.domain.model.ble.BleDevice
 
 sealed class DeviceViewState {
-    data class Loading(val loading: Boolean) : DeviceViewState()
-    data class Success(val item: List<BaseModel>) : DeviceViewState()
-    data class Failure(val error: Error) : DeviceViewState()
+    object Success : DeviceViewState()
     data class InitLocateDevice(val user: User) : DeviceViewState()
     object LocateDevice : DeviceViewState()
     object LocateDeviceNext : DeviceViewState()
