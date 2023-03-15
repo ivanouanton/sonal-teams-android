@@ -18,8 +18,8 @@ class WebActivity : BaseWebViewActivity<ActivityWebBinding>() {
         binding.ivBack.setOnClickListener { goBack() }
         setView()
 
-        if (intent.hasExtra(WebCommand.PAGE_URL)) {
-            setUrl(intent.getStringExtra(WebCommand.PAGE_URL))
+        if (intent.hasExtra(PAGE_URL)) {
+            setUrl(intent.getStringExtra(PAGE_URL))
         } else {
             setUrl("https://www.waveneuro.com")
         }
@@ -28,8 +28,8 @@ class WebActivity : BaseWebViewActivity<ActivityWebBinding>() {
     private fun setView() {
         with(binding) {
             setWebView(webView)
-            tvTitle.text = if (intent.hasExtra(WebCommand.PAGE_TITLE)) {
-                 intent.getStringExtra(WebCommand.PAGE_TITLE)
+            tvTitle.text = if (intent.hasExtra(PAGE_TITLE)) {
+                intent.getStringExtra(PAGE_TITLE)
             } else {
                 getString(R.string.app_name)
             }

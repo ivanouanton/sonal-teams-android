@@ -15,7 +15,7 @@ import javax.inject.Inject
 class OrganizationViewModelImpl @Inject constructor(
     app: Application,
     errorHandler: ErrorHandler,
-    private val getPersonalInfoUseCase: GetUserInfoUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val mapper: OrganizationMapperImpl
 ) : BaseAndroidViewModelImpl(app, errorHandler), OrganizationViewModel {
 
@@ -32,7 +32,7 @@ class OrganizationViewModelImpl @Inject constructor(
 
     private fun getPersonalInfo() {
         launchPayload {
-            val response = getPersonalInfoUseCase.getUser()
+            val response = getUserInfoUseCase.getUser()
             viewEffect.value = OrganizationViewEffect.Success(getOrganizations(response))
         }
     }

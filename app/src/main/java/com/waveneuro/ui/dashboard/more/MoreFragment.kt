@@ -11,12 +11,13 @@ import com.waveneuro.injection.component.DaggerFragmentComponent
 import com.waveneuro.injection.module.FragmentModule
 import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.base.BaseFragment
-import com.waveneuro.ui.dashboard.account.AccountCommand
+import com.waveneuro.ui.dashboard.account.AccountActivity
 import com.waveneuro.ui.dashboard.history.HistoryActivity
 import com.waveneuro.ui.dashboard.more.MoreViewEffect.*
 import com.waveneuro.ui.dashboard.more.MoreViewEvent.*
-import com.waveneuro.ui.dashboard.web.WebCommand
-import com.waveneuro.ui.user.login.LoginCommand
+import com.waveneuro.ui.dashboard.web.WebActivity
+import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_SUPPORT
+import com.waveneuro.ui.user.login.LoginActivity
 import javax.inject.Inject
 
 internal class MoreFragment : BaseFragment() {
@@ -25,12 +26,6 @@ internal class MoreFragment : BaseFragment() {
 
     @Inject
     lateinit var moreViewModel: MoreViewModel
-    @Inject
-    lateinit var accountCommand: AccountCommand
-    @Inject
-    lateinit var webCommand: WebCommand
-    @Inject
-    lateinit var loginCommand: LoginCommand
 
     override fun onCreate(savedInstanceState: Bundle?) {
         fragmentComponent = DaggerFragmentComponent.builder()
@@ -57,11 +52,10 @@ internal class MoreFragment : BaseFragment() {
         with(moreViewModel) {
             viewEffect.observe(this@MoreFragment, Observer { viewEffect ->
                 when(viewEffect) {
-                    is ProfileInfo -> accountCommand.navigate()
+                    is ProfileInfo -> startActivity(AccountActivity.newIntent(requireContext()))
                     is DeviceHistory -> startActivity(HistoryActivity.newIntent(requireContext()))
-                    is Help -> webCommand.navigate(WebCommand.PAGE_SUPPORT)
-                    is Login -> loginCommand.navigate()
-                    else -> {}
+                    is Help -> startActivity(WebActivity.newIntent(requireContext(), PAGE_SUPPORT))
+                    is Login -> startActivity(LoginActivity.newIntent(requireContext()))
                 }
             })
         }

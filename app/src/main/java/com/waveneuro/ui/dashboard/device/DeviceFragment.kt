@@ -50,7 +50,7 @@ import com.waveneuro.ui.dashboard.DashboardViewState.Disconnect
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.LocateDeviceNextClicked
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.NoDeviceFound
 import com.waveneuro.ui.dashboard.device.DeviceViewState.*
-import com.waveneuro.ui.session.how_to.HowToCommand
+import com.waveneuro.ui.session.how_to.HowToActivity
 import com.waveneuro.ui.session.session.SessionCommand
 import com.waveneuro.utils.ext.toast
 import timber.log.Timber
@@ -60,8 +60,6 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
 
     @Inject
     lateinit var sessionCommand: SessionCommand
-    @Inject
-    lateinit var howToCommand: HowToCommand
     @Inject
     lateinit var deviceViewModel: DeviceViewModel
 
@@ -97,7 +95,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
         setObserver()
         deviceViewModel.processEvent(DeviceViewEvent.Start)
         if (!deviceViewModel.onboardingDisplayed) {
-            howToCommand.navigate()
+            startActivity(HowToActivity.newIntent(requireContext()))
         }
     }
 
@@ -265,7 +263,7 @@ class DeviceFragment : BaseListFragment(), OnDeviceItemClickListener {
     }
 
     private fun launchHowToActivity() {
-        howToCommand.navigate()
+        startActivity(HowToActivity.newIntent(requireContext()))
     }
 
     private fun launchPairingSuccessfulDialog() {
