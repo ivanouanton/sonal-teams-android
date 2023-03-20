@@ -83,6 +83,8 @@ public class BluetoothManager {
 
             @Override
             public void onScanning(BleDevice bleDevice) {
+                bleDevices = new ArrayList<>();
+                bleDevices.add(bleDevice);
                 success.onScanning(bleDevice);
             }
 
@@ -187,6 +189,12 @@ public class BluetoothManager {
     public void getDeviceName(String mac, String name, DeviceConnectionCallback callback) {
         if (TextUtils.isEmpty(mac))
             return;
+
+        BleManager.getInstance().cancelScan();
+
+        if (bleDevices == null)
+            return;
+
         for (int i = 0; i < bleDevices.size(); i++) {
             if (mac.equals(bleDevices.get(i).getMac())) {
                 bleDevice = bleDevices.get(i);
