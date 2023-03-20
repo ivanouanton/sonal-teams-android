@@ -41,23 +41,18 @@ class SessionViewModelImpl @Inject constructor(
     lateinit var analyticsManager: AnalyticsManager
 
     override val viewEffect = SingleLiveEvent<SessionViewEffect>()
+    override val isCriticalDialogShowed = MutableStateFlow(false)
+    override val isLowDialogShowed = MutableStateFlow(false)
+    override val isPrepareDialogShowed = MutableStateFlow(false)
+
+    override var batteryLevelChangeCallback =
+        BluetoothManager.OnBatteryLevelChangedCallback { newValue: Byte ->
+            batteryLevel.value = newValue
+        }
 
     val data = MutableLiveData<SessionViewState?>()
     val batteryLevel = MutableLiveData<Byte>()
     val currentClient = MutableLiveData<String>()
-
-    private var _isLowDialogShowed = MutableStateFlow(false)
-    private var _isCriticalDialogShowed = MutableStateFlow(false)
-    private var _isPrepareDialogShowed = MutableStateFlow(false)
-
-    val isCriticalDialogShowed: StateFlow<Boolean> get() = _isCriticalDialogShowed
-    val isLowDialogShowed: StateFlow<Boolean> get() = _isLowDialogShowed
-    val isPrepareDialogShowed: StateFlow<Boolean> get() = _isPrepareDialogShowed
-
-    var batteryLevelChangeCallback =
-        BluetoothManager.OnBatteryLevelChangedCallback { newValue: Byte ->
-            batteryLevel.value = newValue
-        }
 
     init {
         getClient()
@@ -78,7 +73,7 @@ class SessionViewModelImpl @Inject constructor(
             is Start -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_STARTED,
-                    dataManager.user.id,
+                    "dataManager.user.id", //TODO uncommment
                     dataManager.eegId,
                     dataManager.protocolId,
                     dataManager.sonalId
@@ -89,6 +84,9 @@ class SessionViewModelImpl @Inject constructor(
                     data.postValue(SessionViewState.LocateDevice)
                     viewEffect.postValue(SessionViewEffect.InitializeBle)
                 }
+                if (viewEvent.doNotShowAgain) {
+                    dataManager.setPrecautionsDisplayed()
+                }
             }
             is BackClicked -> {
                 viewEffect.postValue(SessionViewEffect.Back)
@@ -98,6 +96,11 @@ class SessionViewModelImpl @Inject constructor(
             }
             is LocatingDevice -> {
                 data.postValue(SessionViewState.LocateDevice)
+            }
+            is StartSessionClicked -> {
+                data.postValue(SessionViewState.StartSessionClicked(
+                    dataManager.isPrecautionsDisplayed
+                ))
             }
             is StartSession -> {
                 data.postValue(SessionViewState.SessionStarted)
@@ -120,7 +123,7 @@ class SessionViewModelImpl @Inject constructor(
             is DevicePaused -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_PAUSED,
-                    dataManager.user.id,
+                    "dataManager.user.id", //TODO uncommment
                     dataManager.eegId,
                     dataManager.protocolId,
                     dataManager.sonalId
@@ -133,7 +136,7 @@ class SessionViewModelImpl @Inject constructor(
             is DeviceError -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_TERMINATED_EARLY,
-                    dataManager.user.id,
+                    "dataManager.user.id", //TODO uncommment
                     dataManager.eegId,
                     dataManager.protocolId,
                     dataManager.sonalId
@@ -189,18 +192,6 @@ class SessionViewModelImpl @Inject constructor(
             val response = getClientUseCase.getClient(dataManager.patientId.toInt())
             currentClient.value = ("${response.firstName} ${response.lastName}")
         }
-    }
-
-    fun setPrepareIsShowed(newValue: Boolean) {
-        _isPrepareDialogShowed.value = newValue
-    }
-
-    fun setLowIsShowed(newValue: Boolean) {
-        _isLowDialogShowed.value = newValue
-    }
-
-    fun setCriticalIsShowed(newValue: Boolean) {
-        _isCriticalDialogShowed.value = newValue
     }
 
     companion object {

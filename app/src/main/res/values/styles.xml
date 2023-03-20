@@ -3,6 +3,7 @@
     <style name="BottomView">
         <item name="colorPrimary">@color/black</item>
     </style>
+
     <style name="SplashTheme" parent="Theme.WaveNeuroAndroid">
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:statusBarColor">@color/translucent_black</item>

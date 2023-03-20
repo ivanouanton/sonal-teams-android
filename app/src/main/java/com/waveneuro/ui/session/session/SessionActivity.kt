@@ -16,15 +16,12 @@ import com.ap.ble.data.BleDevice
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
-import com.waveneuro.data.DataManager
-import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.databinding.ActivitySessionBinding
 import com.waveneuro.databinding.DialogInfoBinding
 import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.databinding.DialogPopupWithCheckboxBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.DashboardActivity
-import com.waveneuro.ui.session.complete.SessionCompleteCommand
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
 import com.waveneuro.ui.session.session.SessionViewEffect.*
 import com.waveneuro.ui.session.session.SessionViewEvent.*
@@ -36,22 +33,13 @@ import com.waveneuro.utils.CountDownTimer.OnCountDownListener
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.views.sessionProgressDialogBuilder
 import timber.log.Timber
-import javax.inject.Inject
 
 class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionViewModel>(),
     OnCountDownListener, DeviceConnectionCallback {
 
-    @Inject
-    lateinit var sessionCompleteCommand: SessionCompleteCommand
-
     override val viewModel: SessionViewModelImpl by viewModels {
         getAppComponent().sessionViewModelFactory()
     }
-
-    @Inject
-    lateinit var dataManager: DataManager
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
 
     private var readyDialog: AlertDialog? = null
     private var precautionsWarningDialog: AlertDialog? = null
@@ -105,7 +93,7 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
             }
             btnStartSession.setOnClickListener {
                 btnStartSession.visibility = View.INVISIBLE
-                startSession()
+                viewModel.processEvent(SessionViewEvent.StartSessionClicked)
             }
             ivInfo.setOnClickListener {
                 showInfoDialog()
@@ -163,6 +151,9 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
                         binding.tvStopSessionInfo.visibility = View.VISIBLE
                         binding.llControlInfo.visibility = View.GONE
                     }
+                    is SessionViewState.StartSessionClicked -> {
+                        startSession(viewState.isPrecautionsShowed)
+                    }
                     is SessionStarted -> {
                         if (readyDialog != null) readyDialog?.dismiss()
                         binding.btnStartSession.visibility = View.GONE
@@ -208,7 +199,7 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
                     is ShowLoader -> preparingDialog?.show()
                     is HideLoader -> {
                         preparingDialog?.dismiss()
-                        setPrepareIsShowed(true)
+                        isPrepareDialogShowed.value = true
                     }
                 }
             })
@@ -222,9 +213,9 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
                     showBatteryDialog(R.string.error_battery_critical, CRITICAL_BATTERY)
 
                 if (batteryLevel > CRITICAL_BATTERY && isCriticalDialogShowed.value)
-                    setCriticalIsShowed(false)
+                    isCriticalDialogShowed.value = false
                 if (batteryLevel > LOW_BATTERY && isLowDialogShowed.value)
-                    setLowIsShowed(false)
+                    isLowDialogShowed.value = false
             })
         }
     }
@@ -234,10 +225,10 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
             else getString(R.string.heading_pause_session)
     }
 
-    private fun startSession() {
-        if (dataManager.precautionsDisplayed) {
+    private fun startSession(isPrecautionsShowed: Boolean) {
+        if (isPrecautionsShowed) {
             showStartSessionDialog()
-            viewModel.processEvent(Start)
+            viewModel.processEvent(Start())
         } else {
             showPrecautionsWarningDialog()
         }
@@ -260,8 +251,8 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
             readyDialog = builder.create()
             readyDialog?.show()
             when(type) {
-                LOW_BATTERY -> viewModel.setLowIsShowed(true)
-                CRITICAL_BATTERY -> viewModel.setCriticalIsShowed(true)
+                LOW_BATTERY -> viewModel.isLowDialogShowed.value = true
+                CRITICAL_BATTERY -> viewModel.isCriticalDialogShowed.value = true
             }
         }
     }
@@ -367,12 +358,9 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
             tvContent.setText(R.string.warning_message)
             btnPrimary.setText(R.string.continue_button)
             btnPrimary.setOnClickListener {
-                if (dontShowAgain.isChecked) {
-                    dataManager.setPrecautionsDisplayed()
-                }
                 precautionsWarningDialog?.hide()
                 showStartSessionDialog()
-                viewModel.processEvent(Start)
+                viewModel.processEvent(Start(dontShowAgain.isChecked))
             }
         }
 

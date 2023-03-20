@@ -1,12 +1,12 @@
 package com.waveneuro.ui.model.client.mapper
 
-import com.waveneuro.data.model.response.client.ClientResponse
+import com.waveneuro.domain.model.client.ClientRs
 import com.waveneuro.ui.model.client.ClientUi
 import javax.inject.Inject
 
 class ClientMapperImpl @Inject constructor() : ClientMapper {
 
-    override fun fromApiToUi(api: ClientResponse) = with(api) {
+    override fun fromDomainToUi(domain: ClientRs) = with(domain) {
         ClientUi(
             id,
             firstName,
@@ -23,8 +23,8 @@ class ClientMapperImpl @Inject constructor() : ClientMapper {
         )
     }
 
-    override fun fromUiToApi(ui: ClientUi) = with(ui) {
-        ClientResponse(
+    override fun fromUiToDomain(ui: ClientUi) = with(ui) {
+        ClientRs(
             id,
             firstName,
             lastName,

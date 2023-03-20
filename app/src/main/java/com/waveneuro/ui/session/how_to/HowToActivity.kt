@@ -9,10 +9,10 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityHowToBinding
-import com.waveneuro.ui.base.activity.BaseActivityNew
+import com.waveneuro.ui.base.activity.BaseActivity
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
 
-class HowToActivity : BaseActivityNew<ActivityHowToBinding>() {
+class HowToActivity : BaseActivity<ActivityHowToBinding>() {
 
     override fun initBinding(): ActivityHowToBinding = ActivityHowToBinding.inflate(layoutInflater)
 

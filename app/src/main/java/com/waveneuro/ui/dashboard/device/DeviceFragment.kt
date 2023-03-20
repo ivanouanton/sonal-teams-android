@@ -34,9 +34,9 @@ import com.ap.ble.callback.BleScanCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
-import com.waveneuro.data.model.entity.User
 import com.waveneuro.databinding.FragmentDeviceBinding
 import com.waveneuro.domain.model.ble.BleDevice
+import com.waveneuro.domain.model.user.UserInfo
 import com.waveneuro.ui.base.fragment.BaseViewModelFragment
 import com.waveneuro.ui.dashboard.DashBoardViewModelImpl
 import com.waveneuro.ui.dashboard.DashboardActivity
@@ -50,6 +50,7 @@ import com.waveneuro.ui.dashboard.device.DeviceViewState.*
 import com.waveneuro.ui.dashboard.device.adapter.DeviceAdapter
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModel
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelImpl
+import com.waveneuro.ui.dashboard.home.HomeFragment
 import com.waveneuro.ui.session.how_to.HowToActivity
 import com.waveneuro.ui.session.session.SessionActivity
 import com.waveneuro.utils.ext.getAppComponent
@@ -58,7 +59,9 @@ import timber.log.Timber
 
 class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewModel>() {
 
-    private val dashBoardViewModel: DashBoardViewModelImpl by viewModels()
+    private val dashBoardViewModel: DashBoardViewModelImpl by viewModels {
+        getAppComponent().dashboardViewModelFactory()
+    }
 
     private lateinit var deviceAdapter: DeviceAdapter
     private val deviceList = mutableListOf<BleDevice>()
@@ -73,19 +76,9 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
     override fun initBinding(container: ViewGroup?): FragmentDeviceBinding =
         FragmentDeviceBinding.inflate(layoutInflater)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setObserver()
-
-        viewModel.processEvent(DeviceViewEvent.Start)
-        if (!viewModel.onboardingDisplayed) {
-            startActivity(HowToActivity.newIntent(requireContext()))
-        }
-    }
-
     override fun initViews(savedInstanceState: Bundle?) {
         super.initViews(savedInstanceState)
+        setObserver()
         binding?.let { binding ->
             with(binding) {
                 deviceAdapter = DeviceAdapter(requireContext(), ::onClickDevice)
@@ -105,7 +98,10 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                         viewModel.processEvent(DeviceViewEvent.Start)
                     } else {
                         //TODO check logic probably set bottom bar
-                        startActivity(DashboardActivity.newIntent(requireContext()))
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fr_container, HomeFragment.newInstance())
+                            .commit()
+//                        startActivity(DashboardActivity.newIntent(requireContext()))
                     }
                 }
                 tvFirstTime.setOnClickListener {
@@ -115,6 +111,14 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.processEvent(DeviceViewEvent.Start)
+        if (!viewModel.onboardingDisplayed) {
+            startActivity(HowToActivity.newIntent(requireContext()))
+        }
+    }
 
     private fun setObserver() {
         binding?.let { binding ->
@@ -230,18 +234,19 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         }
     }
 
-    private fun setUserDetail(user: User) {
+    private fun setUserDetail(user: UserInfo) {
         // DONE Which name need to display
-        if (TextUtils.isEmpty(user.imageThumbnailUrl)) {
-            val strArray = user.name?.split(" ")?.toTypedArray() ?: arrayOf()
-            val builder = StringBuilder()
-            if (strArray.isNotEmpty()) {
-                builder.append(strArray[0], 0, 1)
-            }
-            if (strArray.size > 1) {
-                builder.append(strArray[1], 0, 1)
-            }
-        }
+        //TODO initials on image
+//        if (TextUtils.isEmpty(user.imageThumbnailUrl)) {
+//            val strArray = user.name?.split(" ")?.toTypedArray() ?: arrayOf()
+//            val builder = StringBuilder()
+//            if (strArray.isNotEmpty()) {
+//                builder.append(strArray[0], 0, 1)
+//            }
+//            if (strArray.size > 1) {
+//                builder.append(strArray[1], 0, 1)
+//            }
+//        }
     }
 
     private fun launchHowToActivity() {

@@ -22,11 +22,11 @@ class DeviceViewModelImpl @Inject constructor(
     @Inject
     lateinit var dataManager: DataManager
 
-    val data = MutableLiveData<DeviceViewState>()
+    override val data = MutableLiveData<DeviceViewState>()
     override val viewEffect = SingleLiveEvent<DeviceViewEffect>()
 
-    val onboardingDisplayed: Boolean
-        get() = if (dataManager.onboardingDisplayed) {
+    override val onboardingDisplayed: Boolean
+        get() = if (dataManager.isOnboardingDisplayed) {
             true
         } else {
             dataManager.setOnboardingDisplayed()
@@ -72,7 +72,7 @@ class DeviceViewModelImpl @Inject constructor(
     }
 
     private fun setDeviceId(sonalId: String?) {
-        dataManager.saveSonalId(sonalId)
+        dataManager.saveSonalId(sonalId ?: "")
     }
 
 }

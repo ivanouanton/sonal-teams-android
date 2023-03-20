@@ -1,16 +1,16 @@
 package com.waveneuro.domain.usecase.user
 
 import com.waveneuro.data.api.user.UserApi
-import com.waveneuro.domain.model.client.ClientInfo
-import com.waveneuro.domain.model.client.ClientMapperImpl
+import com.waveneuro.domain.model.user.UserInfo
+import com.waveneuro.domain.model.user.UserMapperImpl
 import javax.inject.Inject
 
 class GetUserInfoUseCase @Inject constructor(
     private val userApi: UserApi,
-    private val mapper: ClientMapperImpl
+    private val mapper: UserMapperImpl
 ) {
 
-    suspend fun getUser(): ClientInfo =
+    suspend fun getUser(): UserInfo =
         mapper.fromApiToDomain(userApi.getUserInfo())
 
 }

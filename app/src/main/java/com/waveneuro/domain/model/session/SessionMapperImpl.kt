@@ -1,8 +1,8 @@
 package com.waveneuro.domain.model.session
 
-import com.waveneuro.data.api.user.model.session.ApiSession
-import com.waveneuro.data.api.user.model.session.ApiSessionListRs
-import com.waveneuro.data.api.user.model.session.ApiSessionRq
+import com.waveneuro.data.api.session.model.session.ApiSession
+import com.waveneuro.data.api.session.model.session.ApiSessionListRs
+import com.waveneuro.data.api.session.model.session.ApiSessionRq
 import javax.inject.Inject
 
 class SessionMapperImpl @Inject constructor() : SessionMapper {

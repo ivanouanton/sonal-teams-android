@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.waveneuro.databinding.ActivityHelpBinding
-import com.waveneuro.ui.base.activity.BaseActivityNew
+import com.waveneuro.ui.base.activity.BaseActivity
 import com.waveneuro.ui.dashboard.web.WebActivity
 import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_CONTACT
 import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_FAQ
 import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_POLICY
 import com.waveneuro.ui.dashboard.web.WebActivity.Companion.PAGE_TERMS_CONDITIONS
 
-class HelpActivity : BaseActivityNew<ActivityHelpBinding>() {
+class HelpActivity : BaseActivity<ActivityHelpBinding>() {
 
     override fun initBinding(): ActivityHelpBinding = ActivityHelpBinding.inflate(layoutInflater)
 

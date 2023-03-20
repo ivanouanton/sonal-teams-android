@@ -12,7 +12,7 @@ import com.waveneuro.utils.ext.dialogBuilder
 import com.waveneuro.utils.ext.toast
 
 abstract class BaseViewModelActivity<B : ViewBinding, VM : BaseViewModel> :
-    BaseActivityNew<B>() {
+    BaseActivity<B>() {
 
     protected abstract val viewModel: VM
 

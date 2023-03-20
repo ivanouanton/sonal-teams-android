@@ -33,7 +33,7 @@ class DashBoardViewModelImpl @Inject constructor(
                 when (val connect = data.value) {
                     is Connect -> {
                         viewEffect.postValue(
-                            DashboardViewEffect.Device(connect.data.name)
+                            DashboardViewEffect.Device(connect.data.name ?: "")
                         )
                     }
                     else -> {}

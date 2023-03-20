@@ -6,24 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waveneuro.R
-import com.waveneuro.data.model.response.common.TosStatus
+import com.waveneuro.domain.model.common.TosStatus
 import com.waveneuro.databinding.DialogViewClientBinding
-import com.waveneuro.injection.component.DaggerFragmentComponent
-import com.waveneuro.injection.component.FragmentComponent
-import com.waveneuro.injection.module.FragmentModule
-import com.waveneuro.ui.base.BaseActivity
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientBottomSheet
 import com.waveneuro.ui.model.client.ClientUi
 import com.waveneuro.ui.session.history.SessionHistoryActivity
 import com.waveneuro.utils.DateHelper
-import javax.inject.Inject
 
 class ViewClientBottomSheet : BottomSheetDialogFragment() {
 
-    @Inject
-    lateinit var sessionHistoryCommand: SessionHistoryCommand
-
-    private lateinit var fragmentComponent: FragmentComponent
     private lateinit var binding: DialogViewClientBinding
 
     private var clientId: Int = 0
@@ -39,15 +30,6 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
     private var treatmentDataPresent = false
     private var onStartSession: (() -> Unit)? = null
     private var onClientUpdated: ((String?) -> Unit)? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        fragmentComponent = DaggerFragmentComponent.builder()
-            .activityComponent((activity as BaseActivity?)?.activityComponent())
-            .fragmentModule(FragmentModule(this))
-            .build()
-        fragmentComponent.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,7 +98,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
 
     private fun editClient() {
         val editClientBottomSheet = EditClientBottomSheet.newInstance(
-            onClientUpdated, clientId, firstName, lastName, birthday, isMale, email
+            onClientUpdated, clientId, firstName, lastName, birthday, isMale
         )
         editClientBottomSheet.show(parentFragmentManager, "EditClient BottomSheet")
         dismiss()

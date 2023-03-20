@@ -38,8 +38,8 @@ class MfaViewModelImpl @Inject constructor(
                 mfaCode ?: "",
                 session ?: ""
             )
-            //TODO save refresh token
-            preferenceManager.accessToken = response.accessToken
+            preferenceManager.accessToken = response.tokens.idToken
+            preferenceManager.refreshToken = response.tokens.refreshToken
             viewEffect.postValue(MfaViewEffect.Home)
         }
     }

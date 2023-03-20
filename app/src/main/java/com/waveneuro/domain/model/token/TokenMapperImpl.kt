@@ -5,11 +5,11 @@ import javax.inject.Inject
 
 class TokenMapperImpl @Inject constructor() : TokenMapper {
 
-    override fun fromApiToDomain(api: ApiConfirmTokenRs): Token = with(api) {
-        Token(
-            accessToken,
-            refreshToken
-        )
-    }
+//    override fun fromApiToDomain(api: ApiConfirmTokenRs): Token = with(api) {
+//        Token(
+//            accessToken,
+//            refreshToken
+//        )
+//    }
 
 }

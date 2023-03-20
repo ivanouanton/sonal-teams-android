@@ -1,19 +1,20 @@
 package com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.asif.abase.domain.base.UseCaseCallback
-import com.waveneuro.data.model.request.client.ClientRequest
-import com.waveneuro.data.model.request.common.SexType
-import com.waveneuro.data.model.response.client.ClientResponse
-import com.waveneuro.domain.usecase.client.UpdatePatientUseCase
-import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Error
+import com.waveneuro.domain.model.common.SexType
+import com.waveneuro.domain.model.client.ClientRq
+import com.waveneuro.domain.usecase.client.UpdateClientUseCase
+import com.waveneuro.ui.base.handler.error.ErrorHandler
+import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Success
 import javax.inject.Inject
 
 class EditClientViewModel @Inject constructor(
-    private val updatePatientUseCase: UpdatePatientUseCase,
-) : ViewModel() {
+    app: Application,
+    errorHandler: ErrorHandler,
+    private val updateClientUseCase: UpdateClientUseCase,
+) : BaseAndroidViewModelImpl(app, errorHandler) {
 
     val dataEditClientLive = MutableLiveData<EditClientViewState>()
 
@@ -22,24 +23,14 @@ class EditClientViewModel @Inject constructor(
         firstName: String,
         lastName: String,
         birthday: String?,
-        email: String,
         sex: SexType
     ) {
-        val request = ClientRequest(firstName, lastName, birthday, email, sex)
+        launchPayload {
+            val request = ClientRq(firstName, lastName, birthday, sex)
 
-        updatePatientUseCase.execute(request, id, object : UseCaseCallback<ClientResponse> {
-
-            override fun onSuccess(response: ClientResponse) {
-                dataEditClientLive.postValue(Success("$firstName $lastName"))
-            }
-
-            override fun onError(throwable: Throwable) {
-                dataEditClientLive.postValue(Error(throwable.message))
-            }
-
-            override fun onFinish() {}
-
-        })
+            updateClientUseCase.updateClient(id, request)
+            dataEditClientLive.postValue(Success("$firstName $lastName"))
+        }
     }
 
 }

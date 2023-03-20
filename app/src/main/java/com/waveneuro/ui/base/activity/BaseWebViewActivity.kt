@@ -6,7 +6,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseWebViewActivity<B : ViewBinding> : BaseActivityNew<B>() {
+abstract class BaseWebViewActivity<B : ViewBinding> : BaseActivity<B>() {
 
     private var webView: WebView? = null
 

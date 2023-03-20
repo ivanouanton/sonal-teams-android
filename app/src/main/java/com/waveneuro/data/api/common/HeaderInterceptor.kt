@@ -1,6 +1,5 @@
 package com.waveneuro.data.api.common
 
-import com.waveneuro.data.Config
 import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.ui.base.handler.error.model.TokenException
 import okhttp3.FormBody
@@ -30,6 +29,7 @@ class HeaderInterceptor @Inject constructor(
                     "Authorization",
                     "Bearer ${prefManager.accessToken}"
                 )
+                Timber.e("accessToken = ${prefManager.accessToken}")
 
                 val response = chain.proceed(build())
 
@@ -41,9 +41,7 @@ class HeaderInterceptor @Inject constructor(
                     val newUrl = HttpUrl.Builder()
                         .scheme(chain.request().url.scheme)
                         .host(chain.request().url.host)
-                            //TODO
-//                        .addPathSegment(Config.PATHS[0])
-                        .addPathSegment("refresh")
+                        .addPathSegment("refresh-token")
                         .build()
 
                     refreshRequestBuilder.url(newUrl)
@@ -61,9 +59,10 @@ class HeaderInterceptor @Inject constructor(
                         throw TokenException()
                     } else {
                         try {
+                            //TODO
                             val jsonObject = JSONObject(refreshResponse.body?.string() ?: "")
-                            if (jsonObject.has("access_token")) {
-                                val newToken = jsonObject.getString("access_token")
+                            if (jsonObject.has("tokenId")) {
+                                val newToken = jsonObject.getString("tokenId")
                                 prefManager.accessToken = newToken
                                 Timber.e("NEW ACCESS TOKEN :: $newToken")
                                 refreshResponse.close()

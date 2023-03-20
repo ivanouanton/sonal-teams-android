@@ -3,7 +3,7 @@ package com.waveneuro.data.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.waveneuro.domain.model.client.ClientInfo;
+import com.waveneuro.domain.model.user.UserInfo;
 
 public class PreferenceManagerImpl implements PreferenceManager {
 
@@ -61,7 +61,7 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
-    public void saveUser(ClientInfo user) {
+    public void saveUser(UserInfo user) {
         getDefaultEditor().putString(PreferenceKeys.USER_ID, user.getId())
                 .putString(PreferenceKeys.NAME, user.getFirstName())
                 .putString(PreferenceKeys.GIVEN_NAME, user.getLastName())
@@ -111,8 +111,13 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
-    public String getName() {
+    public String getFirstName() {
         return defaultPreferences.getString(PreferenceKeys.NAME, "");
+    }
+
+    @Override
+    public String getLastName() {
+        return defaultPreferences.getString(PreferenceKeys.GIVEN_NAME, "");
     }
 
     @Override
@@ -121,8 +126,8 @@ public class PreferenceManagerImpl implements PreferenceManager {
     }
 
     @Override
-    public String getImageUrl() {
-        return defaultPreferences.getString(PreferenceKeys.IMAGE_THUMBNAIL_URL, "");
+    public String getEmail() {
+        return defaultPreferences.getString(PreferenceKeys.EMAIL, "");
     }
 
     @Override

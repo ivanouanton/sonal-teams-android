@@ -23,9 +23,9 @@ class SplashActivity : BaseViewModelActivity<ActivitySplashBinding, SplashViewMo
         ActivitySplashBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-        window.statusBarColor = Color.TRANSPARENT
+//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+//        window.statusBarColor = Color.TRANSPARENT
         super.onCreate(savedInstanceState)
 
         setObserver()

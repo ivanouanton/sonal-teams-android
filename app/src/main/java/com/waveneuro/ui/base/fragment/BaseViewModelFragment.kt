@@ -13,7 +13,7 @@ import com.waveneuro.utils.ext.dialogBuilder
 import com.waveneuro.utils.ext.toast
 
 abstract class BaseViewModelFragment<B : ViewBinding, VM : BaseViewModel> :
-    BaseFragmentNew<B>() {
+    BaseFragment<B>() {
 
     protected abstract val viewModel: VM
 

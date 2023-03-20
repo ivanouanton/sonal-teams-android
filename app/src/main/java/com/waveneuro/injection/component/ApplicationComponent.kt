@@ -5,11 +5,14 @@ import com.asif.abase.injection.qualifier.ApplicationContext
 import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.preference.PreferenceManager
+import com.waveneuro.injection.module.ApiModule
 import com.waveneuro.injection.module.ApplicationModule
 import com.waveneuro.ui.dashboard.DashboardViewModelFactory
 import com.waveneuro.ui.dashboard.account.viewmodel.AccountViewModelFactory
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelFactory
 import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModelFactory
+import com.waveneuro.ui.dashboard.home.viewmodel.HomeViewModelFactory
+import com.waveneuro.ui.dashboard.more.viewmodel.MoreViewModelFactory
 import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModelFactory
 import com.waveneuro.ui.introduction.splash.viewmodel.SplashViewModelFactory
 import com.waveneuro.ui.session.history.viewmodel.SessionHistoryViewModelFactory
@@ -24,7 +27,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ApplicationModule::class])
+@Component(modules = [ApplicationModule::class, ApiModule::class,])
 interface ApplicationComponent {
 
     @ApplicationContext
@@ -48,5 +51,7 @@ interface ApplicationComponent {
     fun sessionViewModelFactory(): SessionViewModelFactory
     fun sessionHistoryViewModelFactory(): SessionHistoryViewModelFactory
     fun deviceViewModelFactory(): DeviceViewModelFactory
+    fun moreViewModelFactory(): MoreViewModelFactory
+    fun homeViewModelFactory(): HomeViewModelFactory
 
 }
