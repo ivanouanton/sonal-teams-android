@@ -61,14 +61,6 @@ class ResetPasswordViewModelImpl @Inject constructor(
                     message.value = Event("User not found.")
                     true
                 }
-                //TODO add
-//                if (Integer.valueOf(error.error.code) == 400) {
-//                    val snackBar =
-//                        Snackbar.make(binding.rpaRoot, R.string.email_does_not_match, Snackbar.LENGTH_LONG)
-//                    snackBar.duration = 100000000
-//                    snackBar.setAction(R.string.ok) { snackBar.dismiss() }
-//                    snackBar.show()
-//                }
                 else -> false
             }
         } catch (e: Exception) {

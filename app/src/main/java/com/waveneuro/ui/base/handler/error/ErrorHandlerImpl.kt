@@ -39,7 +39,11 @@ class ErrorHandlerImpl(
 
                                 apiError
                             }
-                            HttpURLConnection.HTTP_NOT_FOUND -> NotFound
+                            HttpURLConnection.HTTP_NOT_FOUND ->  {
+                                val apiError = appErrorAdapter.fromJson(errorString)!!
+
+                                apiError
+                            }
                             HttpURLConnection.HTTP_NOT_ACCEPTABLE -> {
                                 val apiError = appErrorAdapter.fromJson(errorString)!!
 

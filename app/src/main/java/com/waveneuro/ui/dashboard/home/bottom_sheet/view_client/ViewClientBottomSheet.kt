@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waveneuro.R
-import com.waveneuro.domain.model.common.TosStatus
 import com.waveneuro.databinding.DialogViewClientBinding
+import com.waveneuro.domain.model.common.TosStatus
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientBottomSheet
 import com.waveneuro.ui.model.client.ClientUi
 import com.waveneuro.ui.session.history.SessionHistoryActivity
@@ -78,7 +78,6 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
 
             tvEditClient.setOnClickListener { editClient() }
             tvViewHistory.setOnClickListener {
-                //TODO check
                 startActivityForResult(SessionHistoryActivity.newIntent(
                     requireContext(),
                     clientId,

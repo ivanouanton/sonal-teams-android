@@ -1,4 +1,4 @@
-package com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client
+package com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
@@ -7,18 +7,19 @@ import com.waveneuro.domain.model.client.ClientRq
 import com.waveneuro.domain.usecase.client.UpdateClientUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
+import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Success
 import javax.inject.Inject
 
-class EditClientViewModel @Inject constructor(
+class EditClientViewModelImpl @Inject constructor(
     app: Application,
     errorHandler: ErrorHandler,
     private val updateClientUseCase: UpdateClientUseCase,
-) : BaseAndroidViewModelImpl(app, errorHandler) {
+) : BaseAndroidViewModelImpl(app, errorHandler), EditClientViewModel {
 
-    val dataEditClientLive = MutableLiveData<EditClientViewState>()
+    override val dataEditClientLive = MutableLiveData<EditClientViewState>()
 
-    fun updateClient(
+    override fun updateClient(
         id: Int,
         firstName: String,
         lastName: String,

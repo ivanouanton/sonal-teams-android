@@ -27,8 +27,7 @@ class SetNewPasswordViewModelImpl @Inject constructor(
 
     private fun setNewPassword(email: String, code: String, password: String) {
         launchPayload {
-            //TODO save tokens
-            val response = setNewPasswordUseCase.setNewPassword(email, code, password)
+            setNewPasswordUseCase.setNewPassword(email, code, password)
             viewEffect.postValue(SetNewPasswordViewEffect.Success)
         }
     }

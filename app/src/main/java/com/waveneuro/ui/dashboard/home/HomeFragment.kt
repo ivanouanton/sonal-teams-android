@@ -24,7 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.waveneuro.R
 import com.waveneuro.databinding.FragmentHomeBinding
 import com.waveneuro.ui.base.fragment.BaseViewModelFragment
-import com.waveneuro.ui.dashboard.device.DeviceFragment
+import com.waveneuro.ui.dashboard.device.DeviceActivity
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
 import com.waveneuro.ui.dashboard.home.adapter.ClientListAdapter
 import com.waveneuro.ui.dashboard.home.bottom_sheet.filters.FiltersBottomSheet
@@ -134,9 +134,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     }
 
     private fun launchDeviceScreen() {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fr_container, DeviceFragment.newInstance())
-            .commit()
+        startActivity(DeviceActivity.newIntent(requireContext()))
     }
 
     private fun onItemClick(client: ClientUi) {

@@ -9,17 +9,21 @@ import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.waveneuro.R
-import com.waveneuro.domain.model.common.SexType
 import com.waveneuro.databinding.DialogEditClientBinding
+import com.waveneuro.domain.model.common.SexType
 import com.waveneuro.ui.base.utils.EventObserver
 import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.EditClientViewState.Success
+import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.viewmodel.EditClientViewModelImpl
 import com.waveneuro.utils.DateHelper
+import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
 import java.util.*
 
 class EditClientBottomSheet : BottomSheetDialogFragment() {
 
-    private val viewModel: EditClientViewModel by viewModels()
+    private val viewModel: EditClientViewModelImpl by viewModels {
+        getAppComponent().editClientViewModelFactory()
+    }
 
     private lateinit var binding: DialogEditClientBinding
 

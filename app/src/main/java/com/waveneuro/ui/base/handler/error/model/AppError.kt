@@ -29,9 +29,3 @@ object ErrorType {
     const val TOS_DOES_NOT_SIGNED = "tos_not_signed"
     const val SESSION_ARE_NOT_AVAILABLE = "no_available_protocol"
 }
-
-object ErrorCode {
-    const val BAD_REQUEST = 400
-    const val NOT_FOUND = 404
-    const val NOT_ACCEPTABLE = 406
-}

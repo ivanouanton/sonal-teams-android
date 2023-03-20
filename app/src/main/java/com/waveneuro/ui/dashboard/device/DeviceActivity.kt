@@ -13,20 +13,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.ap.ble.BluetoothManager
 import com.ap.ble.BluetoothManager.DeviceConnectionCallback
@@ -34,14 +28,14 @@ import com.ap.ble.callback.BleScanCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
-import com.waveneuro.databinding.FragmentDeviceBinding
+import com.waveneuro.databinding.ActivityDeviceBinding
+import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.domain.model.ble.BleDevice
 import com.waveneuro.domain.model.user.UserInfo
-import com.waveneuro.ui.base.fragment.BaseViewModelFragment
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.DashBoardViewModelImpl
 import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.dashboard.DashboardViewEvent
-import com.waveneuro.ui.dashboard.DashboardViewState
 import com.waveneuro.ui.dashboard.DashboardViewState.Connect
 import com.waveneuro.ui.dashboard.DashboardViewState.Disconnect
 import com.waveneuro.ui.dashboard.device.DeviceViewEvent.LocateDeviceNextClicked
@@ -50,14 +44,13 @@ import com.waveneuro.ui.dashboard.device.DeviceViewState.*
 import com.waveneuro.ui.dashboard.device.adapter.DeviceAdapter
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModel
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelImpl
-import com.waveneuro.ui.dashboard.home.HomeFragment
 import com.waveneuro.ui.session.how_to.HowToActivity
 import com.waveneuro.ui.session.session.SessionActivity
 import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.toast
 import timber.log.Timber
 
-class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewModel>() {
+class DeviceActivity : BaseViewModelActivity<ActivityDeviceBinding, DeviceViewModel>() {
 
     private val dashBoardViewModel: DashBoardViewModelImpl by viewModels {
         getAppComponent().dashboardViewModelFactory()
@@ -73,61 +66,50 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         getAppComponent().deviceViewModelFactory()
     }
 
-    override fun initBinding(container: ViewGroup?): FragmentDeviceBinding =
-        FragmentDeviceBinding.inflate(layoutInflater)
+    override fun initBinding(): ActivityDeviceBinding =
+        ActivityDeviceBinding.inflate(layoutInflater)
 
-    override fun initViews(savedInstanceState: Bundle?) {
-        super.initViews(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setView()
         setObserver()
-        binding?.let { binding ->
-            with(binding) {
-                deviceAdapter = DeviceAdapter(requireContext(), ::onClickDevice)
-                binding.rvDeviceAvailable.adapter = deviceAdapter
-                deviceAdapter.submitList(deviceList)
 
-                operatingAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate)
-                operatingAnim?.interpolator = LinearInterpolator()
-                tvFirstTime.paintFlags = tvFirstTime.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        viewModel.processEvent(DeviceViewEvent.Start)
+        if (!viewModel.onboardingDisplayed) {
+            startActivity(HowToActivity.newIntent(this))
+        }
+    }
 
-                btnLocateDevice.setOnClickListener {
-                    checkPermissions()
-                    viewModel.processEvent(DeviceViewEvent.LocateDevice)
+    private fun setView() {
+        with(binding) {
+            deviceAdapter = DeviceAdapter(this@DeviceActivity, ::onClickDevice)
+            binding.rvDeviceAvailable.adapter = deviceAdapter
+            deviceAdapter.submitList(deviceList)
+
+            operatingAnim = AnimationUtils.loadAnimation(this@DeviceActivity, R.anim.rotate)
+            operatingAnim?.interpolator = LinearInterpolator()
+            tvFirstTime.paintFlags = tvFirstTime.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+            btnLocateDevice.setOnClickListener {
+                checkPermissions()
+                viewModel.processEvent(DeviceViewEvent.LocateDevice)
+            }
+            ivBack.setOnClickListener {
+                if (isSearching) {
+                    viewModel.processEvent(DeviceViewEvent.Start)
+                } else {
+                    startActivity(DashboardActivity.newIntent(this@DeviceActivity))
                 }
-                ivBack.setOnClickListener {
-                    if (isSearching) {
-                        viewModel.processEvent(DeviceViewEvent.Start)
-                    } else {
-                        //TODO check logic probably set bottom bar
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fr_container, HomeFragment.newInstance())
-                            .commit()
-//                        startActivity(DashboardActivity.newIntent(requireContext()))
-                    }
-                }
-                tvFirstTime.setOnClickListener {
-                    launchHowToActivity()
-                }
+            }
+            tvFirstTime.setOnClickListener {
+                launchHowToActivity()
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.processEvent(DeviceViewEvent.Start)
-        if (!viewModel.onboardingDisplayed) {
-            startActivity(HowToActivity.newIntent(requireContext()))
-        }
-    }
-
     private fun setObserver() {
-        binding?.let { binding ->
-            viewModel.data.removeObservers(viewLifecycleOwner)
-            viewModel.viewEffect.removeObservers(viewLifecycleOwner)
-            viewModel.data.observe(viewLifecycleOwner, Observer { viewState ->
-                if (lifecycle.currentState != Lifecycle.State.RESUMED) {
-                    return@Observer
-                }
+        with(binding) {
+            viewModel.data.observe(this@DeviceActivity, Observer { viewState ->
                 isSearching = false
                 when (viewState) {
                     is Success -> {
@@ -136,7 +118,6 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                         binding.llContainerDevice.visibility = View.GONE
                     }
                     is InitLocateDevice -> {
-                        setUserDetail(viewState.user)
                         with(binding) {
                             tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
                             tvLabelWelcome.visibility = View.VISIBLE
@@ -145,14 +126,14 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                             llLocateDevice.visibility = View.VISIBLE
                             cvDeviceAvailable.visibility = View.GONE
                             llContainerDevice.visibility = View.GONE
-                            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
+                            Glide.with(this@DeviceActivity).load(R.drawable.turn_on).into(ivDevice)
                         }
                     }
                     is LocateDevice -> {
                         with(binding) {
                             tvLabelWelcome.text = getString(R.string.ensure_your_device_powered_up)
                             tvLabelWelcome.visibility = View.VISIBLE
-                            Glide.with(requireContext()).load(R.drawable.turn_on).into(ivDevice)
+                            Glide.with(this@DeviceActivity).load(R.drawable.turn_on).into(ivDevice)
                             ivDevice.visibility = View.VISIBLE
                             llLocateDevice.visibility = View.VISIBLE
                             cvDeviceAvailable.visibility = View.GONE
@@ -165,7 +146,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                             tvLabelWelcome.visibility = View.VISIBLE
                             ivDevice.setImageDrawable(
                                 ContextCompat.getDrawable(
-                                    requireContext(),
+                                    this@DeviceActivity,
                                     R.drawable.img_device_sonal_connector_with_wave
                                 )
                             )
@@ -185,7 +166,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                             tvScanningDeviceInfo.visibility = View.VISIBLE
                             tvLabelScanning.visibility = View.VISIBLE
                             llContainerDevice.visibility = View.VISIBLE
-                            Glide.with(requireContext()).load(R.drawable.searching).into(ivDeviceScanning)
+                            Glide.with(this@DeviceActivity).load(R.drawable.searching).into(ivDeviceScanning)
                         }
                         locateDevice()
                     }
@@ -212,7 +193,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                     else -> {}
                 }
             })
-            viewModel.viewEffect.observe(viewLifecycleOwner, Observer { viewEffect: DeviceViewEffect? ->
+            viewModel.viewEffect.observe(this@DeviceActivity, Observer { viewEffect ->
                 if (viewEffect is DeviceViewEffect.SessionRedirect) {
                     launchSessionScreen(
                         viewEffect.treatmentLength,
@@ -221,7 +202,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                     )
                 }
             })
-            dashBoardViewModel.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
+            dashBoardViewModel.data.observe(this@DeviceActivity, Observer { dashboardViewState ->
                 Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
                 if (dashboardViewState != null) {
                     if (dashboardViewState is Connect) {
@@ -230,46 +211,30 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                         viewModel.processEvent(DeviceViewEvent.Disconnected)
                     }
                 }
-            }
+            })
         }
-    }
-
-    private fun setUserDetail(user: UserInfo) {
-        // DONE Which name need to display
-        //TODO initials on image
-//        if (TextUtils.isEmpty(user.imageThumbnailUrl)) {
-//            val strArray = user.name?.split(" ")?.toTypedArray() ?: arrayOf()
-//            val builder = StringBuilder()
-//            if (strArray.isNotEmpty()) {
-//                builder.append(strArray[0], 0, 1)
-//            }
-//            if (strArray.size > 1) {
-//                builder.append(strArray[1], 0, 1)
-//            }
-//        }
     }
 
     private fun launchHowToActivity() {
-        startActivity(HowToActivity.newIntent(requireContext()))
+        startActivity(HowToActivity.newIntent(this))
     }
 
     private fun launchPairingSuccessfulDialog() {
-        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.PopUp)
-        val viewGroup = view?.findViewById<ViewGroup>(android.R.id.content)
-        val dialogView =
-            LayoutInflater.from(context).inflate(R.layout.dialog_popup, viewGroup, false)
-        val tvTitle = dialogView.findViewById<TextView>(R.id.tv_title)
-        val tvContent = dialogView.findViewById<TextView>(R.id.tv_content)
-        val btnPrimary = dialogView.findViewById<Button>(R.id.btn_primary)
-        tvTitle.setText(R.string.pairing_successful)
-        tvContent.setText(R.string.pairing_successful_description)
-        btnPrimary.setText(R.string.proceed_to_session)
-        builder.setView(dialogView)
-        val ad = builder.create()
-        btnPrimary.setOnClickListener {
-            viewModel.processEvent(DeviceViewEvent.StartSessionClicked)
+        val binding = DialogPopupBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+        val dialog = builder.create()
+
+        with(binding) {
+            tvTitle.setText(R.string.pairing_successful)
+            tvContent.setText(R.string.pairing_successful_description)
+            btnPrimary.setText(R.string.proceed_to_session)
+            btnPrimary.setOnClickListener {
+                dialog.dismiss()
+                viewModel.processEvent(DeviceViewEvent.StartSessionClicked)
+            }
         }
-        ad.show()
+
+        dialog.show()
     }
 
     private fun launchSessionScreen(
@@ -278,10 +243,10 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         sonalId: String
     ) {
         if (TextUtils.isEmpty(treatmentLength) || TextUtils.isEmpty(protocolFrequency)) {
-            requireActivity().toast("Treatment data not available.")
+            toast("Treatment data not available.")
         }
         startActivity(SessionActivity.newIntent(
-            requireContext(), treatmentLength, protocolFrequency, sonalId
+            this, treatmentLength, protocolFrequency, sonalId
         ))
     }
 
@@ -322,7 +287,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                 } else {
                     viewModel.processEvent(NoDeviceFound)
                     try {
-                        requireActivity().toast("No device found.")
+                        toast("No device found.")
                     } catch (e: IllegalStateException) {
                         Timber.e(e.message)
                     }
@@ -356,8 +321,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
     private fun checkPermissions() {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         if (!bluetoothAdapter.isEnabled) {
-            Toast.makeText(requireActivity(), "Please turn on Bluetooth first", Toast.LENGTH_LONG)
-                .show()
+            toast("Please turn on Bluetooth first")
             return
         }
         val permissions: MutableList<String> = ArrayList()
@@ -369,7 +333,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         }
         val permissionDeniedList: MutableList<String> = ArrayList()
         for (permission in permissions) {
-            val permissionCheck = ContextCompat.checkSelfPermission(requireActivity(), permission)
+            val permissionCheck = ContextCompat.checkSelfPermission(this, permission)
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                 onPermissionGranted(permission)
             } else {
@@ -378,7 +342,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         }
         if (permissionDeniedList.isNotEmpty()) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                AlertDialog.Builder(requireActivity())
+                AlertDialog.Builder(this)
                     .setTitle("Location Permission Request")
                     .setMessage("WaveNeuro requires that Location permission be enabled to scan for Bluetooth Low Energy devices.\nPlease allow Location permission to continue.")
                     .setNegativeButton(
@@ -389,7 +353,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
                     ) { dialog: DialogInterface?, which: Int ->
                         val deniedPermissions = permissionDeniedList.toTypedArray()
                         ActivityCompat.requestPermissions(
-                            requireActivity(),
+                            this,
                             deniedPermissions,
                             REQUEST_CODE_PERMISSION_LOCATION
                         )
@@ -399,7 +363,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
             } else {
                 val deniedPermissions = permissionDeniedList.toTypedArray()
                 ActivityCompat.requestPermissions(
-                    requireActivity(),
+                    this,
                     deniedPermissions,
                     REQUEST_CODE_PERMISSION_BLUETOOTH
                 )
@@ -410,7 +374,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
     private fun onPermissionGranted(permission: String) {
         when (permission) {
             Manifest.permission.ACCESS_FINE_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
-                AlertDialog.Builder(requireActivity())
+                AlertDialog.Builder(this)
                     .setTitle("Location Services not enabled")
                     .setMessage("Android requires that Location Services to enabled to scan for Bluetooth Low Energy devices.\nPlease enable Location Services in Settings to continue. ")
                     .setNegativeButton(
@@ -435,8 +399,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
     }
 
     private fun checkGPSIsOpen(): Boolean {
-        val locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
@@ -473,9 +436,7 @@ class DeviceFragment : BaseViewModelFragment<FragmentDeviceBinding, DeviceViewMo
         private const val REQUEST_CODE_PERMISSION_LOCATION = 2
         private const val REQUEST_CODE_PERMISSION_BLUETOOTH = 3
 
-        fun newInstance(): DeviceFragment {
-            return DeviceFragment()
-        }
+        fun newIntent(context: Context): Intent = Intent(context, DeviceActivity::class.java)
     }
 
 }

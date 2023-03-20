@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.waveneuro.databinding.ActivitySessionHistoryBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
+import com.waveneuro.ui.dashboard.device.DeviceActivity
 import com.waveneuro.ui.model.Session
 import com.waveneuro.ui.session.history.adapter.SessionListAdapter
 import com.waveneuro.ui.session.history.viewmodel.SessionHistoryViewModel
@@ -56,7 +57,7 @@ class SessionHistoryActivity :
 
             tvName.text = "$firstName $lastName"
             btnStartSession.setOnClickListener {
-                setResult(RESULT_OK, Intent().putExtra(START_SESSION, true))
+                startActivity(DeviceActivity.newIntent(this@SessionHistoryActivity))
                 finish()
             }
             ivBack.setOnClickListener { onBackPressed() }

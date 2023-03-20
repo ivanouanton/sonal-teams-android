@@ -11,6 +11,7 @@ import com.waveneuro.ui.dashboard.DashboardViewModelFactory
 import com.waveneuro.ui.dashboard.account.viewmodel.AccountViewModelFactory
 import com.waveneuro.ui.dashboard.device.viewmodel.DeviceViewModelFactory
 import com.waveneuro.ui.dashboard.history.viewmodel.HistoryViewModelFactory
+import com.waveneuro.ui.dashboard.home.bottom_sheet.edit_client.viewmodel.EditClientViewModelFactory
 import com.waveneuro.ui.dashboard.home.viewmodel.HomeViewModelFactory
 import com.waveneuro.ui.dashboard.more.viewmodel.MoreViewModelFactory
 import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModelFactory
@@ -53,5 +54,6 @@ interface ApplicationComponent {
     fun deviceViewModelFactory(): DeviceViewModelFactory
     fun moreViewModelFactory(): MoreViewModelFactory
     fun homeViewModelFactory(): HomeViewModelFactory
+    fun editClientViewModelFactory(): EditClientViewModelFactory
 
 }

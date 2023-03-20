@@ -41,6 +41,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.dashboard.device.DeviceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.dashboard.organization.OrganizationActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>

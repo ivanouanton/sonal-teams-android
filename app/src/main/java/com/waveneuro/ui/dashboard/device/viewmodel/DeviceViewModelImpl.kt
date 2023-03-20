@@ -51,7 +51,6 @@ class DeviceViewModelImpl @Inject constructor(
             is DeviceViewEvent.Searched -> data.postValue(DeviceViewState.Searched)
             is NoDeviceFound -> data.postValue(DeviceViewState.LocateDevice)
             is LocateDeviceNextClicked -> {
-                //TODO Searching device screen
                 if (data.value == null || data.value is InitLocateDevice
                     || data.value is DeviceViewState.LocateDevice
                 ) data.postValue(LocateDeviceNext) else data.postValue(Searching)

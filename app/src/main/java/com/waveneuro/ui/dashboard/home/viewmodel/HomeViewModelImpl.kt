@@ -10,7 +10,9 @@ import com.waveneuro.domain.usecase.protocol.GetLatestProtocolUseCase
 import com.waveneuro.domain.usecase.user.GetOrganizationsUseCase
 import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
+import com.waveneuro.ui.base.handler.error.model.ApiError
 import com.waveneuro.ui.base.handler.error.model.AppError
+import com.waveneuro.ui.base.handler.error.model.ErrorType
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState
 import com.waveneuro.ui.dashboard.home.HomeClientsViewState.*
@@ -144,12 +146,22 @@ class HomeViewModelImpl @Inject constructor(
         }
     }
 
-    private fun protocolErrorHandler(appError: AppError): Boolean {
-        currentClient?.let {
-            clientsData.postValue(ClientProtocolSuccess(it, false))
-        }
-        return false
-    }
+    private fun protocolErrorHandler(appError: AppError): Boolean = if (appError is ApiError) {
+        try {
+            currentClient?.let {
+                clientsData.postValue(ClientProtocolSuccess(it, false))
+            }
+            when (appError.errorType) {
+                ErrorType.TOS_DOES_NOT_SIGNED -> {
+                    true
+                }
+                ErrorType.SESSION_ARE_NOT_AVAILABLE -> {
+                    true
+                }
+                else -> false
+            }
+        } catch (e: Exception) { false }
+    } else { false }
 
     private fun resetPage() {
         page = 1
