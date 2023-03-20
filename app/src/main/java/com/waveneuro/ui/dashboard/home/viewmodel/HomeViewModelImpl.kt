@@ -72,13 +72,6 @@ class HomeViewModelImpl @Inject constructor(
             is OnStartSessionClick -> {
                 viewEffect.postValue(HomeViewEffect.DeviceRedirect)
             }
-//            is DeviceDisconnected -> {
-//                deviceData.postValue(HomeDeviceViewState.PairDevice)
-//            }
-//            is DeviceConnected -> {
-//                deviceData.postValue(HomeDeviceViewState.StartSession)
-//            }
-
             else -> {}
         }
     }

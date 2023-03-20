@@ -121,16 +121,6 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                 is HomeViewEffect.DeviceRedirect -> launchDeviceScreen()
             }
         })
-//        dashBoardViewModel!!.data.observe(requireActivity()) { dashboardViewState: DashboardViewState? ->
-//            Timber.i("DEVICE_DASHBOARD :: onChanged: received freshObject")
-//            if (dashboardViewState != null) {
-//                if (dashboardViewState is Connect) {
-//                    homeViewModel.processEvent(HomeViewEvent.DeviceConnected)
-//                } else if (dashboardViewState is Disconnect) {
-//                    homeViewModel.processEvent(HomeViewEvent.DeviceDisconnected)
-//                }
-//            }
-//        }
     }
 
     private fun launchDeviceScreen() {
