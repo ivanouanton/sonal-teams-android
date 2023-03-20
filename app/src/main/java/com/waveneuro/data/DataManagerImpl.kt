@@ -50,8 +50,6 @@ class DataManagerImpl(
         preferenceManager.precautionsDisplayed
 
 
-
-
     override fun saveAccessToken(accessToken: String) {
         preferenceManager.accessToken = accessToken
     }
