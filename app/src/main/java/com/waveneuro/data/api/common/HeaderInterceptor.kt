@@ -2,9 +2,10 @@ package com.waveneuro.data.api.common
 
 import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.ui.base.handler.error.model.TokenException
-import okhttp3.FormBody
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
@@ -44,12 +45,12 @@ class HeaderInterceptor @Inject constructor(
                         .addPathSegment("refresh-token")
                         .build()
 
+                    val json = """{"refresh_token":"${prefManager.refreshToken}"}""".trimIndent()
+
+                    val requestBody = json.toRequestBody("application/json".toMediaType())
+
                     refreshRequestBuilder.url(newUrl)
-                    refreshRequestBuilder.post(FormBody.Builder().build())
-                    refreshRequestBuilder.addHeader(
-                        "Authorization",
-                        "Bearer ${prefManager.refreshToken}"
-                    )
+                    refreshRequestBuilder.post(requestBody)
 
                     val refreshResponse = chain.proceed(refreshRequestBuilder.build())
 
@@ -59,10 +60,11 @@ class HeaderInterceptor @Inject constructor(
                         throw TokenException()
                     } else {
                         try {
-                            //TODO
                             val jsonObject = JSONObject(refreshResponse.body?.string() ?: "")
-                            if (jsonObject.has("tokenId")) {
-                                val newToken = jsonObject.getString("tokenId")
+                            val authResultObject = jsonObject.getJSONObject("AuthenticationResult")
+
+                            if (authResultObject.has("IdToken")) {
+                                val newToken = authResultObject.getString("IdToken")
                                 prefManager.accessToken = newToken
                                 Timber.e("NEW ACCESS TOKEN :: $newToken")
                                 refreshResponse.close()
