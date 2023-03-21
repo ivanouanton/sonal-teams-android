@@ -24,10 +24,11 @@ class EditClientViewModelImpl @Inject constructor(
         firstName: String,
         lastName: String,
         birthday: String?,
+        email: String,
         sex: SexType
     ) {
         launchPayload {
-            val request = ClientRq(firstName, lastName, birthday, sex)
+            val request = ClientRq(firstName, lastName, birthday, email, sex)
 
             updateClientUseCase.updateClient(id, request)
             dataEditClientLive.postValue(Success("$firstName $lastName"))

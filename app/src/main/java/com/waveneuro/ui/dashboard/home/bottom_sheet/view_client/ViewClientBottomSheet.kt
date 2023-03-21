@@ -97,7 +97,7 @@ class ViewClientBottomSheet : BottomSheetDialogFragment() {
 
     private fun editClient() {
         val editClientBottomSheet = EditClientBottomSheet.newInstance(
-            onClientUpdated, clientId, firstName, lastName, birthday, isMale
+            onClientUpdated, clientId, firstName, lastName, birthday, isMale, email
         )
         editClientBottomSheet.show(parentFragmentManager, "EditClient BottomSheet")
         dismiss()

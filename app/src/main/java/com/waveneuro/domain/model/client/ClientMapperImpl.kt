@@ -41,7 +41,7 @@ class ClientMapperImpl @Inject constructor() : ClientMapper {
 
     override fun fromDomainToApi(domain: ClientRq): ApiClientRq = with(domain) {
         ApiClientRq(
-            firstName, lastName, birthday, sex
+            firstName, lastName, birthday, email, sex
         )
     }
 

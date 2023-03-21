@@ -13,6 +13,7 @@ interface EditClientViewModel : BaseViewModel {
         firstName: String,
         lastName: String,
         birthday: String?,
+        email: String,
         sex: SexType
     )
 

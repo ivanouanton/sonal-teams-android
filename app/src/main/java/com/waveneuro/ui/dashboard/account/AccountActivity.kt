@@ -71,9 +71,6 @@ class AccountActivity : BaseViewModelActivity<ActivityAccountBinding, AccountVie
             llLastName.setOnClickListener {
                 buildDialog(R.string.enter_last_name, tvLastNameValue).show()
             }
-            llEmail.setOnClickListener {
-                buildDialog(R.string.enter_email, tvEmailValue).show()
-            }
             llOrganization.setOnClickListener {
                 startActivity(OrganizationActivity.newIntent(this@AccountActivity))
             }

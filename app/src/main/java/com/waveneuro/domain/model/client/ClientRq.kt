@@ -6,5 +6,6 @@ data class ClientRq(
     val firstName: String,
     val lastName: String,
     val birthday: String?,
+    val email: String,
     val sex: SexType,
 )

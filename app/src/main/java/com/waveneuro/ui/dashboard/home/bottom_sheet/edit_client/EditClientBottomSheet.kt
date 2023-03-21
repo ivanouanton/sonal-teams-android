@@ -32,6 +32,7 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
     private var lastName: String? = null
     private var birthday: String? = null
     private var isMale: Boolean = false
+    private var email: String? = null
     private var onClientUpdated: ((String?) -> Unit)? = null
 
     override fun onCreateView(
@@ -50,6 +51,7 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
             tipFirstName.setText(firstName ?: "")
             tipLastName.setText(lastName ?: "")
             tipBirthday.setText(DateHelper.birthdayFormat(birthday))
+            tipEmail.setText(email ?: "")
 
             rbMale.isChecked = isMale
             rbFemale.isChecked = !isMale
@@ -101,6 +103,7 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
                 tipFirstName.text?.trim().toString(),
                 tipLastName.text?.trim().toString(),
                 tipBirthday.text?.trim().toString(),
+                tipEmail.text?.trim().toString(),
                 if (rbMale.isChecked) SexType.MALE else SexType.FEMALE
             )
         }
@@ -114,12 +117,14 @@ class EditClientBottomSheet : BottomSheetDialogFragment() {
             lastName: String?,
             birthday: String?,
             sex: Boolean,
+            email: String?
         ) = EditClientBottomSheet().apply {
             this.clientId = id
             this.firstName = name
             this.lastName = lastName
             this.birthday = birthday
             this.isMale = sex
+            this.email = email
             this.onClientUpdated = onClientUpdated
         }
     }
