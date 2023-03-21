@@ -264,7 +264,6 @@ class DeviceActivity : BaseViewModelActivity<ActivityDeviceBinding, DeviceViewMo
                         )
                     )
                 }
-                override fun onCharacterises(value: String?) {}
                 override fun onDisconnected() {
                     showLoading(false)
                     viewModel.processEvent(DeviceViewEvent.Disconnected)

@@ -467,9 +467,6 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
     override fun onConnected(bleDevice: BleDevice) {
         // follow the interface
     }
-    override fun onCharacterises(value: String) {
-        // follow the interface
-    }
     override fun onDisconnected() {
         Timber.e("SESSION DISCONNECTED CALLBACK")
         if (!sessionTimer.isFinished) {
