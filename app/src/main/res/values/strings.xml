@@ -272,6 +272,7 @@
     <string name="waveneuro_logo_alt">WaveNeuro Logo</string>
     <string name="sonal_logo">Sonal Logo</string>
     <string name="default_error_message">Please contact admin at support@waveneurohelp.zendesk.com</string>
+    <string name="no_internet_connection">No Internet connection</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="date_picker_birth_title">Select Birth date</string>

@@ -1,7 +1,7 @@
 package com.waveneuro.ui.dashboard.home
 
-import com.waveneuro.data.model.entity.User
+import com.waveneuro.domain.model.user.UserInfo
 
 sealed class HomeUserViewState {
-    class Success(val item: User) : HomeUserViewState()
+    class Success(val item: UserInfo) : HomeUserViewState()
 }

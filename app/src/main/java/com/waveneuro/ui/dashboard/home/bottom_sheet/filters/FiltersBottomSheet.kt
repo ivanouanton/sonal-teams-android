@@ -6,31 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.waveneuro.R
-import com.waveneuro.data.model.response.organization.OrganizationResponse
 import com.waveneuro.databinding.DialogFiltersBinding
-import com.waveneuro.injection.component.DaggerFragmentComponent
-import com.waveneuro.injection.component.FragmentComponent
-import com.waveneuro.injection.module.FragmentModule
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.domain.model.user.Organization
 
 class FiltersBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogFiltersBinding
     private lateinit var adapter: OrgsListAdapter
-    private lateinit var fragmentComponent: FragmentComponent
 
-    private var organizationList: List<OrganizationResponse> = listOf()
+    private var organizationList: List<Organization> = listOf()
     private var selectedIds: MutableList<Int> = mutableListOf()
     private var onFiltersChanged: ((List<Int>) -> Unit)? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        fragmentComponent = DaggerFragmentComponent.builder()
-            .activityComponent((activity as BaseActivity?)?.activityComponent())
-            .fragmentModule(FragmentModule(this))
-            .build()
-        fragmentComponent.inject(this)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +54,7 @@ class FiltersBottomSheet : BottomSheetDialogFragment() {
 
     companion object {
         fun newInstance(
-            organizations: List<OrganizationResponse>,
+            organizations: List<Organization>,
             selected: List<Int>,
             onApplyClick: (List<Int>) -> Unit
         ): FiltersBottomSheet = FiltersBottomSheet().apply {

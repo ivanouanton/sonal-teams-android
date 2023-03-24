@@ -1,9 +1,7 @@
 package com.ap.ble;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -27,7 +25,6 @@ public class BluetoothManager {
     static ArrayList<BleDevice> bleDevices;
 
     String treatmentStatus;
-    String deviceCharacteristicValue;
     Application context;
 
     public byte batteryLevel;
@@ -83,6 +80,8 @@ public class BluetoothManager {
 
             @Override
             public void onScanning(BleDevice bleDevice) {
+                bleDevices = new ArrayList<>();
+                bleDevices.add(bleDevice);
                 success.onScanning(bleDevice);
             }
 
@@ -113,15 +112,6 @@ public class BluetoothManager {
                 new Handler().postDelayed(() -> {
                     deviceCallback.onConnected(bleDevice);
                     setupNotifying();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            String[] response = new String[2];
-                            response[0] = "Device Connected";
-                            response[1] = deviceCharacteristicValue;
-                            deviceCallback.onCharacterises(deviceCharacteristicValue);
-                        }
-                    }, 5000);
                 }, 1000);
             }
 
@@ -148,8 +138,6 @@ public class BluetoothManager {
 
     public interface DeviceConnectionCallback {
         void onConnected(BleDevice bleDevice);
-
-        void onCharacterises(String value);
 
         void onDisconnected();
     }
@@ -187,6 +175,12 @@ public class BluetoothManager {
     public void getDeviceName(String mac, String name, DeviceConnectionCallback callback) {
         if (TextUtils.isEmpty(mac))
             return;
+
+        BleManager.getInstance().cancelScan();
+
+        if (bleDevices == null)
+            return;
+
         for (int i = 0; i < bleDevices.size(); i++) {
             if (mac.equals(bleDevices.get(i).getMac())) {
                 bleDevice = bleDevices.get(i);
@@ -251,11 +245,6 @@ public class BluetoothManager {
                         }
                     }
                 });
-    }
-
-    private List<BluetoothGattService> getServices() {
-        BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
-        return gatt.getServices();
     }
 
     public void setupNotifying() {

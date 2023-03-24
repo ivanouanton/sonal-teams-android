@@ -1,18 +1,18 @@
 package com.waveneuro.ui.model.client.mapper
 
-import com.waveneuro.data.model.response.client.ClientResponse
+import com.waveneuro.domain.model.client.ClientRs
 import com.waveneuro.ui.model.client.ClientUi
 
 interface ClientMapper {
 
-    fun fromApiToUi(api: ClientResponse) : ClientUi
+    fun fromDomainToUi(domain: ClientRs) : ClientUi
 
-    fun fromApiToUi(api: List<ClientResponse>) : List<ClientUi> =
-        api.map(::fromApiToUi)
+    fun fromDomainToUi(domain: List<ClientRs>) : List<ClientUi> =
+        domain.map(::fromDomainToUi)
 
-    fun fromUiToApi(ui: ClientUi) : ClientResponse
+    fun fromUiToDomain(ui: ClientUi) : ClientRs
 
-    fun fromUiToApi(ui: List<ClientUi>) : List<ClientResponse> =
-        ui.map(::fromUiToApi)
+    fun fromUiToDomain(ui: List<ClientUi>) : List<ClientRs> =
+        ui.map(::fromUiToDomain)
 
 }

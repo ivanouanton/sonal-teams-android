@@ -1,9 +1,12 @@
 package com.waveneuro.ui.session.session
 
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -13,41 +16,30 @@ import com.ap.ble.data.BleDevice
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.waveneuro.R
-import com.waveneuro.data.DataManager
-import com.waveneuro.data.analytics.AnalyticsManager
+import com.waveneuro.databinding.ActivitySessionBinding
 import com.waveneuro.databinding.DialogInfoBinding
 import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.databinding.DialogPopupWithCheckboxBinding
-import com.waveneuro.databinding.FragmentSessionBinding
-import com.waveneuro.ui.base.BaseActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
-import com.waveneuro.ui.session.complete.SessionCompleteCommand
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
+import com.waveneuro.ui.dashboard.DashboardActivity
 import com.waveneuro.ui.session.precautions.PrecautionsBottomSheet
 import com.waveneuro.ui.session.session.SessionViewEffect.*
 import com.waveneuro.ui.session.session.SessionViewEvent.*
 import com.waveneuro.ui.session.session.SessionViewState.*
+import com.waveneuro.ui.session.session.viewmodel.SessionViewModel
+import com.waveneuro.ui.session.session.viewmodel.SessionViewModelImpl
 import com.waveneuro.utils.CountDownTimer
 import com.waveneuro.utils.CountDownTimer.OnCountDownListener
+import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.views.sessionProgressDialogBuilder
-import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
-import javax.inject.Inject
 
-class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCallback {
+class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionViewModel>(),
+    OnCountDownListener, DeviceConnectionCallback {
 
-    @Inject
-    lateinit var sessionCompleteCommand: SessionCompleteCommand
-    @Inject
-    lateinit var dashboardCommand: DashboardCommand
-    @Inject
-    lateinit var viewModel: SessionViewModel
-    @Inject
-    lateinit var dataManager: DataManager
-    @Inject
-    lateinit var analyticsManager: AnalyticsManager
-
-    private lateinit var binding: FragmentSessionBinding
+    override val viewModel: SessionViewModelImpl by viewModels {
+        getAppComponent().sessionViewModelFactory()
+    }
 
     private var readyDialog: AlertDialog? = null
     private var precautionsWarningDialog: AlertDialog? = null
@@ -61,17 +53,17 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     private var disconnectedIntentionally = false
     private var sessionTimer = CountDownTimer(0, 10, 1, this)
 
+
+    override fun initBinding(): ActivitySessionBinding = ActivitySessionBinding.inflate(layoutInflater)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = FragmentSessionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        if (intent.hasExtra(SessionCommand.SONAL_ID)) {
-            sonalId = intent.getStringExtra(SessionCommand.SONAL_ID)
+        if (intent.hasExtra(SONAL_ID)) {
+            sonalId = intent.getStringExtra(SONAL_ID)
         }
-        if (intent.hasExtra(SessionCommand.TREATMENT_LENGTH)) {
-            treatmentLength = intent.getStringExtra(SessionCommand.TREATMENT_LENGTH)
+        if (intent.hasExtra(TREATMENT_LENGTH)) {
+            treatmentLength = intent.getStringExtra(TREATMENT_LENGTH)
             try {
                 treatmentLengthMinutes = treatmentLength!!.toInt() / 60
             } catch (e: Exception) {
@@ -79,8 +71,8 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 finish()
             }
         }
-        if (intent.hasExtra(SessionCommand.PROTOCOL_FREQUENCY)) {
-            protocolFrequency = intent.getStringExtra(SessionCommand.PROTOCOL_FREQUENCY)
+        if (intent.hasExtra(PROTOCOL_FREQUENCY)) {
+            protocolFrequency = intent.getStringExtra(PROTOCOL_FREQUENCY)
         }
 
         setView()
@@ -97,11 +89,11 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         with(binding) {
             clPrecautions.setOnClickListener {
                 val precautionsBottomSheet = PrecautionsBottomSheet.newInstance()
-                precautionsBottomSheet.show(supportFragmentManager, "")
+                precautionsBottomSheet.show(supportFragmentManager, "PrecautionsBottomSheet")
             }
             btnStartSession.setOnClickListener {
                 btnStartSession.visibility = View.INVISIBLE
-                startSession()
+                viewModel.processEvent(SessionViewEvent.StartSessionClicked)
             }
             ivInfo.setOnClickListener {
                 showInfoDialog()
@@ -153,20 +145,14 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         with(viewModel) {
             data.observe(this@SessionActivity, Observer { viewState ->
                 when(viewState) {
-                    is Success -> onSuccess(viewState.item)
-                    is Failure -> onFailure(viewState.error)
-                    is Loading -> {
-                        if (viewState.loading) {
-                            displayWait("Loading...", null)
-                        } else {
-                            removeWait()
-                        }
-                    }
                     is LocateDevice -> {
                         binding.tvSessionTimer.visibility = View.VISIBLE
                         binding.tvSessionTimer.text = "30:00"
                         binding.tvStopSessionInfo.visibility = View.VISIBLE
                         binding.llControlInfo.visibility = View.GONE
+                    }
+                    is SessionViewState.StartSessionClicked -> {
+                        startSession(viewState.isPrecautionsShowed)
                     }
                     is SessionStarted -> {
                         if (readyDialog != null) readyDialog?.dismiss()
@@ -213,7 +199,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                     is ShowLoader -> preparingDialog?.show()
                     is HideLoader -> {
                         preparingDialog?.dismiss()
-                        setPrepareIsShowed(true)
+                        isPrepareDialogShowed.value = true
                     }
                 }
             })
@@ -227,9 +213,9 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                     showBatteryDialog(R.string.error_battery_critical, CRITICAL_BATTERY)
 
                 if (batteryLevel > CRITICAL_BATTERY && isCriticalDialogShowed.value)
-                    setCriticalIsShowed(false)
+                    isCriticalDialogShowed.value = false
                 if (batteryLevel > LOW_BATTERY && isLowDialogShowed.value)
-                    setLowIsShowed(false)
+                    isLowDialogShowed.value = false
             })
         }
     }
@@ -239,10 +225,10 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             else getString(R.string.heading_pause_session)
     }
 
-    private fun startSession() {
-        if (dataManager.precautionsDisplayed) {
+    private fun startSession(isPrecautionsShowed: Boolean) {
+        if (isPrecautionsShowed) {
             showStartSessionDialog()
-            viewModel.processEvent(Start)
+            viewModel.processEvent(Start())
         } else {
             showPrecautionsWarningDialog()
         }
@@ -265,8 +251,8 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             readyDialog = builder.create()
             readyDialog?.show()
             when(type) {
-                LOW_BATTERY -> viewModel.setLowIsShowed(true)
-                CRITICAL_BATTERY -> viewModel.setCriticalIsShowed(true)
+                LOW_BATTERY -> viewModel.isLowDialogShowed.value = true
+                CRITICAL_BATTERY -> viewModel.isCriticalDialogShowed.value = true
             }
         }
     }
@@ -283,7 +269,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                     "Yes"
                 ) { _: DialogInterface?, _: Int ->
                     if (!sessionTimer.isFinished) sessionTimer.pause()
-                    dashboardCommand.navigate()
+                    launchDashboard()
                 }
                 .setCancelable(false)
                 .show()
@@ -302,7 +288,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
                 btnPrimary.text = "Exit Session"
                 btnPrimary.setOnClickListener {
                     if (!sessionTimer.isFinished) sessionTimer.pause()
-                    dashboardCommand.navigate()
+                    launchDashboard()
                 }
             }
 
@@ -339,7 +325,7 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             tvTitle.setText(R.string.congratulations)
             tvContent.setText(R.string.session_done)
             btnPrimary.setText(R.string.go_home)
-            btnPrimary.setOnClickListener { v: View? -> dashboardCommand.navigate() }
+            btnPrimary.setOnClickListener { launchDashboard() }
         }
 
         readyDialog = builder.create()
@@ -372,12 +358,9 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
             tvContent.setText(R.string.warning_message)
             btnPrimary.setText(R.string.continue_button)
             btnPrimary.setOnClickListener {
-                if (dontShowAgain.isChecked) {
-                    dataManager.setPrecautionsDisplayed()
-                }
                 precautionsWarningDialog?.hide()
                 showStartSessionDialog()
-                viewModel.processEvent(Start)
+                viewModel.processEvent(Start(dontShowAgain.isChecked))
             }
         }
 
@@ -484,9 +467,6 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     override fun onConnected(bleDevice: BleDevice) {
         // follow the interface
     }
-    override fun onCharacterises(value: String) {
-        // follow the interface
-    }
     override fun onDisconnected() {
         Timber.e("SESSION DISCONNECTED CALLBACK")
         if (!sessionTimer.isFinished) {
@@ -504,6 +484,11 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
         }
     }
 
+    private fun launchDashboard() {
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         BluetoothManager.getInstance().unregisterDeviceConnectionCallback(this)
@@ -514,5 +499,19 @@ class SessionActivity : BaseActivity(), OnCountDownListener, DeviceConnectionCal
     companion object {
         private const val LOW_BATTERY: Byte = 20
         private const val CRITICAL_BATTERY: Byte = 10
+
+        private const val BLE_DEVICE = "ble_device"
+        private const val TREATMENT_LENGTH = "treatment_length"
+        private const val PROTOCOL_FREQUENCY = "protocol_frequency"
+        private const val SONAL_ID = "sonal_id"
+
+        fun newIntent(context: Context, treatmentLength: String?,
+                      protocolFrequency: String?, sonalId: String?): Intent =
+            Intent(context, SessionActivity::class.java).apply {
+                putExtra(SONAL_ID, sonalId)
+                putExtra(TREATMENT_LENGTH, treatmentLength)
+                putExtra(PROTOCOL_FREQUENCY, protocolFrequency)
+            }
     }
+
 }

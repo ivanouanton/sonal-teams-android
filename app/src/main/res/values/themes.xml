@@ -108,6 +108,14 @@
         <item name="fontFamily">@font/inter_semi_bold</item>
     </style>
 
+    <style name="BaseText.SemiBold.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BaseText.SemiBold.Black.26">
+        <item name="android:textSize">26sp</item>
+    </style>
+
     <style name="BaseText.Bold" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/inter_bold</item>
     </style>
@@ -145,10 +153,6 @@
     </style>
 
     <style name="BaseText.Subtitle.Black">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="BaseText.SemiBold.Black">
         <item name="android:textColor">@color/black</item>
     </style>
 

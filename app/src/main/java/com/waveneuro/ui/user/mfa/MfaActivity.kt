@@ -1,5 +1,7 @@
 package com.waveneuro.ui.user.mfa
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -7,31 +9,30 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.waveneuro.databinding.ActivityMfaBinding
-import com.waveneuro.ui.base.BaseActivity
-import com.waveneuro.ui.dashboard.DashboardCommand
-import com.waveneuro.ui.user.login.LoginViewEffect
-import com.waveneuro.ui.user.login.LoginViewEffect.Home
-import com.waveneuro.ui.user.login.LoginViewEffect.WrongMfaCode
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
+import com.waveneuro.ui.dashboard.DashboardActivity
+import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModel
+import com.waveneuro.ui.user.mfa.viewmodel.MfaViewModelImpl
+import com.waveneuro.utils.ext.getAppComponent
 import com.waveneuro.utils.ext.hideKeyboard
-import javax.inject.Inject
+import com.waveneuro.utils.ext.toast
 
-class MfaActivity : BaseActivity() {
+class MfaActivity : BaseViewModelActivity<ActivityMfaBinding, MfaViewModel>() {
 
-    @Inject
-    lateinit var dashboardCommand: DashboardCommand
-    @Inject
-    lateinit var mfaViewModel: MfaViewModel
-
-    private lateinit var binding: ActivityMfaBinding
+    override val viewModel: MfaViewModelImpl by viewModels {
+        getAppComponent().mfaViewModelFactory()
+    }
 
     var username: String? = ""
     var session: String? = ""
     var currentFocusedPosition = 0
     val viewsList = mutableListOf<TextInputEditText>()
+
+    override fun initBinding(): ActivityMfaBinding = ActivityMfaBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -39,17 +40,22 @@ class MfaActivity : BaseActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         window.statusBarColor = Color.TRANSPARENT
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = ActivityMfaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        if (intent.hasExtra(MfaCommand.SESSION))
-            session = intent.getStringExtra(MfaCommand.SESSION)
+        if (intent.hasExtra(SESSION))
+            session = intent.getStringExtra(SESSION)
 
-        if (intent.hasExtra(MfaCommand.USERNAME))
-            username = intent.getStringExtra(MfaCommand.USERNAME)
+        if (intent.hasExtra(USERNAME))
+            username = intent.getStringExtra(USERNAME)
 
+        setView()
+        initObservers()
+    }
+
+    private fun setView() {
         with(binding) {
+            tvBackToLogin.setOnClickListener {
+                onBackPressed()
+            }
             viewsList.add(tipCode1)
             viewsList.add(tipCode2)
             viewsList.add(tipCode3)
@@ -68,11 +74,15 @@ class MfaActivity : BaseActivity() {
 
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-        mfaViewModel.viewEffect.observe(this, loginViewEffectObserver)
+    }
 
-        binding.tvBackToLogin.setOnClickListener {
-            onBackPressed()
-        }
+    private fun initObservers() {
+        viewModel.viewEffect.observe(this, Observer { viewEffect ->
+            when (viewEffect) {
+                is MfaViewEffect.Home -> launchHomeScreen()
+                is MfaViewEffect.WrongMfaCode -> toast("The code you entered doesn’t match")
+            }
+        })
     }
 
     private val mTextEditorWatcher: TextWatcher = object : TextWatcher {
@@ -81,7 +91,7 @@ class MfaActivity : BaseActivity() {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             if (s.length == 1) {
                 if (currentFocusedPosition == 5) {
-                    mfaViewModel.confirmToken(buildMfaCode(), username, session)
+                    viewModel.processEvent(MfaViewEvent.ConfirmToken(buildMfaCode(), username, session))
                 } else {
                     viewsList[currentFocusedPosition + 1].requestFocus()
                 }
@@ -103,16 +113,20 @@ class MfaActivity : BaseActivity() {
         return mfaCode.toString()
     }
 
-    private val loginViewEffectObserver = Observer { viewEffect: LoginViewEffect? ->
-        if (viewEffect is Home) {
-            launchHomeScreen()
-        } else if (viewEffect is WrongMfaCode) {
-            Toast.makeText(this, "The code you entered doesn’t match", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun launchHomeScreen() {
         binding.root.hideKeyboard()
-        dashboardCommand.navigate()
+        startActivity(DashboardActivity.newIntent(this))
+        finish()
+    }
+
+    companion object {
+        private const val USERNAME = "username"
+        private const val SESSION = "session"
+
+        fun newIntent(context: Context, username: String?, session: String?) =
+            Intent(context, MfaActivity::class.java).apply {
+                putExtra(USERNAME, username)
+                putExtra(SESSION, session)
+            }
     }
 }

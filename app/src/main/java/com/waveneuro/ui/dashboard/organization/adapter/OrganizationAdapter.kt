@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import com.waveneuro.databinding.ItemProfileOrganizationBinding
 import com.waveneuro.ui.base.recycler.BaseEntityListAdapter
 import com.waveneuro.ui.base.recycler.EntityVH
-import com.waveneuro.ui.model.organization.OrganizationUi
+import com.waveneuro.ui.model.organization.UiOrganization
 
 class OrganizationAdapter(
     context: Context
-) : BaseEntityListAdapter<OrganizationUi, OrganizationAdapter.OrganizationVH>(
+) : BaseEntityListAdapter<UiOrganization, OrganizationAdapter.OrganizationVH>(
     context,
-    OrganizationUi.DiffCallback
+    UiOrganization.DiffCallback
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganizationVH =
@@ -21,8 +21,8 @@ class OrganizationAdapter(
 
     inner class OrganizationVH(
         private val binding: ItemProfileOrganizationBinding
-    ) : EntityVH<OrganizationUi>(binding.root) {
-        override fun bind(model: OrganizationUi) {
+    ) : EntityVH<UiOrganization>(binding.root) {
+        override fun bind(model: UiOrganization) {
             super.bind(model)
             binding.tvOrganization.text = model.name
         }

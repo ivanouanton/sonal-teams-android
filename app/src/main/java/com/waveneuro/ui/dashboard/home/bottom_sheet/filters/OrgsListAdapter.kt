@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.waveneuro.data.model.response.organization.OrganizationResponse
 import com.waveneuro.databinding.ItemOrganizationBinding
+import com.waveneuro.domain.model.user.Organization
 
 class OrgsListAdapter(
     private val context: Context,
-    private val orgs: List<OrganizationResponse>,
+    private val orgs: List<Organization>,
     private val selected: List<Int>,
     private val onSelected: (Int) -> Unit,
     private val onDeselected: (Int) -> Unit

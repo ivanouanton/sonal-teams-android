@@ -1,9 +1,9 @@
 package com.waveneuro.ui.model.client
 
 import androidx.recyclerview.widget.DiffUtil
-import com.waveneuro.data.model.response.client.AlternativeId
-import com.waveneuro.data.model.response.common.TosStatus
-import com.waveneuro.data.model.response.organization.OrganizationResponse
+import com.waveneuro.domain.model.common.TosStatus
+import com.waveneuro.domain.model.client.AlternativeId
+import com.waveneuro.domain.model.user.Organization
 
 data class ClientUi(
     val id: Int,
@@ -13,9 +13,9 @@ data class ClientUi(
     val email: String,
     val username: String?,
     val isMale: Boolean,
-    val organization: OrganizationResponse,
+    val organization: Organization,
     val isTosSigned: Boolean,
-    val tosStatus: TosStatus?,
+    val tosStatus: TosStatus,
     val alternativeIds: List<AlternativeId>?,
     val imageURLString: String?,
 ) {

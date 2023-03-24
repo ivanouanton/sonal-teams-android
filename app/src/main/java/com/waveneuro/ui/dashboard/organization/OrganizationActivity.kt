@@ -1,45 +1,41 @@
 package com.waveneuro.ui.dashboard.organization
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.asif.abase.data.model.BaseModel
 import com.waveneuro.R
-import com.waveneuro.data.model.response.user.UserInfoResponse
 import com.waveneuro.databinding.ActivityOrganizationBinding
-import com.waveneuro.ui.base.BaseActivity
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.organization.OrganizationViewEffect.BackRedirect
 import com.waveneuro.ui.dashboard.organization.OrganizationViewEvent.BackClicked
 import com.waveneuro.ui.dashboard.organization.OrganizationViewEvent.Start
-import com.waveneuro.ui.dashboard.organization.OrganizationViewState.*
 import com.waveneuro.ui.dashboard.organization.adapter.OrganizationAdapter
+import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModel
+import com.waveneuro.ui.dashboard.organization.viewmodel.OrganizationViewModelImpl
 import com.waveneuro.utils.ext.addItemDecorationWithoutLastDivider
-import javax.inject.Inject
+import com.waveneuro.utils.ext.getAppComponent
 
-class OrganizationActivity : BaseActivity() {
+class OrganizationActivity :
+    BaseViewModelActivity<ActivityOrganizationBinding, OrganizationViewModel>() {
 
-    private lateinit var binding: ActivityOrganizationBinding
     private lateinit var adapter: OrganizationAdapter
 
-    @Inject
-    lateinit var viewModel: OrganizationViewModel
+    override val viewModel: OrganizationViewModelImpl by viewModels {
+        getAppComponent().organizationViewModelFactory()
+    }
+
+    override fun initBinding(): ActivityOrganizationBinding =
+        ActivityOrganizationBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = ActivityOrganizationBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         setAdapter()
         setView()
         setObserver()
         viewModel.processEvent(Start)
-    }
-
-    override fun onSuccess(model: BaseModel) {
-        super.onSuccess(model)
-        if (model is UserInfoResponse) {
-            adapter.submitList(viewModel.getOrganizations(model))
-        }
     }
 
     private fun setAdapter() {
@@ -59,27 +55,22 @@ class OrganizationActivity : BaseActivity() {
     }
 
     private fun setObserver() {
-        viewModel.data.observe(this, Observer { viewState ->
-            when (viewState) {
-                is Success -> onSuccess(viewState.item)
-                is Failure -> onFailure(viewState.error)
-                is Loading -> {
-                    if (viewState.loading) displayWait("Loading...", null)
-                    else removeWait()
-                }
-                else -> {}
-            }
-
-        })
         viewModel.viewEffect.observe(this, Observer { viewEffect ->
             when(viewEffect) {
                 is BackRedirect -> goBack()
+                is OrganizationViewEffect.Success -> {
+                    adapter.submitList(viewEffect.organizations)
+                }
             }
         })
     }
 
     private fun goBack() {
         onBackPressed()
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, OrganizationActivity::class.java)
     }
 
 }

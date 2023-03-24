@@ -29,6 +29,22 @@
         tools:ignore="DataExtractionRules"
         tools:targetApi="m">
         <activity
+            android:name=".ui.introduction.splash.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:clearTaskOnLaunch="false"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.dashboard.device.DeviceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.dashboard.organization.OrganizationActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
@@ -37,15 +53,7 @@
             android:exported="false" />
         <activity android:name=".ui.dashboard.help.HelpActivity" />
         <activity
-            android:name=".ui.device.MyDeviceActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.password.confirm.SetNewPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.password.first.SetPasswordActivity"
+            android:name=".ui.user.password.new_password.SetNewPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -57,10 +65,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.session.complete.SessionCompleteActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.session.session.SessionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -69,31 +73,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.password.changed.ResetPasswordInfoActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.change.ChangePasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.email.sent.SentUsernameActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.password.recovery.RecoveryInstructionsActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.email.forgot.ForgotUsernameActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.user.password.reset.ResetPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.profile.notactive.AccountNotActiveActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -120,17 +100,6 @@
             android:name=".ui.session.history.SessionHistoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.introduction.splash.SplashActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.App.Starting">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="com.mixpanel.android.MPConfig.EnableDebugLogging"

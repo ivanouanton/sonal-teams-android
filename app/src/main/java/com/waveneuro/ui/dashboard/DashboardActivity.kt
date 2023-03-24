@@ -1,26 +1,28 @@
 package com.waveneuro.ui.dashboard
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.fragment.app.FragmentManager
+import androidx.activity.viewModels
 import com.waveneuro.R
 import com.waveneuro.databinding.ActivityDashboardBinding
-import com.waveneuro.ui.base.BaseActivity
-import com.waveneuro.ui.dashboard.device.DeviceFragment
+import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.dashboard.home.HomeFragment
 import com.waveneuro.ui.dashboard.more.MoreFragment
-import com.waveneuro.ui.session.history.SessionHistoryActivity
+import com.waveneuro.utils.ext.getAppComponent
 
-class DashboardActivity : BaseActivity() {
+class DashboardActivity : BaseViewModelActivity<ActivityDashboardBinding, DashboardViewModel>() {
 
-    private lateinit var binding: ActivityDashboardBinding
+    override val viewModel: DashBoardViewModelImpl by viewModels {
+        getAppComponent().dashboardViewModelFactory()
+    }
+
+    override fun initBinding(): ActivityDashboardBinding =
+        ActivityDashboardBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent()?.inject(this)
-        binding = ActivityDashboardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(::onNavItemSelected)
         binding.bottomNavigation.selectedItemId = R.id.bottom_navigation_home
@@ -56,5 +58,11 @@ class DashboardActivity : BaseActivity() {
 //            }
 //        }
 //    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, DashboardActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+    }
 
 }
