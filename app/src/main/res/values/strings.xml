@@ -21,7 +21,9 @@
     <string name="powered_by">Powered by</string>
     <string name="auth_code">Auth code</string>
     <string name="enter_six_digit_mfa">Enter the six digit code from your authenticator app to complete login</string>
-    <string name="username_error">Enter username</string>
+    <string name="username_error">Enter email</string>
+    <string name="login_failed_title">Login Failed</string>
+    <string name="login_failed_message">Your email or password is incorrect. Please try again.</string>
 
     <!--Register-->
     <string name="registration">Registration</string>
