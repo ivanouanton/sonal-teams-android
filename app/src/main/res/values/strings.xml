@@ -43,6 +43,8 @@
     <string name="forgot_username_q">Forgot Username?</string>
     <string name="send_reset_code">Send Reset Code</string>
     <string name="enter_registered_email">Enter Registered Email Address</string>
+    <string name="incorrect_reset_email">Incorrect Email</string>
+    <string name="email_doesnt_match">The email you entered doesn\'t match your account</string>
 
     <!--Recovery Instructions-->
     <string name="check_your_email">Check Your Email</string>

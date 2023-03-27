@@ -1,6 +1,7 @@
 package com.waveneuro.ui.user.password.reset.viewmodel
 
 import android.app.Application
+import com.waveneuro.R
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.password.ForgotPasswordUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
@@ -9,6 +10,7 @@ import com.waveneuro.ui.base.handler.error.model.AppError
 import com.waveneuro.ui.base.handler.error.model.ErrorName.USER_DOES_NOT_EXIST
 import com.waveneuro.ui.base.utils.Event
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
+import com.waveneuro.ui.user.login.LoginViewEffect
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEffect
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEffect.*
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEvent
@@ -58,7 +60,11 @@ class ResetPasswordViewModelImpl @Inject constructor(
         try {
             when (appError.error) {
                 USER_DOES_NOT_EXIST -> {
-                    message.value = Event("User not found.")
+                    viewEffect.postValue(
+                        ResetPasswordViewEffect.ShowErrorDialog(
+                            appCtx.getString(R.string.incorrect_reset_email),
+                            appCtx.getString(R.string.email_doesnt_match)
+                    ))
                     true
                 }
                 else -> false

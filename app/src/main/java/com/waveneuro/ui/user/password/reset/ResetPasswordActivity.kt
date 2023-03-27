@@ -19,6 +19,7 @@ import com.waveneuro.databinding.ActivityResetPasswordBinding
 import com.waveneuro.databinding.DialogPopupBinding
 import com.waveneuro.ui.base.activity.BaseViewModelActivity
 import com.waveneuro.ui.user.login.LoginActivity
+import com.waveneuro.ui.user.login.LoginViewEffect
 import com.waveneuro.ui.user.password.code.ForgotPasswordCodeActivity
 import com.waveneuro.ui.user.password.reset.ResetPasswordViewEffect.LoginRedirect
 import com.waveneuro.ui.user.password.reset.viewmodel.ResetPasswordViewModel
@@ -99,6 +100,9 @@ class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding
                 }
                 is ResetPasswordViewEffect.Success -> {
                     launchCheckEmailDialog()
+                }
+                is ResetPasswordViewEffect.ShowErrorDialog -> {
+                    showErrorDialog(viewEffect.title ?: "", viewEffect.message)
                 }
             }
         })
