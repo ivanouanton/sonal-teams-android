@@ -33,8 +33,8 @@ import com.waveneuro.ui.dashboard.home.viewmodel.HomeViewModel
 import com.waveneuro.ui.dashboard.home.viewmodel.HomeViewModelImpl
 import com.waveneuro.ui.model.client.ClientUi
 import com.waveneuro.utils.ext.getAppComponent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import android.widget.EditText
 
 class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -45,7 +45,7 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
     private lateinit var adapter: ClientListAdapter
     private var filtersBottomSheet: FiltersBottomSheet? = null
     private val currentList = mutableListOf<ClientUi>()
-
+    private var searchJob: Job? = null
 
     override fun initBinding(container: ViewGroup?): FragmentHomeBinding =
         FragmentHomeBinding.inflate(layoutInflater)
@@ -64,6 +64,20 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
         binding?.spinKit?.visibility = View.INVISIBLE
     }
 
+    fun EditText.setOnSearchChangeListener(delay: Long = 1000L, onSearch: (String) -> Unit) {
+        addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchJob?.cancel() // Cancel previous job if it exists
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(delay) // Wait for the specified delay
+                    onSearch(s.toString()) // Call the search function
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
     private fun setView() {
         binding?.let { binding ->
             with(binding) {
@@ -71,9 +85,11 @@ class HomeFragment : BaseViewModelFragment<FragmentHomeBinding, HomeViewModel>()
                     viewModel.processEvent(HomeViewEvent.NewQuery(etSearch.text.toString()))
                     srlClients.isRefreshing = false
                 }
-                etSearch.onTextChanged {
-                    viewModel.processEvent(HomeViewEvent.NewQuery(it))
+
+                etSearch.setOnSearchChangeListener(delay = 1000L) { searchText ->
+                    viewModel.processEvent(HomeViewEvent.NewQuery(searchText))
                 }
+
                 tilSearch.setEndIconOnClickListener {
                     filtersBottomSheet?.show(childFragmentManager, "")
                 }
