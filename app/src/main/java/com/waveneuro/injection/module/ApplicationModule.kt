@@ -6,8 +6,6 @@ import com.asif.abase.injection.qualifier.ApplicationContext
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.waveneuro.data.DataManager
-import com.waveneuro.data.DataManagerImpl
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.analytics.AnalyticsManagerImpl
 import com.waveneuro.data.api.common.buildBaseMoshi
@@ -50,12 +48,6 @@ class ApplicationModule(private val myApplication: Application) {
         val gsonBuilder = GsonBuilder()
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         return gsonBuilder.create()
-    }
-
-    @Singleton
-    @Provides
-    fun provideDataManager(preferenceManager: PreferenceManager): DataManager {
-        return DataManagerImpl(preferenceManager)
     }
 
     @Singleton

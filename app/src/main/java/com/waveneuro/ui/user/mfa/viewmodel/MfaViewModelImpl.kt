@@ -1,7 +1,7 @@
 package com.waveneuro.ui.user.mfa.viewmodel
 
 import android.app.Application
-import com.waveneuro.data.preference.PreferenceManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.login.ConfirmTokenUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
@@ -18,8 +18,7 @@ class MfaViewModelImpl @Inject constructor(
     private val confirmTokenUseCase: ConfirmTokenUseCase
 ) : BaseAndroidViewModelImpl(app, errorHandler), MfaViewModel {
 
-    @Inject
-    lateinit var preferenceManager: PreferenceManager
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<MfaViewEffect>()
 
@@ -38,8 +37,8 @@ class MfaViewModelImpl @Inject constructor(
                 mfaCode ?: "",
                 session ?: ""
             )
-            preferenceManager.accessToken = response.tokens.idToken
-            preferenceManager.refreshToken = response.tokens.refreshToken
+            prefs.accessToken = response.tokens.idToken
+            prefs.refreshToken = response.tokens.refreshToken
             viewEffect.postValue(MfaViewEffect.Home)
         }
     }

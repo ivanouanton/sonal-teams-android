@@ -2,7 +2,8 @@ package com.waveneuro.ui.dashboard.home.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.waveneuro.data.DataManager
+import com.waveneuro.data.preference.PreferenceManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.client.GetClientUseCase
 import com.waveneuro.domain.usecase.client.GetClientsUseCase
@@ -22,7 +23,6 @@ import com.waveneuro.ui.dashboard.home.HomeViewEvent
 import com.waveneuro.ui.dashboard.home.HomeViewEvent.*
 import com.waveneuro.ui.model.client.ClientUi
 import com.waveneuro.ui.model.client.mapper.ClientMapperImpl
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeViewModelImpl @Inject constructor(
@@ -36,13 +36,12 @@ class HomeViewModelImpl @Inject constructor(
     private val mapper: ClientMapperImpl
 ) : BaseAndroidViewModelImpl(app, errorHandler), HomeViewModel {
 
-    @Inject
-    lateinit var dataManager: DataManager
+    private val prefs: PreferenceManager = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<HomeViewEffect>()
     override val filters = MutableLiveData(listOf<Int>())
 
-    val userData = MutableLiveData<HomeUserViewState>()
+    private val userData = MutableLiveData<HomeUserViewState>()
     val clientsData = MutableLiveData<HomeClientsViewState>()
 
     private var page = 1
@@ -76,9 +75,8 @@ class HomeViewModelImpl @Inject constructor(
         }
     }
     private fun getUserDetails() {
-        if (dataManager.user != null) {
-            userData.postValue(HomeUserViewState.Success(dataManager.user))
-            Timber.e("dataManager.user = ${dataManager.user}")
+        if (prefs.userId != null) {
+            userData.postValue(HomeUserViewState.Success(prefs.user))
         } else {
             getUserInfo()
         }
@@ -87,9 +85,9 @@ class HomeViewModelImpl @Inject constructor(
     private fun getUserInfo() {
         launchPayload {
             val response = getUserInfoUseCase.getUser()
-            dataManager.saveUser(response)
+            prefs.saveUser(response)
             userData.postValue(HomeUserViewState.Success(
-                dataManager.user
+                prefs.user
             ))
         }
     }
@@ -128,11 +126,11 @@ class HomeViewModelImpl @Inject constructor(
             val response = getLatestProtocolUseCase.getProtocol(client.id)
 
             with(response) {
-                dataManager.saveProtocolFrequency(protocolFrequency)
-                dataManager.saveTreatmentLength(treatmentLength)
-                dataManager.saveProtocolId(id)
-                dataManager.saveEegId(eegId)
-                dataManager.savePatientId(client.id.toLong())
+                prefs.protocolFrequency = protocolFrequency
+                prefs.treatmentLength = treatmentLength
+                prefs.protocolId = id
+                prefs.eegId = eegId
+                prefs.patientId = client.id.toLong()
             }
 
             clientsData.postValue(ClientProtocolSuccess(client, true))
