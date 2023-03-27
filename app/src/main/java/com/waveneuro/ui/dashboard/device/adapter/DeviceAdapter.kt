@@ -23,7 +23,7 @@ class DeviceAdapter (
         @SuppressLint("SetTextI18n")
         override fun bind(model: BleDevice) {
             super.bind(model)
-            binding.tvDeviceName.text = model.name
+            binding.tvDeviceName.text = model.name ?: model.mac
             binding.root.setOnClickListener { onItemClick(model) }
         }
     }
