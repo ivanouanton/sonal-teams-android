@@ -115,7 +115,7 @@ class ResetPasswordActivity : BaseViewModelActivity<ActivityResetPasswordBinding
 
     private fun launchCheckEmailDialog() {
         val dialogBinding = DialogPopupBinding.inflate(layoutInflater)
-        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
+        val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(dialogBinding.root)
         val dialog = builder.create()
 
         with(dialogBinding) {
