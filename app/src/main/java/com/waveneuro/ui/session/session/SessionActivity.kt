@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
@@ -44,6 +45,7 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
     private var readyDialog: AlertDialog? = null
     private var precautionsWarningDialog: AlertDialog? = null
     private var preparingDialog: AlertDialog? = null
+    private var batteryDialog: AlertDialog? = null
 
     private var treatmentLength: String? = null
     private var protocolFrequency: String? = null
@@ -238,18 +240,19 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
         val binding = DialogPopupBinding.inflate(layoutInflater)
         val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
 
+        if (batteryDialog?.isShowing == true) batteryDialog?.dismiss()
+
+        batteryDialog = builder.create()
+
         with(binding) {
             tvTitle.setText(R.string.warning_title)
             tvContent.setText(message)
             btnPrimary.setText(R.string.continue_button)
-            btnPrimary.setOnClickListener { readyDialog?.dismiss() }
+            btnPrimary.setOnClickListener { batteryDialog?.dismiss() }
         }
 
-        if (readyDialog?.isShowing == true) readyDialog?.dismiss()
-
-        if (preparingDialog?.isShowing != true) {
-            readyDialog = builder.create()
-            readyDialog?.show()
+        if (preparingDialog?.isShowing != true && readyDialog?.isShowing != true) {
+            batteryDialog?.show()
             when(type) {
                 LOW_BATTERY -> viewModel.isLowDialogShowed.value = true
                 CRITICAL_BATTERY -> viewModel.isCriticalDialogShowed.value = true
@@ -336,6 +339,10 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
         val binding = DialogPopupBinding.inflate(layoutInflater)
         val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
         readyDialog = builder.create()
+        readyDialog?.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) { }
+            true
+        }
 
         with(binding) {
             Glide.with(this@SessionActivity).load(R.drawable.turn_on).into(ivPrimary)
@@ -352,13 +359,17 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
         val binding = DialogPopupWithCheckboxBinding.inflate(layoutInflater)
         val builder = MaterialAlertDialogBuilder(this, R.style.PopUp).setView(binding.root)
         precautionsWarningDialog = builder.create()
+        precautionsWarningDialog?.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) { }
+            true
+        }
 
         with(binding) {
             tvTitle.setText(R.string.warning)
             tvContent.setText(R.string.warning_message)
             btnPrimary.setText(R.string.continue_button)
             btnPrimary.setOnClickListener {
-                precautionsWarningDialog?.hide()
+                precautionsWarningDialog?.dismiss()
                 showStartSessionDialog()
                 viewModel.processEvent(Start(dontShowAgain.isChecked))
             }
@@ -391,12 +402,10 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
     private fun setDeviceInitChars() {
         BluetoothManager.getInstance().sendFrequencyData(
             protocolFrequency,
-            treatmentLength,
-            object : BluetoothManager.Callback {
-                override fun invoke(args: String) {
-                    // follow the interface
-                }
-            })
+            treatmentLength
+        ) {
+            // follow the interface
+        }
         Timber.e(
             "SESSION_VARS T :: %s :: %s",
             treatmentLength,
@@ -459,7 +468,7 @@ class SessionActivity : BaseViewModelActivity<ActivitySessionBinding, SessionVie
         binding.tvSessionTimer.post {
             binding.tvSessionTimer.text = "00:00"
             ble6Value = "04"
-            viewModel.processEvent(SessionViewEvent.EndSession)
+            viewModel.processEvent(EndSession)
         }
     }
 
