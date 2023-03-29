@@ -103,7 +103,8 @@ class LoginViewModelImpl @Inject constructor(
 
     private fun loginErrorHandler(appError: AppError): Boolean = if (appError is ApiError) {
         try {
-            if (appError.error == "Incorrect username or password.") {
+            if (appError.error == "Incorrect username or password."
+                || appError.error == "User does not exist." ) {
                 viewEffect.postValue(LoginViewEffect.ShowErrorDialog(
                     appCtx.getString(R.string.login_failed_title),
                     appCtx.getString(R.string.login_failed_message)
