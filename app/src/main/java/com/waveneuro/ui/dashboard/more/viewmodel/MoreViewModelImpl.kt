@@ -5,6 +5,7 @@ import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
+import com.waveneuro.domain.usecase.login.LogoutUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
 import com.waveneuro.ui.dashboard.more.MoreViewEffect
@@ -19,6 +20,7 @@ class MoreViewModelImpl @Inject constructor(
     app: Application,
     errorHandler: ErrorHandler,
     private val analyticsManager: AnalyticsManager,
+    private val logoutUseCase: LogoutUseCase,
 ) : BaseAndroidViewModelImpl(app, errorHandler), MoreViewModel {
 
     private val prefs = PreferenceManagerImpl(appCtx)
@@ -49,7 +51,10 @@ class MoreViewModelImpl @Inject constructor(
     }
 
     private fun logout() {
-        prefs.logout()
+        launchPayload {
+            logoutUseCase.logout()
+            prefs.logout()
+        }
     }
 
 }

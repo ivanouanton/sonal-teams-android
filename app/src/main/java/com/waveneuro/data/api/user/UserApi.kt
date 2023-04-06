@@ -22,6 +22,9 @@ interface UserApi {
     @POST("login")
     suspend fun login(@Body request: ApiLoginRq): ApiLoginMfaRs
 
+    @POST("logout")
+    suspend fun logout()
+
     @POST("confirm-software-token")
     suspend fun confirmSoftwareToken(@Body request: ApiConfirmTokenRq): ApiConfirmTokenRs
 
