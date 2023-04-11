@@ -2,7 +2,6 @@ package com.waveneuro.injection.component
 
 import android.content.Context
 import com.asif.abase.injection.qualifier.ApplicationContext
-import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsManager
 import com.waveneuro.data.preference.PreferenceManager
 import com.waveneuro.injection.module.ApiModule
@@ -33,7 +32,6 @@ interface ApplicationComponent {
 
     @ApplicationContext
     fun context(): Context
-    fun dataManager(): DataManager
     fun preferenceManager(): PreferenceManager
     fun analyticsManager(): AnalyticsManager
 

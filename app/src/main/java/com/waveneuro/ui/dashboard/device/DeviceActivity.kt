@@ -257,7 +257,7 @@ class DeviceActivity : BaseViewModelActivity<ActivityDeviceBinding, DeviceViewMo
                     showLoading(false)
 
                     viewModel.processEvent(DeviceViewEvent.Connected)
-                    viewModel.processEvent(DeviceViewEvent.SetDeviceId(bleDevice.name))
+                    viewModel.processEvent(DeviceViewEvent.SetDeviceId(bleDevice.name ?: bleDevice.mac))
                     dashBoardViewModel.processEvent(
                         DashboardViewEvent.Connected(
                             BleDevice(bleDevice.name, bleDevice.mac)

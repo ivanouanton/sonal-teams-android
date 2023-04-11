@@ -1,8 +1,7 @@
 package com.waveneuro.ui.user.password.code.viewmodel
 
 import android.app.Application
-import android.text.TextUtils
-import com.waveneuro.data.DataManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.login.LoginUseCase
 import com.waveneuro.domain.usecase.password.ForgotPasswordUseCase
@@ -20,8 +19,7 @@ class ForgotPasswordCodeViewModelImpl @Inject constructor(
     private val forgotPasswordUseCase: ForgotPasswordUseCase
 ) : BaseAndroidViewModelImpl(app, errorHandler), ForgotPasswordCodeViewModel {
 
-    @Inject
-    lateinit var dataManager: DataManager
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<ForgotPasswordCodeViewEffect>()
 
@@ -52,24 +50,24 @@ class ForgotPasswordCodeViewModelImpl @Inject constructor(
     }
 
     private fun removeRememberUserData() {
-        if (!TextUtils.isEmpty(dataManager.rememberUsername)) {
-            dataManager.removeRememberUser()
+        if (prefs.rememberUsername.isNullOrBlank().not()) {
+            prefs.removeRememberUser()
         }
-        if (!TextUtils.isEmpty(dataManager.rememberPassword)) {
-            dataManager.removeRememberPassword()
+        if (prefs.rememberPassword.isNullOrBlank().not()) {
+            prefs.removeRememberPassword()
         }
     }
 
     private fun isRememberDataExist() {
-        if (!TextUtils.isEmpty(dataManager.rememberUsername)) {
+        if (prefs.rememberUsername.isNullOrBlank().not()) {
             viewEffect.postValue(
-                ForgotPasswordCodeViewEffect.RememberMe(dataManager.rememberUsername)
+                ForgotPasswordCodeViewEffect.RememberMe(prefs.rememberUsername ?: "")
             )
         }
     }
 
     private fun saveUserLoginDetails(username: String) {
-        dataManager.rememberUsername(username)
+        prefs.rememberUsername = username
     }
 
     private fun login(username: String, password: String) {

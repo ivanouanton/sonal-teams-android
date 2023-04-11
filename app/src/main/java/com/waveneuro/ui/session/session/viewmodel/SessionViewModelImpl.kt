@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ap.ble.BluetoothManager
-import com.waveneuro.data.DataManager
 import com.waveneuro.data.analytics.AnalyticsEvent
 import com.waveneuro.data.analytics.AnalyticsManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.model.session.SessionRq
 import com.waveneuro.domain.usecase.client.GetClientUseCase
@@ -22,7 +22,6 @@ import com.waveneuro.ui.session.session.SessionViewState.SessionPaused
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
@@ -33,12 +32,13 @@ class SessionViewModelImpl @Inject constructor(
     app: Application,
     errorHandler: ErrorHandler,
     private val addSessionUseCase: AddSessionUseCase,
-    private val getClientUseCase: GetClientUseCase,
-    private val dataManager: DataManager
+    private val getClientUseCase: GetClientUseCase
 ) : BaseAndroidViewModelImpl(app, errorHandler), SessionViewModel {
 
     @Inject
     lateinit var analyticsManager: AnalyticsManager
+
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<SessionViewEffect>()
     override val isCriticalDialogShowed = MutableStateFlow(false)
@@ -59,9 +59,9 @@ class SessionViewModelImpl @Inject constructor(
     }
 
     override fun processEvent(viewEvent: SessionViewEvent) {
-        Timber.e("SESSION_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
+        Timber.e("SESSION_EVENT :: %s", viewEvent.javaClass.simpleName)
         if (data.value != null)
-            Timber.e("SESSION_STATE :: %s", "" + data.value?.javaClass?.simpleName)
+            Timber.e("SESSION_STATE :: %s", data.value?.javaClass?.simpleName)
         when (viewEvent) {
             is Initializing -> {
                 viewEffect.postValue(SessionViewEffect.ShowLoader)
@@ -73,10 +73,10 @@ class SessionViewModelImpl @Inject constructor(
             is Start -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_STARTED,
-                    "dataManager.user.id", //TODO uncommment
-                    dataManager.eegId,
-                    dataManager.protocolId,
-                    dataManager.sonalId
+                    prefs.userId ?: "",
+                    prefs.eegId ?: "",
+                    prefs.protocolId ?: "",
+                    prefs.sonalId ?: ""
                 )
                 if (data.value is SessionPaused) {
                     data.postValue(SessionViewState.ResumeSession)
@@ -85,7 +85,7 @@ class SessionViewModelImpl @Inject constructor(
                     viewEffect.postValue(SessionViewEffect.InitializeBle)
                 }
                 if (viewEvent.doNotShowAgain) {
-                    dataManager.setPrecautionsDisplayed()
+                    prefs.isPrecautionsDisplayed = true
                 }
             }
             is BackClicked -> {
@@ -99,7 +99,7 @@ class SessionViewModelImpl @Inject constructor(
             }
             is StartSessionClicked -> {
                 data.postValue(SessionViewState.StartSessionClicked(
-                    dataManager.isPrecautionsDisplayed
+                    prefs.isPrecautionsDisplayed
                 ))
             }
             is StartSession -> {
@@ -108,10 +108,10 @@ class SessionViewModelImpl @Inject constructor(
             is EndSession -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_COMPLETED,
-                    dataManager.user.id,
-                    dataManager.eegId,
-                    dataManager.protocolId,
-                    dataManager.sonalId
+                    prefs.userId ?: "",
+                    prefs.eegId ?: "",
+                    prefs.protocolId ?: "",
+                    prefs.sonalId ?: ""
                 )
                 data.postValue(SessionViewState.SessionEnded)
                 //DONE API call
@@ -123,10 +123,10 @@ class SessionViewModelImpl @Inject constructor(
             is DevicePaused -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_PAUSED,
-                    "dataManager.user.id", //TODO uncommment
-                    dataManager.eegId,
-                    dataManager.protocolId,
-                    dataManager.sonalId
+                    prefs.userId ?: "",
+                    prefs.eegId ?: "",
+                    prefs.protocolId ?: "",
+                    prefs.sonalId ?: ""
                 )
                 data.postValue(SessionPaused)
             }
@@ -136,10 +136,10 @@ class SessionViewModelImpl @Inject constructor(
             is DeviceError -> {
                 sentSessionEvent(
                     AnalyticsEvent.SESSION_TERMINATED_EARLY,
-                    "dataManager.user.id", //TODO uncommment
-                    dataManager.eegId,
-                    dataManager.protocolId,
-                    dataManager.sonalId
+                    prefs.userId ?: "",
+                    prefs.eegId ?: "",
+                    prefs.protocolId ?: "",
+                    prefs.sonalId ?: ""
                 )
                 val (title, message) = viewEvent
                 //DONE call API with true
@@ -156,11 +156,11 @@ class SessionViewModelImpl @Inject constructor(
 
     private fun addSessionData(isCompleted: Boolean) {
         val request = SessionRq()
-        request.eegId = dataManager.eegId.toLong()
-        request.protocolId = dataManager.protocolId.toLong()
-        request.sonalId = dataManager.sonalId
+        request.eegId = prefs.eegId?.toLong()
+        request.protocolId = prefs.protocolId?.toLong()
+        request.sonalId = prefs.sonalId
         request.isCompleted = isCompleted
-        request.patientId = dataManager.patientId
+        request.patientId = prefs.patientId
         request.finishedAt = System.currentTimeMillis() / 1000
 
         launchPayload {
@@ -189,7 +189,7 @@ class SessionViewModelImpl @Inject constructor(
 
     private fun getClient() {
         launchPayload {
-            val response = getClientUseCase.getClient(dataManager.patientId.toInt())
+            val response = getClientUseCase.getClient(prefs.patientId.toInt())
             currentClient.value = ("${response.firstName} ${response.lastName}")
         }
     }

@@ -101,6 +101,9 @@ class LoginActivity : BaseViewModelActivity<ActivityLoginBinding, LoginViewModel
                         viewEffect.session
                     ))
                 }
+                is ShowErrorDialog -> {
+                    showErrorDialog(viewEffect.title ?: "", viewEffect.message)
+                }
                 else -> {}
             }
         })

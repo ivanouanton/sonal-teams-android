@@ -1,7 +1,7 @@
 package com.waveneuro.ui.introduction.splash.viewmodel
 
 import android.app.Application
-import com.waveneuro.data.DataManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
@@ -18,15 +18,14 @@ class SplashViewModelImpl @Inject constructor(
     private val getPersonalInfoUseCase: GetUserInfoUseCase,
 ) : BaseAndroidViewModelImpl(app, errorHandler), SplashViewModel {
 
-    @Inject
-    lateinit var dataManager: DataManager
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<SplashViewEffect>()
 
     override fun processEvent(viewEvent: SplashViewEvent) {
         when (viewEvent) {
             is SplashViewEvent.Start -> {
-                if (dataManager.isLoggedIn) {
+                if (prefs.accessToken.isNullOrBlank().not()) {
                     getPersonalInfo()
                 } else {
                     viewEffect.setValue(SplashViewEffect.Login)
@@ -38,7 +37,7 @@ class SplashViewModelImpl @Inject constructor(
     private fun getPersonalInfo() {
         launchPayload(customErrorConsumer = ::getUserErrorHandler) {
             val response = getPersonalInfoUseCase.getUser()
-            dataManager.saveUser(response)
+            prefs.saveUser(response)
             viewEffect.value = SplashViewEffect.Home
         }
     }

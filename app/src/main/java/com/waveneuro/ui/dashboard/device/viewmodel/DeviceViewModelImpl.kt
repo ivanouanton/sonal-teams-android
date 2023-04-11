@@ -2,7 +2,7 @@ package com.waveneuro.ui.dashboard.device.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.waveneuro.data.DataManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.ui.base.handler.error.ErrorHandler
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
@@ -19,31 +19,30 @@ class DeviceViewModelImpl @Inject constructor(
     errorHandler: ErrorHandler
 ) : BaseAndroidViewModelImpl(app, errorHandler), DeviceViewModel {
 
-    @Inject
-    lateinit var dataManager: DataManager
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val data = MutableLiveData<DeviceViewState>()
     override val viewEffect = SingleLiveEvent<DeviceViewEffect>()
 
     override val onboardingDisplayed: Boolean
-        get() = if (dataManager.isOnboardingDisplayed) {
+        get() = if (prefs.isOnboardingDisplayed) {
             true
         } else {
-            dataManager.setOnboardingDisplayed()
+            prefs.isOnboardingDisplayed = true
             false
         }
 
     override fun processEvent(viewEvent: DeviceViewEvent) {
-        Timber.e("DEVICE_EVENT :: %s", "" + viewEvent.javaClass.simpleName)
+        Timber.e("DEVICE_EVENT :: %s", viewEvent.javaClass.simpleName)
         if (data.value != null) Timber.e(
             "DEVICE_STATE :: %s",
-            "" + data.value?.javaClass?.simpleName
+            data.value?.javaClass?.simpleName
         )
         when (viewEvent) {
-            is Start -> data.postValue(InitLocateDevice(dataManager.user))
+            is Start -> data.postValue(InitLocateDevice(prefs.user))
             is DeviceClicked -> data.postValue(Connecting(viewEvent.bleDevice))
             is DeviceViewEvent.LocateDevice -> {
-                Timber.e("DEVICE_STATE :: %s", "" + (data.value is DeviceViewState.LocateDevice))
+                Timber.e("DEVICE_STATE :: %s", data.value is DeviceViewState.LocateDevice)
                 data.postValue(Searching)
             }
             is DeviceViewEvent.Connected -> data.postValue(DeviceViewState.Connected)
@@ -58,9 +57,9 @@ class DeviceViewModelImpl @Inject constructor(
             is StartSessionClicked -> {
                 viewEffect.postValue(
                     DeviceViewEffect.SessionRedirect(
-                        dataManager.treatmentLength,
-                        dataManager.protocolFrequency,
-                        dataManager.sonalId
+                        prefs.treatmentLength ?: "",
+                        prefs.protocolFrequency ?: "",
+                        prefs.sonalId ?: ""
                     )
                 )
             }
@@ -71,7 +70,7 @@ class DeviceViewModelImpl @Inject constructor(
     }
 
     private fun setDeviceId(sonalId: String?) {
-        dataManager.saveSonalId(sonalId ?: "")
+        prefs.sonalId = sonalId
     }
 
 }

@@ -11,7 +11,6 @@ import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRq
 import com.waveneuro.data.api.user.model.mfa.ApiConfirmTokenRs
 import com.waveneuro.data.api.user.model.password.ApiForgotPasswordRq
 import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRq
-import com.waveneuro.data.api.user.model.password.ApiSetNewPasswordRs
 import com.waveneuro.data.api.user.model.protocol.ApiProtocolRs
 import com.waveneuro.data.api.user.model.user.ApiOrganizationRs
 import com.waveneuro.data.api.user.model.user.ApiUserInfoRs
@@ -36,7 +35,7 @@ interface UserApi {
     suspend fun updateUser(@Body request: ApiUserUpdateRq): ApiUserInfoRs
 
     @POST("users/confirm_forgot_password")
-    suspend fun changeTempPassword(@Body request: ApiSetNewPasswordRq): ApiSetNewPasswordRs
+    suspend fun changeTempPassword(@Body request: ApiSetNewPasswordRq)
 
     @GET("sonal/user_devices")
     suspend fun getSonalDevices(): ApiSonalDevicesRs

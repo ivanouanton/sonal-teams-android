@@ -1,7 +1,7 @@
 package com.waveneuro.ui.dashboard.account.viewmodel
 
 import android.app.Application
-import com.waveneuro.data.DataManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.user.GetUserInfoUseCase
 import com.waveneuro.domain.usecase.user.UpdateUserInfoUseCase
@@ -20,8 +20,7 @@ class AccountViewModelImpl @Inject constructor(
     private val updateUserInfoUseCase: UpdateUserInfoUseCase
 ) : BaseAndroidViewModelImpl(app, errorHandler), AccountViewModel {
 
-    @Inject
-    lateinit var dataManager: DataManager
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<AccountViewEffect>()
 
@@ -39,7 +38,7 @@ class AccountViewModelImpl @Inject constructor(
         launchPayload {
             val response = getUserInfoUseCase.getUser()
 
-            dataManager.saveUser(response)
+            prefs.saveUser(response)
             viewEffect.postValue(AccountViewEffect.GetSuccess(response))
         }
     }
@@ -48,7 +47,7 @@ class AccountViewModelImpl @Inject constructor(
         launchPayload {
             val response = updateUserInfoUseCase.updateUser(firstName, lastName)
 
-            dataManager.saveUser(response)
+            prefs.saveUser(response)
             viewEffect.postValue(UpdateSuccess(response))
         }
     }

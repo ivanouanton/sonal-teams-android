@@ -4,7 +4,6 @@ object PreferenceKeys {
     const val ACCESS_TOKEN = "access_token"
     const val REFRESH_TOKEN = "refresh_token"
     const val EMAIL = "email"
-    const val IMAGE_THUMBNAIL_URL = "image_thumbnail_url"
     const val NAME = "name"
     const val USERNAME = "username"
     const val USER_ID = "username"

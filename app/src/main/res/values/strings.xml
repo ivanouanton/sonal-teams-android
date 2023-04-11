@@ -21,7 +21,9 @@
     <string name="powered_by">Powered by</string>
     <string name="auth_code">Auth code</string>
     <string name="enter_six_digit_mfa">Enter the six digit code from your authenticator app to complete login</string>
-    <string name="username_error">Enter username</string>
+    <string name="username_error">Enter email</string>
+    <string name="login_failed_title">Login Failed</string>
+    <string name="login_failed_message">Your email or password is incorrect. Please try again.</string>
 
     <!--Register-->
     <string name="registration">Registration</string>
@@ -41,6 +43,8 @@
     <string name="forgot_username_q">Forgot Username?</string>
     <string name="send_reset_code">Send Reset Code</string>
     <string name="enter_registered_email">Enter Registered Email Address</string>
+    <string name="incorrect_reset_email">Incorrect Email</string>
+    <string name="email_doesnt_match">The email you entered doesn\'t match your account</string>
 
     <!--Recovery Instructions-->
     <string name="check_your_email">Check Your Email</string>

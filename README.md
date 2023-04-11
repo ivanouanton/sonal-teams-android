@@ -1,4 +1,4 @@
-# Sonal Teams [Android] 
+# Sonal Teams [Android]
 
 [![CodeQuality Gate](https://github.com/waveneuroscience/sonal-b2b-app-android/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/waveneuroscience/sonal-b2b-app-android/actions/workflows/sonarcloud.yml)
 

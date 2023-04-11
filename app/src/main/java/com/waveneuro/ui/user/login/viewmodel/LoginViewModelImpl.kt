@@ -1,12 +1,14 @@
 package com.waveneuro.ui.user.login.viewmodel
 
 import android.app.Application
-import android.text.TextUtils
-import com.waveneuro.data.DataManager
+import com.waveneuro.R
 import com.waveneuro.data.analytics.AnalyticsManager
+import com.waveneuro.data.preference.PreferenceManagerImpl
 import com.waveneuro.domain.base.SingleLiveEvent
 import com.waveneuro.domain.usecase.login.LoginUseCase
 import com.waveneuro.ui.base.handler.error.ErrorHandler
+import com.waveneuro.ui.base.handler.error.model.ApiError
+import com.waveneuro.ui.base.handler.error.model.AppError
 import com.waveneuro.ui.base.viewmodel.BaseAndroidViewModelImpl
 import com.waveneuro.ui.user.login.LoginViewEffect
 import com.waveneuro.ui.user.login.LoginViewEffect.EnterMfaCode
@@ -22,10 +24,9 @@ class LoginViewModelImpl @Inject constructor(
 ) : BaseAndroidViewModelImpl(app, errorHandler), LoginViewModel {
 
     @Inject
-    lateinit var dataManager: DataManager
-
-    @Inject
     lateinit var analyticsManager: AnalyticsManager
+
+    private val prefs = PreferenceManagerImpl(appCtx)
 
     override val viewEffect = SingleLiveEvent<LoginViewEffect>()
 
@@ -56,30 +57,30 @@ class LoginViewModelImpl @Inject constructor(
     }
 
     private fun removeRememberUserData() {
-        if (!TextUtils.isEmpty(dataManager.rememberUsername)) {
-            dataManager.removeRememberUser()
+        if (prefs.rememberUsername.isNullOrBlank().not()) {
+            prefs.removeRememberUser()
         }
-        if (!TextUtils.isEmpty(dataManager.rememberPassword)) {
-            dataManager.removeRememberPassword()
+        if (prefs.rememberPassword.isNullOrBlank().not()) {
+            prefs.removeRememberPassword()
         }
     }
 
     private fun isRememberDataExist() {
-            if (!TextUtils.isEmpty(dataManager.rememberUsername)) {
+            if (prefs.rememberUsername.isNullOrBlank().not()) {
                 viewEffect.postValue(
                     RememberMe(
-                        dataManager.rememberUsername
+                        prefs.rememberUsername ?: ""
                     )
                 )
             }
         }
 
     private fun saveUserLoginDetails(username: String) {
-        dataManager.rememberUsername(username)
+        prefs.rememberUsername = username
     }
 
     private fun login(username: String, password: String) {
-        launchPayload {
+        launchPayload(customErrorConsumer = ::loginErrorHandler) {
             val response = loginUseCase.login(username, password)
 
             if (response.challengeName != null) {
@@ -99,5 +100,19 @@ class LoginViewModelImpl @Inject constructor(
             }
         }
     }
+
+    private fun loginErrorHandler(appError: AppError): Boolean = if (appError is ApiError) {
+        try {
+            if (appError.error == "Incorrect username or password."
+                || appError.error == "User does not exist." ) {
+                viewEffect.postValue(LoginViewEffect.ShowErrorDialog(
+                    appCtx.getString(R.string.login_failed_title),
+                    appCtx.getString(R.string.login_failed_message)
+                ))
+                true
+            }
+            else false
+        } catch (e: Exception) { false }
+    } else { false }
 
 }
